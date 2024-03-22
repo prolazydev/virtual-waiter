@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*, *::before, *::after {
+	box-sizing: border-box;
+}
+ 
+@layer base {
+	:root {
+		/* --toast-timeout: 3s; */
+	/* TODO: Create a pallete */
+	}
+
+	.dark {
+	/* TODO: Create a pallete */
+
+	}
+}
+
+body {
+    background-color: #f8f8f8;
+}
+
+/* Reusable classes */
+
+.absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+} 

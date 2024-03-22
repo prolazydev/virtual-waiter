@@ -1,0 +1,58 @@
+@import './base.css';
+
+#app {
+	@apply min-h-screen flex flex-col relative 
+	;
+}
+
+.tost {
+  	@apply 	flex flex-col gap-3 fixed top-32 right-14 transition-all duration-500
+			z-[9999];
+}
+.tost > div > p {
+	@apply px-3 py-4
+}
+
+.tost-n {
+	@apply mt-24 relative bg-white text-lg shadow-md opacity-0 duration-500 transition-all
+  ;
+
+}
+
+.tost-show {
+	@apply 	mt-0 opacity-100;
+}
+.tost-show::before {
+  	@apply w-full absolute bottom-0 left-0 h-1 bg-black content-[''];
+	animation: new-tost var(--tost-timeout, 3s) 1 linear forwards;
+	animation-play-state: var(--tost-play-state, running);
+}
+@keyframes new-tost {
+	to {
+		width: 0%;
+	}
+}
+
+.tost-hide {
+	@apply 	-mt-24 opacity-0;
+}
+
+
+/* @media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+} */
+
+@media (min-width: 1024px) {
+  /* body {
+    display: flex;
+    place-items: center;
+  }
+
+  #app {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0 2rem;
+  } */
+}
