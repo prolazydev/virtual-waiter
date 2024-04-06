@@ -19,7 +19,9 @@ export function initServer() {
 	);
 
 	handleMiscErrors(server);
-	return app; 
+
+	return server;
+	// return app; 
 }
 
 export function handleMiscErrors(server: http.Server) {

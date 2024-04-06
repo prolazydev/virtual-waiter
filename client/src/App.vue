@@ -7,16 +7,14 @@
 </template>
 
 <script setup lang="ts">
-// import { runSocket } from './services/webSocket';
+const { checkAuth } = useAuth();
 
+onBeforeMount(async () => {
+	await checkAuth();
+})
 
 onMounted(async () => {
-	// const call = await fetch('http://localhost:3000');
-
-	// const contentType = call.headers.get('content-type')!;
-	// if ( contentType.includes('text'))
-	// 	console.log(await call.text());
-
+	// const { runSocket } = webSocketService();
 	// runSocket();
 })
 

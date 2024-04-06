@@ -1,11 +1,27 @@
-import { useUserStore } from '@/stores/user';
 import type { LoggedInUser } from '@/types/auth/user';
-import { myFetch } from '@/utils/http';
 
-export const useAuth = () => {
+export default () => {
 	const userStore = useUserStore();
 
+	/**
+	 * Returns authentication state
+	 */
 	const isAuth = () => userStore.user.isAuth;
+
+	const checkAuth = async () => {
+		try {
+			const { response, data } = await myFetch<LoggedInUser>('auth/check');
+
+			if (response.value?.ok) 
+				userStore.setNewLoginUser(data.value!);
+			else 
+				userStore.logoutUser();
+
+		} catch (error) {
+			console.log(error);
+			userStore.logoutUser();
+		}
+	}
 
 	/**
 	 * Login
@@ -15,14 +31,23 @@ export const useAuth = () => {
 	const login = (newUser: LoggedInUser) =>
 		userStore.setNewLoginUser(newUser);
 
+	/**
+	 * Empties the user store and logs out the user
+	 */
 	const logout = async () => {
-		userStore.logoutUser();
-		console.log(userStore.user);
-		await myFetch('auth/logout', '', { method: 'POST' });
+		try {
+			await myFetch('auth/logout', '', { method: 'POST' });
+		} catch (error) {
+			console.log(error);
+		} finally {
+			userStore.logoutUser();
+
+		}
 	}
 
 	return {
 		isAuth,
+		checkAuth,
 		login,
 		logout,
 	}

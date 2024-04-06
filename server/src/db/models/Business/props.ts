@@ -1,0 +1,69 @@
+import mongoose from 'mongoose';
+import { IBusiness } from './Business';
+
+const isDateRange = /^\d{2}:\d{2}-\d{2}:\d{2}$|^closed$|^24$/;
+
+const hoursValidation = [ 
+	{
+		validator: function(this: { $__parent: IBusiness  }, dateRange: string) {
+			// If is24 is true, closeHours should be empty or not assigned
+			if (this.$__parent.is24) {
+				return !dateRange || dateRange.trim() === '';
+			} else
+				return isDateRange.test(dateRange);
+		}
+	}
+	// {
+	// 	validator: function(dateRange: string) {
+	// 		return isDateRange.test(dateRange);
+	// 	},
+	// 	// @ts-expect-error stupid
+	// 	message: props => `Date ${props.value} is invalid!`
+	// }, 
+	// {
+	// 	validator: function(this: { __parent: SingleNested  }, dateRange: string) {
+	// 		// If is24 is true, closeHours should be empty or not assigned
+	// 		return !this.is24 || (this.is24 && (!dateRange || dateRange.trim() === ''));
+	// 	},
+	// 	// @ts-expect-error stupid
+	// 	message: props => `${props.path} invalid!`,
+	// }, 
+];
+
+export const hours = new mongoose.Schema({
+	monday: {
+		type: String,
+		required: false,
+		validate: hoursValidation,
+	},
+	tuesday: {
+		type: String,
+		required: false,
+		validate: hoursValidation,
+	},
+	wednesday: {
+		type: String,
+		required: false,
+		validate: hoursValidation,
+	},
+	thursday: {
+		type: String,
+		required: false,
+		validate: hoursValidation,
+	},
+	friday: {
+		type: String,
+		required: false,
+		validate: hoursValidation,
+	},
+	saturday: {
+		type: String,
+		required: false,
+		validate: hoursValidation,
+	},
+	sunday: {
+		type: String,
+		required: false,
+		validate: hoursValidation,
+	}
+});

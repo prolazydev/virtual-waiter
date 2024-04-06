@@ -1,4 +1,5 @@
 import { NextFunction, Response } from 'express';
+
 import { ACCESS_TOKEN_DURATION } from '../utils/constants';
 import { rGet, rDel } from '../services/redis.service';
 import { findUserByEmail } from '../services/CRUD/user.service';
@@ -6,16 +7,16 @@ import { UserResult, MyRequest } from '../types';
 import { Message } from '../utils/common/ServerResponseMessages';
 import { verifyToken, decodeToken, signToken } from '../utils/crypto';
 import { CustomError } from '../utils/errors';
-import { asyncErrorHandler } from '../utils/errors/asyncErrorHandler';
-import { respond } from '../utils/common/index.js';
+import { requestHandler } from '../utils/errors/asyncErrorHandler';
 import { StatusCodes } from 'http-status-codes';
+import { respond } from '../utils/common/http';
 
-export const isAuthenticated = asyncErrorHandler(async (req, res, next) => {
-	let { accessToken } = req.cookies;
+export const isAuthenticated = requestHandler(async (req, res, next) => {
+	let accessToken = req.cookies.accessToken ?? req.signedCookies.accessToken;
 
 	// Check if there is a token in the header, workaround
 	let myToken = req.headers.authorization;
-	if (myToken && myToken.startsWith('Bearer')) {
+	if (myToken && myToken.startsWith('Bearer') && !accessToken) {
 		myToken = myToken.split(' ')[ 1 ];
 
 		accessToken = myToken;
@@ -23,31 +24,29 @@ export const isAuthenticated = asyncErrorHandler(async (req, res, next) => {
 
 	if ( !accessToken ) 
 		return respond(res, StatusCodes.UNAUTHORIZED, Message.NotAuthorized);
-		// return next(new CustomError(Message.Unauthorized, 403));
 
 	let userObj: UserResult;
 
-	const payload = verifyToken(accessToken);
+	const { payload } = verifyToken(accessToken);
+
 	if ( !payload ) {
 		const oldToken = decodeToken(accessToken);
+		if ( !oldToken )
+			return respond(res, StatusCodes.UNAUTHORIZED, Message.NotAuthorized);
 
-		// TODO: Maybe add null checks
 		const refreshToken = await rGet(oldToken!.id!);
-		const refreshTokenPayload = verifyToken(refreshToken!);
-		if ( !refreshTokenPayload ) {
+		const { payload: refreshTokenPayload, err } = verifyToken(refreshToken!);
+		if ( err ) {
 			const deleted = await rDel(oldToken!.id!);
 			if ( !deleted )
 				return respond(res, StatusCodes.INTERNAL_SERVER_ERROR, Message.DatabaseError);
-				// return next(new CustomError(Message.DatabaseError, 500)); 
+			
 			return respond(res, StatusCodes.UNAUTHORIZED, Message.NotAuthorized);
-			// return next(new CustomError(Message.Unauthorized, 403));
 		}
 
-		const user = await findUserByEmail(refreshTokenPayload.email);
-		
+		const user = await findUserByEmail(refreshTokenPayload!.email);
 		if ( !user )
 			return respond(res, StatusCodes.UNAUTHORIZED, Message.NotAuthorized);
-			// return next(new CustomError(Message.NotAuthenticated, 403));
 
 		userObj = {
 			id: user._id.toString(),
@@ -60,11 +59,12 @@ export const isAuthenticated = asyncErrorHandler(async (req, res, next) => {
 			maxAge: 2 * 60 * 60 * 1000, // 2h,
 			httpOnly: true,
 			secure: false, // leave to false in development
-			sameSite: 'none'
+			sameSite: 'none',
+			signed: true
 		});
 		res.setHeader('x-set-access-token', newAccessToken);
-
-	} else 
+		console.log(`New access token set for user: ${userObj.username}`);
+	}  else
 		userObj = {
 			id: payload.id!,
 			username: payload.username,
@@ -72,12 +72,13 @@ export const isAuthenticated = asyncErrorHandler(async (req, res, next) => {
 			avatar: payload.avatar,
 			roles: payload.roles
 		};
+
 	req.identity = userObj;
 	
 	return next();
 });
 
-export const isOwner = asyncErrorHandler(async (req, res, next) => {
+export const isOwner = requestHandler(async (req, res, next) => {
 	try {
 		const id = req.params.id || req.query.id || req.body.id;
 
@@ -108,7 +109,7 @@ export const isInRole = (...roles: string[]) => {
 	};
 };
 
-export const isAdmin = asyncErrorHandler(async (req, res, next) => {
+export const isAdmin = requestHandler(async (req, res, next) => {
 	try {
 		const userRoles = req.identity!.roles!;
 

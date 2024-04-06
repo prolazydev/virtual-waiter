@@ -1,10 +1,13 @@
 import express from 'express';
-// import restaurantRouter from './restaurant.router';
-import authRouter from './auth.router';
+
 import { isAdmin, isAuthenticated, isOwner } from '../middlewares/auth.middleware';
+
+import authRouter from './auth.router';
 import userRouter from './user.router';
 import restaurantRouter from './restaurant.router';
 import restaurantRatingRouter from './restaurantRating.router';
+import businessRouter from './business.router';
+import businessCategoryRouter from './businessCategory.router';
 
 const router = express.Router();
 
@@ -18,10 +21,9 @@ export default (): express.Router => {
 	userRouter(router, [ isAuthenticated, isAdmin ]);
 	restaurantRouter(router, [ isAuthenticated ]);
 	restaurantRatingRouter(router, [ isAuthenticated ]);
-	// router.use(authRoutes);
 
-	// router.stack.forEach((r) => {
-	// 	console.log(r.route);
-	// });
+	businessRouter(router, [ isAuthenticated, isAdmin ]);
+	businessCategoryRouter(router, [ isAuthenticated, isAdmin ]);
+
 	return router;
 };

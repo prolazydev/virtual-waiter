@@ -1,4 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 import mongoose, { InferSchemaType, Query, model } from 'mongoose';
 import validator from 'validator';
 import crypto from 'crypto';
@@ -52,7 +51,12 @@ const userSchema = new mongoose.Schema({
 			min: 8, 
 			select: false // doesn't return password in any query
 		},
-		passwordChangedAt: Date,
+		passwordChangedAt: {
+			type: Date,
+			required: false,
+			default: undefined,
+			select: false,
+		},
 		// May need to be not required
 		salt: { 
 			type: String, 
@@ -132,21 +136,22 @@ userSchema.methods.createResetPasswordToken = function() {
 };
 
 userSchema.pre('save', async function (next) {	
-	if (this.isNew)
-		return next();
-	if (!this.isModified('auth.password')) 
-		return next();
+	if (this.isNew || this.isModified('auth.password')) {
+		const salt = randomSalt();		
+		this.auth!.salt = salt;
+		this.auth!.password = hashPassword(salt, this.auth!.password);
+		this.auth!.passwordChangedAt = new Date(Date.now());
+
+		// await this.save();
+		next();
+	}
 	
-	const salt = randomSalt();		
-	this.auth!.salt = salt;
-	this.auth!.password = hashPassword(salt, this.auth!.password);
-	this.auth!.passwordChangedAt = new Date(Date.now());
 	next();
 });
 
 // userSchema for update (soft deleting user and all related data)
 userSchema.pre(/^(updateOne|findOneAndUpdate)/, async function (next) {
-	const user = this as & mongoose.FlatRecord<User>;
+	const user = this as mongoose.FlatRecord<User>;
 	// if (user.isNew)
 	// 	return next();
 
@@ -173,7 +178,7 @@ userSchema.pre(/^(updateOne|findOneAndUpdate)/, async function (next) {
 
 userSchema.pre(/^(find|findOne)/, function (next): void {
 	// Global filter
-	(this as Query<any, any, object, any, 'find'>)
+	(this as Query<object, object>)
 		.where({ deleted: false });
 
 	next();

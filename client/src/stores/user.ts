@@ -6,29 +6,31 @@ const emptyUser: LoggedInUser = {
 	username: '',
 	roles: '',
 	isAuth: false,
+	hasBusiness: false,
 	avatar: ''
 }
 
-export const useUserStore = defineStore('user', () => {
-	const user = ref<LoggedInUser>({
-		id: '',
-		email: '',
-		username: '',
-		roles: '',
-		isAuth: false,
-	});
-
-	function setNewLoginUser(newUser: LoggedInUser) {
-		user.value = newUser
-		user.value.isAuth = true;
-	}
-
-	const logoutUser = () => user.value = emptyUser
-
-	return {
-		user,
-		setNewLoginUser,
-		logoutUser
-	}
-
-}, { persist: true });
+export default 
+	defineStore('user', () => {
+		const user = ref<LoggedInUser>({
+			id: '',
+			email: '',
+			username: '',
+			roles: '',
+			hasBusiness: false,
+			isAuth: false,
+		});
+	
+		const setNewLoginUser = (newUser: LoggedInUser) => {
+			user.value = newUser
+			user.value.isAuth = true;
+		}
+	
+		const logoutUser = () => user.value = emptyUser
+	
+		return {
+			user,
+			setNewLoginUser,
+			logoutUser
+		}
+	}, { persist: true });

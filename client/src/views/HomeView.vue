@@ -123,9 +123,8 @@
 
 <script lang="ts" setup>
 import Glide from '@glidejs/glide'
-import { useScrollTo } from '@/composables/useScrollTo';
-import { useSlider } from '@/composables/useSlider';
-import { initGlideStatistics } from '@/composables';
+// import { useScrollTo } from '@/composables/useScrollTo';
+// import { initGlideStatistics } from '@/composables';
 const { observeSlide1, observeSlide2, observeSlide3 } = useSlider();
 
 // TODO: implement automatic fetching of statistics
@@ -167,15 +166,15 @@ onMounted(() => {
     observeSlide2.observe(slides[1]);
     observeSlide3.observe(slides[2]);
 
-    initGlideStatistics();
+    // initGlideStatistics();
+    useFlipStatistics();
 })
 
 onUnmounted(() => {
     observeSlide1.disconnect();
     observeSlide2.disconnect();
     observeSlide3.disconnect();
-    const test = glide.destroy();
-    console.log('destroyed: ', test);
+    glide.destroy();
 })
 
 function scrollToAboutUs() {
@@ -372,3 +371,4 @@ function scrollToAboutUs() {
 }
 </style>
 
+@/composables/use

@@ -1,8 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { Request } from 'express';
-import { RequestHandler, 
-	// ParamsDictionary, 
-	Query } from 'express-serve-static-core';
+import { RequestHandler } from 'express-serve-static-core';
 import { JwtPayload } from 'jsonwebtoken';
 import mongoose from 'mongoose';
 
@@ -32,7 +30,7 @@ export interface UserResult {
  */
 // export interface MyRequest<TBody = any, TQuery extends Query = any> extends Express.Request {
 // eslint-disable-next-line  @typescript-eslint/no-unused-vars
-export interface MyRequest<TBody = any, TQuery extends Query = any> extends Request {
+export interface MyRequest<TBody = any> extends Request {
 	body: TBody,
 	// query: TQuery;
 	cookies: any,
@@ -56,10 +54,12 @@ export type RequestResult<TModel = undefined> = {
 export interface LoginRequest {
 	email: string,
 	password: string,
+	rememberMe: boolean,
 }
 export interface LoginWithUsernameRequest {
 	username: string,
 	password: string,
+	rememberMe: boolean,
 }
 
 /**
@@ -85,4 +85,8 @@ export type SendEmailOptions = {
 	email: string,
 	subject: string,
 	message: string,
+}
+
+export interface Validatable<T> {
+    [key: string]: T;
 }

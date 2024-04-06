@@ -1,5 +1,5 @@
 <template>
-    <div id="loginForm" class="">
+    <div id="loginForm">
         <form @submit.prevent="handleLogin">
             <div class="flex flex-col mx-auto">
                 <h1 class="w-fit text-3xl font-bold text-[#1b1b1b] uppercase tracking-widest">Login</h1>
@@ -16,29 +16,35 @@
                 <label for="password">Password</label>
                 <input v-model="loginFormData.password" type="password" id="password" />
             </div>
+
+            <Checkbox v-model="loginFormData.rememberMe" _label="Remember me" _id="rememberMe" />
+            
             <div class="relative w-3 h-3 mx-auto">
-                <div :class="{ 'go-down': requestStatus === 'Loading' }" class="w-3 h-3 mx-auto bg-[#1b1b1b]  absolute top-0 rounded-full transition-all duration-700"></div>
+                <div :class="{ 'go-down': requestStatus === 'Loading' || requestStatus === 'Error' }" class="w-3 h-3 mx-auto bg-[#1b1b1b]  absolute top-0 rounded-full transition-all duration-700"></div>
             </div>
             <button class="login-button" :class="{ 'processing': requestStatus === 'Loading' }" type="submit">
-                <p :class="{ 'translate-y-[calc(0%+40px)]': requestStatus === 'Success' }" class="transition-transform duration-500 delay-100">Login</p>
-                <LucideIcon :class="{ 'mt-14': requestStatus === 'Success', '-mt-14': requestStatus === 'Idle' }" id="loaderIcon" class="absolute"  name="Loader" :size="32" :stroke-width="2" />
+                <p :class="{ 'translate-y-[calc(0%+40px)]': requestStatus === 'Success' || requestStatus === 'Error' }" class="transition-transform duration-500 delay-100">Login</p>
+                <LucideIcon :class="{ 'mt-14': requestStatus === 'Success', '-mt-14': requestStatus === 'Idle' || requestStatus === 'Error' }" id="loaderIcon" class="absolute"  name="Loader" :size="32" :stroke-width="2" />
                 <LucideIcon :class="{ 'process-success': requestStatus === 'Success' }" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-16 transition-all duration-500" id="chefHatIcon" name="ChefHat"  :size="32" :stroke-width="2"  />
+                <LucideIcon :class="{ 'process-success': requestStatus === 'Error' }" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-16 transition-all duration-500" id="chefHatIcon" name="X"  :size="32" :stroke-width="2"  />
             </button>
         </form>        
     </div>
 </template>
 
 <script lang="ts" setup>
-import { tostRouterTo } from '@/composables/myRouter';
-import type { RequestStatus } from '@/enums/fromValidations';
+import type { RequestStatus } from '@/enums/EFromValidations';
 import type { LoggedInUser, LoginModel } from '@/types/auth/user';
-import { myFetch } from '@/utils/http';
-import { useAuth } from '@/composables/useAuth'
 
+const router = useRouter();
+const route = useRoute();
+
+const { login } = useAuth();
 
 const loginFormData = ref<LoginModel>({
     loginType: 'invalid',
     password: '',
+    rememberMe: false,
 });
 const identifier = ref('');
 
@@ -46,15 +52,10 @@ const usernameRegex = /^[a-zA-Z0-9._]{2,30}$/;
 
 const requestStatus = ref<RequestStatus>('Idle');
 
-const router = useRouter();
-const route = useRoute();
-
-
 onMounted(() => {
     // TODO: check if user is already logged in
 })
 
-const { login } = useAuth();
 const identifierType = computed(() => {
     if (identifier.value === '') {
         loginFormData.value.loginType = 'invalid';
@@ -78,28 +79,31 @@ const handleLogin = async () => {
     if (identifierType.value === 'email' && loginFormData.value.loginType === 'email') {
         url = 'auth/login';
         loginFormData.value.email = identifier.value;
-        console.log(identifier.value);
     }
     else if (identifierType.value === 'username' && loginFormData.value.loginType === 'username') {
         url = 'auth/login_with_username';
         loginFormData.value.username = identifier.value;
-        console.log(identifier.value);
     }
     else // TODO: show error message
         return;
 
-    const { data, error, statusCode } = await myFetch<LoggedInUser>(url, loginFormData.value, { method: 'POST' })
+    try {
+        const { data, error, statusCode } = await myFetch<LoggedInUser>(url, loginFormData.value, { method: 'POST' })
 
-    if (!error.value && data.value) {
-        requestStatus.value = 'Success';
+        if (!error.value && data.value) {
+            requestStatus.value = 'Success';
 
-        login(data.value)
+            login(data.value)
 
-        const redirect = route.query.redirect as string ?? '/';
-        await tostRouterTo(router, redirect, 'Logged in!');
-    } else {
-        requestStatus.value = 'Error';
-        console.log(statusCode.value, error.value);
+            const redirect = route.query.redirect as string ?? '/';
+            await tostRouterTo(router, redirect, 'Logged in!');
+        } else {
+            requestStatus.value = 'Error';
+            setTimeout(() => requestStatus.value = 'Idle', 1250)
+            console.log(statusCode.value, error.value);
+        }
+    } catch (error) {
+        console.log(error);
     }
 }
 
@@ -107,7 +111,7 @@ const handleLogin = async () => {
 
 <style scoped>
 #loginForm {
-    @apply mx-auto my-20 py-16 px-20 flex gap-20 border-4 border-[#1b1b1b]
+    @apply mx-auto mt-auto py-16 px-20 flex gap-20 border-4 border-[#1b1b1b]
     ;
 }
 
@@ -179,8 +183,5 @@ const handleLogin = async () => {
 .process-success  {
     @apply -translate-y-1/2
 }
-
-
-
 
 </style>

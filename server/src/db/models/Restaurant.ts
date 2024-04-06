@@ -1,6 +1,4 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 import mongoose, { InferSchemaType } from 'mongoose';
-import type { DocumentSchemaDefinitionType } from './BaseTypes';
 
 const restaurantSchema = new mongoose.Schema({
 	userId: { 
@@ -29,11 +27,7 @@ const restaurantSchema = new mongoose.Schema({
 		type: Number,
 		required: false,
 	},
-	image: {
-		type: Buffer,
-
-		// required: [ true, 'Image is required!' ], 
-	},
+	image: { type: Buffer },
 	// TODO: fix rating schema
 	averageRating: {
 		type: Number,
@@ -60,9 +54,3 @@ const restaurantSchema = new mongoose.Schema({
 
 export type Restaurant = InferSchemaType<typeof restaurantSchema>;
 export const RestaurantModel = mongoose.model('Restaurant', restaurantSchema);
-
-export const RestaurantDocumentSchemaDefinition: DocumentSchemaDefinitionType = {
-	name: 'Restaurant',
-	tableName: 'restaurants',
-	schemaDefinition: restaurantSchema,
-};

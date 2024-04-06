@@ -1,9 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
-import { Message } from './ServerResponseMessages';
-import { logger } from '../../services/logger.service';
 
 /**
  * Convert a date to a cron expression
@@ -19,30 +13,30 @@ export function dateToCronExpression(date: Date) {
 	return `${minutes} ${hours} ${day} ${month} *`; // Run every minute at the specified date and time
 }
 
-export function respond<TData = null>(res: Response, statusCode: StatusCodes, message: string | typeof Message, data: TData | null = null, error: string | Error | any = '') {
-	// const status = statusCode >= 200 && statusCode < 300 ? 'success' : 'error';
-	let status = '';
-	if (statusCode >= 200 && statusCode < 300) status = 'success';
-	else {
-		status = 'error';
-		console.error(error);
-		logger.error(error);
-	}
 
-	let respondData = {};
-	if (!isDataEmpty<TData>(data)) {
-		respondData = { status, data, message };
-		return res.status(statusCode).json(respondData);
-	}
-	else if (!data) {
-		respondData = { status, message };
-		return res.status(statusCode).json(respondData);
-	} 
+export function isEmptyObject<TObject>(obj: TObject) {
+	for (const key in obj) 
+		if (Object.prototype.hasOwnProperty.call(obj, key)) 
+			return false; // Object has at least one property, so it's not empty
+
+
+	return true; // Object has no own properties, so it's empty
 }
 
-function isDataEmpty<TData = null>(data: TData | null = null) {
-	return data === null || data === undefined || data === '';
+export function regexFuzzySearch(text: string) {
+	const regex = text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+	
+	return new RegExp('^' + regex, 'gi');
 }
+
+// PRIVATE
+// function escapeRegex(text: string) {
+// 	return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+// }
+
+// function isDataEmpty<TData = null>(data: TData | null = null) {
+// 	return data === null || data === undefined || data === '';
+// }
 
 // TODO: maybe implement a mail service
 // export function mail(to: string, subject: string, html: string) {

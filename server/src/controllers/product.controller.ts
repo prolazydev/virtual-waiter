@@ -1,11 +1,12 @@
 import { StatusCodes } from 'http-status-codes';
-import { respond } from '../utils/common';
+
+import { respond } from '../utils/common/http';
 import { Message } from '../utils/common/ServerResponseMessages';
-import { asyncErrorHandler } from '../utils/errors/asyncErrorHandler';
+import { requestHandler } from '../utils/errors/asyncErrorHandler';
 import { createProduct, findProductById, findAllProducts } from '../services/CRUD/product.service';
 import type { Product } from '../db/models/Product';
 
-export const registerProduct = asyncErrorHandler<Product>(async (req, res) => {
+export const registerProduct = requestHandler<Product>(async (req, res) => {
 	const product = req.body;
 	if ( !product ) 
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
@@ -19,7 +20,7 @@ export const registerProduct = asyncErrorHandler<Product>(async (req, res) => {
 	respond(res, StatusCodes.OK, Message.SuccessCreate, newProduct);
 });
 
-export const getAllProducts = asyncErrorHandler(async (req, res) => {
+export const getAllProducts = requestHandler(async (req, res) => {
 	try {
 		const products = await findAllProducts();
 		respond(res, StatusCodes.OK, Message.SuccessRead, products);
@@ -28,7 +29,7 @@ export const getAllProducts = asyncErrorHandler(async (req, res) => {
 	}
 });
 
-export const getProductById = asyncErrorHandler(async (req, res) => {
+export const getProductById = requestHandler(async (req, res) => {
 	const id = req.params.id;
 	if ( !id ) 
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);

@@ -5,7 +5,7 @@ import { mongoId } from '../../types';
 
 // POST
 export const createUser = async (userObj: User) => 
-	new UserModel(userObj).save({ validateBeforeSave: false, validateModifiedOnly: false,  },);
+	new UserModel(userObj).save({ validateBeforeSave: true, validateModifiedOnly: true });
 
 // GET
 export const findUsers = async () => await UserModel.find();

@@ -17,12 +17,21 @@ declare global {
 
 			ACCESS_TOKEN_DURATION: string,
 			REFRESH_TOKEN_DURATION: string,
-			REDIS_REFRESH_TOKEN_EXPIRY_TIME_IN_S: string,
+			ACCESS_TOKEN_DURATION_EXTENDED: string,
+			REFRESH_TOKEN_DURATION_EXTENDED: string,
 
+			REDIS_REFRESH_TOKEN_EXPIRY_TIME_IN_S: string,
+			REDIS_REFRESH_TOKEN_EXPIRY_TIME_IN_S_EXTENDED: string,
+			
 			MAILTRAP_USERNAME: string,
 			MAILTRAP_PASSWORD: string,
 			MAILTRAP_HOST: string,
 			MAILTRAP_PORT: string,
+
+			// Websocket Settings
+			HEARTBEAT_INTERVAL: string,
+			HEARTBEAT_VALUE: string,
+			// HEARTBEAT_TIMEOUT: string,
 		}
 	}
 }

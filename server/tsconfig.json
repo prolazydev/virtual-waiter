@@ -1,11 +1,15 @@
 {
   "compilerOptions": {
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "target": "ESNext",
-    // "module": "NodeNext",
+    "removeComments": true,
+    "resolveJsonModule": true,
     "module": "ESNext",
-    // "moduleResolution": "NodeNext",
     "moduleResolution": "Bundler",
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "types": [
       "node"
@@ -13,6 +17,6 @@
   },
   "include": [
     "src",
-    "*.d.ts"
+    "*.d.ts",
   ]
 }

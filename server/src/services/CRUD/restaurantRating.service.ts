@@ -1,5 +1,5 @@
-import { RestaurantRate, RestaurantRateModel } from '../../db/models/RestaurantRate';
+import { RestaurantReview, RestaurantReviewModel } from '../../db/models/RestaurantReview';
 
 // POST
-export const createRestaurantRating = async (restaurantRating: RestaurantRate) => 
-	new RestaurantRateModel(restaurantRating).save();
+export const createRestaurantRating = async (restaurantRating: RestaurantReview) => 
+	new RestaurantReviewModel(restaurantRating).save();

@@ -2,7 +2,7 @@
 import mongoose, { InferSchemaType } from 'mongoose';
 import { RestaurantModel } from './Restaurant';
 
-const restaurantRateSchema = new mongoose.Schema({
+const restaurantReviewSchema = new mongoose.Schema({
 	// User who submitted the rating
 	userId: {
 		type: mongoose.Schema.Types.ObjectId,
@@ -24,9 +24,9 @@ const restaurantRateSchema = new mongoose.Schema({
 	review: { type: String, trim: true, required: false },
 }, { timestamps: true });
 
-restaurantRateSchema.pre('save', async function (next) {
+restaurantReviewSchema.pre('save', async function (next) {
 	const restaurantId = this.restaurantId.toString();
-	const rates = await RestaurantRateModel.find({ restaurantId }).lean();
+	const rates = await RestaurantReviewModel.find({ restaurantId }).lean();
 	rates.push(this);
 	const restaurant = await RestaurantModel.findById(this.restaurantId);
 
@@ -37,5 +37,5 @@ restaurantRateSchema.pre('save', async function (next) {
 	next();
 });
 
-export type RestaurantRate = InferSchemaType<typeof restaurantRateSchema>;
-export const RestaurantRateModel = mongoose.model('RestaurantRates', restaurantRateSchema);
+export type RestaurantReview = InferSchemaType<typeof restaurantReviewSchema>;
+export const RestaurantReviewModel = mongoose.model('restaurant_rates', restaurantReviewSchema);

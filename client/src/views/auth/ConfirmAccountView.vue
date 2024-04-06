@@ -1,6 +1,9 @@
 <template>
-	<div class="w-full p-12 flex flex-col gap-20 items-center">
-		<h1 class="text-4xl font-semibold text-center">{{ statusMessage }}</h1>
+	<div class="w-full p-12 flex flex-col gap-16 items-center">
+		<div class="flex flex-col gap-5 items-center">
+			<h1 class="text-4xl font-semibold">{{ requestStatus }}</h1>
+			<h2 class="text-2xl ">{{ statusMessage }}</h2>
+		</div>
 		<div class="relative w-1 h-32 mx-auto">
 			<LucideIcon class="loader-icon stroke-[#1b1b1b]" :class="{ 'processing-request': requestStatus === 'Loading' }" name="Loader" :size="128" />
 			<LucideIcon class="icon stroke-[#07B889]" :class="{ 'show-icon': requestStatus === 'Success' }" name="PartyPopper" :size="128" />
@@ -8,21 +11,24 @@
 			<LucideIcon class="icon stroke-rose-600" :class="{ 'show-icon': requestStatus === 'Expired' }" name="CalendarX" :size="128" />
 		</div>
 
-		<!-- TODO: show link if auth -->
-		<div v-if="requestStatus === 'Expired'" class="flex flex-col items-center gap-3 opacity-0 z-10 transition-all duration-500 delay-700" :class="{ 'show-error-message': requestStatus === 'Expired' || requestStatus === 'Error' }">
+		<div v-if="isAuth() && requestStatus === 'Expired'" class="flex flex-col items-center gap-3 opacity-0 z-10 transition-all duration-500 delay-700" :class="{ 'show-error-message': requestStatus === 'Expired' || requestStatus === 'Error' }">
 			<p class="text-lg">Please resend the confirmation email to verify your account</p>
 			<router-link class="button-link" :class="{ 'show-button-link': requestStatus === 'Expired' }" to="/account/settings">Go to Account</router-link>
 		</div>
+		<div v-else class="flex flex-col items-center gap-3 opacity-0 z-10 transition-all duration-500 delay-700" :class="{ 'show-error-message': requestStatus === 'Unauthorized' }">
+			<router-link class="button-link" :class="{ 'show-button-link': requestStatus === 'Expired' }" to="/login">Login</router-link>
+		</div>
 		<LucideIcon class="mt-16 stroke-[#1b1b1b]" name="Dot" :size="14" :stroke-width="14" />
-
 	</div>
 </template>
 
 <script lang="ts" setup>
-import type { RequestStatus } from '@/enums/fromValidations';
-import { myFetch } from '@/utils/http';
-import router from '@/router';
-import { tostRouterTo } from '@/composables/myRouter';
+import type { RequestStatus } from '@/enums/EFromValidations';
+
+const router = useRouter();
+const { params } = useRoute();
+
+const { isAuth } = useAuth();
 
 const requestStatus = ref<RequestStatus>('Idle');
 
@@ -33,19 +39,18 @@ const statusMessage = computed(() => {
 		case 'Success':
 			return 'Account Confirmed';
 		case 'Error':
-			return 'Error Confirming Account - Please try again later';
+			return 'Error Confirming Account. Please try again later';
 		case 'Expired':
 			return 'Token Expired';
 		case 'Forbidden':
-			return 'Forbidden - This token has already been used or expired';
+			return 'This token has already been used or expired';
 		case 'Unauthorized':
-			return 'Unauthorized - Please login to verify your account';
+			return 'Login to verify your account';
 		default:
 			return '';
 	}
 });
 
-const params = useRoute().params;
 
 onMounted( async() => {
 	setTimeout(() => requestStatus.value = 'Loading', 0)
@@ -60,20 +65,15 @@ onMounted( async() => {
 					setTimeout( async() => await tostRouterTo(router, '/', 'Account verified!'), 1000)
 				} else 
 					requestStatus.value = 'Expired';
-
 			} else 
 				requestStatus.value = 'Error';
-				
-		} else if ( statusCode.value === 403 ) 
+		} 
+		else if ( statusCode.value === 403 ) 
 			requestStatus.value = 'Forbidden';
 		else if ( statusCode.value === 401 ) 
 			requestStatus.value = 'Unauthorized';
-		
-			
 	} catch (error) {
-		if ( error ) {
-			console.error(error);
-		}
+		console.error(error);
 	}
 });	
 
@@ -133,3 +133,4 @@ onMounted( async() => {
 }
 
 </style>
+@/utils/myFetch@/composables/tostRouterTo

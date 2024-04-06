@@ -1,67 +1,63 @@
 <template>
-    <div class="register-form mx-auto my-20 py-16 px-20 flex gap-20 border-4 border-[#1b1b1b] ">
-        <div class="w-32 flex items-center justify-center relative">
-            <div class="relative">
-                <LucideIcon id="formLoaderIcon" class="loader-icon stroke-[#1b1b1b]" :class="{ 'processing-request': requestStatus === 'Loading' }" name="Loader" :size="128" />
-                <LucideIcon id="formPartyPopper" class="opacity-0 stroke-[#07B889]" :class="{ 'form-icon': requestStatus === 'Success' }" name="PartyPopper" :size="128" />
-                <LucideIcon id="formHeartCrack" class="opacity-0 stroke-rose-600" :class="{ 'form-icon': requestStatus === 'Error' }" name="HeartCrack" :size="128" />
-                <LucideIcon id="formChefHatIcon" class="center-hat stroke-[#1b1b1b]" :class="{ 'move-hat': registerForm.becomeChef && requestStatus === 'Idle' }" name="ChefHat" :size="128" />
-                <LucideIcon id="formUserIcon" class="stroke-[#1b1b1b]" :class="(requestStatus === 'Idle') ? 'user-icon form-icon' : 'opacity-0'"  name="UserRound" :size="128" />
+    <div class="w-fit h-full mx-auto mt-auto py-20">
+        <div class="register-form">
+            <div class="w-32 flex items-center justify-center relative">
+                <div class="relative">
+                    <LucideIcon id="formLoaderIcon" class="loader-icon stroke-[#1b1b1b]" :class="{ 'processing-request': requestStatus === 'Loading' }" name="Loader" :size="128" />
+                    <LucideIcon id="formPartyPopper" class="opacity-0 stroke-[#07B889]" :class="{ 'form-icon': requestStatus === 'Success' }" name="PartyPopper" :size="128" />
+                    <LucideIcon id="formHeartCrack" class="opacity-0 stroke-rose-600" :class="{ 'form-icon': requestStatus === 'Error' }" name="HeartCrack" :size="128" />
+                    <LucideIcon id="formChefHatIcon" class="center-hat stroke-[#1b1b1b]" :class="{ 'move-hat': registerForm.becomeChef && requestStatus === 'Idle' }" name="ChefHat" :size="128" />
+                    <LucideIcon id="formUserIcon" class="stroke-[#1b1b1b]" :class="(requestStatus === 'Idle') ? 'user-icon form-icon' : 'opacity-0'"  name="UserRound" :size="128" />
+                </div>
             </div>
-        </div>
-        <div id="formDivider"></div>
-        <div>
-            <h1 class="text-3xl font-bold text-[#1b1b1b] uppercase tracking-widest">Sign Up</h1>
-            <div class="h-1 w-4 mb-5 bg-[#1b1b1b]"></div>
-            <form @submit.prevent="signUp" id="registerForm" class="flex flex-col gap-4">
-                <div class="relative flex flex-col gap-2">
-                    <label for="username">Username</label>
-                    <input v-model="registerForm.username" @keyup="validateUsername" type="text" id="username" autofocus />
-                    <LucideIcon :class="{ 'show-icon': usernameValidity === 'Valid' }" class="absolute top-0 -right-10 opacity-0 pointer-events-none transition-all duration-500" :size="32" :stroke-width="2" name="Check" />
-                    <LucideIcon :class="{ 'show-icon': usernameValidity === 'Invalid' }" class="absolute top-[100%] -right-10 opacity-0 pointer-events-none transition-all duration-500" :size="32" :stroke-width="2" name="X" />
-                    <LucideIcon :class="{ 'show-icon': usernameValidity === 'Taken' }" class="absolute top-[100%] -right-10 opacity-0 pointer-events-none transition-all duration-500" :size="32" :stroke-width="2" name="UserRoundX" />
-                </div>
-                <div class="relative flex flex-col gap-2">
-                    <label for="email">Email</label>
-                    <input v-model="registerForm.email" type="email" id="email" />
-                    <LucideIcon :class="{ 'show-icon': emailValidity === 'Valid' }" class="absolute top-0 -right-10 opacity-0 pointer-events-none transition-all duration-500" :size="32" :stroke-width="2" name="Check" />
-                    <LucideIcon :class="{ 'show-icon': emailValidity === 'Invalid' }" class="absolute top-[100%] -right-10 opacity-0 pointer-events-none transition-all duration-500" :size="32" :stroke-width="2" name="X" />
-                </div>
-                <div class="relative flex flex-col gap-2">
-                    <label for="password">Password</label>
-                    <input v-model="registerForm.password"  type="password" id="password" />
-                    <LucideIcon :class="{ 'show-icon': passwordValidity === 'Valid' }" class="absolute top-0 -right-10 opacity-0 pointer-events-none transition-all duration-500" :size="32" :stroke-width="2" name="Check" />
-                    <LucideIcon :class="{ 'show-icon': passwordValidity === 'Invalid' }" class="absolute top-[100%] -right-10 opacity-0 pointer-events-none transition-all duration-500" :size="32" :stroke-width="2" name="X" />
-                </div>
-                <div class="relative flex flex-col gap-2">
-                    <label for="confirmPassword">Confirm Password</label>
-                    <input v-model="registerForm.confirmPassword" type="password" id="confirmPassword" />
-                    <LucideIcon :class="{ 'show-icon': confirmPasswordValidity === 'Valid' }" class="absolute top-0 -right-10 opacity-0 pointer-events-none transition-all duration-500" :size="32" :stroke-width="2" name="Check" />
-                    <LucideIcon :class="{ 'show-icon': confirmPasswordValidity === 'Invalid' }" class="absolute top-[100%] -right-10 opacity-0 pointer-events-none transition-all duration-500" :size="32" :stroke-width="2" name="X" />
-                </div>
-                <div class="flex gap-3">
-                    <input v-model="registerForm.becomeChef" type="checkbox" name="Chef" id="becomeChefCheckbox" value="false">
-                    <label for="becomeChefCheckbox">Become a Chef</label>
-                </div>
-                <button id="submitButton" class="w-full bg-[#1b1b1b] text-white py-2 ">
-                    <p class="transition-transform duration-500">Sign Up</p>
+            <div id="formDivider"></div>
+            <div>
+                <h1 class="text-3xl font-bold text-[#1b1b1b] uppercase tracking-widest">Sign Up</h1>
+                <div class="h-1 w-4 mb-5 bg-[#1b1b1b]"></div>
+                <form @submit.prevent="signUp" id="registerForm" class="flex flex-col gap-4">
+                    <div class="relative flex flex-col gap-2">
+                        <label for="username">Username</label>
+                        <input v-model="registerForm.username" @keyup="validateUsername" type="text" id="username" autofocus />
+                        <LucideIcon :class="{ 'show-icon': usernameValidity === 'Valid' }" class="absolute top-0 -right-10 opacity-0 pointer-events-none transition-all duration-500" :size="32" :stroke-width="2" name="Check" />
+                        <LucideIcon :class="{ 'show-icon': usernameValidity === 'Invalid' }" class="absolute top-[100%] -right-10 opacity-0 pointer-events-none transition-all duration-500" :size="32" :stroke-width="2" name="X" />
+                        <LucideIcon :class="{ 'show-icon': usernameValidity === 'Taken' }" class="absolute top-[100%] -right-10 opacity-0 pointer-events-none transition-all duration-500" :size="32" :stroke-width="2" name="UserRoundX" />
+                    </div>
+                    <div class="relative flex flex-col gap-2">
+                        <label for="email">Email</label>
+                        <input v-model="registerForm.email" type="email" id="email" />
+                        <LucideIcon :class="{ 'show-icon': emailValidity === 'Valid' }" class="absolute top-0 -right-10 opacity-0 pointer-events-none transition-all duration-500" :size="32" :stroke-width="2" name="Check" />
+                        <LucideIcon :class="{ 'show-icon': emailValidity === 'Invalid' }" class="absolute top-[100%] -right-10 opacity-0 pointer-events-none transition-all duration-500" :size="32" :stroke-width="2" name="X" />
+                    </div>
+                    <div class="relative flex flex-col gap-2">
+                        <label for="password">Password</label>
+                        <input v-model="registerForm.password"  type="password" id="password" />
+                        <LucideIcon :class="{ 'show-icon': passwordValidity === 'Valid' }" class="absolute top-0 -right-10 opacity-0 pointer-events-none transition-all duration-500" :size="32" :stroke-width="2" name="Check" />
+                        <LucideIcon :class="{ 'show-icon': passwordValidity === 'Invalid' }" class="absolute top-[100%] -right-10 opacity-0 pointer-events-none transition-all duration-500" :size="32" :stroke-width="2" name="X" />
+                    </div>
+                    <div class="relative flex flex-col gap-2">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input v-model="registerForm.confirmPassword" type="password" id="confirmPassword" />
+                        <LucideIcon :class="{ 'show-icon': confirmPasswordValidity === 'Valid' }" class="absolute top-0 -right-10 opacity-0 pointer-events-none transition-all duration-500" :size="32" :stroke-width="2" name="Check" />
+                        <LucideIcon :class="{ 'show-icon': confirmPasswordValidity === 'Invalid' }" class="absolute top-[100%] -right-10 opacity-0 pointer-events-none transition-all duration-500" :size="32" :stroke-width="2" name="X" />
+                    </div>
+                    <div class="flex gap-3">
+                        <Checkbox v-model="registerForm.becomeChef" _label="Become a Chef" _id="becomeChefCheckbox" />
+                    </div>
+                    <button id="submitButton" class="w-full bg-[#1b1b1b] text-white py-2 ">
+                        <p class="transition-transform duration-500">Sign Up</p>
 
-                    <LucideIcon class="absolute" name="ChefHat" :size="32" :stroke-width="2"  />
-                </button>
-                <!-- <button type="button" @click="useTost('test')">
-                    test
-                </button> -->
-            </form>
+                        <LucideIcon class="absolute" name="ChefHat" :size="32" :stroke-width="2"  />
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { tostRouterTo } from '@/composables/myRouter';
-// import { useTost } from '@/composables/toast';
-import type { InputValidity, RequestStatus } from '@/enums/fromValidations';
-import router from '@/router';
-import { myFetch } from '@/utils/http';
+import type { InputValidity, RequestStatus } from '@/enums/EFromValidations';
+
+const router = useRouter();
 
 // const becomeChef = ref(false);
 const registerForm = ref({
@@ -92,19 +88,15 @@ const validateUsername = async () => {
     usernameValidity.value = 'Valid';
     await debounceSearch();
 }
-const debounceSearch = useDebounceFn(async () => {
-    if (usernameValidity.value) {
-        const res = await myFetch<boolean>(`auth/user/${registerForm.value.username}`, );
-        if (!res.data) 
-            return takenUsernames.value.add(registerForm.value.username);
-    }
-}, 500)
+
 watch(takenUsernames.value, () => {
     if (takenUsernames.value.has(registerForm.value.username)) 
         usernameValidity.value = 'Taken';
     else 
         usernameValidity.value = 'Valid';
 });
+
+
 // TODO: Implement this
 // watch(takenEmails.value, () => {
 //     if (takenEmails.value.has(registerForm.value.email)) 
@@ -144,6 +136,14 @@ const isFormValid = computed(() => {
     return usernameValidity.value === 'Valid' && emailValidity.value === 'Valid' && passwordValidity.value === 'Valid' && confirmPasswordValidity.value === 'Valid';
 })
 
+const debounceSearch = useDebounceFn(async () => {
+    if (usernameValidity.value) {
+        const res = await myFetch<boolean>(`auth/user/${registerForm.value.username}`, );
+        if (!res.data) 
+            return takenUsernames.value.add(registerForm.value.username);
+    }
+}, 500)
+
 const signUp = async () => {
     if (isFormValid.value) {
         requestStatus.value = 'Loading';
@@ -168,7 +168,7 @@ const signUp = async () => {
 /* Green color #07B889 */
 
 .register-form {
-    @apply relative
+    @apply relative mt-auto py-16 px-20 flex gap-20 border-4 border-[#1b1b1b]
 }
 
 .form-icon {

@@ -1,26 +1,32 @@
 import nodemailer from 'nodemailer';
-import { MAILTRAP_HOST, MAILTRAP_PASSWORD, MAILTRAP_PORT, MAILTRAP_USERNAME } from './constants';
+import { MAILTRAP_HOST, MAILTRAP_PASSWORD, MAILTRAP_USERNAME } from './constants';
 import { SendEmailOptions } from '../types';
 
+
 export const sendEmail = async (options: SendEmailOptions) => {
-	const transporter = nodemailer.createTransport({ 
+	const emailOptions = {
+		from: 'support@virtualwaiter.com',
+		to: options.email,
+		subject: `Virtual Waiter - ${options.subject}`,
+		text: options.message,
+	};
+
+	// Correct way to create transporter instance
+	const transporter = nodemailer.createTransport({
 		host: MAILTRAP_HOST,
-		port: parseInt(MAILTRAP_PORT),
+		// port: parseInt(MAILTRAP_PORT),
+		port: 2525, // port 25 works sending email only once for some stupid reason
 		auth: {
 			user: MAILTRAP_USERNAME,
 			pass: MAILTRAP_PASSWORD,
 		}
 	});
-
-
-	const emailOptions = {
-		from: 'Virtual Waiter <support@virtualwaiter.com>',
-		to: options.email,
-		subject: options.subject,
-		text: options.message,
-	};
-	const sentMail = await transporter.sendMail(emailOptions);
-
-	console.log(sentMail);
+	try {
+		const sentMail = await transporter.sendMail(emailOptions);
+	
+		console.log(sentMail);
+	} catch (error) {
+		console.log(error);
+	}
 };
 

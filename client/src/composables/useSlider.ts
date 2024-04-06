@@ -1,4 +1,7 @@
-export function useSlider() {
+/**
+ * This is a composable function that uses the Intersection Observer API to animate elements when they are in view.
+ */
+export default () => {
     const observerOptions: IntersectionObserverInit = {
         root: null, // Use the viewport as the root
         threshold: 0.85, // Percentage of the element that must be visible to trigger

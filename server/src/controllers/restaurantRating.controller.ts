@@ -1,11 +1,12 @@
 import { StatusCodes } from 'http-status-codes';
-import { createRestaurantRating } from '../services/CRUD/restaurantRating.service';
-import { respond } from '../utils/common';
-import { Message } from '../utils/common/ServerResponseMessages';
-import { asyncErrorHandler } from '../utils/errors/asyncErrorHandler';
-import { RestaurantRate } from '../db/models/RestaurantRate';
 
-export const newRestaurantRating = asyncErrorHandler<RestaurantRate>(async (req, res) => {
+import { createRestaurantRating } from '../services/CRUD/restaurantRating.service';
+import { respond } from '../utils/common/http';
+import { Message } from '../utils/common/ServerResponseMessages';
+import { requestHandler } from '../utils/errors/asyncErrorHandler';
+import { RestaurantReview } from '../db/models/RestaurantReview';
+
+export const newRestaurantRating = requestHandler<RestaurantReview>(async (req, res) => {
 	try {
 		const restaurantRating = req.body;
 	

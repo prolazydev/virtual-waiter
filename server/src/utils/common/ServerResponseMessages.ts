@@ -71,10 +71,16 @@ enum MailMessages {
 	EmailPasswordSend = 'An email has been sent to the provided email address with the password reset link.',
 }
 
+enum BusinessMessages {
+	/** Your Business account has already been confirmed! */
+	BusinessAlreadyConfirmed = 'Your Business account has already been confirmed!',
+}
+
 export const Message = {
 	...CrudMessages,
 	...CommonMessage,
 	...JWTMessages,
 	...AuthMessages,
 	...MailMessages,
+	...BusinessMessages,
 };

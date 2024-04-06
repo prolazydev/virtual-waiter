@@ -61,14 +61,15 @@ export const signToken = (userObj: UserResult, tokenOptions: SignOptions = { exp
 	
 export const verifyToken = (token: string) => {
 	try {
-		const verified = jwt.verify(token, TEST_SECRET_PUBLIC_JWT, { algorithms: [ 'RS256' ], } ) as MyJwtPayload;
-		return verified;
+		const payload = jwt.verify(token, TEST_SECRET_PUBLIC_JWT, { algorithms: [ 'RS256' ], } ) as MyJwtPayload;
+		return { payload, err: null };
 	} catch (err: jwt.JsonWebTokenError | Error | any) {
-		if (err instanceof jwt.JsonWebTokenError) {
-			if (err.name === 'TokenExpiredError')
-				return null;
-			console.log('JWT ERROR: ', err);
-		}
+		if ( err.message === 'jwt expired' )
+			return { payload: null, err: 'Expired' };
+		else if ( err.message === 'jwt malformed' )
+			return { payload: null, err: 'Malformed' };
+		
+		return { payload: null, err };
 	}
 };
 	
@@ -79,5 +80,17 @@ export const decodeToken = (token: string) => {
 		console.log(err);
 		return null;
 	}
+};
+
+export const createToken = () => {
+	const token = crypto.randomBytes(32).toString('hex');
+	const hashToken = crypto.createHash('sha256').update(token).digest('hex');
+	return { token, hashToken };
+};
+
+export const generateRandom4DigitNumber = () => {
+	// Generate a random number between 1000 and 9999 (inclusive)
+	const randomNumber = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
+	return randomNumber;
 };
 

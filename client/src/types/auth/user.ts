@@ -4,6 +4,7 @@ export type LoggedInUser = {
 	username: string;
 	roles: string[] | string;
 	isAuth: boolean;
+	hasBusiness: boolean;
 	avatar?: string;
 };
 
@@ -15,16 +16,19 @@ type EmailLogin = {
 	loginType: 'email';
 	email: string;
 	password: string;
+	rememberMe: boolean;
 };
 
 type UsernameLogin = {
 	loginType: 'username';
 	username: string;
 	password: string;
+	rememberMe: boolean;
 };
 type InvalidLogin = {
 	loginType: 'invalid';
 	password: string;
+	rememberMe: boolean;
 };
 
 export type LoginModel = EmailLogin | UsernameLogin | InvalidLogin;

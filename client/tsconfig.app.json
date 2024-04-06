@@ -20,7 +20,7 @@
 				"./src/*"
 			]
 		},
-		"types": [  ]
+		"types": [ "node" ]
 	},
 	"files": [
 		"auto-imports.d.ts",

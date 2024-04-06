@@ -1,10 +1,11 @@
 <template>
     <component
         :is="icon"
-        :size="size || 32" 
+        :size="size ?? 32" 
         :color="color"
-        :stroke-width="strokeWidth" 
-    />
+        :stroke-width="strokeWidth" >
+		<slot></slot>
+	</component>
 </template>
 
 <script lang="ts" setup>

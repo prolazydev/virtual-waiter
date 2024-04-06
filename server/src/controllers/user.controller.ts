@@ -1,18 +1,19 @@
 import mongoose from 'mongoose';
+import { StatusCodes } from 'http-status-codes';
+
 import { findUserById, findUsers, deleteUserById, updateUserById } from '../services/CRUD/user.service.js';
 import { Message } from '../utils/common/ServerResponseMessages.js';
-import { asyncErrorHandler } from '../utils/errors/asyncErrorHandler.js';
+import { requestHandler } from '../utils/errors/asyncErrorHandler.js';
 import { compressImageWebp } from '../utils/compression/index.js';
-import { StatusCodes } from 'http-status-codes';
-import { respond } from '../utils/common/index.js';
+import { respond } from '../utils/common/http';
 
-export const getAllUsers = asyncErrorHandler(async (req, res) => {
+export const getAllUsers = requestHandler(async (req, res) => {
 	const users = await findUsers();
 
 	respond(res, StatusCodes.OK, Message.SuccessRead, users);
 });
 
-export const getUserMe = asyncErrorHandler(async (req, res) => {
+export const getUserMe = requestHandler(async (req, res) => {
 	const id = req.identity!.id;
 
 	if ( !id )
@@ -27,7 +28,7 @@ export const getUserMe = asyncErrorHandler(async (req, res) => {
 	respond(res, StatusCodes.OK, Message.SuccessRead, user);
 });
 
-export const getUserById = asyncErrorHandler(async (req, res) => {
+export const getUserById = requestHandler(async (req, res) => {
 	const id = req.params.id;
 	if ( !id ) 
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
@@ -40,7 +41,7 @@ export const getUserById = asyncErrorHandler(async (req, res) => {
 	respond(res, StatusCodes.OK, Message.SuccessRead, user);
 });
 
-export const updateUser = asyncErrorHandler(async (req, res) => {
+export const updateUser = requestHandler(async (req, res) => {
 	// TODO: update only allowed props
 	const id = req.params.id;
 	if ( !id ) 
@@ -54,7 +55,7 @@ export const updateUser = asyncErrorHandler(async (req, res) => {
 	respond(res, StatusCodes.OK, Message.SuccessUpdate, user);
 });
 
-export const updateUserAvatar = asyncErrorHandler(async (req, res) => {
+export const updateUserAvatar = requestHandler(async (req, res) => {
 	if ( !req.file )
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 		// return next(new CustomError(Message.InvalidInput, StatusCodes.BAD_REQUEST));
@@ -71,7 +72,7 @@ export const updateUserAvatar = asyncErrorHandler(async (req, res) => {
 	respond(res, StatusCodes.OK, '', Message.SuccessUpdate);
 });
 
-export const deleteUser = asyncErrorHandler(async (req, res) => {
+export const deleteUser = requestHandler(async (req, res) => {
 	const id = req.identity!.id;
 	if ( !id ) 
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
@@ -84,7 +85,7 @@ export const deleteUser = asyncErrorHandler(async (req, res) => {
 	respond(res, StatusCodes.OK, '', Message.SuccessDelete);
 });
 
-export const deleteSelf = asyncErrorHandler(async (req, res) => {
+export const deleteSelf = requestHandler(async (req, res) => {
 	const id = req.identity!.id;
 	if ( !id ) 
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);

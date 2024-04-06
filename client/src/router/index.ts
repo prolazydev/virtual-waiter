@@ -3,8 +3,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/auth/LoginView.vue'
 import RegisterView from '@/views/auth/RegisterView.vue'
-import { useUserStore } from '@/stores/user';
-
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,9 +15,6 @@ const router = createRouter({
 		{
 			path: '/about',
 			name: 'about',
-			// route level code-splitting
-			// this generates a separate chunk (About.[hash].js) for this route
-			// which is lazy-loaded when the route is visited.
 			component: () => import('../views/AboutView.vue')
 		},
 		{
@@ -31,15 +26,22 @@ const router = createRouter({
 		{
 			path: '/register',
 			name: 'register',
-			component: RegisterView
+			component: RegisterView,
+			beforeEnter: (to, from, next) => {
+				const { isAuth } = useAuth();
+				if (isAuth()) 
+					next({ name: 'home' });
+				else
+					next();
+			}
 		},
 		{
-			path: '/confirm-account/:token',
+			path: '/confirm_account/:token',
 			name: 'confirmAccount',
 			component: () => import('@/views/auth/ConfirmAccountView.vue'),
 			meta: {
 				auth: true
-			}
+			},
 		},
 		{
 			path: '/search',
@@ -49,7 +51,58 @@ const router = createRouter({
 			// { 
 			// 	query: route.query.query, searchType: route.query.searchType 
 			// }),
-		}
+		},
+		{
+			path: '/profile',
+			name: 'authProfile',
+			component: () => import('@/views/user/ProfileView.vue'),
+			meta: {
+				auth: true
+			},
+		},
+		// {
+		// 	path: '/profile/:username',
+		// 	name: 'userProfile',
+		// 	component: () => import('@/views/user/UserProfileView.vue'),
+		// }
+		{
+			path: '/dashboard',
+			name: 'dashboard',
+			component: () => import('@/views/business/BusinessDashboardView.vue'),
+			meta: {
+				auth: true
+			},
+		},
+		{
+			path: '/business/:id',
+			name: 'businessProfile',
+			component: () => import('@/views/business/BusinessProfileView.vue'),
+			meta: {
+				auth: true
+			},
+		},
+		// TODO: Add edit business page
+		// {
+		// 	path: '/edit_business/:id',
+		// 	name: 'editBusiness',
+		// 	component: () => import('@/views/business/EditBusinessView.vue'),
+		// },
+		{
+			path:'/create_business',
+			name: 'createBusiness',
+			component: () => import('@/views/business/CreateBusinessView.vue'),
+			meta: {
+				auth: true
+			},
+		},
+		{
+			path: '/business_confirmation/:id',
+			name: 'businessConfirmation',
+			component: () => import('@/views/business/BusinessConfirmationView.vue'),
+			meta: {
+				auth: true
+			},
+		},
 		// TODO: Add 404 page
 		// {
 		// 	path: '/:pathMatch(.*)*',
@@ -60,19 +113,19 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-	const userStore = useUserStore();	
+	const { isAuth } = useAuth();
 
-	if (to.meta.auth && !userStore.user) {
+	if (to.meta.auth && !isAuth()) {
 		next({ name: 'login', query: { redirect: to.fullPath } })
 	} else {
 		next()
 	}
 });
 
-router.afterEach(() => {
-	// const toast = router.
+// router.afterEach(() => {
+// 	// const toast = router.
 	
-});
+// });
 
 
 

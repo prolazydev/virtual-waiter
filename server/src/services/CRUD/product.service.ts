@@ -1,4 +1,4 @@
-import mongoose, { FilterQuery, ProjectionType, QueryOptions } from 'mongoose';
+import mongoose, { FilterQuery, ProjectionType, QueryOptions, type Types } from 'mongoose';
 import { type Product, ProductModel } from '../../db/models/Product';
 
 // POST
@@ -8,21 +8,21 @@ export const createProduct = async (product: Product) =>
 // GET
 export const findAllProducts = async () => await ProductModel.find();
 
-export const findProductById = (id: string) => ProductModel.findById(id);
-export const findProductsByUserId = (userId: string) => ProductModel.find({ userId });
-export const findProductsByName = (name: string) => ProductModel.find({ name });
+export const findProductById = (id: string | Types.ObjectId) => ProductModel.findById(id);
+export const findProductsByUserId = (userId: string | Types.ObjectId) => ProductModel.find({ userId });
+export const findProductsByName = (name: string | Types.ObjectId) => ProductModel.find({ name });
 
 export const findProductByCustomQuery = (filter?: FilterQuery<Product>, projection?: ProjectionType<Product>, options?: QueryOptions<Product>) => ProductModel.findOne(filter, projection, options);
 export const findProductsByCustomQuery = (filter: FilterQuery<Product>, projection?: ProjectionType<Product>, options?: QueryOptions<Product>) => ProductModel.find(filter, projection, options);
 
 // PATCH
-export const findAndUpdateProductById = async (id: string, values: Product) => 
+export const findAndUpdateProductById = async (id: string | Types.ObjectId, values: Product) => 
 	ProductModel.findByIdAndUpdate(id, values, { new: true, runValidators: true });
 
 // DELETE
-export const findAndDeleteProductById = async (id: string) => 
+export const findAndDeleteProductById = async (id: string | Types.ObjectId) => 
 	ProductModel.findByIdAndUpdate(id, { 'deleted': true }, { new: true, runValidators: true });
-export const deleteProductsByUserId = async (userId: string) => {
+export const deleteProductsByUserId = async (userId: string | Types.ObjectId) => {
 	const session = await mongoose.startSession();
 	session.startTransaction();
 

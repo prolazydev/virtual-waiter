@@ -6,9 +6,14 @@ const productSchema = new mongoose.Schema({
 		ref: 'users',
 		required: true, 
 	},
-	restaurantId: {
+	// restaurantId: {
+	// 	type: mongoose.Schema.Types.ObjectId,
+	// 	ref: 'restaurants',
+	// 	required: true,
+	// },
+	businessId: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'restaurants',
+		ref: 'businesses',
 		required: true,
 	},
 	name: {
@@ -19,16 +24,18 @@ const productSchema = new mongoose.Schema({
 		type: String,
 		trim: true,
 	},
-	price: {
-		type: Number,
-		required: true,
+	price: Number,
+	currency: {
+		type: String,
+		required: false,
+		default: 'EURO',
 	},
-	quantity: {
-		type: Number,
-		required: true,
-	},
+	// quantity: {
+	// 	type: Number,
+	// 	required: true,
+	// },
 	image: {
-		type: Buffer,
+		type: [ Buffer ],
 		required: [ true, 'Image is required!' ], 
 	},
 	averageRating: {

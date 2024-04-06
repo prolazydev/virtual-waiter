@@ -28,11 +28,9 @@ const HPPOptions: hpp.Options = { whitelist: [ 'name' ], };
 export function initMiddlewares(app: Express) {
 	app.use(morgan('dev'));
 
-
 	app.use(cors(CORSOptions));
 	app.use(helmet());
 	app.use('/api', rateLimiter);
-
 
 	app.use(express.json({ limit: '10kb' }));
 	app.use(sanitize()); // Sanitize data after body parsing
@@ -41,8 +39,7 @@ export function initMiddlewares(app: Express) {
 	app.use(hpp(HPPOptions));
 
 	app.use(express.urlencoded({ extended: true }));
-	app.use(cookieParser());
-
+	app.use(cookieParser('secret'));
 
 	// TODO: caching
 
