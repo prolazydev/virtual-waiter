@@ -18,6 +18,7 @@ export interface IBusiness extends Document {
 	hours: typeof hours;
 	is24: boolean;
 	attributes?: string[];
+	totalRates?: number;
 	averageRating?: number;
 	reviews?: number;
 	reviewPoints?: number;
@@ -80,6 +81,7 @@ const businessSchema = new Schema<IBusiness>({
 	// 	type: Number,
 	// 	required: false,
 	// },
+	totalRates: Number,
 	averageRating: {
 		type: Number,
 		default: 0,

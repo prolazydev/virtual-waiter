@@ -38,4 +38,4 @@ restaurantReviewSchema.pre('save', async function (next) {
 });
 
 export type RestaurantReview = InferSchemaType<typeof restaurantReviewSchema>;
-export const RestaurantReviewModel = mongoose.model('restaurant_rates', restaurantReviewSchema);
+export const RestaurantReviewModel = mongoose.model('restaurant_reviews', restaurantReviewSchema);

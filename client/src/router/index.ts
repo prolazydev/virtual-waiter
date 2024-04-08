@@ -90,7 +90,7 @@ const router = createRouter({
 		{
 			path:'/create_business',
 			name: 'createBusiness',
-			component: () => import('@/views/business/CreateBusinessView.vue'),
+			component: () => import('@/views/business/BusinessCreateView.vue'),
 			meta: {
 				auth: true
 			},

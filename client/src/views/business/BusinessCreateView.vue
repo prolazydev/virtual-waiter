@@ -13,7 +13,7 @@
 			<div class="relative flex flex-col gap-2">
 				<div class="flex gap-1 items-center">
 					<label for="businessAddress">Email address</label>
-					<Tooltip text="This email will be used to communicate with potential costumers, will be a private email so clients will not see the email but you will get notified for every activity on this email">
+					<Tooltip _class="w-80" text="This email will be used to communicate with potential costumers, will be a private email so clients will not see the email but you will get notified for every activity on this email">
 						<LucideIcon class="mt-1 text-white fill-black" name="Info" :size="18" :stroke-width="2" />
 					</Tooltip>
 				</div>
@@ -153,7 +153,7 @@
                 <p :class="{ 'translate-y-[calc(0%+40px)]': requestStatus === 'Success' || requestStatus === 'Error' }" class="transition-transform duration-500 delay-100">Create</p>
                 <LucideIcon :class="{ 'mt-14': requestStatus === 'Success', '-mt-14': requestStatus === 'Idle' || requestStatus === 'Error' }" id="loaderIcon" class="absolute" name="Loader" :size="32" :stroke-width="2" />
                 <LucideIcon :class="{ 'process-success': requestStatus === 'Success' }" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-16 transition-all duration-500" id="chefHatIcon" name="ChefHat"  :size="32" :stroke-width="2"  />
-                <LucideIcon :class="{ 'process-success': requestStatus === 'Error' }" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-16 transition-all duration-500" id="chefHatIcon" name="XCircle"  :size="32" :stroke-width="2"  />
+                <LucideIcon :class="{ 'process-success': requestStatus === 'Error' }" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-16 transition-all duration-500" id="chefHatIcon" name="CircleX"  :size="32" :stroke-width="2"  />
             </button>
 		</form>
 

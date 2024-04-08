@@ -1,9 +1,29 @@
 export type BusinessItem = {
-	id: string;
+	_id: string;
+	userId: string;
 	name: string;
-	address: string;
-	phone: string;
 	email: string;
+	userEmail: string;
+	streetAddress?: string[];
+	phone?: string;
+	description?: string;
+	location?: string;
+	profileImage?: string;
+	coverImage?: string;
+	hours?: Hours;
+	is24: boolean;
+	attributes?: string[];
+	totalRates?: number;
+	averageRating?: number;
+	reviews?: number;
+	reviewPoints?: number;
+	categories?: string[];
+	website?: string;
+	confirmationCode?: number;
+	confirmationCodeExpiry?: Date;
+	confirmed?: boolean;
+	deleted?: boolean;
+	banned?: boolean;
 }
 
 type Hours = {

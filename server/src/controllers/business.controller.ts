@@ -75,6 +75,11 @@ export const getBusinessSelf = requestHandler(async (req, res) => {
 	if ( !userId ) 
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 
+	// TODO: get business with the ratings also
+	// const myBusinesses = await findBusinessesByCustomQuery({
+		
+	// }, {  }, {  })
+
 	const businesses = await findBusinessesByUserId(userId);
 	if ( !businesses ) 
 		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
