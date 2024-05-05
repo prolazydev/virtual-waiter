@@ -13,21 +13,6 @@ const hoursValidation = [
 				return isDateRange.test(dateRange);
 		}
 	}
-	// {
-	// 	validator: function(dateRange: string) {
-	// 		return isDateRange.test(dateRange);
-	// 	},
-	// 	// @ts-expect-error stupid
-	// 	message: props => `Date ${props.value} is invalid!`
-	// }, 
-	// {
-	// 	validator: function(this: { __parent: SingleNested  }, dateRange: string) {
-	// 		// If is24 is true, closeHours should be empty or not assigned
-	// 		return !this.is24 || (this.is24 && (!dateRange || dateRange.trim() === ''));
-	// 	},
-	// 	// @ts-expect-error stupid
-	// 	message: props => `${props.path} invalid!`,
-	// }, 
 ];
 
 export const hours = new mongoose.Schema({
@@ -66,4 +51,11 @@ export const hours = new mongoose.Schema({
 		required: false,
 		validate: hoursValidation,
 	}
-});
+}, { _id: false });
+
+// hours.set('toJSON', {
+// 	virtuals: true,
+// 	transform: function(doc, ret) {
+// 		delete ret._id;
+// 	}
+// });

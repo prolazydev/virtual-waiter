@@ -1,8 +1,9 @@
-import type { Router, RequestHandler } from 'express';
+import type { Router, RequestHandler, Response, NextFunction } from 'express';
 
-import { registerBusinessRequest, getAllBusinesses, getBusinessById, getBusinessesByUserId, getBusinessesByName, getBusinessesByCustomQuery, updateBusinessById, deleteUserBusinessesTransaction, getBusinessSelf, confirmBusinessAccount, getBusinessConfirmationCode } from '../controllers/business.controller';
+import { registerBusinessRequest, getAllBusinesses, getBusinessById, getBusinessesByUserId, getBusinessesByName, getBusinessesByCustomQuery, updateBusinessById, deleteUserBusinessesTransaction, getBusinessesSelf, confirmBusinessAccount, getBusinessConfirmationCode } from '../controllers/business.controller';
 import { deleteBusinessById } from '../services/CRUD/business.service';
-import { isAuthenticated } from '../middlewares/auth.middleware';
+import { isAuthenticated, isSelfItemOwner } from '../middlewares/auth.middleware';
+import type { MyRequest } from '../types';
 
 export default (businessRouter: Router, middlewares: RequestHandler[] | RequestHandler = []) => {
 	// Register business process
@@ -13,7 +14,10 @@ export default (businessRouter: Router, middlewares: RequestHandler[] | RequestH
 	// GET
 	businessRouter.get('/business', middlewares, getAllBusinesses);
 	
-	businessRouter.get('/business/self', isAuthenticated, getBusinessSelf);
+	businessRouter.get('/business_self', isAuthenticated, getBusinessesSelf);
+	businessRouter.get('/business_self/:id', isAuthenticated, (req: MyRequest, res: Response, next: NextFunction) => isSelfItemOwner(req, res, next, 'businesses'), getBusinessById);
+	
+	
 	businessRouter.get('/business/:id', isAuthenticated, getBusinessById);
 	businessRouter.get('/business/user/:userId', middlewares, getBusinessesByUserId);
 	businessRouter.get('/business/name/:name', middlewares, getBusinessesByName);

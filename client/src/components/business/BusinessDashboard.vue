@@ -12,7 +12,6 @@
 				<button @click="() => console.log('blewh')" class="absolute top-0 right-0 m-2 z-50 transition-all" type="button" >
 					<LucideIcon class="fill-transparent hover:fill-rose-500 hover:text-rose-500 transition-all" name="Heart" :stroke-width="2" />
 				</button>
-
 			</div>
 
 			<div class="w-full mb-2 border-b-4 border-[#1b1b1b]"></div>
@@ -22,7 +21,7 @@
 					<router-link :to="{ path: `/business/${business._id}` }" class="hover:underline">
 						<h1 class="text-2xl font-semibold text-[#1b1b1b]">{{ business.name }}</h1>
 					</router-link>
-					<Review v-if="business.totalRates && business.totalRates > 0" :stars="business.averageRating!" :rating="business.totalRates" />
+					<Review v-if="business.reviews && business.reviews > 0" :stars="business.averageRating!" :rating="business.reviews" />
 
 
 					<div class="flex gap-2 text-sm font-semibold">
@@ -47,7 +46,6 @@
 				</div>
 			</div>
 		</div>
-
 	</div>
 
 	<div v-else class="mx-auto">
@@ -62,18 +60,14 @@ import { type BusinessItem } from '@/types/business';
 
 const businesses = ref<BusinessItem[]>([]);
 
-onBeforeMount(async () => {
-	await getBusinesses();
-});
-
-onMounted(() => {  });
-
 const getBusinesses = async () => {
-	const { response, data } = await myFetch<BusinessItem[]>('business/self');
+	const { response, data } = await myFetch<BusinessItem[]>('business_self');
 	if (response.value!.ok && data.value) {
 		businesses.value = data.value;
 	}
 }
+
+await getBusinesses();
 
 </script>
 

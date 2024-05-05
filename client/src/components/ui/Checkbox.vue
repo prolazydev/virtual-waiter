@@ -83,12 +83,11 @@ const returnValue = (e: HTMLInputElement) => {
 	;
 }
 
-
 /* When the checkbox is checked, add a blue background */
-.checkbox-container input:checked ~ .checkbox-label {
+/* .checkbox-container input:checked ~ .checkbox-label { */
 	/* TODO: Maybe add bg color */
   /* background-color: #2196F3; */
-}
+/* } */
 
 /* Create the checkmark/indicator (hidden when not checked) */
 /* Style the checkmark/indicator */

@@ -56,6 +56,8 @@ enum AuthMessages {
 	 * Account Confirmation Token is invalid or has expired! Please request a new confirmation email.
 	 */
 	AccountConfirmationError = 'Account Confirmation Token is invalid or has expired! Please request a new confirmation email.',
+	/** Unauthorized */
+	Unauthorized = 'Unauthorized',
 }
 
 enum MailMessages {

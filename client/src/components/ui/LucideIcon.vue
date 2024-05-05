@@ -25,9 +25,5 @@ const props = defineProps({
 	strokeWidth: Number,
 })
 
-const icon = computed(() => (icons as any)[props.name]);
+const icon = computed(() => icons[props.name]);
 </script>
-
-<style scoped>
-
-</style>

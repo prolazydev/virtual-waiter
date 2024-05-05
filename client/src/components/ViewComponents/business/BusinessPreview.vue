@@ -115,7 +115,7 @@
 						<div class="contact-pill">
 							<template v-if="website && website.length > 0">
 								<a :href="`https://${website}`" target="_blank" rel="noopener noreferrer">{{ website }}</a>
-								<LucideIcon name="ArrowUpRightSquare" :size="16" :stroke-width="2" />
+								<LucideIcon name="SquareArrowUpRight" :size="16" :stroke-width="2" />
 							</template>
 							<template v-else>
 								<div class="px-24 py-[0.625rem] bg-gray-200"></div>

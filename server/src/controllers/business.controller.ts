@@ -2,11 +2,11 @@ import mongoose, { type FilterQuery } from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
 
 import { respond } from '../utils/common/http';
-import type { Business } from '../db/models/Business/Business';
+import { type Business } from '../db/models/Business/Business';
 import { Message } from '../utils/common/ServerResponseMessages';
 import { requestHandler } from '../utils/errors/asyncErrorHandler';
 import { handleError } from '../utils/errors/error';
-import { createBusiness, findBusinesses, findBusinessById, findBusinessesByUserId, findBusinessesByName, findBusinessesByCustomQuery, findAndUpdateBusinessById, deleteBusinessesByUserId, deleteBusinessById, findBusinessByCustomQuery } from '../services/CRUD/business.service';
+import { createBusiness, findBusinesses, findBusinessById, findBusinessesByUserId, findBusinessesByName, findBusinessesByCustomQuery, findBusinessesByAggregate, findAndUpdateBusinessById, deleteBusinessesByUserId, deleteBusinessById, findBusinessByCustomQuery } from '../services/CRUD/business.service';
 import { generateRandom4DigitNumber } from '../utils/crypto';
 import { sendEmail } from '../utils/email';
 
@@ -35,15 +35,35 @@ export const getAllBusinesses = requestHandler(async (req, res) => {
 });
 
 export const getBusinessById = requestHandler(async (req, res) => {
-	const id = req.params.id;
-	if ( !id ) 
-		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
+	try {
+		const id = req.params.id;
+		if ( !id ) 
+			return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
+		if ( id.length !== 24 )
+			return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 
-	const business = await findBusinessById(id);
-	if ( !business ) 
-		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
+		// TODO: get business with the ratings also
+		const business = (await findBusinessesByAggregate([
+			{
+				$lookup: {
+					from: 'business_reviews',
+					localField: '_id',
+					foreignField: 'businessId',
+					as: 'userReviews',
+				},
+			},
+		]))[0];
 
-	respond(res, StatusCodes.OK, Message.SuccessRead, business);
+		if ( !business ) 
+			return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
+		
+		business.averageRating = parseFloat(business.averageRating!.toFixed(2));
+
+		respond(res, StatusCodes.OK, Message.SuccessRead, business);
+	} catch (error) {
+		console.log(error);
+		handleError(res, error);
+	}
 });
 
 export const getBusinessesByUserId = requestHandler(async (req, res) => {
@@ -70,15 +90,10 @@ export const getBusinessesByName = requestHandler(async (req, res) => {
 	respond(res, StatusCodes.OK, Message.SuccessRead, businesses);
 });
 
-export const getBusinessSelf = requestHandler(async (req, res) => {
+export const getBusinessesSelf = requestHandler(async (req, res) => {
 	const userId = req.identity!.id;
 	if ( !userId ) 
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
-
-	// TODO: get business with the ratings also
-	// const myBusinesses = await findBusinessesByCustomQuery({
-		
-	// }, {  }, {  })
 
 	const businesses = await findBusinessesByUserId(userId);
 	if ( !businesses ) 
@@ -237,4 +252,5 @@ export const deleteUserBusinessesTransaction = requestHandler(async (req, res) =
 		await session.endSession();
 	}
 });
+
 // #endregion

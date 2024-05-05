@@ -1,28 +1,30 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { Request } from 'express';
 import { RequestHandler } from 'express-serve-static-core';
-import { JwtPayload } from 'jsonwebtoken';
+// import { JwtPayload } from 'jsonwebtoken';
 import mongoose from 'mongoose';
 
 export type middlewareRequest = RequestHandler[] | RequestHandler;
 
-export interface MyJwtPayload extends JwtPayload {
-	/**
-	 * User Id
-	 */
-	id: string | undefined;
-	username: string,
-	email: string,
-	avatar?: string,
-	roles?: string[];
-}
+// TODO: maybe delete this
+// export interface MyJwtPayload extends JwtPayload {
+// 	/**
+// 	 * User Id
+// 	 */
+// 	id: string | undefined;
+// 	username: string,
+// 	email: string,
+// 	avatar?: string,
+// 	roles?: string[];
+// }
 
 export interface UserResult {
 	id: string,
 	username: string,
 	email: string,
 	avatar?: string,
-	roles?: string[]
+	roles?: string[],
+	rememberMe?: boolean,
 }
 
 /**
@@ -30,13 +32,16 @@ export interface UserResult {
  */
 // export interface MyRequest<TBody = any, TQuery extends Query = any> extends Express.Request {
 // eslint-disable-next-line  @typescript-eslint/no-unused-vars
-export interface MyRequest<TBody = any> extends Request {
+export interface MyRequest<TBody = any, TItem = any> extends Request {
 	body: TBody,
 	// query: TQuery;
 	cookies: any,
 	// params: ParamsDictionary,
 	identity?: UserResult,
 	headers: any,
+	// db?: any,
+	collectionDb?: string,
+	item?: TItem,
 }
 
 /**

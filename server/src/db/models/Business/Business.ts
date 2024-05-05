@@ -9,7 +9,16 @@ export interface IBusiness extends Document {
 	name: string;
 	email: string;
 	userEmail: string;
-	streetAddress?: string[];
+	streetAddress?: {
+		primary?: {
+			main: string;
+			zipCode: string;
+		},
+		secondary?: {
+			main: string;
+			zipCode: string;
+		},
+	};
 	phone?: string;
 	description?: string;
 	location?: string;
@@ -18,7 +27,6 @@ export interface IBusiness extends Document {
 	hours: typeof hours;
 	is24: boolean;
 	attributes?: string[];
-	totalRates?: number;
 	averageRating?: number;
 	reviews?: number;
 	reviewPoints?: number;
@@ -81,22 +89,24 @@ const businessSchema = new Schema<IBusiness>({
 	// 	type: Number,
 	// 	required: false,
 	// },
-	totalRates: Number,
+	// totalRates: Number,
 	averageRating: {
 		type: Number,
+		required: true,
 		default: 0,
 		min: 0,
 		max: 5,
-		required: false,
 	},
 	reviews: {
 		type: Number,
-		required: false,
+		required: true,
+		min: 0,
 		default: 0,
 	},
 	reviewPoints: {
 		type: Number,
-		required: false,
+		required: true,
+		min: 0,
 		default: 0,
 	},	
 	categories: {
@@ -112,16 +122,34 @@ const businessSchema = new Schema<IBusiness>({
 		},
 	},
 	streetAddress: {
-		primary: String,
-		secondary: String,
+		primary: {
+			main: {
+				type: String,
+				required: false,
+			},
+			zipCode: {
+				type: String,
+				required: false,
+			},
+		},
+		secondary: {
+			main: {
+				type: String,
+				required: false,
+			},
+			zipCode: {
+				type: String,
+				required: false,
+			},
+		},
+		// primary: String,
+		// secondary: String,
 	},
 	website: {
 		type: String,
 		required: false,
 		validate: {
-			validator: function(websiteValue: string) {
-				return validator.isURL(websiteValue);
-			},
+			validator: (websiteValue: string) => validator.isURL(websiteValue),
 			message: (props: { value: string }) => `"${props.value}" is not a valid URL!`,
 		}
 	},

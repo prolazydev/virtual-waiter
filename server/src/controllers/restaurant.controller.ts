@@ -39,12 +39,10 @@ export const getRestaurantById = requestHandler(async (req, res) => {
 	const id = req.params.id;
 	if ( !id ) 
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
-		// return next(new CustomError(Message.InvalidInput, StatusCodes.BAD_REQUEST));
 
 	const restaurant = await findRestaurantById(id);
 	if ( !restaurant ) 
 		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
-		// return next(new CustomError(Message.NotFound, StatusCodes.NOT_FOUND));
 
 	respond(res, StatusCodes.OK, Message.SuccessRead, restaurant);
 });
@@ -53,12 +51,10 @@ export const getRestaurantsByUserId = requestHandler(async (req, res) => {
 	const id = req.params.id;
 	if ( !id ) 
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
-		// return next(new CustomError(Message.InvalidInput, StatusCodes.BAD_REQUEST));
 
 	const restaurants = await findRestaurantsByUserId(id);
 	if ( !restaurants ) 
 		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
-		// return next(new CustomError(Message.NotFound, StatusCodes.NOT_FOUND));
 
 	respond(res, StatusCodes.OK, Message.SuccessRead, restaurants);
 });

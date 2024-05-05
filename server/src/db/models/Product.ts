@@ -25,11 +25,12 @@ const productSchema = new mongoose.Schema({
 		trim: true,
 	},
 	price: Number,
-	currency: {
-		type: String,
-		required: false,
-		default: 'EURO',
-	},
+	// TODO: Show currency globally not per product
+	// currency: {
+	// 	type: String,
+	// 	required: false,
+	// 	default: 'EURO',
+	// },
 	// quantity: {
 	// 	type: Number,
 	// 	required: true,

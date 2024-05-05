@@ -67,8 +67,8 @@ export default defineConfig({
 					names: ['Flip'],
 				},
 				// {
-				// 	from: 'lucide-vue-next',
-				// 	names: [ '*' ],
+				// 	from: 'v-calendar',
+				// 	names: [ 'DatePicker' ],
 				// }
 			],
 			dirs: [ 
@@ -79,7 +79,6 @@ export default defineConfig({
 			resolvers: [ 
 				(componentName: string) => resolvePath(componentName),
 			],
-			
 			dts: true,
 			exclude: [ 'tc-range-slider' ]
 		}),
@@ -109,7 +108,6 @@ export default defineConfig({
 })
 
 // Private
-
 const resolvePath = (componentName: string) => findComponent(componentName);
 
 // find component locally t that is nested inside components folder knowing only the name

@@ -8,7 +8,7 @@ import { Message } from '../utils/common/ServerResponseMessages';
 import { createConfirmAccountToken, createResetPasswordToken, createUser, findUserByCustomQuery, findUserByEmail, findUserById, userExists } from '../services/CRUD/user.service';
 import { randomSalt, passwordMatch, signToken } from '../utils/crypto';
 import { REFRESH_TOKEN_DURATION, ACCESS_TOKEN_DURATION, REDIS_REFRESH_TOKEN_EXPIRY_TIME, ACCESS_TOKEN_DURATION_EXTENDED, REFRESH_TOKEN_DURATION_EXTENDED, NODE_ENV, REDIS_REFRESH_TOKEN_EXPIRY_TIME_EXTENDED } from '../utils/constants';
-import { rDel, rSet } from '../services/redis.service';
+import { rDel, rExists, rSet } from '../services/redis.service';
 import { sendEmail } from '../utils/email';
 import { respond } from '../utils/common/http';
 
@@ -150,9 +150,9 @@ export const logout = requestHandler(async (req, res) => {
 	respond(res, StatusCodes.OK);
 });
 // TODO: maybe refactor
-export const checkAuth = requestHandler(async (req, res) => {
-	respond(res, StatusCodes.OK, Message.SuccessLogin, req.identity!);
-});
+export const checkAuth = requestHandler(async (req, res) => 
+	respond(res, StatusCodes.OK, Message.SuccessLogin, req.identity!)
+);
 
 export const addRole = requestHandler<{ id: string, role: string; }>(async (req, res) => {
 	const { id, role } = req.body;
@@ -315,28 +315,34 @@ export const verifyAccount = requestHandler(async (req, res) => {
  */
 async function tokenLoginUser(res: Response, userObj: UserResult, rememberMe: boolean = false) {
 	const accessToken = signToken(userObj, { expiresIn: rememberMe ? ACCESS_TOKEN_DURATION_EXTENDED : ACCESS_TOKEN_DURATION, algorithm: 'RS256' });
+	
+	userObj.rememberMe = rememberMe;
 	const refreshToken = signToken(userObj, { expiresIn: rememberMe ? REFRESH_TOKEN_DURATION_EXTENDED : REFRESH_TOKEN_DURATION, algorithm: 'RS256' });
 
 	if (!accessToken || !refreshToken) {
+		const test = await rExists(userObj.id);
+		console.log(test);
+
 		await rDel(userObj.id);
+
 		return respond(res, StatusCodes.INTERNAL_SERVER_ERROR, Message.JWTError);
 	}
 
-	const isSet = await rSet(userObj.id, refreshToken, { EX: parseInt(rememberMe ? REDIS_REFRESH_TOKEN_EXPIRY_TIME_EXTENDED : REDIS_REFRESH_TOKEN_EXPIRY_TIME!) });
+	const isSet = await rSet(userObj.id, refreshToken, 
+		{ EX: parseInt(rememberMe ? REDIS_REFRESH_TOKEN_EXPIRY_TIME_EXTENDED : REDIS_REFRESH_TOKEN_EXPIRY_TIME) });
 	if (isSet !== 'OK') {
 		console.log('Redis error: ', isSet);
 		return respond(res, StatusCodes.INTERNAL_SERVER_ERROR, Message.DatabaseError);
 	}
 
 	const cookieOptions: CookieOptions = {
-		// 30 days with rememberMe or 1h without
-		maxAge: 30 * 24 * 1 * 60 * 60 * 1000, // 1h,
-		// maxAge: 10000, // 10s,
+		// maxAge: 10000, // 10s, for testing
+		maxAge: rememberMe ? 30 * 24 * 1 * 60 * 60 * 1000 : 5 * 60 * 1000, // 30d or 5m,
 		httpOnly: true,
-		secure: true, // leave to false in development
+		secure: true, 
+		// secure: NODE_ENV === 'production', // leave to false in development
 		sameSite: 'none',
 		signed: true,
-
 	};
 	if (NODE_ENV === 'production') cookieOptions.secure = true;
 

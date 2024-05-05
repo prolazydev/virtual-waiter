@@ -1,11 +1,11 @@
 import express from 'express';
 
-import { isAdmin, isAuthenticated, isOwner } from '../middlewares/auth.middleware';
+import { isAdmin, isAuthenticated, isSelfUserOwner } from '../middlewares/auth.middleware';
 
 import authRouter from './auth.router';
 import userRouter from './user.router';
 import restaurantRouter from './restaurant.router';
-import restaurantRatingRouter from './restaurantRating.router';
+// import restaurantRatingRouter from './restaurantRating.router';
 import businessRouter from './business.router';
 import businessCategoryRouter from './businessCategory.router';
 
@@ -16,11 +16,11 @@ const router = express.Router();
  */
 export default (): express.Router => {
 	// TODO: Add auth middleware
-	authRouter(router, [ isAuthenticated, isOwner ]);
+	authRouter(router, [ isAuthenticated, isSelfUserOwner ]);
 
 	userRouter(router, [ isAuthenticated, isAdmin ]);
 	restaurantRouter(router, [ isAuthenticated ]);
-	restaurantRatingRouter(router, [ isAuthenticated ]);
+	// restaurantRatingRouter(router, [ isAuthenticated ]);
 
 	businessRouter(router, [ isAuthenticated, isAdmin ]);
 	businessCategoryRouter(router, [ isAuthenticated, isAdmin ]);

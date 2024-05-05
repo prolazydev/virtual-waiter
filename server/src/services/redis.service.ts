@@ -40,3 +40,5 @@ export const rGet = async (key: string) =>
 export const rDel = async (key: string) => 
 	redisClient.del(key);
 
+export const rExists = async (key: string) =>
+	redisClient.exists(key);

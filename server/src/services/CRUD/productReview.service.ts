@@ -10,8 +10,10 @@ export const findAllProductReviews = async () => await ProductReviewModel.find()
 
 export const findProductReviewById = (id: string | Types.ObjectId) => ProductReviewModel.findById(id);
 export const findProductReviewsByUserId = (userId: string | Types.ObjectId) => ProductReviewModel.find({ userId });
-export const findProductReviewsByBusinessId = (businessId: string | Types.ObjectId) => ProductReviewModel.find({ businessId });
-export const findProductReviewsByProductId = (productId: string | Types.ObjectId) => ProductReviewModel.find({ productId });
+export const findProductReviewsByBusinessId = (businessId: string | Types.ObjectId, projection?: ProjectionType<ProductReview>, options?: QueryOptions<ProductReview>) =>
+	ProductReviewModel.find({ businessId }, projection, options);
+export const findProductReviewsByProductId = (productId: string | Types.ObjectId, projection?: ProjectionType<ProductReview>, options?: QueryOptions<ProductReview>) =>
+	ProductReviewModel.find({ productId }, projection, options);
 
 export const findProductReviewByCustomQuery = (filter?: FilterQuery<ProductReview>, projection?: ProjectionType<ProductReview>, options?: QueryOptions<ProductReview>) => ProductReviewModel.findOne(filter, projection, options);
 export const findProductReviewsByCustomQuery = (filter: FilterQuery<ProductReview>, projection?: ProjectionType<ProductReview>, options?: QueryOptions<ProductReview>) => ProductReviewModel.find(filter, projection, options);

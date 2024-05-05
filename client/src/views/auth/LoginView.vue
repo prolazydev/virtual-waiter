@@ -96,7 +96,8 @@ const handleLogin = async () => {
             login(data.value)
 
             const redirect = route.query.redirect as string ?? '/';
-            await tostRouterTo(router, redirect, 'Logged in!');
+            setTimeout(async () =>
+                await tostRouterTo(router, redirect, 'Logged in!'), 650);
         } else {
             requestStatus.value = 'Error';
             setTimeout(() => requestStatus.value = 'Idle', 1250)

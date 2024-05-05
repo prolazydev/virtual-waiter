@@ -1,4 +1,4 @@
-import mongoose, { type ClientSession, type FilterQuery, type ProjectionType, type QueryOptions, type UpdateQuery } from 'mongoose';
+import mongoose, { type AggregateOptions, type ClientSession, type FilterQuery, type PipelineStage, type ProjectionType, type QueryOptions, type UpdateQuery } from 'mongoose';
 import { UpdateOptions } from 'mongodb';
 import { type Business, BusinessModel } from '../../db/models/Business/Business';
 
@@ -7,7 +7,7 @@ export const createBusiness = async (business: Business) =>
 	new BusinessModel(business).save();
 
 // GET
-export const findBusinesses = async () => await BusinessModel.find();
+export const findBusinesses = () => BusinessModel.find();
 
 export const findBusinessById = (id: string | mongoose.Schema.Types.ObjectId) => BusinessModel.findById(id);
 export const findBusinessesByUserId = (userId: string) => BusinessModel.find({ userId });
@@ -15,6 +15,9 @@ export const findBusinessesByName = (name: string) => BusinessModel.find({ name 
 
 export const findBusinessByCustomQuery = (filter?: FilterQuery<Business>, projection?: ProjectionType<Business>, options?: QueryOptions<Business>) => BusinessModel.findOne(filter, projection, options);
 export const findBusinessesByCustomQuery = (filter: FilterQuery<Business>, projection?: ProjectionType<Business>, options?: QueryOptions<Business>) => BusinessModel.find(filter, projection, options);
+
+export const findBusinessesByAggregate = async (pipeline?: PipelineStage[], options?: AggregateOptions) =>
+	BusinessModel.aggregate(pipeline, options);
 
 // PATCH
 export const findAndUpdateBusinessById = async (id: string, values: UpdateQuery<Business>, options: QueryOptions<Business> = { new: true, runValidators: true }) =>

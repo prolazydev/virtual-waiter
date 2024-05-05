@@ -33,25 +33,24 @@ const businessReviewSchema = new mongoose.Schema<BusinessReviewDocument>({
 	},
 	deleted: {
 		type: Boolean,
+		required: false,
 		default: false,
 	},
 }, { timestamps: true });
 
-businessReviewSchema.pre('save', async function (next) {
-	const rates = await findBusinessReviewsByBusinessId(this.businessId).lean();
-	const business = await findBusinessById(this.businessId);
-
-	if (!business) {
+businessReviewSchema.post('save', async function (review) {
+	const rates = await findBusinessReviewsByBusinessId(review.businessId, undefined, { lean: true });
+	const business = await findBusinessById(review.businessId);
+	if ( !business ) 
 		throw new Error('Business not found');
-	}
 
-	const totalRates = rates.reduce((acc, rate) => acc + rate.rate, 0);
+	const reviews = rates.length;
+	const averageRating = rates.reduce((acc, rate) => acc + rate.rate, 0) / reviews;
 
-	business.totalRates = totalRates;
-	business.averageRating = totalRates / rates.length;
-	await business!.save();
+	business.reviews = reviews;
+	business.averageRating = averageRating;
 
-	next();
+	await business.save();
 });
 
 

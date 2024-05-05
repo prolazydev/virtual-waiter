@@ -15,7 +15,9 @@
 			<LucideIcon name="Star" :size="sizes" color="gray" />
 			<LucideIcon name="Star" :size="sizes" color="gray" />
 		</ul>
-		<p class="text-sm"><span class="font-bold">{{ stars }}</span> ({{ `${reviews} Reviews` }})</p>
+		<p v-if="reviews" :class="_pClass ?? 'text-sm'">
+			({{ `${reviews} Reviews` }})
+		</p>
 	</div>
 </template>
 
@@ -23,7 +25,8 @@
 const props = defineProps<{
 	stars: number,
 	reviews?: number,
-	sizes?: number
+	sizes?: number,
+	_pClass?: string,
 }>();
 
 const hasFloatingPointAboveHalf = computed(() => props.stars % 1 >= 0.5);

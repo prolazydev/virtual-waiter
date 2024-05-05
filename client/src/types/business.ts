@@ -1,10 +1,12 @@
+import type { BaseDocument } from './common';
+
 export type BusinessItem = {
 	_id: string;
 	userId: string;
 	name: string;
 	email: string;
 	userEmail: string;
-	streetAddress?: string[];
+	streetAddress?: StreetAddresses;
 	phone?: string;
 	description?: string;
 	location?: string;
@@ -13,19 +15,19 @@ export type BusinessItem = {
 	hours?: Hours;
 	is24: boolean;
 	attributes?: string[];
-	totalRates?: number;
-	averageRating?: number;
-	reviews?: number;
+	averageRating: number;
+	reviews: number;
+	userReviews: UserReview[];
 	reviewPoints?: number;
 	categories?: string[];
 	website?: string;
 	confirmationCode?: number;
 	confirmationCodeExpiry?: Date;
-	confirmed?: boolean;
-	deleted?: boolean;
-	banned?: boolean;
+	verified: boolean;
+	confirmed: boolean;
+	deleted: boolean;
+	banned: boolean;
 }
-
 type Hours = {
 	monday: string;
 	tuesday: string;
@@ -36,12 +38,17 @@ type Hours = {
 	sunday: string;
 }
 
-interface StreetAddresses {
-	primary?: string;
+export type KeyHours = keyof Hours;
+
+type StreetAddresses = {
+	primary?: {
+		main: string;
+		zipCode: string;
+	};
 	secondary?: string;
 }
 
-export interface CreateBusinessModel {
+export type CreateBusinessModel = {
 	userId: string;
 	name: string;
 	email: string;
@@ -67,3 +74,10 @@ export type BusinessCategory = {
 	parentCategories: string[];
 	description?: string;
 }
+
+export type UserReview = {
+	userId: string;
+	businessId: string;
+	rating: number;
+	review: string;
+} & BaseDocument;

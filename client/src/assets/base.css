@@ -25,8 +25,30 @@ body {
 /* Reusable classes */
 
 .absolute-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 } 
+
+.page-main {
+	@apply py-16 px-32 flex flex-col
+}
+
+.loading-content {
+	margin: auto;
+	transform: scale(0.75);
+	opacity: 0;
+	
+	animation: loading-content-fade-in-animation 10s linear 0s 1 forwards;
+}
+
+@keyframes loading-content-fade-in-animation {
+	15% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+}

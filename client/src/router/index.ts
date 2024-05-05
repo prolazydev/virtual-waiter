@@ -21,7 +21,9 @@ const router = createRouter({
 			path: '/login',
 			name: 'login',
 			component: LoginView,
-			props: (route) => ({ redirect: route.query.redirect }),
+			props: route => ({ redirect: route.query.redirect }),
+			beforeEnter: ({ }, { }, next) =>
+				useAuth().isAuth() ? next({ name: 'home' }) : next()
 		},
 		{
 			path: '/register',
@@ -29,6 +31,7 @@ const router = createRouter({
 			component: RegisterView,
 			beforeEnter: (to, from, next) => {
 				const { isAuth } = useAuth();
+
 				if (isAuth()) 
 					next({ name: 'home' });
 				else
@@ -104,11 +107,16 @@ const router = createRouter({
 			},
 		},
 		// TODO: Add 404 page
-		// {
-		// 	path: '/:pathMatch(.*)*',
-		// 	name: 'not-found',
-		// 	component: () => import('@/views/NotFoundView.vue')
-		// }
+		{
+			path: '/:pathMatch(.*)*',
+			name: 'notFound',
+			component: () => import('@/views/error/NotFoundView.vue')
+		},
+		{
+			path: '/bad_request',
+			name: 'badRequest',
+			component: () => import('@/views/error/BadRequestView.vue')
+		}
 	]
 })
 
