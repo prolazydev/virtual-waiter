@@ -45,7 +45,10 @@ type StreetAddresses = {
 		main: string;
 		zipCode: string;
 	};
-	secondary?: string;
+	secondary?: {
+		main: string;
+		zipCode: string;
+	};
 }
 
 export type CreateBusinessModel = {

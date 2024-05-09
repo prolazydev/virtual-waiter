@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     BusinessDashboard: typeof import('@/components/business/BusinessDashboard.vue')['default']
+    BusinessPreview: typeof import('./src/components/ViewComponents/business/BusinessPreview.vue')['default']
     BusinessView: typeof import('@/components/business/BusinessView.vue')['default']
     Checkbox: typeof import('@/components/ui/Checkbox.vue')['default']
     DatePicker: typeof import('@/components/ui/MyDatePicker.vue')['default']

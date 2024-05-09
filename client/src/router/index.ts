@@ -79,7 +79,7 @@ const router = createRouter({
 		{
 			path: '/business/:id',
 			name: 'businessProfile',
-			component: () => import('@/views/business/BusinessProfileView.vue'),
+			component: () => import('@/views/business/businessProfile/BusinessProfileView.vue'),
 			meta: {
 				auth: true
 			},
