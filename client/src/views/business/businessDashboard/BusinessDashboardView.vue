@@ -20,7 +20,7 @@
 
 <style scoped>
 .dashboard {
-	@apply mt-auto py-16 px-20 flex flex-col gap-20
+	@apply py-8 flex flex-col gap-20
 }
 
 </style>

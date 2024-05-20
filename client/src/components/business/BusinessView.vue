@@ -190,7 +190,7 @@
 											<div class="flex gap-1 items-center">
 												<p>10 Photos</p>
 												<div class="w-1 h-1 mx-1 bg-gray-400 rounded-full" />
-												<p>5 Review</p>
+												<p>5 Reviews</p>
 											</div>
 										</div>
 									</button>	
@@ -245,85 +245,80 @@
 				</div>
 				<div class="w-full p-5 flex flex-col gap-5 border-2 border-[#1b1b1b]">
 					<h2 class="text-2xl pb-3 font-semibold border-b border-b-[#1b1b1b]/50">Amenities and More</h2>
-
 					<!-- TODO: Show a list of other properties/attributes -->
 					<!-- TODO: Make custom component to forloop this -->
-					<div class="flex flex-wrap gap-y-5 justify-center">
-						<div class="w-1/4 flex gap-1 items-center">
-							<LucideIcon name="CalendarDays" :size="22" :stroke-width="2" />
+					<div class="h-[35rem] w-[30rem] flex flex-wrap text-lg font-semibold justify-around">
+						<div class="amedety-item">
+							<LucideIcon name="CalendarDays" :size="28" :stroke-width="1.5" />
 							<p>Takes Reservations</p>
 						</div>
-						<div class="w-1/4 flex gap-1 items-center">
-							<LucideIcon name="Truck" :size="22" :stroke-width="2" />
+						<div class="amedety-item">
+							<LucideIcon name="Truck" :size="28" :stroke-width="1.5" />
 							<p>Offers Delivery</p>
 						</div>
-						<div class="w-1/4 flex gap-1 items-center">
-							<LucideIcon name="Popcorn" :size="22" :stroke-width="2" />
+						<div class="amedety-item">
+							<LucideIcon name="Popcorn" :size="28" :stroke-width="1.5" />
 							<p>Offers Takeout</p>
 						</div>
-						<div class="w-1/4 flex gap-1 items-center">
-							<LucideIcon name="Vegan" :size="22" :stroke-width="2" />
+						<div class="amedety-item">
+							<LucideIcon name="Vegan" :size="28" :stroke-width="1.5" />
 							<p>Vegan Options</p>
 						</div>
-						<div class="w-1/4 flex gap-1 items-center">
-							<LucideIcon name="CreditCard" :size="22" :stroke-width="2" />
+						<div class="amedety-item">
+							<LucideIcon name="CreditCard" :size="28" :stroke-width="1.5" />
 							<p>Accepts Credit Cards</p>
 						</div>
-						<div class="w-1/4 flex gap-1 items-center">
-							<LucideIcon name="Gem" :size="22" :stroke-width="2" />
+						<div class="amedety-item">
+							<LucideIcon name="Gem" :size="28" :stroke-width="1.5" />
 							<p>Casual, Trendy, Romantic, Classy</p>
 						</div>
-						<div class="w-1/4 flex gap-1 items-center">
-							<LucideIcon name="Volume2" :size="22" :stroke-width="2" />
+						<div class="amedety-item">
+							<LucideIcon name="Volume2" :size="28" :stroke-width="1.5" />
 							<p>Moderate Noise</p>
 						</div>
-						<div class="w-1/4 flex gap-1 items-center">
-							<LucideIcon name="HandPlatter" :size="22" :stroke-width="2" />
+						<div class="amedety-item">
+							<LucideIcon name="HandPlatter" :size="28" :stroke-width="1.5" />
 							<p>Offers Catering</p>
 						</div>
-						<div class="w-1/4 flex gap-1 items-center">
-							<LucideIcon name="UsersRound" :size="22" :stroke-width="2" />
+						<div class="amedety-item">
+							<LucideIcon name="UsersRound" :size="28" :stroke-width="1.5" />
 							<p>Good for Groups</p>
 						</div>
-						<div class="w-1/4 flex gap-1 items-center">
-							<LucideIcon name="Wifi" :size="22" :stroke-width="2" />
+						<div class="amedety-item">
+							<LucideIcon name="Wifi" :size="28" :stroke-width="1.5" />
 							<p>Free Wi-Fi</p>
 						</div>
-						<div class="w-1/4 flex gap-1 items-center">
-							<LucideIcon name="UtensilsCrossed" :size="22" :stroke-width="2" />
+						<div class="amedety-item">
+							<LucideIcon name="UtensilsCrossed" :size="28" :stroke-width="1.5" />
 							<p>Takeout</p>
 						</div>
-						<div class="w-1/4 flex gap-1 items-center">
-							<LucideIcon name="HandPlatter" :size="22" :stroke-width="2" />
+						<div class="amedety-item">
+							<LucideIcon name="HandPlatter" :size="28" :stroke-width="1.5" />
 							<p>Table service</p>
 						</div>
-						<div class="w-1/4 flex gap-1 items-center">
-							<LucideIcon name="Sparkle" :size="22" :stroke-width="2" />
-							<p>Good for groups</p>
-						</div>
-						
-						<div class="w-1/4 flex gap-1 items-center">
-							<LucideIcon name="SquareArrowOutUpRight" :size="22" :stroke-width="2" />
-							<p>Outdoor seating</p>
-						</div>
-						<div class="w-1/4 flex gap-1 items-center">
-							<LucideIcon name="SquareArrowOutUpRight" :size="22" :stroke-width="2" />
+						<div class="amedety-item">
+							<LucideIcon name="Blocks" :size="28" :stroke-width="1.5" />
 							<p>Good for kids</p>
 						</div>
-						<div class="w-1/4 flex gap-1 items-center">
-							<LucideIcon name="SquareArrowOutUpRight" :size="22" :stroke-width="2" />
+						
+						<div class="amedety-item">
+							<LucideIcon name="TreePalm" :size="28" :stroke-width="1.5" />
+							<p>Outdoor seating</p>
+						</div>
+						<div class="amedety-item">
+							<LucideIcon name="SquareArrowOutUpRight" :size="28" :stroke-width="1.5" />
 							<p>Good for groups</p>
 						</div>
-						<div class="w-1/4 flex gap-1 items-center">
-							<LucideIcon name="SquareArrowOutUpRight" :size="22" :stroke-width="2" />
+						<div class="amedety-item">
+							<LucideIcon name="SquareArrowOutUpRight" :size="28" :stroke-width="1.5" />
 							<p>Good for groups</p>
 						</div>
-						<div class="w-1/4 flex gap-1 items-center">
-							<LucideIcon name="SquareArrowOutUpRight" :size="22" :stroke-width="2" />
+						<div class="amedety-item">
+							<LucideIcon name="SquareArrowOutUpRight" :size="28" :stroke-width="1.5" />
 							<p>Good for groups</p>
 						</div>
-						<div class="w-1/4 flex gap-1 items-center">
-							<LucideIcon name="SquareArrowOutUpRight" :size="22" :stroke-width="2" />
+						<div class="amedety-item">
+							<LucideIcon name="SquareArrowOutUpRight" :size="28" :stroke-width="1.5" />
 							<p>Good for groups</p>
 						</div>
 					</div>
@@ -404,10 +399,10 @@
 
 <script lang="ts" setup>
 import 'v-calendar/style.css';
-import { type BusinessItem, type KeyHours } from '@/types/business';
+import { type Business, type KeyHours } from '@/types/business';
 import LucideIcon from '../ui/LucideIcon.vue';
 
-const business = ref<BusinessItem>();
+const business = ref<Business>();
 
 const reservationForm = ref({
 	date: new Date(),
@@ -427,7 +422,7 @@ onMounted(async () => {
 
 const getBusiness = async () => {
 	try {
-		const { response, statusCode, data } = await myFetch<BusinessItem>(`business_self/${params.id}`);
+		const { response, statusCode, data } = await myFetch<Business>(`business_self/${params.id}`);
 
 		if (response.value!.ok && data.value) {
 			business.value = data.value;
@@ -537,5 +532,16 @@ const handleShowProduct = () => {
 .test input {
 	@apply w-32
 }
+
+.amedeties-list {
+	flex: 1 0 50%;
+	box-sizing: border-box;
+}
+
+.amedety-item {
+	@apply w-52 flex gap-1 items-center
+	;
+}
+
 
 </style>

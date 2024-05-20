@@ -52,7 +52,17 @@ export const getBusinessById = requestHandler(async (req, res) => {
 					as: 'userReviews',
 				},
 			},
+			{
+				$lookup: {
+					from: 'products',
+					localField: '_id',
+					foreignField: 'businessId',
+					as: 'businessProducts',
+				}
+			}
 		]))[0];
+
+		console.log(business);
 
 		if ( !business ) 
 			return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);

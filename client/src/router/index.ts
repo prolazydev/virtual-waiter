@@ -71,7 +71,7 @@ const router = createRouter({
 		{
 			path: '/dashboard',
 			name: 'dashboard',
-			component: () => import('@/views/business/BusinessDashboardView.vue'),
+			component: () => import('@/views/business/businessDashboard/BusinessDashboardView.vue'),
 			meta: {
 				auth: true
 			},

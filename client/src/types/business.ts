@@ -1,6 +1,28 @@
-import type { BaseDocument } from './common';
+import type { UserReview } from './userReview';
 
-export type BusinessItem = {
+type Hours = {
+	monday: string;
+	tuesday: string;
+	wednesday: string;
+	thursday: string;
+	friday: string;
+	saturday: string;
+	sunday: string;
+}
+export type KeyHours = keyof Hours;
+
+type StreetAddresses = {
+	primary?: {
+		main: string;
+		zipCode: string;
+	};
+	secondary?: {
+		main: string;
+		zipCode: string;
+	};
+}
+
+export type Business = {
 	_id: string;
 	userId: string;
 	name: string;
@@ -21,6 +43,9 @@ export type BusinessItem = {
 	reviewPoints?: number;
 	categories?: string[];
 	website?: string;
+	takesReservations: boolean;
+	delivery: boolean;
+	takeout: boolean;
 	confirmationCode?: number;
 	confirmationCodeExpiry?: Date;
 	verified: boolean;
@@ -28,27 +53,12 @@ export type BusinessItem = {
 	deleted: boolean;
 	banned: boolean;
 }
-type Hours = {
-	monday: string;
-	tuesday: string;
-	wednesday: string;
-	thursday: string;
-	friday: string;
-	saturday: string;
-	sunday: string;
-}
 
-export type KeyHours = keyof Hours;
-
-type StreetAddresses = {
-	primary?: {
-		main: string;
-		zipCode: string;
-	};
-	secondary?: {
-		main: string;
-		zipCode: string;
-	};
+export type BusinessCategory = {
+	userId: string;
+	name: string;
+	parentCategories: string[];
+	description?: string;
 }
 
 export type CreateBusinessModel = {
@@ -71,16 +81,4 @@ export type CreateBusinessModel = {
 	website?: string;
 }
 
-export type BusinessCategory = {
-	userId: string;
-	name: string;
-	parentCategories: string[];
-	description?: string;
-}
 
-export type UserReview = {
-	userId: string;
-	businessId: string;
-	rating: number;
-	review: string;
-} & BaseDocument;
