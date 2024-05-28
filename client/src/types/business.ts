@@ -13,11 +13,11 @@ export type KeyHours = keyof Hours;
 
 type StreetAddresses = {
 	primary?: {
-		main: string;
+		street: string;
 		zipCode: string;
 	};
 	secondary?: {
-		main: string;
+		street: string;
 		zipCode: string;
 	};
 }

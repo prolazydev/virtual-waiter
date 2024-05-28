@@ -190,8 +190,14 @@ const createBusinessFormData = ref<CreateBusinessModel>({
 	city: '',
 	categories: [ '' ],
 	streetAddress: {
-		primary: '',
-		secondary: ''
+		primary: {
+			street: '',
+			zipCode: '',
+		},
+		secondary: {
+			street: '',
+			zipCode: '',
+		}
 	},
 });
 

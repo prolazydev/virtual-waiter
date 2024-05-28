@@ -7,6 +7,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AsyncComponent: typeof import('./src/components/AsyncComponent.vue')['default']
     BusinessDashboard: typeof import('@/components/business/BusinessDashboard.vue')['default']
     BusinessPreview: typeof import('./src/components/ViewComponents/business/BusinessPreview.vue')['default']
     BusinessView: typeof import('@/components/business/BusinessView.vue')['default']
