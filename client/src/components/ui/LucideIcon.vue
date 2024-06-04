@@ -22,6 +22,7 @@ const props = defineProps({
 	 */
 	size: Number, 
 	color: String,
+	/** Defaults 1 */
 	strokeWidth: Number,
 })
 

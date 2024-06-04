@@ -1,5 +1,5 @@
 <template>
-	<div v-if="business" class="page-main gap-5">
+	<div v-if="business" class="page-main business-view">
 		<div class="flex flex-col gap-3">
 			<!-- TODO: create a breadcrumb like style for where this item came from eg: Ferizaj > SteakHouse Restaurant > Ferizaj SteakHouse -->
 			<div class="flex justify-between items-baseline">
@@ -27,7 +27,7 @@
 			</div>
 			<div class="group-links flex gap-3">
 				<!-- TODO: Add to the business the google link address for router link -->
-				<a v-if="business.streetAddress && business.streetAddress.primary" href="#"><LucideIcon name="MapPin" :size="22" :stroke-width="1.5" />{{ business.streetAddress.primary.main }}</a>
+				<a v-if="business.streetAddress && business.streetAddress.primary" href="#"><LucideIcon name="MapPin" :size="22" :stroke-width="1.5" />{{ business.streetAddress.primary.address }}</a>
 
 				<div class="w-[2px] bg-neutral-200"></div>
 				<a :href="`tel:+${business.phone}`"><LucideIcon name="Phone" :size="22" :stroke-width="1.5" />{{ business.phone }}</a>
@@ -213,7 +213,7 @@
 							<div class="flex justify-between">
 								<div class="flex flex-col">
 									<a href="#">Google map link</a>
-									<p>{{ business.streetAddress.primary.main }}</p>
+									<p>{{ business.streetAddress.primary.address }}</p>
 									<p>{{ business.streetAddress.primary.zipCode }}</p>
 								</div>
 								<div class="flex flex-col">
@@ -377,10 +377,10 @@
 					<div v-if="business.streetAddress" class="flex justify-between items-center">
 						<!-- TODO: Have it be a single link -->
 						<div class="flex flex-col">
-							<a class="font-semibold hover:underline" :href="`https://www.google.com/maps/search/?api=1&query=${business.streetAddress.primary!.main}`">Get directions</a>
-							<p class="font-semibold text-gray-500">{{ business.streetAddress.primary!.main }}</p>
+							<a class="font-semibold hover:underline" :href="`https://www.google.com/maps/search/?api=1&query=${business.streetAddress.primary!.address}`">Get directions</a>
+							<p class="font-semibold text-gray-500">{{ business.streetAddress.primary!.address }}</p>
 						</div>
-						<a :href="`https://www.google.com/maps/search/?api=1&query=${business.streetAddress.primary!.main}`">
+						<a :href="`https://www.google.com/maps/search/?api=1&query=${business.streetAddress.primary!.address}`">
 							<LucideIcon name="MapPin" :size="28" :stroke-width="2" />
 						</a>
 					</div>
@@ -444,6 +444,10 @@ const handleShowProduct = () => {
 </script>
 
 <style scoped>
+.business-view {
+	@apply gap-5 py-10
+}
+
 .light-button {
 	@apply border-b-2 border-b-[#1b1b1b] text-[#1b1b1b] font-semibold
 }

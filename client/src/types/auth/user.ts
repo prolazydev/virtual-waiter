@@ -6,6 +6,7 @@ export type LoggedInUser = {
 	isAuth: boolean;
 	hasBusiness: boolean;
 	avatar?: string;
+	lastTab?: string;
 };
 
 // export type LoginModel<TType extends 'email' | 'username'> = {

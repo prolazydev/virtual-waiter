@@ -1,4 +1,5 @@
 import type { UserReview } from './userReview';
+import type { IconKeys } from "@/types";
 
 type Hours = {
 	monday: string;
@@ -13,11 +14,11 @@ export type KeyHours = keyof Hours;
 
 type StreetAddresses = {
 	primary?: {
-		street: string;
+		address: string;
 		zipCode: string;
 	};
 	secondary?: {
-		street: string;
+		address: string;
 		zipCode: string;
 	};
 }
@@ -79,6 +80,11 @@ export type CreateBusinessModel = {
 	is24: boolean;
 	attributes?: string[];
 	website?: string;
+}
+
+export type BusinessDashboardTab = {
+	name: string;
+	icon: IconKeys;
 }
 
 

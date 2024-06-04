@@ -1,5 +1,5 @@
 <template>
-	<div class="w-fit p-3 mx-auto flex flex-col border-2 border-[#1b1b1b] ">
+	<div class="w-fit p-3 flex flex-col border-2 border-[#1b1b1b] ">
 			<div class="relative">
 				<router-link :to="{ path: `/business/${business._id}` }">
 					<div class="w-72 h-48 flex items-center ">
@@ -24,7 +24,7 @@
 
 
 					<div class="flex gap-2 text-sm font-semibold">
-						<div v-for="(category, index) in business.categories" :key="index" class="px-[6px] bg-[#1b1b1b] text-white rounded-full cursor-pointer hover:bg-[#303030] hover:shadow-md transition-all">
+						<div v-for="(category, index) in business.categories" :key="index" class="px-[6px] py-[0.75px] bg-[#1b1b1b] text-white rounded-full cursor-pointer hover:bg-[#303030] hover:shadow-md transition-all">
 							{{ category }}
 						</div>
 					</div>  

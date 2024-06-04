@@ -1,6 +1,6 @@
 
 <template>
-	<div class="dashboard">
+	<div class="page-main dashboard">
 		<Suspense>
 			<template #default>
 				<BusinessDashboard />

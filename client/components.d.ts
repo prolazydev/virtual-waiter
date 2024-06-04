@@ -7,11 +7,20 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AsyncComponent: typeof import('./src/components/AsyncComponent.vue')['default']
-    BusinessDashboard: typeof import('@/components/business/BusinessDashboard.vue')['default']
-    BusinessPreview: typeof import('./src/components/ViewComponents/business/BusinessPreview.vue')['default']
+    AsyncComponentA: typeof import('./src/components/AsyncComponentA.vue')['default']
+    AsyncComponentB: typeof import('./src/components/AsyncComponentB.vue')['default']
+    Business: typeof import('@/components/business/Business.vue')['default']
+    BusinessCardItem: typeof import('@/components/business/BusinessCardItem.vue')['default']
+    BusinessCreatePreview: typeof import('./src/components/business/BusinessCreatePreview.vue')['default']
+    BusinessDashboard: typeof import('@/components/business/dashboard/BusinessDashboard.vue')['default']
+    BusinessDashboardBusiness: typeof import('./src/components/business/dashboard/BusinessDashboardBusiness.vue')['default']
+    BusinessDashboardHome: typeof import('./src/components/business/dashboard/BusinessDashboardHome.vue')['default']
+    BusinessDashboardManager: typeof import('./src/components/business/dashboard/BusinessDashboardHome.vue')['default']
+    BusinessHome: typeof import('./src/components/business/dashboard/BusinessDashboardHome.vue')['default']
+    BusinessPreview: typeof import('./src/components/business/BusinessPreview.vue')['default']
     BusinessView: typeof import('@/components/business/BusinessView.vue')['default']
     Checkbox: typeof import('@/components/ui/Checkbox.vue')['default']
+    copy: typeof import('./src/components/AsyncComponentA copy.vue')['default']
     DatePicker: typeof import('@/components/ui/MyDatePicker.vue')['default']
     Flip: typeof import('number-flip')['Flip']
     Footer: typeof import('@/components/header_footer/Footer.vue')['default']

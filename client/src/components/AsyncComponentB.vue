@@ -1,0 +1,3 @@
+<template>
+	test B
+</template>

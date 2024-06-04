@@ -181,14 +181,7 @@ withDefaults(defineProps<CreateBusinessModel>(), {
 		}
 	},
 	city: 'New York',
-	streetAddress() {
-		return {
-			primary: {
-				main: '123 Main St',
-				zipCode: '12345',
-			}
-		}
-	},
+	streetAddresses() {  },
 	description: 'A virtual waiter for your restaurant',
 });
 

@@ -35,16 +35,10 @@ export default function (element: string) {
 		scrollLeft = scrollContainer.scrollLeft;
 	});
 
-	scrollContainer.addEventListener('mouseup', () => {
-		isScrolling = false;
-	});
-
-	scrollContainer.addEventListener('mouseleave', () => {
-		isScrolling = false;
-	});
+	scrollContainer.addEventListener('mouseup', () => isScrolling = false);
+	scrollContainer.addEventListener('mouseleave', () => isScrolling = false);
 
 	scrollContainer.addEventListener('mousemove', (e) => {
-		e.preventDefault();
 		if (!isScrolling) return;
 		const x = e.pageX - scrollContainer.offsetLeft;
 		const walk = x - startX;
@@ -52,11 +46,13 @@ export default function (element: string) {
 		scrollContainer.scrollLeft = scrollLeft - walk;
 	});
 
-	// Add event listener for scroll wheel
-	// scrollContainer.addEventListener('wheel', (e) => {
-	// 	e.preventDefault();
-	// 	const scrollAmount = e.deltaY;
-	// 	scrollContainer.scrollLeft += scrollAmount;
-	// 	// scrollContainer.appendChild(scrollContainer.firstChild as Node)
-	// });
+	scrollContainer.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const scrollAmount = 25; // Fixed scroll amount
+        if (e.deltaY > 0) 
+            scrollContainer.scrollLeft += scrollAmount; // Scroll right
+        else 
+            scrollContainer.scrollLeft -= scrollAmount; // Scroll left
+        
+    });
 }

@@ -11,26 +11,30 @@ const emptyUser: LoggedInUser = {
 }
 
 export default 
-	defineStore('user', () => {
-		const user = ref<LoggedInUser>({
-			id: '',
-			email: '',
-			username: '',
-			roles: '',
-			hasBusiness: false,
-			isAuth: false,
-		});
-	
-		const setNewLoginUser = (newUser: LoggedInUser) => {
-			user.value = newUser
-			user.value.isAuth = true;
-		}
-	
-		const logoutUser = () => user.value = emptyUser
-	
-		return {
-			user,
-			setNewLoginUser,
-			logoutUser
-		}
-	}, { persist: true });
+defineStore('user', () => {
+	const user = ref<LoggedInUser>({
+		id: '',
+		email: '',
+		username: '',
+		roles: '',
+		hasBusiness: false,
+		isAuth: false,
+		lastTab: '',
+	});
+
+	const setNewLoginUser = (newUser: LoggedInUser) => {
+		user.value = newUser
+		user.value.isAuth = true;
+	}
+
+	const setTab = (tab: string) => user.value.lastTab = tab;
+
+	const logoutUser = () => user.value = emptyUser
+
+	return {
+		user,
+		setNewLoginUser,
+		setTab,
+		logoutUser,
+	}
+}, { persist: true });

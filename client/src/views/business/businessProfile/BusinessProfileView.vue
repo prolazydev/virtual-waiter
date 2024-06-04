@@ -1,7 +1,7 @@
 <template>
 	<Suspense>
 		<template #default>
-			<BusinessView  />
+			<Business />
 		</template>
 		<template #fallback>
 			<div class="loading-content">

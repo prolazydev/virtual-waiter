@@ -158,7 +158,7 @@
 		</form>
 
 		<div class="divider"></div>
-		<BusinessPreview v-bind="createBusinessFormData" />
+		<BusinessCreatePreview v-bind="createBusinessFormData" />
 	</div>
 </template>
 
@@ -166,6 +166,7 @@
 import Checkbox from '@/components/ui/Checkbox.vue';
 import type { RequestStatus } from '@/enums/EFromValidations';
 import type { BusinessCategory, CreateBusinessModel } from '@/types/business';
+
 
 const router = useRouter();
 const { user } = useUserStore();
@@ -191,11 +192,11 @@ const createBusinessFormData = ref<CreateBusinessModel>({
 	categories: [ '' ],
 	streetAddress: {
 		primary: {
-			street: '',
+			address: '',
 			zipCode: '',
 		},
 		secondary: {
-			street: '',
+			address: '',
 			zipCode: '',
 		}
 	},

@@ -118,7 +118,7 @@
 import Glide from '@glidejs/glide'
 // import { useScrollTo } from '@/composables/useScrollTo';
 // import { initGlideStatistics } from '@/composables';
-const { observeSlide1, observeSlide2, observeSlide3 } = useSlider();
+const { observeSlide1, observeSlide2, observeSlide3 } = useSlider().homeSlider();
 
 // TODO: implement automatic fetching of statistics
 // const virtualWaiterData = ref({
