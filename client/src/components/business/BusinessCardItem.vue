@@ -33,13 +33,13 @@
 				<div class="w-full border-b-2 border-[#1b1b1b]"></div>
 
 				<div class="flex gap-2 items-center text-gray-600">
-					<Tooltip text="45,254 clicks this week" _class="w-28 mb-1 text-center delay-300">
+					<Tooltip text="45,254 clicks this week" _class="w-28 mb-1 text-center overflow-visible delay-300">
 						<span class="flex gap-2 items-center">45,254 <LucideIcon name="Eye" :size="20" /></span>
 					</Tooltip>
 
 					<span class="w-1 h-1 rounded-full bg-gray-600"></span>
 
-					<Tooltip text="5,000 reservations" _class="w-28 mb-1 text-center delay-300">
+					<Tooltip text="5,000 reservations" _class="w-28 mb-1 text-center overflow-visible delay-300">
 						<span class="flex gap-2 items-center">5,000 <LucideIcon name="UserRound" :size="20" /></span>
 					</Tooltip>
 				</div>

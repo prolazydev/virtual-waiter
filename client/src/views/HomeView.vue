@@ -145,7 +145,7 @@ onMounted(() => {
                 gap: 0,
             }
         }
-    })
+    });
     glide.mount();
 
     const slides = document.querySelectorAll('.home-slide:not(.glide__slide--clone)');

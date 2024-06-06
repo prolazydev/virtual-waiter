@@ -20,7 +20,7 @@
 
 <style scoped>
 .dashboard {
-	@apply py-8 flex flex-col gap-20
+	@apply py-4 flex flex-col gap-20
 }
 
 </style>

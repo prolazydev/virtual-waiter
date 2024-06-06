@@ -63,9 +63,9 @@ export default () => {
         }
     }
 
-    const initSlider = (  ) => {
-
-    }
+    // const initSlider = (  ) => {
+        
+    // }
 
     return {
         homeSlider,

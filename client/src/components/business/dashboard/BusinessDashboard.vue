@@ -67,7 +67,7 @@ const componentRenderer = computed( () => {
 
 .sidenav {
 	@apply 	w-64 flex flex-col gap-3 border-2 border-[#1b1b1b] p-5
-			sticky top-[6.75rem] self-start
+			sticky top-[6.4375rem] self-start
 	;
 }
 
