@@ -37,33 +37,6 @@
 	@apply 	-mt-24 opacity-0;
 }
 
-.progress-bar {
-	@apply z-[100000] transition-all ease-in-out 
-	;
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 0%;
-	height: 4px;
-	background-color: #f3f3f3;
-}
-
-.in-progress {
-	@apply opacity-100
-	;
-}
-
-.finished-progress {
-	@apply opacity-0 duration-1000
-	;
-}
-
-.progress-bar-fill {
-	@apply h-full bg-rose-600 transition-all ease-in-out
-	;
-}
-
-
 /* @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);

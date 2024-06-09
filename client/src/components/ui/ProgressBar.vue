@@ -18,6 +18,9 @@
 	width: 0%;
 	height: 4px;
 	background-color: #f3f3f3;
+
+	touch-action: none;
+	pointer-events: none;
 }
 
 .in-progress {

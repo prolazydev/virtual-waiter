@@ -3,10 +3,13 @@ let interval: NodeJS.Timeout | null = null;
 
 export default () => {
 	const progressBar = document.getElementById('progressBar')!;
-	
+
 	const startLoader = () => {
-		progressBar.style.transitionProperty = 'none';
 		progress = 0;
+
+		progressBar.style.transitionProperty = 'none';
+		
+		progressBar.style.width = `${progress}%`;
 		progressBar.style.opacity = '1';
 
 		progressBar.style.transitionProperty = 'all';
