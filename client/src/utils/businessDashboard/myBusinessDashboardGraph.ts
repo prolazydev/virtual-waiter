@@ -7,7 +7,7 @@ export default function (
 		inquiriyResponseTimeChart: Chart<"line", number[], string>,
 		
 		incomePerQuarterChart: Chart<"doughnut", number[], string>,
-		incomePerMonthChart: Chart<"bar", number[], string>,
+		incomePerMonthChart: Chart<"line", number[], string>,
 		incomePerYearChart: Chart<"line", number[], string> = {} as Chart<"line", number[], string>
 	) {
 	const inquiryChart1 = document.querySelector('.inquiry-breakdown-chart') as HTMLCanvasElement;
@@ -157,7 +157,7 @@ export default function (
 
 	const incomeChart2 = document.querySelector('.income-per-month-chart') as HTMLCanvasElement;
 	incomePerMonthChart = new Chart(incomeChart2, {
-		type: 'bar',
+		type: 'line',
 		data: {
 			labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 			datasets: [{

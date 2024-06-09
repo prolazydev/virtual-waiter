@@ -118,7 +118,10 @@ const router = createRouter({
 	]
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, {}, next) => {
+const loader = useLoader();
+loader.startLoader();
+
 	const { isAuth } = useAuth();
 
 	if (to.meta.auth && !isAuth()) {
@@ -128,11 +131,10 @@ router.beforeEach((to, from, next) => {
 	}
 });
 
-// router.afterEach(() => {
-// 	// const toast = router.
-	
-// });
-
+router.afterEach(() => {
+	const loader = useLoader();
+	loader.finishLoader();
+});
 
 
 export default router

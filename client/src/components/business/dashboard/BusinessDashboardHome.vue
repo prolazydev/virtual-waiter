@@ -181,7 +181,7 @@ let inquiriesPerMonthChart: Chart<"bar", number[], string>;
 let inquiriyResponseTimeChart: Chart<"line", number[], string>;
 
 let incomePerQuarterChart: Chart<"doughnut", number[], string>;
-let incomePerMonthChart: Chart<"bar", number[], string>;
+let incomePerMonthChart: Chart<"line", number[], string>;
 
 onMounted(() => {
 	useScrollX('.favorite-dish-slider');

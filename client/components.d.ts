@@ -28,6 +28,7 @@ declare module 'vue' {
     LucideIcon: typeof import('@/components/ui/LucideIcon.vue')['default']
     MyDatePicker: typeof import('@/components/ui/MyDatePicker.vue')['default']
     NotFound: typeof import('@/components/ui/NotFound.vue')['default']
+    ProgressBar: typeof import('@/components/ui/ProgressBar.vue')['default']
     Review: typeof import('@/components/ui/Review.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

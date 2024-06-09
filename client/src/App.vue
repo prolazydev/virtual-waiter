@@ -1,14 +1,14 @@
 <template>
+	<ProgressBar />
 	<Header />
 	<div class="header-separator"></div>
 	<div id="tostBox"></div>
-	<RouterView />
+	<Router-view />
 	<Footer />
 </template>
 
 <script setup lang="ts">
 const { checkAuth } = useAuth();
-
 onBeforeMount(async () => {
 	await checkAuth();
 })
@@ -16,8 +16,8 @@ onBeforeMount(async () => {
 onMounted(async () => {
 	// const { runSocket } = webSocketService();
 	// runSocket();
-})
 
+})
 </script>
 
 <style scoped>

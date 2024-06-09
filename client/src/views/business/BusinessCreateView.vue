@@ -225,8 +225,6 @@ const requestStatus = ref<RequestStatus>('Idle');
 type Business24HoursObjectKeys = keyof typeof business24Hours.value;
 
 onMounted(() => {
-
-
 	const textarea = document.querySelector<HTMLTextAreaElement>('#businessCategories')!;
 
 	// autosize(textarea);
