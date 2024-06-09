@@ -22,21 +22,19 @@ const router = createRouter({
 			name: 'login',
 			component: LoginView,
 			props: route => ({ redirect: route.query.redirect }),
-			beforeEnter: ({ }, { }, next) =>
-				useAuth().isAuth() ? next({ name: 'home' }) : next()
+			beforeEnter: ({}, {}, next) =>
+				useAuth().isAuth()
+					? next({ name: 'home' })
+					: next()
 		},
 		{
 			path: '/register',
 			name: 'register',
 			component: RegisterView,
-			beforeEnter: (to, from, next) => {
-				const { isAuth } = useAuth();
-
-				if (isAuth()) 
-					next({ name: 'home' });
-				else
-					next();
-			}
+			beforeEnter: ({},{}, next) => 
+				useAuth().isAuth()
+					? next({ name: 'home' })
+					: next()
 		},
 		{
 			path: '/confirm_account/:token',

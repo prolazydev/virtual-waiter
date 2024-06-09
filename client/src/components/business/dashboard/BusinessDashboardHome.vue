@@ -110,14 +110,14 @@
 		<div class="graph-group-2">
 			<div class="flex gap-5">
 				<div class="flex flex-col gap-2">
-					<div class="w-[21.75rem] h-[18.5rem] py-2 px-3 flex flex-col gap-2 border-2 border-[#1b1b1b]">
+					<div class="w-[21.75rem] max-h-[18.5rem] py-2 px-3 flex flex-col gap-2 border-2 border-[#1b1b1b]">
 						<h2 class="text-2xl font-semibold">Inquiry Breakdown</h2>
 						<hr>
 						
 						<canvas class="inquiry-breakdown-chart w-full h-full"></canvas>
 					</div>
 					
-					<div class="w-[21.75rem] h-[18.5rem] py-2 px-3 flex flex-col gap-2 border-2 border-[#1b1b1b]">
+					<div class="w-[21.75rem] max-h-[18.5rem] py-2 px-3 flex flex-col gap-2 border-2 border-[#1b1b1b]">
 						<h2 class="text-2xl font-semibold">Income Per Quarter</h2>
 						<hr>
 						
@@ -125,7 +125,7 @@
 					</div>
 				</div>
 				
-				<div class="w-full flex gap-x-5 gap-y-2 flex-wrap">
+				<div class="w-full max-h-[18.5rem] flex gap-x-5 gap-y-2 flex-wrap">
 					<div class="w-full flex gap-x-5">
 						<div class="w-full h-fit py-2 px-3 flex flex-col gap-2 border-2 border-[#1b1b1b]">
 							<h2 class="text-2xl font-semibold">Monthly Inquiries</h2>
@@ -143,19 +143,20 @@
 					</div>
 
 					<div class="w-full flex gap-x-5 justify-between">
-						<div class="w-1/2 h-fit py-2 px-3 flex flex-col gap-2 border-2 border-[#1b1b1b]">
+						<div class="w-full py-2 px-3 flex flex-col gap-2 border-2 border-[#1b1b1b]">
 							<h2 class="text-2xl font-semibold">Income Per Month</h2>
 							<hr>
 							
 							<canvas class="income-per-month-chart"></canvas>
 						</div>
 
-						<div class="w-1/2 h-fit py-2 px-3 flex flex-col gap-2 border-2 border-[#1b1b1b]">
+						<!-- TODO: Maybe find an idea for the chart -->
+						<!-- <div class="w-1/2 h-fit py-2 px-3 flex flex-col gap-2 border-2 border-[#1b1b1b]">
 							<h2 class="text-2xl font-semibold">*</h2>
 							<hr>
 							
-							<canvas class="income-per-month-chart"></canvas>
-						</div>
+							<canvas class="chart"></canvas>
+						</div> -->
 					</div>
 				</div>
 			</div>

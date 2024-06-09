@@ -61,40 +61,65 @@ export default function (
 				y: {
 					beginAtZero: true
 				}
-			}
+			},
 		}
 	});
-
+	// TODO: Show data for each type of inquiry
 	const inquiryChart3 = document.querySelector('.inquiriy-response-time-month-chart') as HTMLCanvasElement;
 	inquiriyResponseTimeChart = new Chart(inquiryChart3, {
 		type: 'line',
 		data: {
 			labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-			datasets: [{
-				label: 'Inquiry Response Time',
-				data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
-				backgroundColor: '#edf2f7',
-				borderColor: '#4a5568',
-				
-				borderWidth: 3,
-				pointBorderWidth: 5,
-
-				pointHoverBorderWidth: 5,
-				pointHoverRadius: 5,
-
-				pointHitRadius: 10,	
-			}],
+			datasets: [
+				{
+					label: 'Type A',
+					data: [12, 19, 3, 5, 2, 3, 12, 15, 22, 10, 18, 7],
+					backgroundColor: 'rgba(255, 99, 132, 0.2)',
+					borderColor: 'rgba(255, 99, 132, 1)',
+					borderWidth: 1
+				},
+				{
+					label: 'Type B',
+					data: [8, 11, 5, 9, 3, 5, 6, 9, 15, 13, 10, 6],
+					backgroundColor: 'rgba(54, 162, 235, 0.2)',
+					borderColor: 'rgba(54, 162, 235, 1)',
+					borderWidth: 1
+				},
+				{
+					label: 'Type C',
+					data: [6, 9, 4, 8, 7, 3, 4, 7, 10, 11, 9, 5],
+					backgroundColor: 'rgba(75, 192, 192, 0.2)',
+					borderColor: 'rgba(75, 192, 192, 1)',
+					borderWidth: 1
+				}
+			]
 		},
 		options: {
+			scales: {
+				y: {
+					beginAtZero: true,
+					ticks: {
+						stepSize: 5
+					},
+					grid: {
+						display: true,
+						color: 'rgba(200, 200, 200, 0.2)'
+					}
+				},
+				x: {
+					stacked: true,
+					grid: {
+						display: false
+					}
+				}
+			},
 			plugins: {
 				legend: {
 					display: false
 				},
-			},
-			scales: {
-				y: {
-					beginAtZero: true
-				}
+				tooltip: {
+					enabled: true
+				},
 			}
 		}
 	});
@@ -149,6 +174,8 @@ export default function (
 					display: false
 				}
 			},
+			aspectRatio: 4.2,
+
 			scales: {
 				y: {
 					beginAtZero: true
