@@ -22,7 +22,6 @@
 					</router-link>
 					<Review v-if="business.reviews && business.reviews > 0" :stars="business.averageRating!" :rating="business.reviews" />
 
-
 					<div class="flex gap-2 text-sm font-semibold">
 						<div v-for="(category, index) in business.categories" :key="index" class="px-[6px] py-[0.75px] bg-[#1b1b1b] text-white rounded-full cursor-pointer hover:bg-[#303030] hover:shadow-md transition-all">
 							{{ category }}

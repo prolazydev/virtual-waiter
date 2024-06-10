@@ -6,6 +6,10 @@ import { BusinessCategoryModel } from '../BusinessCategory';
 
 export interface IBusiness extends Document {
 	userId: Schema.Types.ObjectId;
+
+	owners: [{ type: Schema.Types.ObjectId, ref: 'User', select: false }],
+	managers: [{ type: Schema.Types.ObjectId, ref: 'User', select: false }],
+	
 	name: string;
 	email: string;
 	userEmail: string;

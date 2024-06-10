@@ -33,10 +33,10 @@ export default () => {
 	}
 
 	const finishLoader = () => {
-		progress = 100;
 		if (interval) 
 			clearInterval(interval);
 		
+		progress = 100;
 		progressBar.style.width = `${progress}%`;
 		setTimeout(() => progressBar.style.opacity = '0', 500);
 	};

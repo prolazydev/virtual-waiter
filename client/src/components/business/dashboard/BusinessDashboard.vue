@@ -32,6 +32,7 @@
 import type { BusinessDashboardTab, BusinessDashboardTabTitles } from '@/types/business';
 
 const { user, setTab } = useUserStore();
+const loader = useLoader();
 
 const tab = ref<BusinessDashboardTabTitles>(user.lastTab || 'Home');
 
@@ -68,32 +69,31 @@ const dashboardTabs: BusinessDashboardTab[] = [
 
 watch(tab, (newTab) => setTab(newTab))
 
-const componentRenderer = computed( () => {
-	switch (tab.value) {
-		case 'Home':
-			return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardHome.vue'));
-			break;
-		case 'Business':
-			return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardBusiness.vue'));
-			break;
-		// TODO: Implement the rest of the dashboard tabs 
-		// case 'Conversations':
-		// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardConversations.vue'));
-		// 	break;
-		// case 'Orders':
-		// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardOrders.vue'));
-		// 	break;
-		// case 'Products':
-		// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardProducts.vue'));
-		// 	break;
-		// case 'Reports':
-		// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardReports.vue'));
-		// 	break;
-		// case 'Settings':
-		// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardSettings.vue'));
-		// 	break;
+const componentRenderer = computed(() => {
+	try {
+		loader.startLoader();
+		switch (tab.value) {
+			case 'Home':
+				return defineAsyncComponent(() => import('@/components/business/dashboard/tabs/BusinessDashboardHome.vue'));
+			case 'Business':
+				return defineAsyncComponent(() => import('@/components/business/dashboard/tabs/BusinessDashboardBusiness.vue'));
+			// TODO: Implement the rest of the dashboard tabs 
+			// case 'Conversations':
+			// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardConversations.vue'));
+			// case 'Orders':
+			// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardOrders.vue'));
+			// case 'Products':
+			// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardProducts.vue'));
+			// case 'Reports':
+			// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardReports.vue'));
+			// case 'Settings':
+			// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardSettings.vue'));
+			default:
+				return defineAsyncComponent(() => import('@/components/business/dashboard/tabs/BusinessDashboardHome.vue'));
+		}
+	} finally {
+		loader.finishLoader();
 	}
-	return false;
 })
 
 

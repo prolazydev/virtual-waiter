@@ -16,14 +16,22 @@
 					<button type="button"><LucideIcon name="Share2" :size="22" :stroke-width="2" />&nbsp;Share</button>
 				</div>
 			</div>
-			<div class="group-links flex gap-3">
-				<Tooltip _class="mb-3" :text="`${business.averageRating} stars`">
-					<Review :stars="business.averageRating" :reviews="business.reviews" :sizes="28" _p-class="text-lg font-semibold" />
-				</Tooltip>
+			<div class="group-links flex gap-3 justify-between">
+				<div>
+					<Tooltip _class="mb-3" :text="`${business.averageRating} stars`">
+						<Review :stars="business.averageRating" :reviews="business.reviews" :sizes="28" _p-class="text-lg font-semibold" />
+					</Tooltip>
 
-				<div class="w-[2px] bg-neutral-200"></div>
+					<div class="w-[2px] bg-neutral-200"></div>
 
-				<router-link to="/"><b>#1 </b>of 30 Restaurans in Ferizaj</router-link>
+					<router-link to="/"><b>#1 </b>of Restaurans in Ferizaj</router-link>
+				</div>
+				<!-- TODO: Add Edit Business button for the owner of the business -->
+				<div v-if="isAuth() && user.id === business.userId">
+					<router-link :to="{ path: `/business/edit/${business._id}` }">
+						Edit Business
+					</router-link>
+				</div>
 			</div>
 			<div class="group-links flex gap-3">
 				<!-- TODO: Add to the business the google link address for router link -->
@@ -402,6 +410,12 @@ import 'v-calendar/style.css';
 import { type Business, type KeyHours } from '@/types/business';
 import LucideIcon from '../ui/LucideIcon.vue';
 
+const { user } = useUserStore();
+const { isAuth } = useAuth();
+
+const { params } = useRoute();
+const router = useRouter();
+
 const business = ref<Business>();
 
 const reservationForm = ref({
@@ -410,14 +424,18 @@ const reservationForm = ref({
 	people: 1,
 });
 
-const { params } = useRoute();
-const router = useRouter();
+
 
 onBeforeMount(async () => {
 });
 
 onMounted(async () => {
 	useScrollX('.slider')
+	// TODO: Implement checking if the logged in user is the owner of the business
+	if (isAuth() && user.id === business.value?.userId) {
+		// Do something
+		console.log('User is the owner of the business');
+	}
 });
 
 const getBusiness = async () => {
@@ -512,6 +530,10 @@ const handleShowProduct = () => {
 			hover:border-b-gray-400 border-b border-b-transparent
 }
 
+.group-links > div {
+	@apply flex gap-3 
+}
+
 .image-item-container {
 	@apply flex object-cover border-2 border-[#1b1b1b] overflow-hidden
 }
@@ -546,6 +568,7 @@ const handleShowProduct = () => {
 	@apply w-52 flex gap-1 items-center
 	;
 }
+
 
 
 </style>
