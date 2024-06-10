@@ -5,14 +5,16 @@ export default () => {
 	const progressBar = document.getElementById('progressBar')!;
 
 	const startLoader = () => {
-		progress = 0;
+		if (progress > 0) {
+			progress = 0;
 
-		progressBar.style.transitionProperty = 'none';
-		
-		progressBar.style.width = `${progress}%`;
-		progressBar.style.opacity = '1';
+			progressBar.style.transitionProperty = 'none';
+			
+			progressBar.style.width = `${progress}%`;
+			progressBar.style.opacity = '1';
 
-		progressBar.style.transitionProperty = 'all';
+			progressBar.style.transitionProperty = 'all';
+		}
 
 		if (interval) 
 			clearInterval(interval);
@@ -26,23 +28,17 @@ export default () => {
 	const clearProgress = () => clearInterval(interval!);
 
 	const setProgress = (value: number) => {
-		if (progressBar) {
-			progress = value;
-			progressBar.style.width = `${progress}%`;
-		}
+		progress = value;
+		progressBar.style.width = `${progress}%`;
 	}
 
 	const finishLoader = () => {
-		if (progressBar) {
-			progress = 100;
-			if (interval) 
-				clearInterval(interval);
-			
-			progressBar.style.width = `${progress}%`;
-			setTimeout(() => {
-				progressBar.style.opacity = '0';
-			}, 500);
-		}
+		progress = 100;
+		if (interval) 
+			clearInterval(interval);
+		
+		progressBar.style.width = `${progress}%`;
+		setTimeout(() => progressBar.style.opacity = '0', 500);
 	};
 
 	return {

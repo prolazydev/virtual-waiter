@@ -29,11 +29,11 @@
 </template>
 
 <script lang="ts" setup>
-import type { BusinessDashboardTab } from '@/types/business';
+import type { BusinessDashboardTab, BusinessDashboardTabTitles } from '@/types/business';
 
 const { user, setTab } = useUserStore();
 
-const tab = ref<string>(user.lastTab || 'Home');
+const tab = ref<BusinessDashboardTabTitles>(user.lastTab || 'Home');
 
 const dashboardTabs: BusinessDashboardTab[] = [
 	{ 
@@ -43,17 +43,56 @@ const dashboardTabs: BusinessDashboardTab[] = [
 	{
 		name: 'Business',
 		icon: 'ChefHat'
-	}
+	},
+	{
+		name: 'Conversations',
+		icon: 'MessageCircle',
+	},
+	{
+		name: 'Orders',
+		icon: 'ShoppingCart'
+	},
+	{
+		name: 'Products',
+		icon: 'Box'
+	},
+	{
+		name: 'Reports',
+		icon: 'BarChart'
+	},
+	{
+		name: 'Settings',
+		icon: 'Settings'
+	},
 ];
 
 watch(tab, (newTab) => setTab(newTab))
 
 const componentRenderer = computed( () => {
-	if (tab.value === 'Home') 
-		return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardHome.vue'));
-	else if (tab.value === 'Business') 
-		return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardBusiness.vue'));
-	
+	switch (tab.value) {
+		case 'Home':
+			return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardHome.vue'));
+			break;
+		case 'Business':
+			return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardBusiness.vue'));
+			break;
+		// TODO: Implement the rest of the dashboard tabs 
+		// case 'Conversations':
+		// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardConversations.vue'));
+		// 	break;
+		// case 'Orders':
+		// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardOrders.vue'));
+		// 	break;
+		// case 'Products':
+		// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardProducts.vue'));
+		// 	break;
+		// case 'Reports':
+		// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardReports.vue'));
+		// 	break;
+		// case 'Settings':
+		// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardSettings.vue'));
+		// 	break;
+	}
 	return false;
 })
 

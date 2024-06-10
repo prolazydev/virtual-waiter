@@ -1,3 +1,5 @@
+import type { BusinessDashboardTabTitles } from '../business';
+
 export type LoggedInUser = {
 	id: string;
 	email: string;
@@ -6,7 +8,7 @@ export type LoggedInUser = {
 	isAuth: boolean;
 	hasBusiness: boolean;
 	avatar?: string;
-	lastTab?: string;
+	lastTab?: BusinessDashboardTabTitles;
 };
 
 // export type LoginModel<TType extends 'email' | 'username'> = {

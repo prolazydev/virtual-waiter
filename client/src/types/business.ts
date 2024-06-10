@@ -82,9 +82,9 @@ export type CreateBusinessModel = {
 	website?: string;
 }
 
+export type BusinessDashboardTabTitles = 'Home' | 'Business' | 'Conversations' | 'Orders' | 'Products' | 'Reports' | 'Settings';
+
 export type BusinessDashboardTab = {
-	name: string;
+	name: BusinessDashboardTabTitles;
 	icon: IconKeys;
 }
-
-
