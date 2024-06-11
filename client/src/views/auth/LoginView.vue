@@ -112,7 +112,7 @@ const handleLogin = async () => {
 
 <style scoped>
 #loginForm {
-    @apply mx-auto mt-auto py-16 px-20 flex gap-20 border-4 border-[#1b1b1b]
+    @apply m-auto py-16 px-20 flex gap-20 bg-white border-4 border-[#1b1b1b]
     ;
 }
 
@@ -122,7 +122,7 @@ const handleLogin = async () => {
 }
 
 #loginForm input {
-    @apply  w-64 p-2 border-2 border-[#1b1b1b] bg-transparent transition-[border]
+    @apply  w-64 p-2 border-2 border-[#1b1b1b] transition-colors
             focus:outline-none focus:border-b-rose-600
     ;
 }

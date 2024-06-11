@@ -1,5 +1,5 @@
 <template>
-    <div class="w-fit h-full mx-auto mt-auto py-20">
+    <div class="w-fit h-full mx-auto mt-auto py-20 bg-white">
         <div class="register-form">
             <div class="w-32 flex items-center justify-center relative">
                 <div class="relative">

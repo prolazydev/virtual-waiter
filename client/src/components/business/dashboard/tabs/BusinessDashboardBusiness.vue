@@ -25,12 +25,6 @@
 			<div class="business-cards">
 				<BusinessCardItem v-for="business in businesses" :key="business._id" :business="business" /> 
 			</div>
-			
-			<!-- 
-			<router-link to="/create_business" title="Create your Business">
-				<LucideIcon class="text-gray-400 hover:text-[#1b1b1b] cursor-pointer transition-colors" name="CirclePlus" :size="148" />
-			</router-link> 
-			-->
 		</div>
 
 		<div v-else class="m-auto">
@@ -52,30 +46,24 @@ const favoriteBusinesses = ref<Business[]>([]);
 const getBusinesses = async () => {
 	const { getBusinessesSelf } = businessService();
 	try {
+		const { response, statusCode, data } = await getBusinessesSelf();
 
-			const { response, statusCode, data } = await getBusinessesSelf();
-			// TODO: handle error
-
-			// resolve('resolved');
+		if (response.value!.ok && data.value) {
+			businesses.value = data.value;
 			
-			if (response.value!.ok && data.value) {
-				businesses.value = data.value;
-				
-				favoriteBusinesses.value = businesses.value;
-			}
+			favoriteBusinesses.value = businesses.value;
+		}
 
-			switch (statusCode.value) {
-				case 400:
-					return await router.push({ name: 'badRequest' });
-				case 401:
-					return await router.push({ name: 'unauthorized' });
-				// Add additional cases as needed
-				default:
-					return // Handle other status codes if necessary
-			}
-			// if (response.value!.ok && data.value)
-			// 	businesses.value = data.value;
-
+		// TODO: handle error
+		switch (statusCode.value) {
+			case 400:
+				return await router.push({ name: 'badRequest' });
+			case 401:
+				return await router.push({ name: 'unauthorized' });
+			// Add additional cases as needed
+			default:
+				return // Handle other status codes if necessary
+		}
 	} catch (error) {
 		console.error(error);
 	}

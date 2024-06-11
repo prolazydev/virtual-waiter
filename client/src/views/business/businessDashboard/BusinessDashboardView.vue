@@ -25,16 +25,13 @@
 			<Transition mode="out-in">
 				<Suspense :timeout="0">
 					<template #default>
-						<!-- <div class="w-full"> -->
-							<component :is="componentRenderer" />
-						<!-- </div> -->
+						<component :is="componentRenderer" />
 					</template>
 					<template #fallback>
-						YEHAW
+						<Loading />
 					</template>
 				</Suspense>
 			</Transition>
-
 		</div>
 	</div>
 </template>

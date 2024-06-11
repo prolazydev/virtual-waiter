@@ -2,7 +2,7 @@
     <header>
         <h1 class="text-3xl font-bold">Virtual<span class="text-rose-600">Waiter</span></h1>
         <span class="w-[2px] bg-[#1b1b1b] mx-3"></span>
-        <ul class="nav-links flex gap-5">
+        <ul class="nav-links flex gap-5 items-center">
             <li><router-link class="nav-link" to="/">Home</router-link></li>
             <li><router-link class="nav-link" to="/search">Discover</router-link></li>
             <li><router-link class="nav-link" to="/about">About</router-link></li>
@@ -26,7 +26,7 @@
                 <LucideIcon class="absolute-center hover:stroke-[3px] hover:cursor-pointer transition-all" name="Search" :size="24" :strokeWidth="2"  />
             </button>
         </form>
-        <ul class="nav-links nav-right ml-auto flex gap-5 items-center ">
+        <ul class="nav-links nav-right ml-auto flex gap-5 items-center">
             <template v-if="!isAuth()">
                 <li><router-link class="nav-link" to="/register">Sign up</router-link></li>
                 <li><router-link class="nav-link" to="/login">Login</router-link></li>
