@@ -37,9 +37,14 @@ body {
 .loading-content {
 	margin: auto;
 	transform: scale(0.75);
+	filter: contrast(0);
 	opacity: 0;
 	
-	animation: loading-content-fade-in-animation 10s linear 0s 1 forwards;
+	animation: loading-content-fade-in-animation 10s ease 0s 1 forwards;
+}
+
+.loading-content > svg {
+	filter: url(#myfilters);
 }
 
 @keyframes loading-content-fade-in-animation {
@@ -47,7 +52,9 @@ body {
 		opacity: 1;
 	}
 	100% {
+		filter: contrast(1);
+
 		opacity: 1;
-		transform: scale(1);
+		transform: scale(1.15);
 	}
 }

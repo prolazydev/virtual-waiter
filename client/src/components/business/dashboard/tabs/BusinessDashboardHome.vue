@@ -166,7 +166,7 @@
 
 <script lang="ts" setup>
 import { type Business } from '@/types/business';
-import myBusinessDashboardGraph from '@/utils/businessDashboard/myBusinessDashboardGraph';
+import myBusinessDashboardGraph from '@/utils/business/businessDashboard/myBusinessDashboardGraph';
 import Glide from '@glidejs/glide';
 
 import Chart from 'chart.js/auto';

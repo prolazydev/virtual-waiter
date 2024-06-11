@@ -67,8 +67,8 @@
 		<div class="border-b-4 border-b-[#1b1b1b]"></div>
 
 		<!-- TODO: make photos clickable to show the gallery of photos -->
-		<div class="flex gap-2 h-96 max-h-96 rounded-2xl ">
-			<div class="image-item-container w-1/2 h-96 rounded-bl-2xl">
+		<div class="flex gap-2 h-96 max-h-96">
+			<div class="image-item-container w-1/2 h-96">
 				<img class="" src="https://cdn.sortiraparis.com/images/80/100789/834071-too-restaurant-too-hotel-paris-photos-menu-entrees.jpg" alt="Presentational image" >
 			</div>
 			<div class="w-1/2 max-h-96 flex flex-col gap-y-3">
@@ -85,7 +85,7 @@
 					<div class="image-item-container w-1/2">
 						<img class="" src="https://cdn.sortiraparis.com/images/80/100789/834071-too-restaurant-too-hotel-paris-photos-menu-entrees.jpg" alt="Presentational image" >
 					</div>
-					<div class="image-item-container w-1/2 rounded-br-2xl">
+					<div class="image-item-container w-1/2">
 						<img class="" src="https://cdn.sortiraparis.com/images/80/100789/834071-too-restaurant-too-hotel-paris-photos-menu-entrees.jpg" alt="Presentational image" >
 					</div>
 				</div>
@@ -410,11 +410,11 @@ import 'v-calendar/style.css';
 import { type Business, type KeyHours } from '@/types/business';
 import LucideIcon from '../ui/LucideIcon.vue';
 
-const { user } = useUserStore();
-const { isAuth } = useAuth();
-
 const { params } = useRoute();
 const router = useRouter();
+
+const { user } = useUserStore();
+const { isAuth } = useAuth();
 
 const business = ref<Business>();
 
@@ -424,36 +424,33 @@ const reservationForm = ref({
 	people: 1,
 });
 
-
-
-onBeforeMount(async () => {
-});
-
 onMounted(async () => {
-	useScrollX('.slider')
-	// TODO: Implement checking if the logged in user is the owner of the business
-	if (isAuth() && user.id === business.value?.userId) {
-		// Do something
-		console.log('User is the owner of the business');
-	}
+	// useScrollX('.slider')
 });
 
-const getBusiness = async () => {
+async function handleGetBusiness() {
+	const { getBusinessSelfById } = businessService();
 	try {
-		const { response, statusCode, data } = await myFetch<Business>(`business_self/${params.id}`);
+		const { response, statusCode, data } = await getBusinessSelfById(params.id as string);
 
-		if (response.value!.ok && data.value) {
-			business.value = data.value;
-		} else if (statusCode.value === 404) {
-			await router.push({ name: 'notFound' });
-		} else if (statusCode.value === 400) {
-			await router.push({ name: 'badRequest' });
+		if (response.value!.ok && data.value) 
+			return business.value = data.value;
+
+		switch (statusCode.value) {
+			case 404:
+				return await router.push({ name: 'notFound' });
+			case 400:
+				return await router.push({ name: 'badRequest' });
+			// Add additional cases as needed
+			default:
+				return // Handle other status codes if necessary
 		}
 	} catch (error) {
 		console.error(error);
 	}
 }
-await getBusiness();
+await handleGetBusiness();
+// NOTE: Needs to be called here since vue bugs out when changing routes for some strange reason
 
 const handleShowProduct = () => {
 	console.log('Show product');

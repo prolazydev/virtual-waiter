@@ -83,11 +83,14 @@ const router = createRouter({
 			},
 		},
 		// TODO: Add edit business page
-		// {
-		// 	path: '/edit_business/:id',
-		// 	name: 'editBusiness',
-		// 	component: () => import('@/views/business/EditBusinessView.vue'),
-		// },
+		{
+			path: '/business/edit/:id',
+			name: 'editBusiness',
+			component: () => import('@/views/business/BusinessEditView.vue'),
+			meta: {
+				auth: true
+			},
+		},
 		{
 			path:'/create_business',
 			name: 'createBusiness',
@@ -118,9 +121,10 @@ const router = createRouter({
 	]
 })
 
+
 router.beforeEach((to, {}, next) => {
-const loader = useLoader();
-loader.startLoader();
+	const loader = useLoader();
+	loader.startLoader();
 
 	const { isAuth } = useAuth();
 
