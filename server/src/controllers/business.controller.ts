@@ -62,8 +62,6 @@ export const getBusinessById = requestHandler(async (req, res) => {
 			}
 		]))[0];
 
-		console.log(business);
-
 		if ( !business ) 
 			return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 		

@@ -11,6 +11,7 @@ export interface IBusiness extends Document {
 	managers: [{ type: Schema.Types.ObjectId, ref: 'User', select: false }],
 	
 	name: string;
+	username: string;
 	email: string;
 	userEmail: string;
 	streetAddress?: {
@@ -49,10 +50,28 @@ const businessSchema = new Schema<IBusiness>({
 		ref: 'users',
 		required: true,
 	},
+	owners: [ { type: Schema.Types.ObjectId, ref: 'User', select: false } ],
+	managers: [ { type: Schema.Types.ObjectId, ref: 'User', select: false } ],
 	name: {
 		type: String,
 		trim: true,
 		required: true,
+	},
+	username: {
+		type: String, 
+		required: [ true, 'Username is required!' ], 
+		unique: true, 
+		trim: true,
+		minLength: [ 2, 'Username must have at least 2 characters!' ],
+		maxLength: [ 30, 'Username cannot exceed 30 characters!' ], // Standard from Instagram
+		validator: [ validator.isAlphanumeric, 'Invalid username' ],
+		validate: {
+			validator: function (value: string) {
+				const usernameRegex = /^[a-zA-Z0-9_.-]+$/;
+				return usernameRegex.test(value);
+			},
+			message: 'Username can contain only letters, numbers, underscores, hyphens and periods.'
+		},
 	},
 	email: {
 		type: String, 
