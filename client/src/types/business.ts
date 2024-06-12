@@ -29,6 +29,7 @@ export type Business = {
 	name: string;
 	email: string;
 	userEmail: string;
+	country?: string;
 	streetAddress?: StreetAddresses;
 	phone?: string;
 	description?: string;
@@ -62,7 +63,8 @@ export type BusinessCategory = {
 	description?: string;
 }
 
-export type CreateBusinessModel = {
+export type CreateBusinessModel =
+	{
 	userId: string;
 	name: string;
 	email: string;
@@ -70,10 +72,11 @@ export type CreateBusinessModel = {
 	phone?: string;
 	streetAddress?: StreetAddresses;	
 	description?: string;
-	city?: string;
-	zipCode?: string
+	// city?: string;
+	// zipCode?: string
+	country?: string;
+	location?: string;
 	categories?: string[];
-	// location?: string;
 	hours: Hours;
 	profileImage?: Buffer;
 	coverImage?: Buffer;

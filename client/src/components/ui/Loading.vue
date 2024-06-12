@@ -50,16 +50,4 @@
 .loading-content > svg {
 	filter: url(#myfilters);
 }
-
-@keyframes loading-content-fade-in-animation {
-	50% {
-		opacity: 1;
-	}
-	100% {
-		filter: contrast(1);
-
-		opacity: 1;
-		transform: scale(1.15);
-	}
-}
 </style>

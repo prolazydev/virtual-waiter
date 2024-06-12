@@ -12,7 +12,7 @@
             </div>
 			<div class="relative flex flex-col gap-2">
 				<div class="flex gap-1 items-center">
-					<label for="businessAddress">Email address</label>
+					<label for="businessAddress">Email Address</label>
 					<Tooltip _class="w-80" text="This email will be used to communicate with potential costumers, will be a private email so clients will not see the email but you will get notified for every activity on this email">
 						<LucideIcon class="mt-1 text-white fill-black" name="Info" :size="18" :stroke-width="2" />
 					</Tooltip>
@@ -28,12 +28,12 @@
                 <input v-model="createBusinessFormData.description" type="text" id="businessDescription" placeholder="The best business there is :)" />
             </div>
 			<div class="relative flex flex-col gap-2">
-                <label for="businessCity">City</label>
-                <input v-model="createBusinessFormData.city" type="text" id="businessCity" placeholder="Tokio" />
+                <label for="businessCountry">Country</label>
+                <input v-model="createBusinessFormData.country" type="text" id="businessCountry" placeholder="New Zealand" />
             </div>
 			<div class="relative flex flex-col gap-2">
-                <label for="businessZipCode">Zip Code</label>
-                <input v-model="createBusinessFormData.zipCode" type="text" id="businessZipCode" placeholder="13807" />
+                <label for="businessLocation">Location</label>
+                <input v-model="createBusinessFormData.location" type="text" id="businessLocation" placeholder="Google Maps" />
             </div>
 			<!-- TODO: Search for categories to add/remove -->
 			<div class="business-categories-input relative flex flex-col gap-2">
@@ -54,16 +54,50 @@
 					</li>
 				</ul>
             </div>
-			<div class="relative flex flex-col gap-2">
+			<div class="street-address-input relative flex flex-col gap-2">
                 <label for="businessWebsite">Website</label>
                 <input v-model="createBusinessFormData.website" type="text" id="businessWebsite" placeholder="www.myBusiness.com" />
             </div>
-			<div class="relative flex flex-col gap-2">
-                <label for="businessStreetAddress">Street Address</label>
-                <input v-model="createBusinessFormData.streetAddress!.primary" type="text" id="businessStreetAddress" placeholder="St. DC Boulevard" />
+			<!-- TODO: Make popups for strees addresses -->
+			<div class="flex flex-col gap-2">
+				<button class="setup-address w-64 h-fit bg-[#1b1b1b] text-white px-2 border-4 border-[#1b1b1b] focus:outline-none focus-visible:border-b-rose-600 active:border-b-white transition-all" type="button">
+					Setup Primary Address
+				</button>
+
+				<div class="show-address-setup">
+					<div class="flex flex-col gap-2">
+						<label for="businessStreetAddress">Primary Street Address</label>
+						<input v-model="createBusinessFormData.streetAddress!.primary!.address" type="text" id="businessStreetAddress" placeholder="St. DC Boulevard" />
+					</div>
+					<div class="flex flex-col gap-2">
+						<label for="businessZipCode">Primary Zip Code</label>
+						<input v-model="createBusinessFormData.streetAddress!.primary!.zipCode" type="text" id="businessZipCode" placeholder="13807" />
+					</div>
+				</div>
+
+				<p class="h-6">{{ createBusinessFormData.streetAddress?.primary?.address }}</p>
             </div>
 
-			<div class="w-full h-1 my-5 mb-0 bg-black"></div>
+			<div class="flex flex-col gap-2">
+				<button class="setup-address w-64 h-fit bg-[#1b1b1b] text-white px-2 border-4 border-[#1b1b1b] focus:outline-none focus-visible:border-b-rose-600 active:border-b-white transition-all" type="button">
+					Setup Secondary Address
+				</button>
+
+				<div class="show-address-setup">
+					<div class="flex flex-col gap-2">
+						<label for="businessStreetAddress">Secondary Street Address</label>
+						<input v-model="createBusinessFormData.streetAddress!.secondary!.address" type="text" id="businessStreetAddress" placeholder="St. DC Boulevard" />
+					</div>
+					<div class="flex flex-col gap-2">
+						<label for="businessZipCode">Secondary Zip Code</label>
+						<input v-model="createBusinessFormData.streetAddress!.secondary!.zipCode" type="text" id="businessZipCode" placeholder="13807" />
+					</div>
+				</div>
+
+				<p class="h-6">{{ createBusinessFormData.streetAddress?.secondary?.address }}</p>
+			</div>
+
+			<div class="w-full h-1  mb-0 bg-black"></div>
 
 			<div class="w-full  flex justify-between">
 				<div class="w-64 mt-2 flex flex-col gap-1">
@@ -188,8 +222,8 @@ const createBusinessFormData = ref<CreateBusinessModel>({
 		saturday: '',
 		sunday: '',
 	},
-	city: '',
 	categories: [ '' ],
+	country: '',
 	streetAddress: {
 		primary: {
 			address: '',
@@ -424,6 +458,17 @@ const handleBusinessCreation = async () => {
 	;
 }
 
+.show-address-setup {
+	@apply  p-5 flex flex-col gap-5 bg-white border-2 border-[#1b1b1b] shadow-lg transition-all duration-300
+			absolute opacity-0 pointer-events-none z-[100]
+			top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+			scale-90
+}
+
+.setup-address:focus + .show-address-setup, .setup-address:focus-within, .show-address-setup:hover {
+	@apply opacity-100 pointer-events-auto scale-100
+}
+
 .use-another-email {
 	@apply line-through text-gray-400
 }
@@ -524,7 +569,6 @@ const handleBusinessCreation = async () => {
 			scale-100
 	;
 }
-
 .process-success  {
     @apply -translate-y-1/2
 }
