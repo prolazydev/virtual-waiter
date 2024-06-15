@@ -133,10 +133,10 @@
 							</template>
 						</div>
 						<div class="contact-pill">
-							<template v-if="city && city.length > 0">
+							<template v-if="location && location.length > 0">
 								<div class="flex flex-col">
 									<h3 class="font-bold hover:underline cursor-pointer">Get directions</h3>
-									<p class="text-xs">{{ city }}</p>
+									<p class="text-xs">{{ location }}</p>
 								</div>
 								<LucideIcon name="Map" :size="16" :stroke-width="2" />
 							</template>
