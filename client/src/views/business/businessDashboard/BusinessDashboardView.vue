@@ -82,9 +82,9 @@ const componentRenderer = computed(() => {
 		loader.startLoader();
 		switch (tab.value) {
 			case 'Home':
-				return defineAsyncComponent(() => import('@/components/business/dashboard/tabs/BusinessDashboardHome.vue'));
+				return defineAsyncComponent(() => import('@/components/business/dashboard/tabs/BusinessDashboardHomeTab.vue'));
 			case 'Business':
-				return defineAsyncComponent(() => import('@/components/business/dashboard/tabs/BusinessDashboardBusiness.vue'));
+				return defineAsyncComponent(() => import('@/components/business/dashboard/tabs/BusinessDashboardBusinessTab.vue'));
 			// TODO: Implement the rest of the dashboard tabs 
 			// case 'Conversations':
 			// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardConversations.vue'));
@@ -97,7 +97,7 @@ const componentRenderer = computed(() => {
 			// case 'Settings':
 			// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardSettings.vue'));
 			default:
-				return defineAsyncComponent(() => import('@/components/business/dashboard/tabs/BusinessDashboardHome.vue'));
+				return defineAsyncComponent(() => import('@/components/business/dashboard/tabs/BusinessDashboardHomeTab.vue'));
 		}
 	} finally {
 		loader.finishLoader();
