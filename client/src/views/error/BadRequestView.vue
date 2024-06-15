@@ -1,8 +1,8 @@
 <template>
-	<div class="mt-auto flex flex-col gap-10 justify-center items-center relative text-[#1b1b1b]">
+	<div class="m-auto flex flex-col gap-10 justify-center items-center relative text-[#1b1b1b]">
 		<h1 id="errorTitle" class="text-4xl text-[#1b1b1b] font-bold">Bad Request</h1>
 		<LucideIcon id="errorIcon" class="text-[#1b1b1b]" name="TriangleAlert" :size="128" :stroke-width="1.5" />
-		<p>Please </p>
+		<p id="errorBody">Please </p>
 	</div>
 </template>
 
@@ -23,6 +23,12 @@ import LucideIcon from '@/components/ui/LucideIcon.vue';
 	@apply opacity-0
 	;
 	animation: fade-up 0.5s 0.5s ease forwards;
+}
+
+#errorBody {
+	@apply opacity-0
+	;
+	animation: fade-up 0.5s 1s ease forwards;
 }
 
 @keyframes fade-up {

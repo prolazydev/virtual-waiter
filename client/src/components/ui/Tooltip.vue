@@ -9,6 +9,7 @@
 defineProps<{
 	text: string;
 	_class?: string;
+	delay?: number;
 }>()
 </script>
 
@@ -19,8 +20,10 @@ defineProps<{
 }
 
 .tooltip:hover .tooltip-text {
-	@apply opacity-100 pointer-events-none
+	@apply opacity-100 pointer-events-none 
 	;
+
+	transition-delay: v-bind(delay + 'ms');
 }
 
 .tooltip-text {

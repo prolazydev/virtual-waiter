@@ -17,17 +17,17 @@
 							<div class="flex flex-col gap-3">
 								<div class="flex flex-col gap-2">
 									<label for="username">Username</label>
-									<input type="text" name="username" id="username" :value="business?.name">
+									<input type="text" name="username" id="username" :value="business?.name" placeholder="imJustKeN">
 								</div>
 
 								<div class="flex flex-col gap-2">
 									<label for="email">Email</label>
-									<input type="text" name="email" id="email" :value="business?.email">
+									<input type="text" name="email" id="email" :value="business?.email" placeholder="im@just.ken">
 								</div>
 
 								<div class="flex flex-col gap-2">
 									<label for="phone">Phone</label>
-									<input type="text" name="phone" id="phone" :value="business?.phone">
+									<input type="text" name="phone" id="phone" :value="business?.phone" placeholder="6688132549">
 								</div>
 
 								<div class="flex flex-col gap-2">
@@ -38,12 +38,12 @@
 
 									<div class="show-address-setup">
 										<div class="flex flex-col gap-2">
-											<label for="businessStreetAddress">Secondary Street Address</label>
-											<input v-model="business!.streetAddress!.secondary!.address" type="text" id="businessStreetAddress" placeholder="St. DC Boulevard" />
+											<label for="businessStreetAddress">Primary Street Address</label>
+											<input v-model="business!.streetAddress!.primary!.address" type="text" id="businessStreetAddress" placeholder="St. DC Boulevard" />
 										</div>
 										<div class="flex flex-col gap-2">
-											<label for="businessZipCode">Secondary Zip Code</label>
-											<input v-model="business!.streetAddress!.secondary!.zipCode" type="text" id="businessZipCode" placeholder="13807" />
+											<label for="businessZipCode">Primary Zip Code</label>
+											<input v-model="business!.streetAddress!.primary!.zipCode" type="text" id="businessZipCode" placeholder="13807" />
 										</div>
 									</div>
 								</div>
@@ -69,17 +69,17 @@
 							<div class="flex flex-col gap-3">
 								<div class="flex flex-col gap-2">
 									<label for="description">Description</label>
-									<textarea name="description" id="description" :value="business?.description"></textarea>
+									<textarea name="description" id="description" :value="business?.description" placeholder="Create something fun :D"></textarea>
 								</div>
 								
 								<div class="flex flex-col gap-2">
 									<label for="state">State</label>
-									<input type="text" name="state" id="state" :value="business?.country">
+									<input type="text" name="state" id="state" :value="business?.country" placeholder="Kensas">
 								</div>
 
 								<div class="flex flex-col gap-2">
 									<label for="website">Website</label>
-									<input type="text" name="website" id="website" :value="business?.website">
+									<input type="text" name="website" id="website" :value="business?.website" placeholder="imjust.ken">
 								</div>
 							</div>
 
@@ -157,11 +157,24 @@
 												<LucideIcon @click="selectedBusinessCategories.pop()" name="X" :size="14" />
 											</li>
 											<li class="w-fit flex items-center ">
-												<input :disabled="selectedBusinessCategories.length < 3 ? false : true" @input="autosizeWidth" @keydown.backspace="handlePop" v-model="categoryInput" id="businessCategories" :placeholder="selectedBusinessCategories.length < 3 ? 'Business Categories' : 'Please remove a category to add a new one'" autocomplete="off" />
+												<input 
+													:disabled="selectedBusinessCategories.length < 3 ? false : true" 
+													@input="autosizeWidth" 
+													@keydown.backspace="handlePop" 
+													v-model="categoryInput" 
+													id="businessCategories" 
+													:placeholder="selectedBusinessCategories.length < 3 ? 'Business Categories' : 'Please remove a category to add a new one'" 
+													autocomplete="off"
+												/>
 
 												<ul :class="{ 'show-business-categories-input': categoriesResult.length > 0 }" class="business-categories-result">
 													<li v-for="(item, index) in categoriesResult" :key="index" @click="addCategory(item.name)" class="flex gap-1">
-														<p v-if="item.parentCategories[0]" class="capitalize">{{ item.parentCategories[0] }} - </p> <span v-html="formatText(item.name)"></span>
+														<Tooltip :text="`${item.parentCategories[0]} - ${item.name}`" class="business-category-tooltip" :delay="700">
+															<p v-if="item.parentCategories[0]" class="capitalize max-w-28 overflow-hidden text-ellipsis">
+																{{ item.parentCategories[0] }} - 
+															</p> 
+															<span v-html="formatText(item.name)"></span>
+														</Tooltip>
 													</li>
 												</ul>
 											</li>
@@ -194,7 +207,7 @@
 											<div class="w-full flex gap-5 justify-end relative">
 												<div class="flex gap-5 absolute-center">
 													<input @change="handlePreviewImage" class="hidden" type="file" name="profileImage" id="profileImage">
-													<label class="form-button-2 text-center cursor-pointer" for="profileImage">{{ imageData ? 'Change' :  'Select a Profile Image' }}</label>
+													<label class="form-button-1 text-center cursor-pointer" for="profileImage">{{ imageData ? 'Change' :  'Select a Profile Image' }}</label>
 
 													<button @click="saveImageData('profileImage')" v-if="imageData" class="form-button-2">
 														Save
@@ -277,8 +290,6 @@
 			</div>
 		</section>
 
-		{{ business }}
-
 		<!-- TODO: Business Preview -->
 	</div>
 </template>
@@ -316,10 +327,33 @@ const business24Hours = ref({
 
 onMounted(() => {
 	const textarea = document.querySelector<HTMLTextAreaElement>('#businessCategories')!;
-
 	autosizeWidth(textarea);
+
+	if (business.value && business.value.categories && business.value.categories.length > 0) 
+		selectedBusinessCategories.value = business.value.categories;
 });
 
+const handleGetBusiness = async () => {
+	try {
+		const { response, statusCode, data } = await getBusinessSelfById(params.id as string);
+
+		if (response.value!.ok && data.value) 
+			return business.value = data.value;
+
+		switch (statusCode.value) {
+			case 404:
+				return await router.push({ name: 'notFound' });
+			case 400:
+				return await router.push({ name: 'badRequest' });
+			// Add additional cases as needed
+			default:
+				return // Handle other status codes if necessary
+		}
+	} catch (error) {
+		console.error(error);
+	}
+};
+await handleGetBusiness();
 
 const autosizeWidth = async (e: Event | HTMLTextAreaElement) => {
 	if (e instanceof Event) {
@@ -350,6 +384,7 @@ const addCategory = (name: string) => {
 		categoryInput.value = '';
 	if (selectedBusinessCategories.value.length < 3) {
 		selectedBusinessCategories.value.push(name);
+
 		business.value!.categories = selectedBusinessCategories.value;
 		return;
 	}
@@ -369,6 +404,8 @@ const formatText = (name: string) => {
 	// If the query is not found, return the original name
 	return name;
 };
+
+const formatCategoryTitle = (parent: string, name: string) => `${parent[0].toLocaleUpperCase() + parent.slice(1)} - ${name}`;
 
 const handlePop = () =>
 	categoryInput.value.length === 0 && selectedBusinessCategories.value.length > 0 && selectedBusinessCategories.value.pop();
@@ -407,28 +444,6 @@ const set24hourSchedule = () => business?.value!.is24
 	: setAllHours('00:00-00:00', false);
 	
 const resetHours = () => setAllHours('', false);
-
-const handleGetBusiness = async () => {
-	try {
-		const { response, statusCode, data } = await getBusinessSelfById(params.id as string);
-
-		if (response.value!.ok && data.value) 
-			return business.value = data.value;
-
-		switch (statusCode.value) {
-			case 404:
-				return await router.push({ name: 'notFound' });
-			case 400:
-				return await router.push({ name: 'badRequest' });
-			// Add additional cases as needed
-			default:
-				return // Handle other status codes if necessary
-		}
-	} catch (error) {
-		console.error(error);
-	}
-};
-await handleGetBusiness();
 
 const handleEditBusiness = async () => {
 
@@ -652,6 +667,10 @@ const arrayBufferToBase64 = (buffer: ArrayBuffer, mimeType: string) => {
 			hover:border-b-rose-700
 			transition-all duration-300
 	;
+}
+
+.business-category-tooltip {
+	@apply 	w-full text-nowrap capitalize
 }
 
 .dialog-img {
