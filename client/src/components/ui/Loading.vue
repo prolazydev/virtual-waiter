@@ -1,5 +1,5 @@
 <template>
-	<div class="m-auto loading-content">
+	<div class="loading-content m-auto">
 		<LucideIcon name="ChefHat" class="text-gray-200 " :size="148" :stroke-width="2">
 			<filter id='myfilters'>
 				<!-- Shadow blur -->
@@ -42,11 +42,6 @@
 </script>
 
 <style scoped>
-.loading-content {
-	margin: auto;
-	
-}
-
 .loading-content > svg {
 	filter: url(#myfilters);
 }

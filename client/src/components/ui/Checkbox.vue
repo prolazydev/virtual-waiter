@@ -69,28 +69,25 @@ const returnValue = (e: HTMLInputElement) => {
 
 /* On mouse-over, add a grey background color */
 .checkbox-container:hover input ~ .checkbox-label {
-  	background-color: #ccc;
+  	@apply bg-[#ccc]
+	;
 }
 
 .checkbox-container input:focus ~ .checkbox-label {
-	@apply border-[#1b1b1b]
+	@apply border-[#1b1b1b] bg-[#ccc]
 	;
-	background-color: #ccc;
 }
 
 .checkbox-container input:disabled ~ .checkbox-label {
-	@apply bg-[#1b1b1b] border-[#1b1b1b] cursor-not-allowed
+	@apply bg-white border-[#1b1b1b] pointer-events-none brightness-50
 	;
 }
 
-/* When the checkbox is checked, add a blue background */
-/* .checkbox-container input:checked ~ .checkbox-label { */
-	/* TODO: Maybe add bg color */
-  /* background-color: #2196F3; */
-/* } */
+/* Selects the parent element when the input is disabled */
+.checkbox-container:has(input:disabled) {
+	@apply  line-through text-gray-500 cursor-not-allowed
+}
 
-/* Create the checkmark/indicator (hidden when not checked) */
-/* Style the checkmark/indicator */
 .checkbox-label:after {
 	@apply 	w-[0.4rem] h-[0.75rem] left-[4px] top-0 border-solid border-0 border-r-[3px] border-b-[3px] border-[#1b1b1b]
 	
@@ -114,5 +111,4 @@ const returnValue = (e: HTMLInputElement) => {
 .checkbox-indeterminate-label:after {
 	@apply w-2 h-0.5 bg-[#1b1b1b] absolute left-[4px] top-1/2 -translate-y-1/2 
 }
-
 </style>

@@ -111,7 +111,7 @@
 				</div>
 
 				<div class="w-64 mt-1 flex flex-col gap-1">
-					<div class="flex justify-between ">
+					<div class="flex justify-between">
 						<Checkbox @change="set24hourSchedule" v-model="createBusinessFormData.is24" class="form-checkbox h-8 flex items-center" _id="useUserEmail" _label="Is open 24/7" />
 						<div v-if="!createBusinessFormData.is24" class="w-2 h-2 rounded-full my-auto bg-[#1b1b1b]"></div>
 						<button v-if="!createBusinessFormData.is24" @click="openSetHours = !openSetHours" class="w-fit h-fit bg-[#1b1b1b] text-white px-2 border-4 border-[#1b1b1b] focus:outline-none focus-visible:border-b-rose-600 active:border-b-white transition-all" type="button">
@@ -129,7 +129,7 @@
 						<div v-for="(key) in Object.keys(createBusinessFormData.hours)" :key="key" class="flex">
 							<h3 class="font-bold capitalize">{{ key }}:</h3>
 							<p v-if="createBusinessFormData.is24">Open 24h</p>
-							<p v-else>{{ createBusinessFormData.hours![key as Business24HoursObjectKeys] ? createBusinessFormData.hours![key as Business24HoursObjectKeys] : '00:00-00:00' }}</p>
+							<p v-else>{{ createBusinessFormData.hours![key as Days] ? createBusinessFormData.hours![key as Days] : '00:00-00:00' }}</p>
 						</div>
 					</div>
 				</div>
@@ -199,7 +199,7 @@
 <script lang="ts" setup>
 import Checkbox from '@/components/ui/Checkbox.vue';
 import type { RequestStatus } from '@/enums/EFromValidations';
-import type { BusinessCategory, CreateBusinessModel } from '@/types/business';
+import type { BusinessCategory, CreateBusinessModel, Days } from '@/types/business';
 
 
 const router = useRouter();
@@ -239,9 +239,9 @@ const createBusinessFormData = ref<CreateBusinessModel>({
 const categoryInput = ref('');
 const categoriesResult = ref<BusinessCategory[]>([]);
 
-const useUserEmail = ref(true);
-
 const selectedBusinessCategories = ref<string[]>([]);
+
+const useUserEmail = ref(true);
 
 const openSetHours = ref(false);
 const business24Hours = ref({
@@ -256,109 +256,112 @@ const business24Hours = ref({
 
 const requestStatus = ref<RequestStatus>('Idle');
 
-type Business24HoursObjectKeys = keyof typeof business24Hours.value;
+// type Business24HoursObjectKeys = keyof typeof business24Hours.value;
 
 onMounted(() => {
 	const textarea = document.querySelector<HTMLTextAreaElement>('#businessCategories')!;
 
-	// autosize(textarea);
 	autosizeWidth(textarea)
 });
 
-watch(() => useUserEmail.value, (newValue: boolean) => newValue 	
-	? createBusinessFormData.value.userEmail = user.email 
+watch(() => useUserEmail.value, (newValue: boolean) => newValue
+	? createBusinessFormData.value.userEmail = user.email
 	: createBusinessFormData.value.userEmail = ''
-)
+);
 
 const autosizeWidth = async (e: Event | HTMLTextAreaElement) => {
-	if ( e instanceof Event ) {
+	if (e instanceof Event) {
 		const length = (e.target as HTMLInputElement).value.length;
 
 		(e.target as HTMLInputElement).style.width = `${Math.max(20, length + 3)}ch`;
-		
-	} else 
+
+	} else
 		e.style.width = Math.max(20, e.value.length + 3) + 'ch';
 
 	await debounceSearchCategories();
-}
+};
 
 const debounceSearchCategories = useDebounceFn(async () => {
+	if (categoryInput.value.length === 0) {
+		categoriesResult.value = [];
+		return;
+	}
 	const { response, data } = await myFetch(`business_category/name/${categoryInput.value}`);
 	if ( response.value?.ok ) {
 		categoriesResult.value = data.value;
 	}
 }, 500);
 
+const addCategory = (name: string) => {
+	if (selectedBusinessCategories.value.length === 2)
+		categoryInput.value = '';
+	if (selectedBusinessCategories.value.length < 3) {
+		selectedBusinessCategories.value.push(name);
+		createBusinessFormData.value.categories = selectedBusinessCategories.value;
+		return;
+	}
+};
+
 const formatText = (name: string) => {
 	const index = name.toLowerCase().indexOf(categoryInput.value.toLowerCase());
 
 	if (index !== -1) {
-        const before = name.substring(0, index);
-        const match = name.substring(index, index + categoryInput.value.length);
-        const after = name.substring(index + categoryInput.value.length);
-        return `${before}<span style="font-weight: bold;">${match}</span>${after}`;
+		const before = name.substring(0, index);
+		const match = name.substring(index, index + categoryInput.value.length);
+		const after = name.substring(index + categoryInput.value.length);
+		return `${before}<span style="font-weight: bold;">${match}</span>${after}`;
 	}
 
-	 // If the query is not found, return the original name
-	 return name;
-}
+	// If the query is not found, return the original name
+	return name;
+};
 
 const handlePop = () => {
-	if (categoryInput.value.length === 0 && selectedBusinessCategories.value.length > 0) 
+	if (categoryInput.value.length === 0 && selectedBusinessCategories.value.length > 0)
 		selectedBusinessCategories.value.pop();
-}
-
-const addCategory = (name: string) => {
-	if (selectedBusinessCategories.value.length === 2) 
-		categoryInput.value = '';
-	if (selectedBusinessCategories.value.length < 3) {
-		selectedBusinessCategories.value.push(name)
-		createBusinessFormData.value.categories = selectedBusinessCategories.value;
-		return 
-	}
-}
+};
 
 const setAllHours = (hour: string, boolVal: boolean = true) => {
 	Object.keys(createBusinessFormData.value.hours!).forEach((key) => {
-		createBusinessFormData.value.hours![key as Business24HoursObjectKeys] = hour;
-		business24Hours.value[key as Business24HoursObjectKeys] = boolVal;
-	})
+		createBusinessFormData.value.hours![key as Days] = hour;
+		business24Hours.value[key as Days] = boolVal;
+	});
 
 	document.querySelectorAll<HTMLInputElement>('.business-hours .form-checkbox input[type="checkbox"]')
 		.forEach((el) => {
 			el.checked = boolVal;
 			el.readOnly = false;
 			el.indeterminate = false;
-		}); 
-}
+		});
+};
 
 const setIndeterminateClosed = (value: string, checked: boolean, key: string) => {
 	if (!value && checked) {
-		createBusinessFormData.value.hours![key as Business24HoursObjectKeys] = '24';
-		business24Hours.value[key as Business24HoursObjectKeys] = true;
-	} 
-	else if (value && value.length > 0) {
-		createBusinessFormData.value.hours![key as Business24HoursObjectKeys] = 'Closed';
-		business24Hours.value[key as Business24HoursObjectKeys] = true;
-	} 
-	else {
-		createBusinessFormData.value.hours![key as Business24HoursObjectKeys] = '';	
-		business24Hours.value[key as Business24HoursObjectKeys] = false;
+		createBusinessFormData.value.hours![key as Days] = '24';
+		business24Hours.value[key as Days] = true;
 	}
-}
+	else if (value && value.length > 0) {
+		createBusinessFormData.value.hours![key as Days] = 'Closed';
+		business24Hours.value[key as Days] = true;
+	}
+	else {
+		createBusinessFormData.value.hours![key as Days] = '';
+		business24Hours.value[key as Days] = false;
+	}
+};
 
 const set24hourSchedule = () => createBusinessFormData.value.is24 
 	? setAllHours('')
 	: setAllHours('00:00-00:00', false);
 	
-const resetHours = () => setAllHours('', false)
+const resetHours = () => setAllHours('', false);
 
 const handleBusinessCreation = async () => {
-    requestStatus.value = 'Loading';
+	requestStatus.value = 'Loading';
 	try {
-		const { response, data, error } = await myFetch<{id: string}>('/business', createBusinessFormData.value, { method: 'POST' });
+		const { response, data, error } = await myFetch<{ id: string; }>('/business', createBusinessFormData.value, { method: 'POST' });
 
-		if ( response.value?.ok ) {
+		if (response.value?.ok) {
 			console.log(data.value);
 			requestStatus.value = 'Success';
 
@@ -372,7 +375,7 @@ const handleBusinessCreation = async () => {
 	} catch (error) {
 		console.log(error);
 	}
-}
+};
 </script>
 
 <style scoped>
@@ -413,6 +416,10 @@ const handleBusinessCreation = async () => {
 
 .business-categories-input {
 	@apply max-w-64 
+}
+
+.business-categories-input svg {
+	@apply cursor-pointer stroke-2 text-gray-600 hover:text-black
 }
 
 .business-categories-input ul {
@@ -561,16 +568,12 @@ const handleBusinessCreation = async () => {
 }
 
 .hours-table p {
-	@apply text-ellipsis
+	@apply text-ellipsis text-center
 }
 
-.show-hours:focus + .hours-table, .show-hours:focus-within, .hours-table:hover {
+.show-hours:focus + .hours-table, .hours-table:hover {
 	@apply 	opacity-100 pointer-events-auto z-10 shadow-lg
 			scale-100
 	;
 }
-.process-success  {
-    @apply -translate-y-1/2
-}
-
 </style>

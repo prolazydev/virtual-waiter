@@ -38,11 +38,11 @@ export type Business = {
 	coverImage?: string;
 	hours?: Hours;
 	is24: boolean;
-	attributes?: string[];
 	averageRating: number;
 	reviews: number;
 	userReviews: UserReview[];
 	reviewPoints?: number;
+	attributes?: string[];
 	categories?: string[];
 	website?: string;
 	takesReservations: boolean;
@@ -56,6 +56,28 @@ export type Business = {
 	banned: boolean;
 }
 
+export type BusinessEdit = {
+	userId: string;
+	name: string;
+	email: string;
+	userEmail: string;
+	country?: string;
+	streetAddress?: StreetAddresses;
+	phone?: string;
+	description?: string;
+	location?: string;
+	profileImage?: Buffer;
+	coverImage?: Buffer;
+	hours?: Hours;
+	is24: boolean;
+	attributes?: string[];
+	categories?: string[];
+	website?: string;
+	takesReservations: boolean;
+	delivery: boolean;
+	takeout: boolean;
+}
+
 export type BusinessCategory = {
 	userId: string;
 	name: string;
@@ -63,8 +85,7 @@ export type BusinessCategory = {
 	description?: string;
 }
 
-export type CreateBusinessModel =
-	{
+export type CreateBusinessModel = {
 	userId: string;
 	name: string;
 	email: string;
@@ -72,8 +93,6 @@ export type CreateBusinessModel =
 	phone?: string;
 	streetAddress?: StreetAddresses;	
 	description?: string;
-	// city?: string;
-	// zipCode?: string
 	country?: string;
 	location?: string;
 	categories?: string[];
@@ -90,4 +109,8 @@ export type BusinessDashboardTabTitles = 'Home' | 'Business' | 'Conversations' |
 export type BusinessDashboardTab = {
 	name: BusinessDashboardTabTitles;
 	icon: IconKeys;
-}
+};
+
+
+export type Days = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+

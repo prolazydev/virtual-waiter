@@ -7,21 +7,17 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    BusinessCardItem: typeof import('@/components/business/BusinessCardItem.vue')['default']
     BusinessCreatePreview: typeof import('@/components/business/BusinessCreatePreview.vue')['default']
     Checkbox: typeof import('@/components/ui/Checkbox.vue')['default']
-    Default: typeof import('@/components/layer/Default.vue')['default']
     Flip: typeof import('number-flip')['Flip']
     Footer: typeof import('@/components/header_footer/Footer.vue')['default']
     Header: typeof import('@/components/header_footer/Header.vue')['default']
-    Loading: typeof import('@/components/ui/Loading.vue')['default']
     LucideIcon: typeof import('@/components/ui/LucideIcon.vue')['default']
-    MyDatePicker: typeof import('@/components/ui/MyDatePicker.vue')['default']
+    MyDialog: typeof import('@/components/ui/MyDialog.vue')['default']
     ProgressBar: typeof import('@/components/ui/ProgressBar.vue')['default']
     Review: typeof import('@/components/ui/Review.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SearchItem: typeof import('@/components/ui/SearchItem.vue')['default']
     Tooltip: typeof import('@/components/ui/Tooltip.vue')['default']
   }
 }
