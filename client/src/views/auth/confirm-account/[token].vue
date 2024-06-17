@@ -26,7 +26,9 @@
 import type { RequestStatus } from '@/enums/EFromValidations';
 
 const router = useRouter();
-const { params } = useRoute();
+const { params } = useRoute('/auth/confirm-account/[token]');
+// const test = useRoute('/auth/confirm-account/[token]');
+
 
 const { isAuth } = useAuth();
 
@@ -51,7 +53,6 @@ const statusMessage = computed(() => {
 	}
 });
 
-
 onMounted( async() => {
 	setTimeout(() => requestStatus.value = 'Loading', 0)
 
@@ -62,7 +63,7 @@ onMounted( async() => {
 			if ( response.value?.ok ) {
 				if ( data.value ) {
 					requestStatus.value = 'Success';
-					setTimeout( async() => await tostRouterTo(router, '/', 'Account verified!'), 1000)
+					setTimeout(async () => await tostRouterTo(router, '/', {}, 'Account verified!'), 1000)
 				} else 
 					requestStatus.value = 'Expired';
 			} else 
@@ -125,7 +126,7 @@ onMounted( async() => {
 			absolute top-1/2 right-1/2 translate-x-1/2 translate-y-5
 }
 .button-link:hover::before {
-	@apply  translate-y-4 w-4/5 
+	@apply  bg-rose-600
 }
 
 .show-error-message {
@@ -133,4 +134,3 @@ onMounted( async() => {
 }
 
 </style>
-@/utils/myFetch@/composables/tostRouterTo

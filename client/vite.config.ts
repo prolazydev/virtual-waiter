@@ -1,15 +1,18 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath, URL } from 'node:url'
+import { fileURLToPath, URL } from 'node:url';
 
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import AutoImport from 'unplugin-auto-import/vite'
+import VueRouter from 'unplugin-vue-router/vite';
+import { VueRouterAutoImports } from 'unplugin-vue-router';
+
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import AutoImport from 'unplugin-auto-import/vite';
 import type { Resolver } from 'unplugin-auto-import/types';
-import Components from 'unplugin-vue-components/vite'
+import Components from 'unplugin-vue-components/vite';
 
-import tailwind from "tailwindcss"
-import autoprefixer from "autoprefixer"
+import tailwind from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
 
 // Resolver for AutoImport
 const composableResolver: Resolver = name => {
@@ -31,12 +34,16 @@ const composableResolver: Resolver = name => {
 
 export default defineConfig({
 	plugins: [
+		VueRouter({
+			routesFolder: 'src/views'
+		}),
 		vue(),
 		AutoImport({
 			dts: true,
 			imports: [
 				'vue',
-				'vue-router',
+				// 'vue-router',
+				VueRouterAutoImports,
 				'pinia',
 				'@vueuse/core',
 				{

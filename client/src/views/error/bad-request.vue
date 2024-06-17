@@ -8,8 +8,6 @@
 
 <script lang="ts" setup>
 import LucideIcon from '@/components/ui/LucideIcon.vue';
-
-
 </script>
 
 <style scoped>

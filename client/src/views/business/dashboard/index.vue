@@ -9,19 +9,13 @@
 					</div>
 
 					<div class="flex flex-col gap-3">
-						<button v-for="(item, index) in dashboardTabs" :key="index" @click="tab = item.name" class="dashboard-link" :class="{ 'active-tab': tab === item.name }">
+						<button v-for="(item, index) in tabs" :key="index" @click="tab = item.name" class="dashboard-link" :class="{ 'active-tab': tab === item.name }">
 							<LucideIcon :name="item.icon" :size="22" />
 							{{ item.name }}
 						</button>
-						<!-- <button @click="() => tabs = 'manager'" class="dashboard-link" :class="{ 'active-tab': tabs === 'manager' }"><LucideIcon name="LayoutDashboard" :size="22"/>Home</button>
-						<button @click="() => tabs = 'business'"  class="dashboard-link" :class="{ 'active-tab': tabs === 'business' }"><LucideIcon name="ChefHat" :size="22"/>Business</button> -->
-						<!-- <button class="dashboard-link">Business</button> -->
 					</div>
 				</div>
 			</div>
-			<!-- TODO: Implement dynamic component rendering on runtime to switch between the dashboard tabs -->
-			<!-- <router-link class="w-fit bg-[#1b1b1b] text-white font-semibold border-2 border-[#1b1b1b] active:border-b-white transition-all" to="/">Manager</router-link>-->
-			<!-- <BusinessCardItem v-for="business in businesses" :key="business._id" :business="business" />  -->
 			<Transition mode="out-in">
 				<Suspense :timeout="0">
 					<template #default>
@@ -42,9 +36,9 @@ import type { BusinessDashboardTab, BusinessDashboardTabTitles } from '@/types/b
 const { user, setTab } = useUserStore();
 const loader = useLoader();
 
-const tab = ref<BusinessDashboardTabTitles>(user.lastTab || 'Home');
+const tab = ref<BusinessDashboardTabTitles>(user.lastBusinessDashboardTab || 'Home');
 
-const dashboardTabs: BusinessDashboardTab[] = [
+const tabs: BusinessDashboardTab[] = [
 	{ 
 		name: 'Home',
 		icon: 'LayoutDashboard'
@@ -75,9 +69,10 @@ const dashboardTabs: BusinessDashboardTab[] = [
 	},
 ];
 
-watch(tab, (newTab) => setTab(newTab))
+watch(tab, (newTab) => setTab( 'lastBusinessDashboardTab', newTab))
 
 const componentRenderer = computed(() => {
+
 	try {
 		loader.startLoader();
 		switch (tab.value) {
@@ -102,9 +97,7 @@ const componentRenderer = computed(() => {
 	} finally {
 		loader.finishLoader();
 	}
-})
-
-
+});
 </script>
 
 <style scoped>

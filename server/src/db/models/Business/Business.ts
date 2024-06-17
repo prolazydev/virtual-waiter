@@ -11,6 +11,7 @@ export interface IBusiness extends Document {
 	managers: [{ type: Schema.Types.ObjectId, ref: 'User', select: false }],
 	
 	name: string;
+	displayName: string;
 	username: string;
 	email: string;
 	userEmail: string;
@@ -54,13 +55,21 @@ const businessSchema = new Schema<IBusiness>({
 	managers: [ { type: Schema.Types.ObjectId, ref: 'User', select: false } ],
 	name: {
 		type: String,
-		trim: true,
 		required: true,
+		unique: true,
+		trim: true,
+		lowercase: true,
+	},
+	displayName: {
+		type: String,
+		trim: true,
+		required: false,
 	},
 	username: {
 		type: String, 
-		required: [ true, 'Username is required!' ], 
-		unique: true, 
+		required: false,
+		// required: [ true, 'Username is required!' ], 
+		// unique: true, 
 		trim: true,
 		minLength: [ 2, 'Username must have at least 2 characters!' ],
 		maxLength: [ 30, 'Username cannot exceed 30 characters!' ], // Standard from Instagram
@@ -82,7 +91,7 @@ const businessSchema = new Schema<IBusiness>({
 	userEmail: {
 		type: String, 
 		required: [ true, 'User Email is required!' ], 
-		unique: true, 
+		// unique: true, 
 		validator: [ validator.isEmail, 'Invalid email!' ]
 	},
 	phone: String,

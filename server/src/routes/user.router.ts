@@ -1,7 +1,7 @@
 import type { RequestHandler, Router } from 'express';
 import multer from 'multer';
 import { isAuthenticated, isSelfUserOwner } from '../middlewares/auth.middleware.js';
-import { getUserMe, getAllUsers, getUserById, deleteUser, updateUser, updateUserAvatar } from '../controllers/user.controller.js';
+import { getUserMe, getAllUsers, deleteUser, updateUser, updateUserAvatar, getUserByUsername } from '../controllers/user.controller.js';
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -16,7 +16,8 @@ const upload = multer({ storage });
 export default (router: Router, middlewares: RequestHandler[] | RequestHandler = []) => {
 	router.get('/user', middlewares, getAllUsers);
 	router.get('/user/me', isAuthenticated, getUserMe);
-	router.get('/user/:id', isAuthenticated, getUserById);
+	// router.get('/user/:id', isAuthenticated, getUserById);
+	router.get('/user/:username', isAuthenticated, getUserByUsername);
 
 	router.delete('/user/self', middlewares, isSelfUserOwner, deleteUser);
 	router.delete('/user/:id', middlewares, isSelfUserOwner, deleteUser);

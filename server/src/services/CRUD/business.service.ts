@@ -10,8 +10,8 @@ export const createBusiness = async (business: Business) =>
 export const findBusinesses = () => BusinessModel.find();
 
 export const findBusinessById = (id: string | mongoose.Schema.Types.ObjectId) => BusinessModel.findById(id);
+export const findBusinessByName = (name: string) => BusinessModel.findOne({ name });
 export const findBusinessesByUserId = (userId: string) => BusinessModel.find({ userId });
-export const findBusinessesByName = (name: string) => BusinessModel.find({ name });
 
 export const findBusinessByCustomQuery = (filter?: FilterQuery<Business>, projection?: ProjectionType<Business>, options?: QueryOptions<Business>) => BusinessModel.findOne(filter, projection, options);
 export const findBusinessesByCustomQuery = (filter: FilterQuery<Business>, projection?: ProjectionType<Business>, options?: QueryOptions<Business>) => BusinessModel.find(filter, projection, options);

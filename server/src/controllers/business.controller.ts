@@ -1,4 +1,5 @@
-import mongoose, { type FilterQuery } from 'mongoose';
+import mongoose, { type FilterQuery, Types } from 'mongoose';
+
 import { StatusCodes } from 'http-status-codes';
 
 import { respond } from '../utils/common/http';
@@ -6,15 +7,18 @@ import { type Business } from '../db/models/Business/Business';
 import { Message } from '../utils/common/ServerResponseMessages';
 import { requestHandler } from '../utils/errors/asyncErrorHandler';
 import { handleError } from '../utils/errors/error';
-import { createBusiness, findBusinesses, findBusinessById, findBusinessesByUserId, findBusinessesByName, findBusinessesByCustomQuery, findBusinessesByAggregate, findAndUpdateBusinessById, deleteBusinessesByUserId, deleteBusinessById, findBusinessByCustomQuery } from '../services/CRUD/business.service';
+import { createBusiness, findBusinesses, findBusinessById, findBusinessesByUserId, findBusinessByName, findBusinessesByCustomQuery, findBusinessesByAggregate, findAndUpdateBusinessById, deleteBusinessesByUserId, deleteBusinessById, findBusinessByCustomQuery } from '../services/CRUD/business.service';
 import { generateRandom4DigitNumber } from '../utils/crypto';
 import { sendEmail } from '../utils/email';
 
+// #region POST
 export const registerBusinessRequest = requestHandler<Business>(async (req, res) => {
 	try {
 		const business = req.body;
 		if ( !business ) 
 			return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
+
+		business.username = 'contosso2';
 
 		const newBusiness = await createBusiness(business);
 		
@@ -23,6 +27,7 @@ export const registerBusinessRequest = requestHandler<Business>(async (req, res)
 		handleError(res, error);
 	}
 });
+// #endregion
 
 // #region GET 
 export const getAllBusinesses = requestHandler(async (req, res) => {
@@ -34,6 +39,7 @@ export const getAllBusinesses = requestHandler(async (req, res) => {
 	}
 });
 
+// TODO: Rename function properly by it's implementation
 export const getBusinessById = requestHandler(async (req, res) => {
 	try {
 		const id = req.params.id;
@@ -42,8 +48,9 @@ export const getBusinessById = requestHandler(async (req, res) => {
 		if ( id.length !== 24 )
 			return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 
-		// TODO: get business with the ratings also
+		// TODO: also get business with the ratings 
 		const business = (await findBusinessesByAggregate([
+			{ $match: { _id: new Types.ObjectId(id) } },
 			{
 				$lookup: {
 					from: 'business_reviews',
@@ -74,24 +81,25 @@ export const getBusinessById = requestHandler(async (req, res) => {
 	}
 });
 
-export const getBusinessesByUserId = requestHandler(async (req, res) => {
-	const id = req.params.id;
-	if ( !id ) 
+export const getBusinessByName = requestHandler(async (req, res) => {
+	const name = req.params.name;
+	if ( !name ) 
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 
-	const businesses = await findBusinessesByUserId(id);
+	const businesses = await findBusinessByName(name);
+
 	if ( !businesses ) 
 		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 
 	respond(res, StatusCodes.OK, Message.SuccessRead, businesses);
 });
 
-export const getBusinessesByName = requestHandler(async (req, res) => {
-	const name = req.params.name;
-	if ( !name ) 
+export const getBusinessesByUserId = requestHandler(async (req, res) => {
+	const id = req.params.id;
+	if ( !id ) 
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 
-	const businesses = await findBusinessesByName(name);
+	const businesses = await findBusinessesByUserId(id);
 	if ( !businesses ) 
 		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 

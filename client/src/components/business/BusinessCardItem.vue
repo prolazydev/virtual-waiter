@@ -7,8 +7,13 @@
 					<LucideIcon v-else class="m-auto opacity-50" name="ChefHat" :size="64" :stroke-width="2" />
 				</div>
 			</router-link>
+			
+			<router-link :to="{ name: '/business/settings/[id]', params: { id: business._id } }" class="absolute top-0 left-0 m-2 z-50 transition-all"  type="button">
+				<LucideIcon class="fill-transparent hover:rotate-90 transition-all duration-300" name="Settings" :stroke-width="2" />
+			</router-link>
+
 			<!-- TODO: add to favorite businesses -->
-			<button @click="() => console.log('blewh')" class="absolute top-0 right-0 m-2 z-50 transition-all" type="button" >
+			<button @click="() => console.log('blewh')" class="absolute top-0 right-0 m-2 z-50 transition-all" type="button">
 				<LucideIcon class="fill-transparent hover:fill-rose-500 hover:text-rose-500 transition-all" name="Heart" :stroke-width="2" />
 			</button>
 		</div>

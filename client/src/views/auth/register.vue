@@ -1,5 +1,5 @@
 <template>
-    <div class="w-fit h-full mx-auto mt-auto py-20 bg-white">
+    <div class="w-fit h-full m-auto py-20 ">
         <div class="register-form">
             <div class="w-32 flex items-center justify-center relative">
                 <div class="relative">
@@ -106,23 +106,25 @@ watch(takenUsernames.value, () => {
 // });
 
 const emailValidity = computed(() => {
-    if (registerForm.value.email.length === 0) 
+    if (registerForm.value.email.length === 0)
         return 'Empty';
 
-    if (!emailRegex.test(registerForm.value.email)) 
+    if (!emailRegex.test(registerForm.value.email))
         return 'Invalid';
-    else 
+    else
         return 'Valid';
-})
+});
+
 const passwordValidity = computed(() => {
-    if (registerForm.value.password.length === 0) 
+    if (registerForm.value.password.length === 0)
         return 'Empty';
 
-    if (!passwordRegex.test(registerForm.value.password)) 
+    if (!passwordRegex.test(registerForm.value.password))
         return 'Invalid';
-    else 
+    else
         return 'Valid';
-})
+});
+
 const confirmPasswordValidity = computed(() => {
     if (registerForm.value.confirmPassword.length === 0) 
         return 'Empty';
@@ -134,15 +136,15 @@ const confirmPasswordValidity = computed(() => {
 })
 const isFormValid = computed(() => {
     return usernameValidity.value === 'Valid' && emailValidity.value === 'Valid' && passwordValidity.value === 'Valid' && confirmPasswordValidity.value === 'Valid';
-})
+});
 
 const debounceSearch = useDebounceFn(async () => {
     if (usernameValidity.value) {
-        const res = await myFetch<boolean>(`auth/user/${registerForm.value.username}`, );
-        if (!res.data) 
+        const res = await myFetch<boolean>(`auth/user/${registerForm.value.username}`,);
+        if (!res.data)
             return takenUsernames.value.add(registerForm.value.username);
     }
-}, 500)
+}, 500);
 
 const signUp = async () => {
     if (isFormValid.value) {
@@ -153,22 +155,20 @@ const signUp = async () => {
          
             if (data.value) {
                 requestStatus.value = 'Success';
-                setTimeout( async() => await tostRouterTo(router, '/', 'Please check your email to verify your account'), 1000)
+                setTimeout( async() => await tostRouterTo(router, '/', {}, 'Please check your email to verify your account'), 1000)
             }
         } catch (error) {
             console.error(error);
         } 
     }
 }
-
-
 </script>
 
 <style scoped>
 /* Green color #07B889 */
 
 .register-form {
-    @apply relative mt-auto py-16 px-20 flex gap-20 border-4 border-[#1b1b1b]
+    @apply relative mt-auto py-16 px-20 flex gap-20 border-4 border-[#1b1b1b] bg-white
 }
 
 .form-icon {

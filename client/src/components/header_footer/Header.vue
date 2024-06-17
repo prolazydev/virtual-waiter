@@ -13,7 +13,7 @@
                     <LucideIcon id="searchTypeIcon" class="flex margin-auto stroke-[#1b1b1b]" :name="searchType" :size="24" :strokeWidth=2 />
                     <span class="arrow"></span>
                 </button>
-                <ul class="dropdown-content left-[-2px]">
+                <ul class="dropdown-content p-2 left-[-2px]">
                     <li @click.prevent="searchProps.searchType = 'general'"><p>General</p></li>
                     <li @click.prevent="searchProps.searchType = 'restaurants'"><p>Restaurants</p></li>
                     <li @click.prevent="searchProps.searchType = 'foods'"><p>Foods</p></li>
@@ -28,13 +28,13 @@
         </form>
         <ul class="nav-links nav-right ml-auto flex gap-5 items-center">
             <template v-if="!isAuth()">
-                <li><router-link class="nav-link" to="/register">Sign up</router-link></li>
-                <li><router-link class="nav-link" to="/login">Login</router-link></li>
+                <li><router-link class="nav-link" to="/auth/register">Sign up</router-link></li>
+                <li><router-link class="nav-link" to="/auth/login">Login</router-link></li>
             </template>
             <template v-else>
                 <!-- TODO: my restaurant -->
                 <li class="header-nav-icon">
-                    <router-link to="/dashboard" title="My Businesses Dashboard"><LucideIcon class="nav-icon cursor-pointer transition-all" name="ChefHat" :strokeWidth="2" tooltip="test" /></router-link>
+                    <router-link to="/business/dashboard" title="My Businesses Dashboard"><LucideIcon class="nav-icon cursor-pointer transition-all" name="ChefHat" :strokeWidth="2" tooltip="test" /></router-link>
                 </li>
                 <!-- TODO: Implement notifications -->
                 <li class="header-nav-icon">
@@ -47,10 +47,10 @@
                     <div v-if="user.avatar && user.avatar.length > 0"></div>
                     <div v-else class="header-nav-icon" id="">
                         <button type="button" class="dropdown-btn-user" id="authUser" aria-haspopup="menu">
-                            <LucideIcon :class="{ 'active-element': router.currentRoute.value.path === '/profile'  }" class="transition-all" name="UserRound" :stroke-width="2" />
+                            <LucideIcon :class="{ 'active-element': router.currentRoute.value.path === `/user/${user.username}`  }" class="transition-all" name="UserRound" :stroke-width="2" />
                         </button>
                         <ul class="dropdown-content px-2 py-3 right-0">
-                            <li><router-link to="/profile">Profile</router-link></li>
+                            <li><router-link :to="{ name: '/user/[username]', params: { username: user.username } }">Profile</router-link></li>
                             <li><button @click="handleLogout">Logout</button></li>
                         </ul>
                     </div>
@@ -95,17 +95,20 @@ const searchType = computed<IconKeys>(() => {
 });
 
 async function handleSearch() {
-    await router.push( { name: 'searchDashboard', query: { 
-            searchType: searchProps.value.searchType, 
-            query: searchProps.value.query
-        }
-    })
+    // await router.push( { name: 'search', query: { 
+    //         searchType: searchProps.value.searchType, 
+    //         query: searchProps.value.query
+    //     }
+    // })
+
+    // TODO: Implement search
+    await router.push({ path: '/search' })
 }
 
 async function handleLogout() {
     await logout();
     // await router.push('/');
-    await tostRouterTo(router, '/', 'Logged out successfully');
+    await tostRouterTo(router, '/', {}, 'Logged out successfully');
 }
 
 </script>

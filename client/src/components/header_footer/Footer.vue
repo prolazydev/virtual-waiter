@@ -20,7 +20,7 @@
                 <div class="flex flex-col gap-1 items-start">
                     <router-link to="/login">Login</router-link>
                     <router-link to="/register">Sign Up</router-link>
-                    <router-link to="/create_business">Create Your Business</router-link>
+                    <router-link to="/business/create">Create Your Business</router-link>
                 </div>
             </div>
             

@@ -8,12 +8,16 @@
 					<span v-if="!business.verified"><Tooltip text="Soulja boi!" _class="mb-2" class="whitespace-nowrap"><LucideIcon name="BadgeCheck" :size="24" :stroke-width="2" /></Tooltip></span>
 				</div>
 
-				<div class="group-links flex gap-1 items-baseline text-lg ">
-					<button type="button"><LucideIcon name="PenLine" :size="22" :stroke-width="2" />&nbsp;Review</button>
-					<div class="w-[2px] bg-neutral-200"></div>
-					<button type="button"><LucideIcon name="Heart" :size="22" :stroke-width="2" />&nbsp;Save</button>
-					<div class="w-[2px] bg-neutral-200"></div>
-					<button type="button"><LucideIcon name="Share2" :size="22" :stroke-width="2" />&nbsp;Share</button>
+				<div class="group-links flex gap-2 items-baseline text-lg">
+					<Tooltip _class="mb-3" text="Review">
+						<button class="px-1 py-1" type="button"><LucideIcon name="PenLine" :size="22" :stroke-width="2" /></button>
+					</Tooltip>
+					<Tooltip _class="mb-3" text="Save">
+						<button class="px-1 py-1" type="button"><LucideIcon name="Heart" :size="22" :stroke-width="2" /></button>
+					</Tooltip>
+					<Tooltip _class="mb-3" text="Share">
+						<button class="px-1 py-1" type="button"><LucideIcon name="Share2" :size="22" :stroke-width="2" /></button>
+					</Tooltip>
 				</div>
 			</div>
 			<div class="group-links flex gap-3 justify-between">
@@ -22,31 +26,33 @@
 						<Review :stars="business.averageRating" :reviews="business.reviews" :sizes="28" _p-class="text-lg font-semibold" />
 					</Tooltip>
 
-					<div class="w-[2px] bg-neutral-200"></div>
+					<div class="w-[1px] bg-gray-200"></div>
 
 					<router-link to="/"><b>#1 </b>of Restaurans in Ferizaj</router-link>
 				</div>
 				<!-- TODO: Add Edit Business button for the owner of the business -->
-				<div v-if="isAuth() && user.id === business.userId">
-					<router-link :to="{ path: `/business/edit/${business._id}` }">
-						Edit Business
+
+				<Tooltip v-if="isAuth() && user.id === business.userId" _class="mb-3 w-max" :text="`Settings for ${business.name}`">
+					<!-- <button class="px-1 py-1" type="button"><LucideIcon name="PenLine" :size="22" :stroke-width="2" /></button> -->
+					<router-link class="px-1 py-1 text-lg" :to="{ path: `/business/settings/${business._id}` }">
+						<LucideIcon name="Settings" :size="22" :stroke-width="2" />
 					</router-link>
-				</div>
+				</Tooltip>
 			</div>
 			<div class="group-links flex gap-3">
 				<!-- TODO: Add to the business the google link address for router link -->
 				<a v-if="business.streetAddress && business.streetAddress.primary" href="#"><LucideIcon name="MapPin" :size="22" :stroke-width="1.5" />{{ business.streetAddress.primary.address }}</a>
 
-				<div class="w-[2px] bg-neutral-200"></div>
+				<div class="w-[1px] bg-gray-200"></div>
 				<a :href="`tel:+${business.phone}`"><LucideIcon name="Phone" :size="22" :stroke-width="1.5" />{{ business.phone }}</a>
 
-				<div class="w-[2px] bg-neutral-200"></div>
+				<div class="w-[1px] bg-gray-200"></div>
 				<a href="#"><LucideIcon name='Laptop' :size="22" :stroke-width="1.5" />Website</a>
 
-				<div class="w-[2px] bg-neutral-200"></div>
+				<div class="w-[1px] bg-gray-200"></div>
 				<a href="#"><LucideIcon name='SquareMenu' :size="22" :stroke-width="1.5" />Menu</a>
 
-				<div class="w-[2px] bg-neutral-200"></div>
+				<div class="w-[1px] bg-gray-200"></div>
 				<div class="flex gap-1">
 					<a href="#"><LucideIcon class="text-emerald-800" name='Clock5' :size="22" :stroke-width="1.5" /><b class="text-emerald-600">Open now</b> <div class="w-1.5 h-1.5 bg-gray-400 rounded-full"></div> 10:00 AM - 10:00 PM</a>
 					<div class="cursor-pointer my-auto">
@@ -55,7 +61,7 @@
 					</div>
 				</div>
 
-				<div class="w-[2px] bg-neutral-200"></div>
+				<div class="w-[1px] bg-gray-200"></div>
 				<a href="#"><LucideIcon name='SquareMenu' :size="22" :stroke-width="1.5" />Book now</a>
 
 				<div class="ml-auto">
@@ -409,7 +415,7 @@
 import 'v-calendar/style.css';
 import { type Business, type KeyHours } from '@/types/business';
 
-const { params } = useRoute();
+const { params } = useRoute('/business/[id]');
 const router = useRouter();
 
 const { user } = useUserStore();
@@ -437,9 +443,9 @@ async function handleGetBusiness() {
 
 		switch (statusCode.value) {
 			case 404:
-				return await router.push({ name: 'notFound' });
+				return await router.push({ name: '/[...slug]' });
 			case 400:
-				return await router.push({ name: 'badRequest' });
+				return await router.push({ name: '/error/bad-request' });
 			// Add additional cases as needed
 			default:
 				return; // Handle other status codes if necessary

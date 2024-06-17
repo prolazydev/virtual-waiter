@@ -4,7 +4,7 @@
 				<form @submit.prevent="handleSearch">
 					<input class="px-2 py-1 border-2 border-[#1b1b1b] outline-none focus:border-b-rose-600 transition-colors" type="text" placeholder="Search" />
 				</form>
-				<router-link to="/create_business" class="px-2 py-1 text-white border-2 border-[#1b1b1b] bg-[#1b1b1b] active:border-b-white">Create your Business</router-link>
+				<router-link to="/business/create" class="px-2 py-1 text-white border-2 border-[#1b1b1b] bg-[#1b1b1b] active:border-b-white">Create your Business</router-link>
 			</div>
 			<div class="favorite-businesses">
 				<!-- TODO: Needs to be at most 4 favorites -->
@@ -28,7 +28,7 @@
 		</div>
 
 		<div v-else class="m-auto">
-			<router-link to="/create_business" title="Create your Business">
+			<router-link to="/business/create" title="Create your Business">
 				<LucideIcon class="text-gray-400 hover:text-[#1b1b1b] cursor-pointer transition-colors" name="CirclePlus" :size="148" />
 			</router-link>
 		</div>
@@ -57,9 +57,10 @@ const getBusinesses = async () => {
 		// TODO: handle error
 		switch (statusCode.value) {
 			case 400:
-				return await router.push({ name: 'badRequest' });
+				return await router.push({ name: '/error/bad-request' });
 			case 401:
-				return await router.push({ name: 'unauthorized' });
+				// TODO: create bad request page
+				return await router.push({ name: '/error/bad-request' });
 			// Add additional cases as needed
 			default:
 				return // Handle other status codes if necessary

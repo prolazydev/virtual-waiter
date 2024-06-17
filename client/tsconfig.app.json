@@ -4,7 +4,8 @@
 		"env.d.ts",
 		"src/**/*",
 		"src/**/*.vue",
-		"src/**/*.ts"
+		"src/**/*.ts",
+		"typed-router.d.ts",
 	],
 	"exclude": [
 		"src/**/__tests__/*",
@@ -21,7 +22,11 @@
 				"./src/*"
 			]
 		},
-		"types": [ "node" ]
+		"types": [ 
+			"node",
+			"unplugin-vue-router/types",
+			"unplugin-vue-components/types",
+		]
 	},
 	"files": [
 		"auto-imports.d.ts",

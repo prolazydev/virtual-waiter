@@ -119,8 +119,8 @@ export const isSelfItemOwner = requestHandler(async (req, res, next, collectionN
 		// 	|| req.body[Object.keys(req.body).find(key => key.toLowerCase().includes('id'))!];
 		// console.log(test);
 
-		const currentUserId = req.identity!.id;
-		if ( !currentUserId || id.length !== 24)
+		const authUserId = req.identity!.id;
+		if ( !authUserId || id.length !== 24)
 			return next(new CustomError(Message.MissingCredentials, 400));
 
 		// Set the collection to be used
@@ -129,10 +129,11 @@ export const isSelfItemOwner = requestHandler(async (req, res, next, collectionN
 			return next(new CustomError(Message.NotFound, StatusCodes.NOT_FOUND));
 
 		const item = await collection.findOne({ _id: mongoose.Types.ObjectId.createFromHexString(id) }, { projection: { userId: 1 } });
+		// TODO: Maybe change the response to bad request or not authorized
 		if ( !item )
 			return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 
-		if (item.userId.toString() !== currentUserId)
+		if (item.userId.toString() !== authUserId)
 			return respond(res, StatusCodes.FORBIDDEN, Message.Unauthorized);
 
 		next();

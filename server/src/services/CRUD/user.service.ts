@@ -12,6 +12,7 @@ export const findUsers = async () => await UserModel.find();
 
 export const findUserById = (id: mongoId) => UserModel.findById(id);
 export const findUserByEmail = (email: string) => UserModel.findOne({ email });
+export const findUserByUsername = (username: string) => UserModel.findOne({ username });
 export const findUserBySessionToken = async (sessionToken: string) => await UserModel.findOne({ 'auth.sessionToken': sessionToken });
 
 export const findUserByCustomQuery = (filter?: FilterQuery<User>, projection?: ProjectionType<User>, options?: QueryOptions<User>) => UserModel.findOne(filter, projection, options);

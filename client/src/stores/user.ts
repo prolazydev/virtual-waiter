@@ -1,4 +1,5 @@
 import type { LoggedInUser } from '@/types/auth/user';
+import type { BusinessDashboardTabTitles } from '@/types/business';
 
 const emptyUser: LoggedInUser = {
 	id: '',
@@ -10,6 +11,11 @@ const emptyUser: LoggedInUser = {
 	avatar: ''
 }
 
+
+type Test = keyof LoggedInUser;
+
+const myTest: Test = 'lastBusinessDashboardTab'
+
 export default 
 defineStore('user', () => {
 	const user = ref<LoggedInUser>({
@@ -19,7 +25,8 @@ defineStore('user', () => {
 		roles: '',
 		hasBusiness: false,
 		isAuth: false,
-		lastTab: '',
+		lastBusinessDashboardTab: 'Home',
+		lastBusinessSettingsTab: 'General',
 	});
 
 	const setNewLoginUser = (newUser: LoggedInUser) => {
@@ -27,7 +34,7 @@ defineStore('user', () => {
 		user.value.isAuth = true;
 	}
 
-	const setTab = (tab: string) => user.value.lastTab = tab;
+	const setTab = (tabKey: 'lastBusinessDashboardTab' | 'lastBusinessSettingsTab', tab: BusinessDashboardTabTitles) => user!.value[tabKey] = tab as any;
 
 	const logoutUser = () => user.value = emptyUser
 

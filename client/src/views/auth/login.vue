@@ -35,9 +35,10 @@
 <script lang="ts" setup>
 import type { RequestStatus } from '@/enums/EFromValidations';
 import type { LoggedInUser, LoginModel } from '@/types/auth/user';
+import type { RouteNamedMap } from 'unplugin-vue-router/types';
 
 const router = useRouter();
-const route = useRoute();
+const route = useRoute('/auth/login');
 
 const { login } = useAuth();
 
@@ -95,9 +96,9 @@ const handleLogin = async () => {
 
             login(data.value)
 
-            const redirect = route.query.redirect as string ?? '/';
+            const redirect = (route.query.redirect ?? '/') as keyof RouteNamedMap;
             setTimeout(async () =>
-                await tostRouterTo(router, redirect, 'Logged in!'), 650);
+                await tostRouterTo(router, redirect, {}, 'Logged in!'), 650);
         } else {
             requestStatus.value = 'Error';
             setTimeout(() => requestStatus.value = 'Idle', 1250)

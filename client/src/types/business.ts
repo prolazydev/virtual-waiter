@@ -104,6 +104,8 @@ export type CreateBusinessModel = {
 	website?: string;
 }
 
+export type Days = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+
 export type BusinessDashboardTabTitles = 'Home' | 'Business' | 'Conversations' | 'Orders' | 'Products' | 'Reports' | 'Settings';
 
 export type BusinessDashboardTab = {
@@ -111,6 +113,9 @@ export type BusinessDashboardTab = {
 	icon: IconKeys;
 };
 
+export type BusinessSettingsTabTitles = 'General' | 'Account' | 'Billing' | 'Subscription' | 'Security' | 'Notifications';
 
-export type Days = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
-
+export type BusinessSettingsTab = {
+	name: BusinessSettingsTabTitles;
+	icon: IconKeys;
+};

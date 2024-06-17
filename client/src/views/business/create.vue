@@ -201,7 +201,6 @@ import Checkbox from '@/components/ui/Checkbox.vue';
 import type { RequestStatus } from '@/enums/EFromValidations';
 import type { BusinessCategory, CreateBusinessModel, Days } from '@/types/business';
 
-
 const router = useRouter();
 const { user } = useUserStore();
 
@@ -357,15 +356,15 @@ const set24hourSchedule = () => createBusinessFormData.value.is24
 const resetHours = () => setAllHours('', false);
 
 const handleBusinessCreation = async () => {
-	requestStatus.value = 'Loading';
 	try {
 		const { response, data, error } = await myFetch<{ id: string; }>('/business', createBusinessFormData.value, { method: 'POST' });
+		
 
 		if (response.value?.ok) {
 			console.log(data.value);
 			requestStatus.value = 'Success';
-
-			setTimeout(() => tostRouterTo(router, `/business_confirmation/${data.value!.id}`, 'Business created!'), 1250);
+			// `/business_confirmation/${data.value!.id}`
+			setTimeout(() => tostRouterTo(router, `/business/confirmation/[id]`, { id: data.value!.id }, 'Business created!'), 1250);
 		} else {
 			requestStatus.value = 'Error';
 			setTimeout(() => requestStatus.value = 'Idle', 1250);

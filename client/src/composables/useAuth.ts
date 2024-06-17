@@ -23,6 +23,17 @@ export default () => {
 		}
 	}
 
+	const hasRole = (roles: string[] | string) => {
+		debugger;
+		if (!Array.isArray(roles))
+			return userStore.user.roles.includes(roles);
+		else
+			return roles.some(role => userStore.user.roles.includes(role));
+
+			
+	}
+
+
 	/**
 	 * Login
 	 * @param newUser - LoggedInUser
@@ -48,6 +59,7 @@ export default () => {
 	return {
 		isAuth,
 		checkAuth,
+		hasRole,
 		login,
 		logout,
 	}

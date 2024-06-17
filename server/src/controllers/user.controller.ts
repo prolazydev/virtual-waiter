@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
 
-import { findUserById, findUsers, deleteUserById, updateUserById } from '../services/CRUD/user.service.js';
+import { findUserById, findUsers, deleteUserById, updateUserById, findUserByUsername } from '../services/CRUD/user.service.js';
 import { Message } from '../utils/common/ServerResponseMessages.js';
 import { requestHandler } from '../utils/errors/asyncErrorHandler.js';
 import { compressImageWebp } from '../utils/compression/index.js';
@@ -34,6 +34,19 @@ export const getUserById = requestHandler(async (req, res) => {
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 		// return next(new CustomError(Message.InvalidInput, StatusCodes.BAD_REQUEST));
 	const user = await findUserById(id);
+	if ( !user ) 
+		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
+		// return next(new CustomError(Message.NotFound, StatusCodes.NOT_FOUND));
+
+	respond(res, StatusCodes.OK, Message.SuccessRead, user);
+});
+
+export const getUserByUsername = requestHandler(async (req, res) => {
+	const username = req.params.username;
+	if ( !username ) 
+		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
+		// return next(new CustomError(Message.InvalidInput, StatusCodes.BAD_REQUEST));
+	const user = await findUserByUsername(username);
 	if ( !user ) 
 		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 		// return next(new CustomError(Message.NotFound, StatusCodes.NOT_FOUND));

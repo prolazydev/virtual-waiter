@@ -23,7 +23,7 @@
 import type { RequestStatus } from '@/enums/EFromValidations';
 
 const router = useRouter();
-const { params } = useRoute();
+const { params } = useRoute('/business/confirmation/[id]');
 
 const codeNumbers = ref<{
 	number1: number,
@@ -42,10 +42,6 @@ const requestCodeStatus = ref<RequestStatus>('Idle');
 const requestStatus = ref('Idle');
 
 onMounted(async () => {
-	// setTimeout(() => requestCodeStatus.value = 'Loading', 0)
-	// setTimeout(() => requestCodeStatus.value = 'Success', 500);
-	// setTimeout(() => requestStatus.value = 'Loading', 1000);
-	// setTimeout(() => requestStatus.value = 'Success', 1500);
 	try {
 		requestCodeStatus.value = 'Loading';
 		const { response, statusCode, data } = await myFetch<{ message: string }>(`business/confirm_account/${params.id}`);
@@ -120,7 +116,7 @@ const checkCodeStatus = async () => {
 		if ( response.value?.ok ) {
 			requestStatus.value = 'Success';
 
-			setTimeout( async() => await tostRouterTo(router, '/', 'Account verified!'), 1000)
+			setTimeout( async() => await tostRouterTo(router, '/', {}, 'Account verified!'), 1000)
 		} else 
 			requestStatus.value = 'Error';
 	} else 
