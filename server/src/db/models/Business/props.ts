@@ -53,6 +53,20 @@ export const hours = new mongoose.Schema({
 	}
 }, { _id: false });
 
+export const cotactsSchema =  new mongoose.Schema({
+	contactType: {
+		type: String,
+		required: true,
+		enum: [ 'phone', 'email' ],
+	},
+	value: {
+		type: String,
+		required: true,
+		// You can add validators here if needed
+		// validate: [validator.isURL, 'Invalid URL!'], // Example validator
+	},
+}, { _id: false });
+
 // hours.set('toJSON', {
 // 	virtuals: true,
 // 	transform: function(doc, ret) {

@@ -1,7 +1,7 @@
 import validator from 'validator';
 import  { Schema, type InferSchemaType, model, Document } from 'mongoose';
 
-import { hours } from './props';
+import { cotactsSchema, hours } from './props';
 import { BusinessCategoryModel } from '../BusinessCategory';
 
 export interface IBusiness extends Document {
@@ -13,6 +13,10 @@ export interface IBusiness extends Document {
 	name: string;
 	displayName: string;
 	username: string;
+	contacts: {
+		contactType: string;
+		value: string;
+	}[];
 	email: string;
 	userEmail: string;
 	streetAddress?: {
@@ -82,6 +86,7 @@ const businessSchema = new Schema<IBusiness>({
 			message: 'Username can contain only letters, numbers, underscores, hyphens and periods.'
 		},
 	},
+	contacts: [ cotactsSchema ],
 	email: {
 		type: String, 
 		required: [ true, 'Business Email is required!' ], 

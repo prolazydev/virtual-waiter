@@ -93,7 +93,8 @@ import 'toolcool-range-slider';
 
 import { type SliderEvent } from '@/types'
 import { ESortType } from '@/types';
-const { toHourMinute } = myTimeUtil();
+
+const { toHourMinute } = myTime();
 
 // const { isAuth } = useAuth();
 // const { user } = useUserStore();

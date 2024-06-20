@@ -34,7 +34,7 @@ const { checkAuth } = useAuth();
 
 onBeforeMount(async () => {
 	await checkAuth();
-})
+});
 
 onMounted(async () => {
 	// const { runSocket } = webSocketService();

@@ -385,7 +385,6 @@ const handleBusinessCreation = async () => {
 .create-business-form form {
 	@apply max-w-[39rem] py-10 px-10 flex flex-wrap gap-x-6 gap-y-2 relative border-4 border-[#1b1b1b]
     ;
-	
 }
 
 .create-business-form form input, .create-business-form form textarea {

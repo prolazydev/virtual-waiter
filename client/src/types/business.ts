@@ -26,12 +26,15 @@ type StreetAddresses = {
 export type Business = {
 	_id: string;
 	userId: string;
-	name: string;
+	username: string;
+	displayName: string;
 	email: string;
 	userEmail: string;
 	country?: string;
 	streetAddress?: StreetAddresses;
 	phone?: string;
+	/** List of owned email and/phone numbers */
+	contacts: BusinessContact[];
 	description?: string;
 	location?: string;
 	profileImage?: string;
@@ -56,14 +59,22 @@ export type Business = {
 	banned: boolean;
 }
 
+type BusinessContact = {
+	contactType: 'email' | 'phone';
+	value: string;
+}
+
 export type BusinessEdit = {
 	userId: string;
-	name: string;
+	username: string;
+	displayName: string;
 	email: string;
 	userEmail: string;
+	phone?: string;
+	/** List of owned email and/phone numbers */
+	contacts: BusinessContact[];
 	country?: string;
 	streetAddress?: StreetAddresses;
-	phone?: string;
 	description?: string;
 	location?: string;
 	profileImage?: Buffer;

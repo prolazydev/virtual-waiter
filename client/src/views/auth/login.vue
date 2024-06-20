@@ -165,6 +165,7 @@ const handleLogin = async () => {
     ;
     animation: loading 1s ease 0s infinite forwards;
 }
+
 @keyframes loading {
     0% {
         top: 50%;

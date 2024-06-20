@@ -16,7 +16,7 @@ export default () => {
 				userStore.setNewLoginUser(data.value!);
 			else 
 				userStore.logoutUser();
-
+			return;
 		} catch (error) {
 			console.log(error);
 			userStore.logoutUser();

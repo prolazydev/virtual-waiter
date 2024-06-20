@@ -1,44 +1,47 @@
 <template>
-		<div v-if="businesses.length > 0" class="w-full flex flex-col gap-5">
-			<div class="flex justify-between">
-				<form @submit.prevent="handleSearch">
-					<input class="px-2 py-1 border-2 border-[#1b1b1b] outline-none focus:border-b-rose-600 transition-colors" type="text" placeholder="Search" />
-				</form>
-				<router-link to="/business/create" class="px-2 py-1 text-white border-2 border-[#1b1b1b] bg-[#1b1b1b] active:border-b-white">Create your Business</router-link>
-			</div>
-			<div class="favorite-businesses">
-				<!-- TODO: Needs to be at most 4 favorites -->
-				<div v-for="business, in favoriteBusinesses" :key="business._id" class="favorite-business-card">
-					<router-link :to="{ path: `/business/${business._id}` }">
-						<div class="favorite-business-image">
-							<img v-if="business.coverImage" src="" alt="">
-							<LucideIcon v-else class="m-auto opacity-50" name="ChefHat" :size="64" :stroke-width="2" />
-						</div>
-					</router-link>
-					<button @click="() => console.log('blewh')" class="absolute top-0 right-0 m-2 z-50 transition-all" type="button" >
-						<LucideIcon class="fill-transparent hover:fill-rose-500 hover:text-rose-500 transition-all" name="Heart" :stroke-width="2" />
-					</button>
+	<div v-if="businesses.length > 0" class="w-full flex flex-col gap-5">
+		<div class="flex justify-between">
+			<form @submit.prevent="handleSearch">
+				<input class="px-2 py-1 border-2 border-[#1b1b1b] outline-none focus:border-b-rose-600 transition-colors" type="text" placeholder="Search" />
+			</form>
+			<router-link to="/business/create" class="px-2 py-1 text-white border-2 border-[#1b1b1b] bg-[#1b1b1b] active:border-b-white">Create your Business</router-link>
+		</div>
+		<div class="favorite-businesses">
+			<!-- TODO: Needs to be at most 4 favorites -->
+			<div v-for="business, in favoriteBusinesses" :key="business._id" v-once class="favorite-business-card">
+				<router-link :to="{ path: `/business/${business._id}` }">
+					<div class="favorite-business-image">
+						<img v-if="business.coverImage" src="" alt="">
+						<LucideIcon v-else class="m-auto opacity-50" name="ChefHat" :size="64" :stroke-width="2" />
+					</div>
+				</router-link>
+				<button @click="() => console.log('blewh')" class="absolute top-0 right-0 m-2 z-50 transition-all" type="button" >
+					<LucideIcon class="fill-transparent hover:fill-rose-500 hover:text-rose-500 transition-all" name="Heart" :stroke-width="2" />
+				</button>
 
-					<h1 class="favorite-business-name">{{ business.name }}</h1>
-				</div>
-			</div>
-			<div class="business-cards">
-				<BusinessCardItem v-for="business in businesses" :key="business._id" :business="business" /> 
+				<router-link :to="{ name: '/business/settings/[id]', params: { id: business._id } }" class="absolute top-0 left-0 m-2 z-50 transition-all"  type="button">
+					<LucideIcon class="fill-transparent hover:rotate-90 transition-all duration-300" name="Settings" :stroke-width="2" />
+				</router-link>
+
+				<h1 class="favorite-business-name">{{ business.name }}</h1>
 			</div>
 		</div>
-
-		<div v-else class="m-auto">
-			<router-link to="/business/create" title="Create your Business">
-				<LucideIcon class="text-gray-400 hover:text-[#1b1b1b] cursor-pointer transition-colors" name="CirclePlus" :size="148" />
-			</router-link>
+		<div class="business-cards">
+			<BusinessCardItem v-for="business in businesses" :key="business._id" :business="business" /> 
 		</div>
+	</div>
+
+	<div v-else class="m-auto">
+		<router-link to="/business/create" title="Create your Business">
+			<LucideIcon class="text-gray-400 hover:text-[#1b1b1b] cursor-pointer transition-colors" name="CirclePlus" :size="148" />
+		</router-link>
+	</div>
 </template>
 
 <script lang="ts" setup>
 import { type Business } from '@/types/business';
 
 const router = useRouter();
-
 
 const businesses = ref<Business[]>([]);
 const favoriteBusinesses = ref<Business[]>([]);

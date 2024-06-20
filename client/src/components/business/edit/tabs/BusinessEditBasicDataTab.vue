@@ -1,17 +1,208 @@
 <template>
 	<section class="w-full flex flex-col h-full gap-5 ]">
 		<div class="flex flex-col mx-auto mt-5">
-			<h1 class="w-fit text-3xl font-bold text-[#1b1b1b] uppercase tracking-widest">Settings for {{ business?.name }}</h1>
+			<h1 class="w-fit text-3xl font-bold text-[#1b1b1b] uppercase tracking-widest">Settings for {{ business?.username }}</h1>
 			<div class="h-1 w-4 mb-5 bg-[#1b1b1b]"></div>
 		</div>
 
-		<form @submit.prevent="handleEditBusiness" class="w-full flex justify-between gap-x-5 relative">
+		<!-- TODO: Figure out the designing for this................... -->
+		<!-- <form @submit.prevent="handleEditBusiness" class="w-full flex justify-between gap-x-5 relative"> -->
 			<div class="form-group">
-				<div class="flex gap-5">
+				<div class="form-part flex-col">
+					<MyDialog _class="contact-info-dialog w-[30rem] p-7" title="Contact Information Settings" size="custom">
+						<button @click="toggleDialog('.contact-info-dialog')" class="form-button-2 flex justify-between items-center" type="button">
+							<div class="flex flex-col text-start">
+								<h3>Contact info</h3>
+								<p>{{ businessEdit.email }}, {{ businessEdit.userEmail }}, {{ businessEdit.phone }}</p>
+							</div>
+							<LucideIcon name="PencilLine" />
+						</button>
+
+						<template #body>
+							<div class="w-full max-h-[25rem] overflow-auto mx-auto py-7 flex flex-col justify-between">
+								<div class="input-group">
+									<div class="w-full mt-5 flex items-center gap-5 relative">
+										<LucideIcon class="absolute left-2" name="Mail" size="22" />
+											
+										<span class="text-sm text-gray-600 absolute -top-5">Personal mail</span>
+										<input 
+											class="w-60 min-w-60 max-w-60"
+											:id="`contactDetail_1`" 
+											type="email" 
+											placeholder="im@just.ken"
+											:value="businessEdit.userEmail"
+											readonly
+										>
+
+										<!-- TODO: handle editing the email -->
+										<button @click="" class="form-button-2 w-full" type="button">Change</button>
+									</div>
+
+									<div v-for="(item, index) in contactListFields" :key="index" class="flex items-center gap-5 relative">
+										<LucideIcon v-if="item.type === 'email'" class="absolute left-2" name="Mail" size="22" />
+										<LucideIcon v-else class="absolute left-2" name="Phone" size="22" />
+
+										<input 
+											class="w-60 min-w-60 max-w-60" 
+											:id="`contactDetail_${index + 2}`" 
+											:type="(item.type === 'phone') ? 'number' : 'email'" 
+											:placeholder="(item.type === 'phone') ? '123456777' : 'im@just.ken'"
+											:value="contactListFields[index].value"
+											v-model="contactListFields[index].value"
+											:readonly="contactListFields[index].state === 'edit'"
+										>
+
+										<!-- TODO: switch between edit and save buttons to edit each input individually -->
+										<!-- <button class="form-button-2" type="button">Edit</button> -->
+										<div class="w-full flex justify-between">
+											<button @click="toggleBusinessContactEdit(index)" class="form-button-2 relative" type="button">
+												<CustomLoader :state="contactListFields[index].processingState">
+													{{ contactListFields[index].state === 'edit' ? 'Edit' : 'Save'}}
+												</CustomLoader>
+											</button>
+											
+											<button @click="removeBusinessContactField(index)" class="form-button-2" type="button">
+											<!-- <button @click="toggleDialog('.delete-contact-info-dialog')" class="form-button-2" type="button"> -->
+												Delete
+											</button>
+										</div>
+									</div>
+
+									<div class="flex justify-between items-center">
+										<button popovertarget="myPopupTest" id="btnPopOverToggleTest" class="flex gap-3 items-center" type="button">
+											<LucideIcon name="CirclePlus" />
+											Add new contact
+										</button>
+
+										<Popup class="p-1 mt-10 ml-0" id="myPopupTest" anchor-name="--testPopover">
+											<!-- TODO: create a new contact input -->
+											<div class="flex flex-col gap-1">
+												<button @click="addBusinessContactField('email')" popovertarget="myPopupTest" class="px-1 py-2 text-lg flex gap-2 items-center border-b-2 border-transparent transition-all hover:border-b-rose-600" type="button">
+													<LucideIcon name="Mail" size="22" />
+													Email
+												</button>
+												<button @click="addBusinessContactField('phone')" popovertarget="myPopupTest" class="px-1 py-2 text-lg flex gap-2 items-center border-b-2 border-transparent transition-all hover:border-b-rose-600" type="button">
+													<LucideIcon name="Phone" size="22" />
+													Phone
+												</button>
+											</div>
+										</Popup>
+									</div>
+								</div>
+								<!-- <div class="flex flex-col gap-2">
+									<label for="email">Email</label>
+									<input class="w-full cursor-text" type="text" name="email" id="email" :value="businessEdit.email" placeholder="im@just.ken">
+								</div>
+
+								<div class="flex flex-col gap-2">
+									<label for="phone">Phone</label>
+									<input class="w-full cursor-text" type="text" name="phone" id="phone" :value="businessEdit.phone" placeholder="6688132549">
+								</div> -->
+
+								<!-- <div class="flex flex-col gap-2">
+									<label for="primaryAddress">Primary Address</label>
+									<button class="form-button-1 setup-address" type="button">
+										Setup Primary Address
+									</button>
+
+									<div class="show-address-setup">
+										<div class="flex flex-col gap-2">
+											<label for="businessStreetAddress">Primary Street Address</label>
+											<input v-model="business!.streetAddress!.primary!.address" type="text" id="businessStreetAddress" placeholder="St. DC Boulevard" />
+										</div>
+										<div class="flex flex-col gap-2">
+											<label for="businessZipCode">Primary Zip Code</label>
+											<input v-model="business!.streetAddress!.primary!.zipCode" type="text" id="businessZipCode" placeholder="13807" />
+										</div>
+									</div>
+								</div>
+
+								<div class="flex flex-col gap-2">
+									<label for="secondaryAddress">Secondary Address</label>
+									<button class="form-button-1 setup-address" type="button">
+										Setup Secondary Address
+									</button>
+
+									<div class="show-address-setup">
+										<div class="flex flex-col gap-2">
+											<label for="businessStreetAddress">Secondary Street Address</label>
+											<input v-model="business!.streetAddress!.secondary!.address" type="text" id="businessStreetAddress" placeholder="St. DC Boulevard" />
+										</div>
+										<div class="flex flex-col gap-2">
+											<label for="businessZipCode">Secondary Zip Code</label>
+											<input v-model="business!.streetAddress!.secondary!.zipCode" type="text" id="businessZipCode" placeholder="13807" />
+										</div>
+									</div>
+								</div> -->
+							</div>
+						</template>
+
+						<template #footer>
+							<div class="w-full flex flex-col gap-5">
+								<hr class="border-[#1b1b1b]">
+
+								<div class="w-full flex justify-end relative">
+									<div class="flex gap-5 absolute-center">
+										<button @click="handleEditBusiness('phone', 'email')"  class="form-button-2">
+											<CustomLoader>
+												Save
+											</CustomLoader>
+										</button>
+									</div>
+									
+									<button @click="toggleDialog('.contact-info-dialog')" class="form-button-1">
+										Close
+									</button>
+								</div>
+							</div>
+						</template>
+					</MyDialog>		
+				</div>
+
+				<MyDialog _class="delete-contact-info-dialog w-[30rem] p-7" title="Delete contact" size='custom'>
+					<template #body>
+						<div class="w-full max-h-[25rem] overflow-auto mx-auto py-7 flex flex-col justify-between">
+							<h2 class="text-lg"> {{ deleteContactInfo.title }} </h2>
+						</div>
+					</template>
+
+					<template #footer>
+						<div class="w-full flex flex-col gap-5">
+							<hr class="border-[#1b1b1b]">
+
+							<div class="w-full flex justify-end relative">
+								<div class="flex gap-5 absolute-center">
+									<button @click="handleDeleteContact(deleteContactInfo.index)" popovertarget="delete-contact-info-dialog" class="form-button-2">
+										Delete
+									</button>
+								</div>
+								
+								<button @click="toggleDialog('.delete-contact-info-dialog')" class="form-button-1">
+									Close
+								</button>
+							</div>
+						</div>
+					</template>
+				</MyDialog>
+
+				<!-- <div class="form-part flex-col">
+					<MyDialog _class="contact-info-dialog2 w-[44rem]" size="custom">
+						<button @click="toggleDialog('.contact-info-dialog2')" class="form-button-1 flex justify-between items-center" type="button">
+							<div class="flex flex-col text-start">
+								<h3>Contact info</h3>
+								<p>{{ business.email }}, {{ business.userEmail }}, {{ business.phone }}</p>
+							</div>
+							<LucideIcon name="PencilLine" />
+						</button>
+					</MyDialog>		
+				</div> -->
+		
+				<div class="hidden gap-5">
+				<!-- <div class="flex gap-5"> -->
 					<div class="flex flex-col gap-3">
 						<div class="flex flex-col gap-2">
 							<label for="username">Username</label>
-							<input type="text" name="username" id="username" :value="business?.name" placeholder="imJustKeN">
+							<input type="text" name="username" id="username" :value="business?.username" placeholder="imJustKeN">
 						</div>
 
 						<div class="flex flex-col gap-2">
@@ -252,9 +443,9 @@
 					</div>
 				</div>
 
-				<button @click="handleSaveBasicData" class="w-fit px-2 py-1 mx-auto font-semibold tracking-widest text-white border-4 border-[#1b1b1b] bg-[#1b1b1b] uppercase active:border-b-white transition-colors">
+				<!-- <button @click="handleSaveBasicData" class="w-fit px-2 py-1 mx-auto font-semibold tracking-widest text-white border-4 border-[#1b1b1b] bg-[#1b1b1b] uppercase active:border-b-white transition-colors">
 					Save
-				</button>
+				</button> -->
 			</div>
 
 			<!-- <div class="w-1 bg-[#1b1b1b]"></div>
@@ -276,7 +467,7 @@
 					
 				</div>
 			</div> -->
-		</form>
+		<!-- </form> -->
 	</section>
 </template>
 
@@ -286,9 +477,16 @@ import { type Business, type BusinessCategory, type BusinessEdit, type Days, typ
 const { params } = useRoute('/business/settings/[id]');
 const router = useRouter();
 
-
 const business = ref<Business>({} as Business);
-const businessEdit = ref<BusinessEdit>({} as BusinessEdit);
+const businessEdit = ref<Partial<BusinessEdit>>({});
+
+interface EditContactField {
+	type: 'email' | 'phone';
+	value: string;
+	state?: 'edit' | 'save';
+	processingState?: 'idle' | 'loading' | 'success' | 'error';
+}
+const contactListFields = ref<EditContactField[]>([]);
 
 const imageData = ref<ArrayBuffer | null>();
 const imagePreview = ref<string>('');
@@ -296,6 +494,8 @@ const imagePreview = ref<string>('');
 const categoryInput = ref('');
 const categoriesResult = ref<BusinessCategory[]>([]);
 const selectedBusinessCategories = ref<string[]>([]);
+
+const deleteContactInfo = ref<{ title: string, index: number }>({} as { title: string, index: number });
 
 const openSetHours = ref(false);
 const business24Hours = ref({
@@ -316,17 +516,55 @@ onMounted(() => {
 		selectedBusinessCategories.value = business.value.categories;
 });
 
+const handleDataMapping = (data: Business) => {
+	business.value = data;
+
+	const businessEditKeys = Object.keys(data);
+
+	for (let i = 0; i < businessEditKeys.length; i++) {
+		const key = businessEditKeys[i] as keyof BusinessEdit;
+
+		if (business.value[key as keyof Business] !== undefined)
+			businessEdit.value[key] = (business.value[key as keyof Business]) as any;
+	}
+
+	contactListFields.value = [];
+	for (let i = 0; i < business.value.contacts.length; i++) {
+		contactListFields.value.push({
+			type: business.value.contacts[i].contactType,
+			value: business.value.contacts[i].value,
+			state: 'edit',
+			processingState: 'idle',
+		});
+	}
+}
+
 const handleGetBusiness = async () => {
 	try {
-
 	const {  getBusinessSelfById } = businessService();
-// const { response, statusCode, data } = await getBusinessByName(params.id);
 		const { response, statusCode, data } = await getBusinessSelfById(params.id);
 
-		console.log(data.value);
+		if (response.value!.ok && data.value) {
+			handleDataMapping(data.value);
 
-		if (response.value!.ok && data.value) 
-			return business.value = data.value;
+			// business.value = data;
+			// const businessEditKeys = Object.keys(data.value);
+
+			// for (let i = 0; i < businessEditKeys.length; i++) {
+			// 	const key = businessEditKeys[i] as keyof BusinessEdit;
+
+			// 	if (business.value[key as keyof Business] !== undefined)
+			// 		businessEdit.value[key] = (business.value[key as keyof Business]) as any;
+			// }
+
+			// for (let i = 0; i < business.value.contacts.length; i++) {
+			// 	contactListFields.value.push({
+			// 		type: business.value.contacts[i].contactType,
+			// 		value: business.value.contacts[i].value,
+			// 		state: 'edit'
+			// 	});
+			// }
+		}
 
 		switch (statusCode.value) {
 			case 404:
@@ -343,12 +581,131 @@ const handleGetBusiness = async () => {
 };
 await handleGetBusiness();
 
+const addBusinessContactField = (type: 'email' | 'phone') => {
+	businessEdit.value.contacts!.push({ contactType: type, value: '' });
+	contactListFields.value.push({ type, value: '', state: 'save' });
+}
+
+const removeBusinessContactField = (index: number) => {
+	if (!contactListFields.value[index].value && !businessEdit.value.contacts![index].value) {
+		contactListFields.value.splice(index, 1);
+		businessEdit.value.contacts!.splice(index, 1);
+		return;
+	}
+
+	deleteContactInfo.value.title = `Are you sure you want to delte your ${contactListFields.value[index].type} contact of: ${contactListFields.value[index].value} ?`;
+	deleteContactInfo.value.index = index;
+	toggleDialog('.delete-contact-info-dialog');
+	// TODO: Handle deleting the contact from the database
+};
+
+const toggleBusinessContactEdit = async (index: number) => {
+	// TODO: Handle editing the contact information to the database
+	try {
+		if (contactListFields.value[index].state === 'save') {
+			// If the contact value is different from the original value
+			if ((contactListFields.value[index].value !== businessEdit.value.contacts![index].value) && businessEdit.value.contacts![index].value.length > 0) {
+				const contactData = {
+					oldValue: businessEdit.value.contacts![index].value,
+					value: contactListFields.value[index].value
+				}
+
+				contactListFields.value[index].processingState = 'loading';
+				const { response, error } = await myFetch<Business>(`business/edit/${business.value._id}/contact`, contactData, { method: 'PATCH' });
+
+				if (response.value?.ok) {
+					contactListFields.value[index].processingState = 'success';
+
+					setTimeout(() => {
+						contactListFields.value[index].processingState = 'idle'
+						contactListFields.value[index].state = 'edit';
+
+						// Update the contact value in the businessEdit object
+						businessEdit.value.contacts![index].value = contactListFields.value[index].value;
+					}, 1000);
+
+				}
+				else {
+					contactListFields.value[index].processingState = 'error';
+					setTimeout(() => contactListFields.value[index].processingState = 'idle', 1000);
+
+					// Handle the error
+					console.error(error.value);
+				}
+			}
+
+			// If the contact value is different from the original value and the original value is empty
+			else if ((contactListFields.value[index].value !== businessEdit.value.contacts![index].value) && !businessEdit.value.contacts![index].value) {
+				console.log('creating new');
+
+				const data = {
+					contactType: contactListFields.value[index].type,
+					value: contactListFields.value[index].value
+				}
+
+				const { response, error } = await myFetch(`business/add/${business.value._id}/contact`, data, { method: 'PATCH' });
+
+				if (response.value?.ok) {
+					contactListFields.value[index].processingState = 'success';
+
+					setTimeout(() => {
+						contactListFields.value[index].processingState = 'idle'
+						contactListFields.value[index].state = 'edit';
+
+						// Update the contact value in the businessEdit object
+						businessEdit.value.contacts![index].value = contactListFields.value[index].value;
+					}, 1000);
+				}
+				else {
+					contactListFields.value[index].processingState = 'error';
+					setTimeout(() => contactListFields.value[index].processingState = 'idle', 1000);
+
+					// Handle the error
+					console.error(error.value);
+				}
+
+
+			}
+			contactListFields.value[index].state = 'edit';
+		}
+		else 
+			contactListFields.value[index].state = 'save';
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+const handleDeleteContact = async (index: number) => {
+	try {
+		// 
+		if (contactListFields.value[index].value && ! businessEdit.value.contacts![index].value) {
+			contactListFields.value.splice(index, 1);
+			businessEdit.value.contacts!.splice(index, 1);
+			return;
+		}
+
+		const { response, error } = await myFetch(`business/delete/${business.value._id}/contact`, { value: contactListFields.value[index].value }, { method: 'PATCH' });
+
+		if (response.value?.ok) {
+			contactListFields.value.splice(index, 1);
+			businessEdit.value.contacts!.splice(index, 1);
+		}
+		else {
+			// Handle the error
+			console.error(error.value);
+		}
+	} catch (error) {
+		console.log(error);
+	} finally {
+		toggleDialog('.delete-contact-info-dialog');
+	}
+};
+
 const autosizeWidth = async (e: Event | HTMLTextAreaElement) => {
 	if (e instanceof Event) {
 		const length = (e.target as HTMLInputElement).value.length;
 
 		(e.target as HTMLInputElement).style.width = `${Math.max(20, length + 3)}ch`;
-
 	} else
 		e.style.width = Math.max(20, e.value.length + 3) + 'ch';
 
@@ -393,7 +750,6 @@ const formatText = (name: string) => {
 	return name;
 };
 
-
 const handlePop = () =>
 	categoryInput.value.length === 0 && selectedBusinessCategories.value.length > 0 && selectedBusinessCategories.value.pop();
 
@@ -432,8 +788,30 @@ const set24hourSchedule = () => business?.value!.is24
 	
 const resetHours = () => setAllHours('', false);
 
-const handleEditBusiness = async () => {
+// TODO: make it accept an array of parameters to update manually each property
+// NOTE: This is a generic function to update the business data
+const handleEditBusiness = async <T extends keyof BusinessEdit>(...props: [T] |  [T, T]) => {
+	const { updateBusiness } = businessService();
+	let data: Partial<BusinessEdit> = {};
 
+	for (let i = 0; i < props.length; i++) 
+		data[props[i]] = businessEdit.value[props[i]] ;
+	
+	
+	const { response, statusCode } = await updateBusiness(business.value._id, data);
+
+	if (response.value?.ok) {
+
+	}
+	else {
+		switch (statusCode.value) {
+			case 400:
+				return await router.push({ name: '/error/bad-request' });
+			// Add additional cases as needed
+			default:
+				return // Handle other status codes if necessary
+		}
+	}
 };
 
 const handleSaveBasicData = async () => {
@@ -500,12 +878,17 @@ const arrayBufferToBase64 = (buffer: ArrayBuffer, mimeType: string) => {
 
 <style scoped>
 .form-group {
-	@apply w-full p-5 flex flex-col gap-5 border-4 border-[#1b1b1b] bg-white
+	@apply 	max-w-[54rem] w-full min-w-48 mx-auto p-5 px-10 flex flex-col gap-5 
+			
 }
 
 .form-group input, .form-group textarea {
-	@apply 	w-60 p-2 border-2 border-[#1b1b1b] transition-colors cursor-pointer
+	@apply 	w-60 p-2 border-2 border-[#1b1b1b] transition-colors 
 			focus:outline-none focus:border-b-rose-600
+}
+
+.form-group input[type="button"] {
+	@apply 	cursor-pointer
 }
 
 .form-group textarea {
@@ -524,7 +907,41 @@ const arrayBufferToBase64 = (buffer: ArrayBuffer, mimeType: string) => {
 .form-button-2 {
 	@apply 	h-fit px-3 py-2 border-2 border-transparent border-[#1b1b1b] outline-none 
 			focus:outline-none focus:border-b-rose-600 active:border-b-rose-600 transition-all
+}
 
+.form-part {
+	@apply flex justify-between bg-white 
+}
+
+.form-part button > div {
+	@apply gap-2
+}
+
+.form-part button svg {
+	@apply stroke-2
+}
+
+.form-part h3 {
+	@apply font-semibold text-xl
+}
+
+.input-group {
+	@apply flex flex-col gap-5
+}
+
+.input-group input {
+	@apply 	w-full pl-9 
+
+			read-only:bg-gray-200 read-only:text-gray-700 read-only:focus:border-b-[#1b1b1b]
+			read-only:cursor-not-allowed 
+}
+
+.input-group svg:has(+ input:read-only) {
+	@apply stroke-gray-700
+}
+
+.input-group svg {
+	@apply 	stroke-2 z-10
 }
 
 .show-address-setup {
@@ -668,4 +1085,14 @@ const arrayBufferToBase64 = (buffer: ArrayBuffer, mimeType: string) => {
 .preview-image {
 	@apply 	w-auto h-auto 
 }
+
+#btnPopOverToggleTest {
+	anchor-name: --testPopover;
+}
+
+/* TESTING */
+/* .my-popover {
+	
+} */
+
 </style>

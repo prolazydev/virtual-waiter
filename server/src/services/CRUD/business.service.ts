@@ -26,6 +26,15 @@ export const findAndUpdateBusinessById = async (id: string, values: UpdateQuery<
 export const findAndUpdateBusinessByCustomQuery = async (query: FilterQuery<Business>, values: UpdateQuery<Business>, options: (UpdateOptions & QueryOptions<Business>) = { new: true, runValidators: true }) =>
 	BusinessModel.updateMany(query, values, options);
 
+export const findAndUpdateBusinessContactById = async (id: string, oldValue: string, value: string) =>
+	BusinessModel.updateOne(
+		{ _id: id, 'contacts.value': oldValue },
+		{ $set: { 'contacts.$.value': value } }
+	);
+
+export const findAndAddBusinessContactById = async (id: string, contact: { contactType: string, value: string; }) =>
+	BusinessModel.updateOne({ _id: id }, { $push: { contacts: contact } });
+
 // DELETE
 export const deleteBusinessById = async (id: string) =>
 	BusinessModel.findByIdAndUpdate(id, { deleted: true }, { new: true, runValidators: true });
@@ -50,3 +59,6 @@ export const deleteBusinessesByUserId = async (userId: string) => {
 
 export const deleteBusinessesByUserIdTransaction = async (userId: string, session: ClientSession) =>
 	BusinessModel.updateMany({ userId }, { deleted: true }, { session });
+
+export const deleteBusinessContactByBusinessId = async (id: string, contact: { contactType: string, value: string; }) =>
+	BusinessModel.updateOne({ _id: id }, { $pull: { 'contacts': contact } });

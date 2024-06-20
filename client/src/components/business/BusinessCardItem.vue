@@ -23,9 +23,9 @@
 		<div class="flex flex-col gap-3">
 			<div class="flex flex-col gap-3">
 				<router-link :to="{ path: `/business/${business._id}` }" class="hover:underline">
-					<h1 class="text-2xl font-semibold text-[#1b1b1b]">{{ business.name }}</h1>
+					<h1 class="text-2xl font-semibold text-[#1b1b1b]">{{ business.username }}</h1>
 				</router-link>
-				<Review v-if="business.reviews && business.reviews > 0" :stars="business.averageRating!" :rating="business.reviews" />
+				<Review :stars="business.averageRating!" :rating="business.reviews" />
 
 				<div class="flex gap-2 text-sm font-semibold">
 					<div v-for="(category, index) in business.categories" :key="index" class="px-[6px] py-[0.75px] bg-[#1b1b1b] text-white rounded-full cursor-pointer hover:bg-[#303030] hover:shadow-md transition-all">

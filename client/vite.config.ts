@@ -21,15 +21,27 @@ const composableResolver: Resolver = name => {
 		return `@/stores/${storeName}`;
 	}
 
-	if ( name.includes('Service') ) {
+	if (name.includes('Service')) {
+		const componentPath = findComponent(name, './src/services');
+		console.log('Service: ', componentPath);
+
 		const serviceName = name.slice(0, name.indexOf('Service'))
 		return `@/services/${serviceName}.service`;
 	}	
 
-	if ( name.startsWith('my') ) 
-		return `@/utils/${name}`;
-	if ( name.startsWith('use') || name.startsWith('tost')) 
+	// TODO: resolve the utils to find the file if it's nested inside a folder
+
+	if (name.startsWith('my')) {
+		const componentPath = findComponent(name, './src/utils');
+		console.log('Util: ', componentPath);
+
+		return componentPath;
+	}
+
+	if (name.startsWith('use') || name.startsWith('tost')) {
+		console.log('Composable: ', name);
 		return `@/composables/${name}`;
+	} 
 }
 
 export default defineConfig({

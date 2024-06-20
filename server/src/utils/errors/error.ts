@@ -5,7 +5,7 @@ import { Message } from '../common/ServerResponseMessages';
 import { respond } from '../common/http';
 
 export const handleError = (res: Response, error: unknown) => {
-	// console.log('Error: ', error);
+	console.log('Error: ', error);
 
 	if ( error instanceof Error.ValidationError ) {
 		const validationErrors = {};

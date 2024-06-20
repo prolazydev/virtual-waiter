@@ -2,7 +2,7 @@
 	<div class="page-main gap-10">
 		<section class="p-5 flex flex-col h-full gap-5 bg-white border-4 border-[#1b1b1b]">
 			<div class="flex flex-col mx-auto">
-				<h1 class="w-fit text-3xl font-bold text-[#1b1b1b] uppercase tracking-widest">Settings for {{ business?.name }}</h1>
+				<h1 class="w-fit text-3xl font-bold text-[#1b1b1b] uppercase tracking-widest">Settings for {{ business?.username }}</h1>
                 <div class="h-1 w-4 mb-5 bg-[#1b1b1b]"></div>
 			</div>
 
@@ -23,7 +23,7 @@
 						<div class="flex flex-col gap-3">
 							<div class="flex flex-col gap-2">
 								<label for="username">Username</label>
-								<input type="text" name="username" id="username" :value="business?.name" placeholder="imJustKeN">
+								<input type="text" name="username" id="username" :value="business?.username" placeholder="imJustKeN">
 							</div>
 
 							<div class="flex flex-col gap-2">

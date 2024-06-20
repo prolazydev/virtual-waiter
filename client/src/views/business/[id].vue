@@ -4,7 +4,7 @@
 			<!-- TODO: create a breadcrumb like style for where this item came from eg: Ferizaj > SteakHouse Restaurant > Ferizaj SteakHouse -->
 			<div class="flex justify-between items-baseline">
 				<div class="flex gap-1 items-baseline">
-					<h1 class="text-4xl font-bold">{{ business.name }}</h1>
+					<h1 class="text-4xl font-bold">{{ business.username }}</h1>
 					<span v-if="!business.verified"><Tooltip text="Soulja boi!" _class="mb-2" class="whitespace-nowrap"><LucideIcon name="BadgeCheck" :size="24" :stroke-width="2" /></Tooltip></span>
 				</div>
 
@@ -32,7 +32,7 @@
 				</div>
 				<!-- TODO: Add Edit Business button for the owner of the business -->
 
-				<Tooltip v-if="isAuth() && user.id === business.userId" _class="mb-3 w-max" :text="`Settings for ${business.name}`">
+				<Tooltip v-if="isAuth() && user.id === business.userId" _class="mb-3 w-max" :text="`Settings for ${business.username}`">
 					<!-- <button class="px-1 py-1" type="button"><LucideIcon name="PenLine" :size="22" :stroke-width="2" /></button> -->
 					<router-link class="px-1 py-1 text-lg" :to="{ path: `/business/settings/${business._id}` }">
 						<LucideIcon name="Settings" :size="22" :stroke-width="2" />
