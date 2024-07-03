@@ -20,11 +20,10 @@
 		</template>
 	</RouterView>
 
-	<!-- NODE: Needs to teleport to place it below the component since it doesn't with transition/suspense -->
+	<!-- NOTE: Needs to teleport to place it below the component since it doesn't with transition/suspense -->
 	<Teleport to="body">
 		<Footer />
 	</Teleport>
-
 </template>
 
 <script setup lang="ts">

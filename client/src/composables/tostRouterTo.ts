@@ -1,5 +1,5 @@
-import type { RouteNamedMap } from 'unplugin-vue-router/types';
-import type { Router } from 'vue-router/auto';
+import type { RouteNamedMap } from 'vue-router/auto-routes';
+import type { Router } from 'vue-router';
 
 /**
  * Navigate to a new route and display a tost message

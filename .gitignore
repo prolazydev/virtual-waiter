@@ -36,3 +36,4 @@ yarn-error.log*
 # Logs and debugging
 logs/
 debug.log
+.run/Dev.run.xml
