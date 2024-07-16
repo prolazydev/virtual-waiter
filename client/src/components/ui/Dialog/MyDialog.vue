@@ -10,9 +10,10 @@
 						<h1 class="text-2xl font-semibold text-nowrap">{{ title }}</h1>
 						<LucideIcon 
 							@click="toggleDialog(_class && !toggleClass ? `.${props._class.split(' ')[0]}` : toggleClass)" 
-							class="cursor-pointer" 
+							class="dialog-default-close" 
 							name="X" 
 							:size="38" 
+							stroke-width="2"
 						/>
 					</div>
 					<hr class="border-[#1b1b1b]">
@@ -104,6 +105,22 @@ because the nesting selector cannot represent pseudo-elements. */
 
 .dialog-head {
 	@apply flex flex-col gap-5
+}
+
+.dialog-default-close {
+	@apply 	cursor-pointer transition-all
+			hover:scale-110 active:scale-95
+	;
+	--shadow-color: hsla(0, 100%, 50%, 0.075);
+}
+
+.dialog-default-close:hover, .dialog-default-close:active {
+    filter: 
+        drop-shadow(0 1px 1px hsl(0deg 0% 0% / 0.075))
+        drop-shadow(0 4px 4px var(--shadow-color))
+        drop-shadow(0 8px 8px var(--shadow-color))
+        drop-shadow(0 16px 16px hsl(0deg 0% 0% / 0.075))
+        drop-shadow(0 2px 2px hsl(0deg 0% 0% / 0.075));
 }
 
 .dialog-body {

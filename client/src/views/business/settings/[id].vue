@@ -50,6 +50,10 @@ const tabs: BusinessSettingsTab[] = [
 		icon: 'Settings'
 	},
 	{
+		name: 'Access',
+		icon: 'Lock'
+	},
+	{
 		name: 'Notifications',
 		icon: 'Bell'
 	},
@@ -65,10 +69,12 @@ const componentRenderer = computed(() => {
 		loader.startLoader();
 		switch (tab.value) {
 			case 'General':
-				return defineAsyncComponent(() => import('@/components/business/edit/tabs/BusinessEditBasicDataTab.vue'));
+				return defineAsyncComponent(() => import('@/components/business/settings/tabs/BusinessEditBasicDataTab.vue'));
+			case 'Access':
+				return defineAsyncComponent(() => import('@/components/business/settings/tabs/BusinessEditAccessControlTab.vue'));
 		
 			default:
-				return defineAsyncComponent(() => import('@/components/business/edit/tabs/BusinessEditBasicDataTab.vue'));
+				return defineAsyncComponent(() => import('@/components/business/settings/tabs/BusinessEditBasicDataTab.vue'));
 		}
 	} finally {
 		loader.finishLoader();
@@ -83,7 +89,7 @@ const componentRenderer = computed(() => {
 }
 
 .sidenav {
-	@apply 	w-64 flex flex-col gap-3 border-2 border-[#1b1b1b] p-5
+	@apply 	min-w-64 w-64 flex flex-col gap-3 border-2 border-[#1b1b1b] p-5
 			sticky top-[6.4375rem] self-start
 	;
 }

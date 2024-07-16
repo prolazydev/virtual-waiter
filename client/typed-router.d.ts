@@ -19,7 +19,7 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
-    '/not-found': RouteRecordInfo<'/not-found', '/:slug(.*)', Record<never, never>, Record<never, never>>,
+    'not-found': RouteRecordInfo<'not-found', '/:slug(.*)', Record<never, never>, Record<never, never>>,
     '/about': RouteRecordInfo<'/about', '/about', Record<never, never>, Record<never, never>>,
     '/auth/confirm-account/[token]': RouteRecordInfo<'/auth/confirm-account/[token]', '/auth/confirm-account/:token', { token: ParamValue<true> }, { token: ParamValue<false> }>,
     '/auth/login': RouteRecordInfo<'/auth/login', '/auth/login', Record<never, never>, Record<never, never>>,
@@ -32,6 +32,6 @@ declare module 'vue-router/auto-routes' {
     '/business/settings/[id]': RouteRecordInfo<'/business/settings/[id]', '/business/settings/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/error/bad-request': RouteRecordInfo<'/error/bad-request', '/error/bad-request', Record<never, never>, Record<never, never>>,
     '/search': RouteRecordInfo<'/search', '/search', Record<never, never>, Record<never, never>>,
-    '/user/[username]': RouteRecordInfo<'/user/[username]', '/user/:username', { username: ParamValue<true> }, { username: ParamValue<false> }>,
+    'user-profile': RouteRecordInfo<'user-profile', '/user/:username', { username: ParamValue<true> }, { username: ParamValue<false> }>,
   }
 }

@@ -35,7 +35,7 @@
 <script lang="ts" setup>
 import type { RequestStatus } from '@/enums/EFromValidations';
 import type { LoggedInUser, LoginModel } from '@/types/auth/user';
-import type { RouteNamedMap } from 'unplugin-vue-router/types';
+import type { RouteNamedMap } from 'vue-router/auto-routes';
 
 const router = useRouter();
 const route = useRoute('/auth/login');

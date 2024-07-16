@@ -9,15 +9,18 @@
 		<!-- <form @submit.prevent="handleEditBusiness" class="w-full flex justify-between gap-x-5 relative"> -->
 			<div class="form-group">
 				<div class="form-part flex-col">
-					<MyDialog _class="contact-info-dialog w-[30rem] p-7" title="Contact Information Settings" size="custom">
-						<button @click="toggleDialog('.contact-info-dialog')" class="form-button-2 flex justify-between items-center" type="button">
-							<div class="flex flex-col text-start">
-								<h3>Contact info</h3>
-								<p>{{ businessEdit.email }}, {{ businessEdit.userEmail }}, {{ businessEdit.phone }}</p>
-							</div>
-							<LucideIcon name="PencilLine" />
-						</button>
-
+                    <!-- TODO: Maybe extract this as a component -->
+					<MyDialog _class="contact-info-dialog w-[30rem] p-7 " title="Contact Information Settings" size="custom">
+						<div role="button" @click="toggleDialog('.contact-info-dialog')" class="form-button-2 " type="button">
+							<div class="px-2 flex justify-between items-center cursor-pointer">
+                                <div class="flex flex-col text-start">
+                                    <h3>Contact info</h3>
+                                    <p class="">{{ businessEdit.email }}, {{ businessEdit.userEmail }}, {{ businessEdit.phone }}</p>
+                                </div>
+                                <LucideIcon name="PencilLine" :stroke-width="2" />
+                            </div>
+						</div>
+                        <!-- TODO: other settings -->
 						<template #body>
 							<div class="w-full max-h-[25rem] overflow-auto mx-auto py-7 flex flex-col justify-between">
 								<div class="input-group">
@@ -32,10 +35,10 @@
 											placeholder="im@just.ken"
 											:value="businessEdit.userEmail"
 											readonly
-										>
+										/>
 
 										<!-- TODO: handle editing the email -->
-										<button @click="" class="form-button-2 w-full" type="button">Change</button>
+										<button @click="goToUserSettings" class="form-button-2 w-full" type="button">Change</button>
 									</div>
 
 									<div v-for="(item, index) in contactListFields" :key="index" class="flex items-center gap-5 relative">
@@ -48,21 +51,18 @@
 											:type="(item.type === 'phone') ? 'number' : 'email'" 
 											:placeholder="(item.type === 'phone') ? '123456777' : 'im@just.ken'"
 											:value="contactListFields[index].value"
-											v-model="contactListFields[index].value"
 											:readonly="contactListFields[index].state === 'edit'"
-										>
+											v-model="contactListFields[index].value"
+										/>
 
-										<!-- TODO: switch between edit and save buttons to edit each input individually -->
-										<!-- <button class="form-button-2" type="button">Edit</button> -->
-										<div class="w-full flex justify-between">
-											<button @click="toggleBusinessContactEdit(index)" class="form-button-2 relative" type="button">
-												<CustomLoader :state="contactListFields[index].processingState">
-													{{ contactListFields[index].state === 'edit' ? 'Edit' : 'Save'}}
+										<div class="w-full flex gap-5 justify-between">
+											<button @click="toggleBusinessContactEdit(index)" class="form-button-2 relative w-full" type="button">
+												<CustomLoader :state="contactListFields[index].processingState" class="edit-button">
+													{{ contactListFields[index].state === 'edit' ? 'Edit' : 'Save' }}
 												</CustomLoader>
 											</button>
 											
 											<button @click="removeBusinessContactField(index)" class="form-button-2" type="button">
-											<!-- <button @click="toggleDialog('.delete-contact-info-dialog')" class="form-button-2" type="button"> -->
 												Delete
 											</button>
 										</div>
@@ -141,19 +141,9 @@
 							<div class="w-full flex flex-col gap-5">
 								<hr class="border-[#1b1b1b]">
 
-								<div class="w-full flex justify-end relative">
-									<div class="flex gap-5 absolute-center">
-										<button @click="handleEditBusiness('phone', 'email')"  class="form-button-2">
-											<CustomLoader>
-												Save
-											</CustomLoader>
-										</button>
-									</div>
-									
-									<button @click="toggleDialog('.contact-info-dialog')" class="form-button-1">
-										Close
-									</button>
-								</div>
+								<button @click="toggleDialog('.contact-info-dialog')" class="form-button-1 w-fit ml-auto">
+									Close
+								</button>
 							</div>
 						</template>
 					</MyDialog>		
@@ -184,18 +174,6 @@
 						</div>
 					</template>
 				</MyDialog>
-
-				<!-- <div class="form-part flex-col">
-					<MyDialog _class="contact-info-dialog2 w-[44rem]" size="custom">
-						<button @click="toggleDialog('.contact-info-dialog2')" class="form-button-1 flex justify-between items-center" type="button">
-							<div class="flex flex-col text-start">
-								<h3>Contact info</h3>
-								<p>{{ business.email }}, {{ business.userEmail }}, {{ business.phone }}</p>
-							</div>
-							<LucideIcon name="PencilLine" />
-						</button>
-					</MyDialog>		
-				</div> -->
 		
 				<div class="hidden gap-5">
 				<!-- <div class="flex gap-5"> -->
@@ -309,7 +287,6 @@
 									
 									<Checkbox @change="set24hourSchedule" v-model="business!.is24" class="form-checkbox h-8 flex items-center" _id="useUserEmail" _label="Is open 24/7" />
 
-
 									<LucideIcon @click="resetHours" class="absolute my-shadow my-shadow-black" name="ListRestart" :stroke-width="2" />
 									<LucideIcon @click="openSetHours = false" class="absolute right-4 my-shadow" name="X" :stroke-width="2" />
 
@@ -343,9 +320,9 @@
 									</li>
 									<li class="w-fit flex items-center ">
 										<input 
-											:disabled="selectedBusinessCategories.length < 3 ? false : true" 
+											:disabled="selectedBusinessCategories.length>=3"
 											@input="autosizeWidth" 
-											@keydown.backspace="handlePop" 
+											@keydown.backspace="handlePop"
 											v-model="categoryInput" 
 											id="businessCategories" 
 											:placeholder="selectedBusinessCategories.length < 3 ? 'Business Categories' : 'Please remove a category to add a new one'" 
@@ -417,7 +394,6 @@
 									<div class="w-full flex justify-center">
 										<img class="preview-image" v-if="imageData" :src="imagePreview" alt="Preview Image">
 										
-										
 										<LucideIcon v-else class="text-gray-600 absolute-center" name="ChefHat" :size="160" :stroke-width="1"/>
 									</div>
 								</template>
@@ -428,9 +404,7 @@
 											<input @change="handlePreviewImage" class="hidden" type="file" name="profileImage" id="profileImage">
 											<label class="form-button-2 text-center cursor-pointer" for="profileImage">{{ imageData ? 'Change' :  'Select a Cover Image' }}</label>
 											
-
 											<button @click="saveImageData('coverImage')" v-if="imageData" class="form-button-2">
-												
 												Save
 											</button>
 										</div>
@@ -477,6 +451,8 @@ import { type Business, type BusinessCategory, type BusinessEdit, type Days, typ
 const { params } = useRoute('/business/settings/[id]');
 const router = useRouter();
 
+const { user } = useUserStore();
+
 const business = ref<Business>({} as Business);
 const businessEdit = ref<Partial<BusinessEdit>>({});
 
@@ -515,6 +491,10 @@ onMounted(() => {
 	if (business.value && business.value.categories && business.value.categories.length > 0) 
 		selectedBusinessCategories.value = business.value.categories;
 });
+
+const goToUserSettings = async () => {
+    await router.push({ name: 'user-profile', params: { username: user.username }, query: { setting: 'primary-email' } });
+}
 
 const handleDataMapping = (data: Business) => {
 	business.value = data;
@@ -568,7 +548,7 @@ const handleGetBusiness = async () => {
 
 		switch (statusCode.value) {
 			case 404:
-				return await router.push({ name: '/[...slug]' });
+				return await router.push({ name: 'not-found' });
 			case 400:
 				return await router.push({ name: '/error/bad-request' });
 			// Add additional cases as needed
@@ -582,7 +562,11 @@ const handleGetBusiness = async () => {
 await handleGetBusiness();
 
 const addBusinessContactField = (type: 'email' | 'phone') => {
-	businessEdit.value.contacts!.push({ contactType: type, value: '' });
+	if (!businessEdit.value.contacts) 
+		businessEdit.value.contacts = [{ contactType: type, value: '' }];
+	else
+		businessEdit.value.contacts!.push({ contactType: type, value: '' });
+
 	contactListFields.value.push({ type, value: '', state: 'save' });
 }
 
@@ -593,14 +577,15 @@ const removeBusinessContactField = (index: number) => {
 		return;
 	}
 
-	deleteContactInfo.value.title = `Are you sure you want to delte your ${contactListFields.value[index].type} contact of: ${contactListFields.value[index].value} ?`;
+	deleteContactInfo.value.title = `Are you sure you want to permanently delete your ${contactListFields.value[index].type} contact of: ${contactListFields.value[index].value} ?`;
 	deleteContactInfo.value.index = index;
 	toggleDialog('.delete-contact-info-dialog');
 	// TODO: Handle deleting the contact from the database
 };
 
 const toggleBusinessContactEdit = async (index: number) => {
-	// TODO: Handle editing the contact information to the database
+	// TODO: Handle editing the contact information to the database,
+    // TODO: Split the functionality
 	try {
 		if (contactListFields.value[index].state === 'save') {
 			// If the contact value is different from the original value
@@ -615,6 +600,7 @@ const toggleBusinessContactEdit = async (index: number) => {
 
 				if (response.value?.ok) {
 					contactListFields.value[index].processingState = 'success';
+					useTost('Contact information updated successfully!');
 
 					setTimeout(() => {
 						contactListFields.value[index].processingState = 'idle'
@@ -647,6 +633,7 @@ const toggleBusinessContactEdit = async (index: number) => {
 
 				if (response.value?.ok) {
 					contactListFields.value[index].processingState = 'success';
+					useTost('Contact information created successfully!');
 
 					setTimeout(() => {
 						contactListFields.value[index].processingState = 'idle'
@@ -677,10 +664,12 @@ const toggleBusinessContactEdit = async (index: number) => {
 
 const handleDeleteContact = async (index: number) => {
 	try {
-		// 
 		if (contactListFields.value[index].value && ! businessEdit.value.contacts![index].value) {
 			contactListFields.value.splice(index, 1);
 			businessEdit.value.contacts!.splice(index, 1);
+            
+            useTost('Contact information deleted successfully!');
+
 			return;
 		}
 
@@ -689,6 +678,8 @@ const handleDeleteContact = async (index: number) => {
 		if (response.value?.ok) {
 			contactListFields.value.splice(index, 1);
 			businessEdit.value.contacts!.splice(index, 1);
+
+            useTost('Contact information deleted successfully!');
 		}
 		else {
 			// Handle the error
@@ -790,38 +781,40 @@ const resetHours = () => setAllHours('', false);
 
 // TODO: make it accept an array of parameters to update manually each property
 // NOTE: This is a generic function to update the business data
-const handleEditBusiness = async <T extends keyof BusinessEdit>(...props: [T] |  [T, T]) => {
-	const { updateBusiness } = businessService();
-	let data: Partial<BusinessEdit> = {};
+// const handleEditBusiness = async <T extends keyof BusinessEdit>(...props: [T] |  [T, T]) => {
+// 	const { updateBusiness } = businessService();
+// 	let data: Partial<BusinessEdit> = {};
+//
+// 	debugger;
+//
+// 	for (let i = 0; i < props.length; i++)
+// 		data[props[i]] = businessEdit.value[props[i]] ;
+//
+//
+// 	const { response, statusCode } = await updateBusiness(business.value._id, data);
+//
+// 	if (response.value?.ok) {
+//
+// 	}
+// 	else {
+// 		switch (statusCode.value) {
+// 			case 400:
+// 				return await router.push({ name: '/error/bad-request' });
+// 			// Add additional cases as needed
+// 			default:
+// 				return // Handle other status codes if necessary
+// 		}
+// 	}
+// };
 
-	for (let i = 0; i < props.length; i++) 
-		data[props[i]] = businessEdit.value[props[i]] ;
-	
-	
-	const { response, statusCode } = await updateBusiness(business.value._id, data);
-
-	if (response.value?.ok) {
-
-	}
-	else {
-		switch (statusCode.value) {
-			case 400:
-				return await router.push({ name: '/error/bad-request' });
-			// Add additional cases as needed
-			default:
-				return // Handle other status codes if necessary
-		}
-	}
-};
-
-const handleSaveBasicData = async () => {
-
-};
-
-// TODO: Dynamically import the component to preview the changes
-const togglePreviewChanges = () => {
-
-};
+// const handleSaveBasicData = async () => {
+//
+// };
+//
+// // TODO: Dynamically import the component to preview the changes
+// const togglePreviewChanges = () => {
+//
+// };
 
 const saveImageData = <T extends keyof BusinessEdit>(propertyName: T) => {
 	businessEdit.value[propertyName] = imagePreview.value as BusinessEdit[T];
@@ -879,7 +872,6 @@ const arrayBufferToBase64 = (buffer: ArrayBuffer, mimeType: string) => {
 <style scoped>
 .form-group {
 	@apply 	max-w-[54rem] w-full min-w-48 mx-auto p-5 px-10 flex flex-col gap-5 
-			
 }
 
 .form-group input, .form-group textarea {
@@ -888,7 +880,7 @@ const arrayBufferToBase64 = (buffer: ArrayBuffer, mimeType: string) => {
 }
 
 .form-group input[type="button"] {
-	@apply 	cursor-pointer
+	@apply 	cursor-pointer text-red-600
 }
 
 .form-group textarea {
@@ -897,6 +889,9 @@ const arrayBufferToBase64 = (buffer: ArrayBuffer, mimeType: string) => {
 
 #profileImage:hover + div > label, #coverImage:hover + div > label {
 	@apply border-b-rose-600
+}
+
+.edit-contact-info-button {
 }
 
 .form-button-1 {
@@ -1095,4 +1090,16 @@ const arrayBufferToBase64 = (buffer: ArrayBuffer, mimeType: string) => {
 	
 } */
 
+</style>
+
+<style>
+.edit-button {
+	@apply w-full
+	;
+}
+
+.edit-button > div:first-child {
+	@apply mx-auto select-none
+	;
+}
 </style>

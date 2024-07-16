@@ -443,7 +443,7 @@ async function handleGetBusiness() {
 
 		switch (statusCode.value) {
 			case 404:
-				return await router.push({ name: '/[...slug]' });
+				return await router.push({ name: 'not-found' });
 			case 400:
 				return await router.push({ name: '/error/bad-request' });
 			// Add additional cases as needed
@@ -474,7 +474,7 @@ const handleShowProduct = () => {
 }
 
 .write-review {
-	@apply flex gap-1 items-center text-lg font-semibold
+	@apply flex gap-1 items-center text-lg font-semibold 
 }
 
 .write-review:hover svg {

@@ -1,6 +1,9 @@
 import type { BusinessDashboardTabTitles, BusinessSettingsTabTitles } from '../business';
 
 export type LoggedInUser = {
+    /**
+     * The user's ID
+     */
 	id: string;
 	email: string;
 	username: string;

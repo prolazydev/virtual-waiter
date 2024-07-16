@@ -50,7 +50,7 @@
                             <LucideIcon :class="{ 'active-element': router.currentRoute.value.path === `/user/${user.username}`  }" class="transition-all" name="UserRound" :stroke-width="2" />
                         </button>
                         <ul class="dropdown-content px-2 py-3 right-0">
-                            <li><router-link :to="{ name: '/user/[username]', params: { username: user.username } }">Profile</router-link></li>
+                            <li><router-link :to="{ name: 'user-profile', params: { username: user.username } }">Profile</router-link></li>
                             <li><button @click="handleLogout">Logout</button></li>
                         </ul>
                     </div>

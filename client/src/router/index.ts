@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router/auto'
-import { routes } from 'vue-router/auto-routes'
+import { routes, handleHotUpdate } from 'vue-router/auto-routes'
 
 // import HomeView from '@/views/HomeView.vue'
 // import LoginView from '@/views/auth/LoginView.vue'
@@ -124,6 +124,9 @@ const router = createRouter({
 	// ]
 })
 
+if (import.meta.hot) {
+    handleHotUpdate(router);
+}
 
 router.beforeEach((to, {}, next) => {
 	const loader = useLoader();
@@ -131,11 +134,12 @@ router.beforeEach((to, {}, next) => {
 
 	const { isAuth, hasRole } = useAuth();
 
+    // TODO: handle auth and role
 	if (to.meta.auth && !isAuth()) {
 		if (to.meta.role && !hasRole(to.meta.role as string)) {
 			
 		}
-		next({ name: 'login', query: { redirect: to.fullPath } })
+		next({ name: '/auth/login', query: { redirect: to.fullPath } })
 	} else {
 		next()
 	}

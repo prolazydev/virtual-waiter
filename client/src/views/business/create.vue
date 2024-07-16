@@ -106,7 +106,7 @@
 
 					<div v-else class="relative flex flex-col gap-2">
 						<label for="businessSUserEmail">User Email</label>
-						<input v-model="createBusinessFormData.userEmail" type="email" id="businessUserEmail" placeholder="User email" required />
+						<input v-model="createBusinessFormData.userEmail" type="email" id="businessUserEmail" placeholder="john@cook.com" required />
 					</div>
 				</div>
 
@@ -119,7 +119,7 @@
 						</button>
 					</div>
 
-					<button class="show-hours w-fit h-fit bg-[#1b1b1b] text-white px-2 border-4 border-[#1b1b1b] z-50 focus:outline-none focus-visible:border-b-rose-600 active:border-b-white transition-all" type="button">
+					<button class="show-hours w-fit h-fit bg-[#1b1b1b] text-white px-2 border-4 border-[#1b1b1b] focus:outline-none focus-visible:border-b-rose-600 active:border-b-white transition-all" type="button">
 						Show Hours
 					</button>
 
@@ -143,40 +143,10 @@
 				<LucideIcon @click="openSetHours = false" class="absolute right-4 my-shadow" name="X" :stroke-width="2" />
 
 				<div class="flex flex-col gap-3">
-					<div class="flex gap-5 items-center">
-						<label class="w-20 mr-5 font-bold text-lg" for="businessMonday">Monday:</label>
-						<input v-model="createBusinessFormData.hours!.monday" :readonly="business24Hours.monday" type="text" placeholder="09:00-17:00"> 
-						<Checkbox @indeterminate="(e, c) => setIndeterminateClosed(e, c, 'monday')" indeterminate class="form-checkbox" _id="monday" _label="24h | Closed" /> 
-					</div>
-					<div class="flex gap-5 items-center">
-						<label class="w-20 mr-5 font-bold text-lg" for="businessTuesday">Tuesday:</label>
-						<input v-model="createBusinessFormData.hours!.tuesday" :readonly="business24Hours.tuesday" type="text" placeholder="09:00-17:00">
-						<Checkbox @indeterminate="(e, c) => setIndeterminateClosed(e, c, 'tuesday')" indeterminate class="form-checkbox" _id="tuesday" _label="24h | Closed" />
-					</div>
-					<div class="flex gap-5 items-center">
-						<label class="w-20 mr-5 font-bold text-lg" for="businessWednesday">Wednesday:</label>
-						<input v-model="createBusinessFormData.hours!.thursday" :readonly="business24Hours.thursday" type="text" placeholder="09:00-17:00">
-						<Checkbox @indeterminate="(e, c) => setIndeterminateClosed(e, c, 'thursday')" indeterminate class="form-checkbox" _id="thursday" _label="24h | Closed" />
-					</div>
-					<div class="flex gap-5 items-center">
-						<label class="w-20 mr-5 font-bold text-lg" for="businessThursday">Thursday:</label>
-						<input v-model="createBusinessFormData.hours!.wednesday" :readonly="business24Hours.wednesday" type="text" placeholder="09:00-17:00">
-						<Checkbox @indeterminate="(e, c) => setIndeterminateClosed(e, c, 'wednesday')" indeterminate class="form-checkbox" _id="wednesday" _label="24h | Closed" />
-					</div>
-					<div class="flex gap-5 items-center">
-						<label class="w-20 mr-5 font-bold text-lg" for="businessFriday">Friday:</label>
-						<input v-model="createBusinessFormData.hours!.friday" :readonly="business24Hours.friday" type="text" placeholder="09:00-17:00">
-						<Checkbox @indeterminate="(e, c) => setIndeterminateClosed(e, c, 'friday')" indeterminate class="form-checkbox" _id="friday" _label="24h | Closed" />
-					</div>
-					<div class="flex gap-5 items-center">
-						<label class="w-20 mr-5 font-bold text-lg" for="businessSaturday">Saturday:</label>
-						<input v-model="createBusinessFormData.hours!.saturday" :readonly="business24Hours.saturday" type="text" placeholder="09:00-17:00">
-						<Checkbox @indeterminate="(e, c) => setIndeterminateClosed(e, c, 'saturday')" indeterminate class="form-checkbox" _id="saturday" _label="24h | Closed" />
-					</div>
-					<div class="flex gap-5 items-center">
-						<label class="w-20 mr-5 font-bold text-lg" for="businessSunday">Sunday:</label>
-						<input v-model="createBusinessFormData.hours!.sunday" :readonly="business24Hours.sunday" type="text" placeholder="09:00-17:00">
-						<Checkbox @indeterminate="(e, c) => setIndeterminateClosed(e, c, 'sunday')" indeterminate class="form-checkbox" _id="sunday" _label="24h | Closed" />
+					<div v-for="(day , index) in Object.keys(business24Hours) " :key="index" class="flex gap-5 items-center">
+						<label :for="`business${day}`" class="w-20 mr-5 font-bold text-lg capitalize">{{ day }}:</label>
+						<input v-model="createBusinessFormData.hours[day as Days]" :readonly="business24Hours.tuesday" type="text" placeholder="09:00-17:00">
+						<Checkbox @indeterminate="(isIndeterminate, checked) => setIndeterminateClosed(isIndeterminate, checked, day as Days)" indeterminate class="form-checkbox" _id="monday" _label="24h | Closed" /> 
 					</div>
 				</div>
 			</div>
@@ -197,7 +167,6 @@
 </template>
 
 <script lang="ts" setup>
-import Checkbox from '@/components/ui/Checkbox.vue';
 import type { RequestStatus } from '@/enums/EFromValidations';
 import type { BusinessCategory, CreateBusinessModel, Days } from '@/types/business';
 
@@ -334,18 +303,18 @@ const setAllHours = (hour: string, boolVal: boolean = true) => {
 		});
 };
 
-const setIndeterminateClosed = (value: string, checked: boolean, key: string) => {
-	if (!value && checked) {
-		createBusinessFormData.value.hours![key as Days] = '24';
-		business24Hours.value[key as Days] = true;
+const setIndeterminateClosed = (isIndeterminate: string, checked: boolean, day: Days) => {
+	if (!isIndeterminate && checked) {
+		createBusinessFormData.value.hours![day] = '24';
+		business24Hours.value[day] = true;
 	}
-	else if (value && value.length > 0) {
-		createBusinessFormData.value.hours![key as Days] = 'Closed';
-		business24Hours.value[key as Days] = true;
+	else if (isIndeterminate && isIndeterminate.length > 0) {
+		createBusinessFormData.value.hours![day] = 'Closed';
+		business24Hours.value[day] = true;
 	}
 	else {
-		createBusinessFormData.value.hours![key as Days] = '';
-		business24Hours.value[key as Days] = false;
+		createBusinessFormData.value.hours![day] = '';
+		business24Hours.value[day] = false;
 	}
 };
 

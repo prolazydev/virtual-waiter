@@ -6,8 +6,10 @@
 }
 
 .tost {
-  	@apply 	flex flex-col gap-3 fixed top-32 right-14 transition-all duration-500
+  	@apply 	flex flex-col gap-3 fixed top-32 right-14 transition-all duration-500 
 			z-[9999];
+
+	anchor-name: --tost-container;
 }
 .tost > div > p {
 	@apply px-3 py-4
@@ -15,9 +17,19 @@
 
 .tost-n {
 	@apply mt-24 relative bg-white text-lg shadow-md opacity-0 duration-500 transition-all
-  ;
+	;
 
+	position-anchor: --tost-container;
+	/* inset-area: center; */
+	position-try-options: flip-block;
+
+	right: -50%;
+    transform: translate(200px, 100px);
 }
+/* 
+.tost-n::backdrop {
+	@apply w-fit bg-transparent 
+} */
 
 .tost-show {
 	@apply 	mt-0 opacity-100;

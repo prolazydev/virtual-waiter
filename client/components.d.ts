@@ -10,6 +10,7 @@ declare module 'vue' {
     BusinessCardItem: typeof import('@/components/business/BusinessCardItem.vue')['default']
     BusinessCreatePreview: typeof import('@/components/business/BusinessCreatePreview.vue')['default']
     BusinessDashboardHomeTab: typeof import('./src/components/business/dashboard/tabs/BusinessDashboardHomeTab.vue')['default']
+    BusinessEditAccessControlTab: typeof import('./src/components/business/settings/tabs/BusinessEditAccessControlTab.vue')['default']
     BusinessEditBasicDataTab: typeof import('./src/components/business/edit/tabs/BusinessEditBasicDataTab.vue')['default']
     BusinessSearchItem: typeof import('./src/components/business/BusinessSearchItem.vue')['default']
     Checkbox: typeof import('@/components/ui/Checkbox.vue')['default']
@@ -26,7 +27,7 @@ declare module 'vue' {
     Review: typeof import('@/components/ui/Review.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SearchItem: typeof import('@/components/ui/SearchItem.vue')['default']
+    SearchItem: typeof import('@/components/business/BusinessSearchItem.vue')['default']
     Tooltip: typeof import('@/components/ui/Tooltip.vue')['default']
   }
 }

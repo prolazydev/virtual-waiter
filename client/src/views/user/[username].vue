@@ -7,9 +7,20 @@
 </template>
 
 <script lang="ts" setup>
+import { definePage } from 'unplugin-vue-router/runtime';
+
+definePage({
+	meta: {
+		auth: true
+	},
+    name: 'user-profile',
+});
+
+// TODO: Handle autmatic prompting of specific action depending on the route query, eg: /user/:username?setting=primary-email
+
 const userData = ref()
 
-const { params } = useRoute('/user/[username]');
+const { params } = useRoute('user-profile');
 
 console.log(params);
 
@@ -17,15 +28,9 @@ console.log(params);
 	const res = await myFetch(`user/${params.username}`, '', { method: 'GET' });
 
 	userData.value = res.data;
-	// resolve('resolved');
+// 	resolve('resolved');
 // }, 1000));
 
-
-definePage({
-	meta: {
-		auth: true
-	}
-})
 </script>
 
 <style scoped>
