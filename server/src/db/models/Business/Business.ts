@@ -10,7 +10,6 @@ export interface IBusiness extends Document {
 	owners: [{ type: Schema.Types.ObjectId, ref: 'User', select: false }],
 	managers: [{ type: Schema.Types.ObjectId, ref: 'User', select: false }],
 	
-	name: string;
 	displayName: string;
 	username: string;
 	contacts: {
@@ -57,13 +56,13 @@ const businessSchema = new Schema<IBusiness>({
 	},
 	owners: [ { type: Schema.Types.ObjectId, ref: 'User', select: false } ],
 	managers: [ { type: Schema.Types.ObjectId, ref: 'User', select: false } ],
-	name: {
-		type: String,
-		required: true,
-		unique: true,
-		trim: true,
-		lowercase: true,
-	},
+	// name: {
+	// 	type: String,
+	// 	required: true,
+	// 	unique: true,
+	// 	trim: true,
+	// 	lowercase: true,
+	// },
 	displayName: {
 		type: String,
 		trim: true,

@@ -28,6 +28,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SearchItem: typeof import('@/components/business/BusinessSearchItem.vue')['default']
+    TestTab: typeof import('./src/components/business/dashboard/tabs/testTab.vue')['default']
     Tooltip: typeof import('@/components/ui/Tooltip.vue')['default']
   }
 }

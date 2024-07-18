@@ -1,5 +1,5 @@
 import type { LoggedInUser } from '@/types/auth/user';
-import type { BusinessDashboardTabTitles } from '@/types/business';
+import type { BusinessDashboardTabTitles } from '@/types/models/business';
 
 const emptyUser: LoggedInUser = {
 	id: '',
@@ -14,7 +14,6 @@ const emptyUser: LoggedInUser = {
 
 type Test = keyof LoggedInUser;
 
-const myTest: Test = 'lastBusinessDashboardTab'
 
 export default 
 defineStore('user', () => {

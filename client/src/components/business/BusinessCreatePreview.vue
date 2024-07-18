@@ -160,7 +160,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { CreateBusinessModel } from '@/types/business';
+import type { CreateBusinessModel } from '@/types/models/business';
 
 withDefaults(defineProps<CreateBusinessModel>(), {
 	userId: '123',

@@ -1,4 +1,4 @@
-import type { UserReview } from './userReview';
+import type { UserReview } from '../userReview';
 import type { IconKeys } from "@/types";
 
 type Hours = {

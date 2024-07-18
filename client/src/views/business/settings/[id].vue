@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { BusinessSettingsTab, BusinessSettingsTabTitles } from '@/types/business';
+import type { BusinessSettingsTab, BusinessSettingsTabTitles } from '@/types/models/business';
 
 const loader = useLoader();
 
@@ -57,10 +57,10 @@ const tabs: BusinessSettingsTab[] = [
 		name: 'Notifications',
 		icon: 'Bell'
 	},
-	{
-		name: 'Account',
-		icon: 'User'
-	}
+	// {
+	// 	name: 'Account',
+	// 	icon: 'User'
+	// }
 	
 ];
 

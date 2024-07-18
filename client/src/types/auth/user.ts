@@ -1,4 +1,4 @@
-import type { BusinessDashboardTabTitles, BusinessSettingsTabTitles } from '../business';
+import type { BusinessDashboardTabTitles, BusinessSettingsTabTitles } from '../models/business';
 
 export type LoggedInUser = {
     /**

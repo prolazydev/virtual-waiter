@@ -446,7 +446,7 @@
 </template>
 
 <script lang="ts" setup>
-import { type Business, type BusinessCategory, type BusinessEdit, type Days, type KeyHours } from '@/types/business';
+import { type Business, type BusinessCategory, type BusinessEdit, type Days, type KeyHours } from '@/types/models/business';
 
 const { params } = useRoute('/business/settings/[id]');
 const router = useRouter();
@@ -891,8 +891,8 @@ const arrayBufferToBase64 = (buffer: ArrayBuffer, mimeType: string) => {
 	@apply border-b-rose-600
 }
 
-.edit-contact-info-button {
-}
+/* .edit-contact-info-button {
+} */
 
 .form-button-1 {
 	@apply 	h-fit px-1 py-2 border-2 border-transparent border-b-[#1b1b1b] outline-none 

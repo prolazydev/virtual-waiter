@@ -31,10 +31,13 @@
 </template>
 
 <script lang="ts" setup>
-import type { BusinessDashboardTab, BusinessDashboardTabTitles } from '@/types/business';
+import type { BusinessDashboardTab, BusinessDashboardTabTitles } from '@/types/models/business';
 
 const { user, setTab } = useUserStore();
 const loader = useLoader();
+
+console.log(user);
+console.log(user.lastBusinessDashboardTab);
 
 const tab = ref<BusinessDashboardTabTitles>(user.lastBusinessDashboardTab || 'Home');
 
@@ -69,10 +72,9 @@ const tabs: BusinessDashboardTab[] = [
 	},
 ];
 
-watch(tab, (newTab) => setTab( 'lastBusinessDashboardTab', newTab))
+watch(tab, (newTab) => setTab('lastBusinessDashboardTab', newTab))
 
 const componentRenderer = computed(() => {
-
 	try {
 		loader.startLoader();
 		switch (tab.value) {
