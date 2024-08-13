@@ -130,3 +130,8 @@ export type BusinessSettingsTab = {
 	name: BusinessSettingsTabTitles;
 	icon: IconKeys;
 };
+
+export type TabMap = {
+    lastBusinessDashboardTab: BusinessDashboardTabTitles;
+    lastBusinessSettingsTab: BusinessSettingsTabTitles;
+};

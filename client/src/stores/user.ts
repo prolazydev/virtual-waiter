@@ -1,5 +1,5 @@
 import type { LoggedInUser } from '@/types/auth/user';
-import type { BusinessDashboardTabTitles } from '@/types/models/business';
+import type { TabMap } from '@/types/models/business';
 
 const emptyUser: LoggedInUser = {
 	id: '',
@@ -8,12 +8,10 @@ const emptyUser: LoggedInUser = {
 	roles: '',
 	isAuth: false,
 	hasBusiness: false,
-	avatar: ''
+	avatar: '',
+    lastBusinessDashboardTab: 'Home',
+    lastBusinessSettingsTab: 'General',
 }
-
-
-type Test = keyof LoggedInUser;
-
 
 export default 
 defineStore('user', () => {
@@ -31,9 +29,16 @@ defineStore('user', () => {
 	const setNewLoginUser = (newUser: LoggedInUser) => {
 		user.value = newUser
 		user.value.isAuth = true;
+        
+        user.value.lastBusinessDashboardTab = 'Home';
+        user.value.lastBusinessSettingsTab = 'General';
 	}
 
-	const setTab = (tabKey: 'lastBusinessDashboardTab' | 'lastBusinessSettingsTab', tab: BusinessDashboardTabTitles) => user!.value[tabKey] = tab as any;
+	// const setTab = (tabKey: 'lastBusinessDashboardTab' | 'lastBusinessSettingsTab', tab: BusinessDashboardTabTitles | BusinessSettingsTabTitles) => user!.value[tabKey] = tab as any;
+	// NOTE: This is the same as the above function but with generics, enforcing the correct tab key and tab value
+    function setTab<K extends keyof TabMap>(tabKey: K, tab: TabMap[K]) {
+        user.value[tabKey] = tab as any;
+    }
 
 	const logoutUser = () => user.value = emptyUser
 
