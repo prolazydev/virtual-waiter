@@ -149,14 +149,6 @@
 							
 							<canvas class="income-per-month-chart"></canvas>
 						</div>
-
-						<!-- TODO: Maybe find an idea for the chart -->
-						<!-- <div class="w-1/2 h-fit py-2 px-3 flex flex-col gap-2 border-2 border-[#1b1b1b]">
-							<h2 class="text-2xl font-semibold">*</h2>
-							<hr>
-							
-							<canvas class="chart"></canvas>
-						</div> -->
 					</div>
 				</div>
 			</div>
@@ -183,8 +175,7 @@ let incomePerQuarterChart: Chart<"doughnut", number[], string>;
 let incomePerMonthChart: Chart<"line", number[], string>;
 
 onMounted(() => {
-	useScrollX('.favorite-dish-slider');
-
+    useScrollX('.favorite-dish-slider');
 	if (favoriteBusinesses.value.length > 1) {
 		glide = new Glide('.glider-container', {
 			type: 'carousel',

@@ -34,3 +34,15 @@ body {
 	@apply py-16 px-32 flex flex-col
 }
 
+
+/* TRANSITION */
+/* .v-enter-active,
+.v-leave-active {
+  transition: opacity 0.35s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+} */
+

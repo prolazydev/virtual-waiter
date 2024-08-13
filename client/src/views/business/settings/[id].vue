@@ -13,7 +13,12 @@
 				</div>
 
 				<div class="flex flex-col gap-3">
-					<button v-for="(item, index) in tabs" :key="index" @click="tab = item.name" class="dashboard-link" :class="{ 'active-tab': tab === item.name }">
+					<button 
+                        v-for="(item, index) in tabs" 
+                        :key="index" @click="tab = item.name" 
+                        :class="{ 'active-tab': tab === item.name }"
+                        class="dashboard-link" 
+                    >
 						<LucideIcon :name="item.icon" :size="22" />
 						{{ item.name }}
 					</button>
@@ -43,6 +48,8 @@ const { params } = useRoute('/business/settings/[id]');
 const { user, setTab } = useUserStore();
 
 const tab = ref<BusinessSettingsTabTitles>(user.lastBusinessSettingsTab || 'General');
+
+watch(tab, (newTab) => setTab('lastBusinessSettingsTab', newTab));
 
 const tabs: BusinessSettingsTab[] = [
 	{
@@ -76,7 +83,9 @@ const componentRenderer = computed(() => {
 			default:
 				return defineAsyncComponent(() => import('@/components/business/settings/tabs/BusinessEditBasicDataTab.vue'));
 		}
-	} finally {
+	} catch (error) {
+        console.error(error);
+    } finally {
 		loader.finishLoader();
 	}
 });

@@ -9,17 +9,26 @@
 					</div>
 
 					<div class="flex flex-col gap-3">
-						<button v-for="(item, index) in tabs" :key="index" @click="tab = item.name" class="dashboard-link" :class="{ 'active-tab': tab === item.name }">
+						<button 
+                            v-for="(item, index) in tabs" 
+                            :key="index" @click="tab = item.name" 
+                            :class="{ 'active-tab': tab === item.name }"
+                            class="dashboard-link" 
+                        >
 							<LucideIcon :name="item.icon" :size="22" />
 							{{ item.name }}
 						</button>
 					</div>
 				</div>
 			</div>
+            <!-- NOTE:  Needed out-in for the component to properly render because of the 
+                        potential race conditions on the component rendering trying to render 
+                        without the transition finishing 
+            -->
 			<Transition mode="out-in">
 				<Suspense :timeout="0">
 					<template #default>
-						<component :is="componentRenderer" />
+						<component :is="componentRenderer" :key="tab" />
 					</template>
 					<template #fallback>
 						<Loading />
@@ -35,9 +44,6 @@ import type { BusinessDashboardTab, BusinessDashboardTabTitles } from '@/types/m
 
 const { user, setTab } = useUserStore();
 const loader = useLoader();
-
-console.log(user);
-console.log(user.lastBusinessDashboardTab);
 
 const tab = ref<BusinessDashboardTabTitles>(user.lastBusinessDashboardTab || 'Home');
 
@@ -64,7 +70,7 @@ const tabs: BusinessDashboardTab[] = [
 	},
 	{
 		name: 'Reports',
-		icon: 'BarChart'
+		icon: 'ChartBar'
 	},
 	{
 		name: 'Settings',
@@ -96,7 +102,10 @@ const componentRenderer = computed(() => {
 			default:
 				return defineAsyncComponent(() => import('@/components/business/dashboard/tabs/BusinessDashboardHomeTab.vue'));
 		}
-	} finally {
+        
+	} catch (error) {
+        console.error(error);
+    } finally {
 		loader.finishLoader();
 	}
 });
