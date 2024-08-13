@@ -150,5 +150,4 @@ router.afterEach(() => {
 	loader.finishLoader();
 });
 
-
 export default router;

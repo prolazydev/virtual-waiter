@@ -28,7 +28,7 @@ export default function (element: string) {
 	const scrollContainer = document.querySelector(element)! as HTMLElement;
 	let isScrolling = false;
 	let startX: number, scrollLeft: number;
-
+    
 	scrollContainer.addEventListener('mousedown', (e) => {
 		isScrolling = true;
 		startX = e.pageX - scrollContainer.offsetLeft;

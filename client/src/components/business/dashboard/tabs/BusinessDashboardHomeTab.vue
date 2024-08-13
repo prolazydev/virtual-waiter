@@ -176,6 +176,7 @@ let incomePerMonthChart: Chart<"line", number[], string>;
 
 onMounted(() => {
     useScrollX('.favorite-dish-slider');
+    
 	if (favoriteBusinesses.value.length > 1) {
 		glide = new Glide('.glider-container', {
 			type: 'carousel',

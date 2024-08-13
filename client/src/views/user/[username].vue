@@ -18,7 +18,7 @@ definePage({
 
 // TODO: Handle autmatic prompting of specific action depending on the route query, eg: /user/:username?setting=primary-email
 
-const userData = ref()
+const userData = ref();
 
 const { params } = useRoute('user-profile');
 

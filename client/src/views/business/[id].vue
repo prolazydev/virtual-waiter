@@ -413,7 +413,7 @@
 
 <script lang="ts" setup>
 import 'v-calendar/style.css';
-import { type Business, type KeyHours } from '@/types/business';
+import type { Business, KeyHours } from '@/types/models/business';
 
 const { params } = useRoute('/business/[id]');
 const router = useRouter();

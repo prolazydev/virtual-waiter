@@ -24,7 +24,7 @@
 					</button>
 				</div>
 			</div>
-			<Transition mode="out-in">
+			<!-- <Transition mode="in-out"> -->
 				<Suspense :timeout="0">
 					<template #default>
 						<component :is="componentRenderer" />
@@ -33,7 +33,7 @@
 						<Loading />
 					</template>
 				</Suspense>
-			</Transition>
+			<!-- </Transition> -->
 		</div>
 	</div>
 </template>

@@ -1,7 +1,6 @@
 <template>
 	<div class="m-auto flex flex-col gap-10 justify-center items-center relative text-[#1b1b1b]">
 		<h1 id="errorTitle" class="text-4xl text-[#1b1b1b] font-bold">Not Found</h1>
-		<!-- TODO: Maybe randomise the icon -->
 		<LucideIcon id="errorIcon" class="text-[#1b1b1b]" name="Turtle" :size="128" />
 		
 		<p class="title-explanation">We couldn't find that page :/</p>

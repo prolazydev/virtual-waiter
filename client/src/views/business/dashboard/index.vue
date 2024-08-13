@@ -25,7 +25,7 @@
                         potential race conditions on the component rendering trying to render 
                         without the transition finishing 
             -->
-			<Transition mode="out-in">
+			<!-- <Transition mode="in-out"> -->
 				<Suspense :timeout="0">
 					<template #default>
 						<component :is="componentRenderer" :key="tab" />
@@ -34,7 +34,7 @@
 						<Loading />
 					</template>
 				</Suspense>
-			</Transition>
+			<!-- </Transition> -->
 		</div>
 	</div>
 </template>
@@ -132,7 +132,8 @@ const componentRenderer = computed(() => {
 			hover:text-[#303030] transition-colors
 }
 
-.router-link-exact-activ, .active-tab {
+
+.router-link-exact-activ, .active-tab, .active-tab > svg { 
 	@apply font-semibold stroke-2
 }
 </style>

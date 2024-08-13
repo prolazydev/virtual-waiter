@@ -101,11 +101,11 @@ const handleSearch = (e: Event) => {
 	@apply filter-none scale-110
 }
 .favorite-business-card:hover .favorite-business-name {
-	@apply top-28
+	@apply top-[85%] drop-shadow-none
 }
 
 .favorite-business-name {
-	@apply 	text-2xl font-semibold text-[#1b1b1b] drop-shadow 
+	@apply 	w-[70%] text-center text-2xl font-semibold text-[#1b1b1b] drop-shadow 
 			absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
 			transition-all duration-500
 			pointer-events-none
