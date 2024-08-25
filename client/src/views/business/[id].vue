@@ -4,7 +4,7 @@
 			<!-- TODO: create a breadcrumb like style for where this item came from eg: Ferizaj > SteakHouse Restaurant > Ferizaj SteakHouse -->
 			<div class="flex justify-between items-baseline">
 				<div class="flex gap-1 items-baseline">
-					<h1 class="text-4xl font-bold">{{ business.username }}</h1>
+					<h1 class="text-4xl font-bold">{{ business?.username ?? 'test username' }}</h1>
 					<span v-if="!business.verified"><Tooltip text="Soulja boi!" _class="mb-2" class="whitespace-nowrap"><LucideIcon name="BadgeCheck" :size="24" :stroke-width="2" /></Tooltip></span>
 				</div>
 

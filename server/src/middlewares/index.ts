@@ -30,9 +30,10 @@ export function initMiddlewares(app: Express) {
 
 	app.use(cors(CORSOptions));
 	app.use(helmet());
+    
 	app.use('/api', rateLimiter);
 
-	app.use(express.json({ limit: '10kb' }));
+	app.use(express.json({ limit: '5mb' }));
 	app.use(sanitize()); // Sanitize data after body parsing
 	
 	app.use(xss(XSSOptions));

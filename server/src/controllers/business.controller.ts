@@ -1,4 +1,4 @@
-import mongoose, { type FilterQuery, Types } from 'mongoose';
+import mongoose, { type FilterQuery, type ProjectionType, Types } from 'mongoose';
 
 import { StatusCodes } from 'http-status-codes';
 
@@ -7,7 +7,7 @@ import { type Business } from '../db/models/Business/Business';
 import { Message } from '../utils/common/ServerResponseMessages';
 import { requestHandler } from '../utils/errors/asyncErrorHandler';
 import { handleError } from '../utils/errors/error';
-import { createBusiness, findBusinesses, findBusinessById, findBusinessesByUserId, findBusinessByName, findBusinessesByCustomQuery, findBusinessesByAggregate, findAndUpdateBusinessById, deleteBusinessesByUserId, deleteBusinessById, findBusinessByCustomQuery, findAndUpdateBusinessContactById, findAndAddBusinessContactById, deleteBusinessContactByBusinessId } from '../services/CRUD/business.service';
+import { createBusiness, findAllBusinesses, findBusinessById, findBusinessesByUserId, findBusinessByName, findBusinessesByCustomQuery, findBusinessesByAggregate, findAndUpdateBusinessById, deleteBusinessesByUserId, deleteBusinessById, findBusinessByCustomQuery, findAndUpdateBusinessContactById, findAndAddBusinessContactById, deleteBusinessContactByBusinessId } from '../services/CRUD/business.service';
 import { generateRandom4DigitNumber } from '../utils/crypto';
 import { sendEmail } from '../utils/email';
 
@@ -15,40 +15,39 @@ import { sendEmail } from '../utils/email';
 export const registerBusinessRequest = requestHandler<Business>(async (req, res) => {
 	try {
 		const business = req.body;
-		if ( !business ) 
+		if (!business)
 			return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 
-		business.username = 'contosso2';
+		// business.username = 'contosso2';
 
 		const newBusiness = await createBusiness(business);
-		
+
 		respond(res, StatusCodes.CREATED, Message.SuccessCreate, { id: newBusiness._id });
 	} catch (error) {
 		handleError(res, error);
 	}
 });
 
-
 export const getBusinessConfirmationCode = requestHandler(async (req, res) => {
 	const id = req.params.id;
-	if ( !id ) 
+	if (!id)
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 
 	const business = await findBusinessById(id);
-	if ( !business ) 
+	if (!business)
 		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 
-	if ( business.userId.toString() !== req.identity!.id )
+	if (business.userId.toString() !== req.identity!.id)
 		return respond(res, StatusCodes.FORBIDDEN, Message.NotAuthorized);
 
-	if ( business.confirmed ) 
+	if (business.confirmed)
 		return respond(res, StatusCodes.CONFLICT, Message.BusinessAlreadyConfirmed);
 
 	business.confirmationCode = generateRandom4DigitNumber();
 	business.confirmationCodeExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
 	// SEND EMAIL
-	const message = `Hi there! Your confirmation code is: ${business.confirmationCode}\n\r\n\rThis code will expire in 10 minutes.`;
+	const message = `Hi there! Your confirmation code is: ${ business.confirmationCode }\n\r\n\rThis code will expire in 10 minutes.`;
 	try {
 		await Promise.all([
 			business.save({ validateBeforeSave: false }),
@@ -72,7 +71,7 @@ export const getBusinessConfirmationCode = requestHandler(async (req, res) => {
 // #region GET 
 export const getAllBusinesses = requestHandler(async (req, res) => {
 	try {
-		const businesses = await findBusinesses();
+		const businesses = await findAllBusinesses();
 		respond(res, StatusCodes.OK, Message.SuccessRead, businesses);
 	} catch (error) {
 		handleError(res, error);
@@ -80,39 +79,47 @@ export const getAllBusinesses = requestHandler(async (req, res) => {
 });
 
 // TODO: Rename function properly by it's implementation
-export const getBusiness = requestHandler(async (req, res) => {
+export const getBusinessById = requestHandler(async (req, res) => {
 	try {
 		const id = req.params.id;
-		if ( !id ) 
+		if (!id)
 			return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
-		if ( id.length !== 24 )
+		if (id.length !== 24)
 			return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 
-		// TODO: also get business with the ratings 
-		const business = (await findBusinessesByAggregate([
-			{ $match: { _id: new Types.ObjectId(id) } },
-			{
-				$lookup: {
-					from: 'business_reviews',
-					localField: '_id',
-					foreignField: 'businessId',
-					as: 'userReviews',
-				},
-			},
-			{
-				$lookup: {
-					from: 'products',
-					localField: '_id',
-					foreignField: 'businessId',
-					as: 'businessProducts',
-				}
-			}
-		]))[0];
+		// check if it has any query params to specifically select only the mentioned fields
+		const fields = req.query.fields as string;
+		const selectFields = fields ? fields.split(',').join(' ') : '';
 
-		if ( !business ) 
-			return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
-		
-		business.averageRating = parseFloat(business.averageRating!.toFixed(2));
+		const business = await findBusinessById(id).select(selectFields).lean();
+
+		// const business = await findBusinessById(id);
+
+		// // TODO: also get business with the ratings 
+		// const business = (await findBusinessesByAggregate([
+		// 	{ $match: { _id: new Types.ObjectId(id) } },
+		// 	{
+		// 		$lookup: {
+		// 			from: 'business_reviews',
+		// 			localField: '_id',
+		// 			foreignField: 'businessId',
+		// 			as: 'userReviews',
+		// 		},
+		// 	},
+		// 	{
+		// 		$lookup: {
+		// 			from: 'products',
+		// 			localField: '_id',
+		// 			foreignField: 'businessId',
+		// 			as: 'businessProducts',
+		// 		}
+		// 	}
+		// ]))[0];
+
+		// if ( !business ) 
+		// 	return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
+
+		// business.averageRating = parseFloat(business.averageRating!.toFixed(2));
 
 		respond(res, StatusCodes.OK, Message.SuccessRead, business);
 	} catch (error) {
@@ -123,12 +130,12 @@ export const getBusiness = requestHandler(async (req, res) => {
 
 export const getBusinessByName = requestHandler(async (req, res) => {
 	const name = req.params.name;
-	if ( !name ) 
+	if (!name)
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 
 	const businesses = await findBusinessByName(name);
 
-	if ( !businesses ) 
+	if (!businesses)
 		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 
 	respond(res, StatusCodes.OK, Message.SuccessRead, businesses);
@@ -136,11 +143,11 @@ export const getBusinessByName = requestHandler(async (req, res) => {
 
 export const getBusinessesByUserId = requestHandler(async (req, res) => {
 	const id = req.params.id;
-	if ( !id ) 
+	if (!id)
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 
 	const businesses = await findBusinessesByUserId(id);
-	if ( !businesses ) 
+	if (!businesses)
 		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 
 	respond(res, StatusCodes.OK, Message.SuccessRead, businesses);
@@ -148,11 +155,11 @@ export const getBusinessesByUserId = requestHandler(async (req, res) => {
 
 export const getBusinessesSelf = requestHandler(async (req, res) => {
 	const userId = req.identity!.id;
-	if ( !userId ) 
+	if (!userId)
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 
 	const businesses = await findBusinessesByUserId(userId);
-	if ( !businesses ) 
+	if (!businesses)
 		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 
 	respond(res, StatusCodes.OK, Message.SuccessRead, businesses);
@@ -160,11 +167,11 @@ export const getBusinessesSelf = requestHandler(async (req, res) => {
 
 export const getBusinessesByCustomQuery = requestHandler<FilterQuery<Business>>(async (req, res) => {
 	const filter = req.body;
-	if ( !filter ) 
+	if (!filter)
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 
 	const businesses = await findBusinessesByCustomQuery(filter);
-	if ( !businesses ) 
+	if (!businesses)
 		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 
 	respond(res, StatusCodes.OK, Message.SuccessRead, businesses);
@@ -173,32 +180,39 @@ export const getBusinessesByCustomQuery = requestHandler<FilterQuery<Business>>(
 // #endregion
 
 // #region PATCH 
+
+/**
+ * Update business details, may update partialy or fully
+ */
 export const updateBusiness = requestHandler(async (req, res) => {
-	const id = req.params.id;
-	if ( !id ) 
-		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
+	try {
+		const id = req.params.id;
+		const business = req.body;
 
-	const business = req.body;
-	if ( !business ) 
-		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
+		if (!id || !business || Object.keys(business).length === 0)
+			return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 
-	const updatedBusiness = await findAndUpdateBusinessById(id, business);
-	if ( !updatedBusiness ) 
-		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
+		const updatedBusiness = await findAndUpdateBusinessById(id, business);
+		if (!updatedBusiness)
+			return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 
-	respond(res, StatusCodes.OK, Message.SuccessUpdate, updatedBusiness);
+		respond(res, StatusCodes.OK, Message.SuccessUpdate, updatedBusiness);
+	} catch (error) {
+		handleError(res, error);
+
+	}
 });
 
-export const updateBusinessContact = requestHandler<{ oldValue: string, value: string }>(async (req, res) => {
+export const updateBusinessContact = requestHandler<{ oldValue: string, value: string; }>(async (req, res) => {
 	try {
 		const id = req.params.id;
 		const { oldValue, value } = req.body;
 
-		if ( !id || !value )
+		if (!id || !value)
 			return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 
 		const updatedBusiness = await findAndUpdateBusinessContactById(id, oldValue, value);
-		if ( !updatedBusiness )
+		if (!updatedBusiness)
 			return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 
 		respond(res, StatusCodes.OK, Message.SuccessUpdate, updatedBusiness);
@@ -224,8 +238,8 @@ export const addBusinessContact = requestHandler<{ contactType: string, value: s
 export const deleteBusinessContact = requestHandler<{ contactType: string, value: string; }>(async (req, res) => {
 	const id = req.params.id;
 	const contact = req.body;
-	
-	if (!id)
+
+	if (!id || !contact)
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 
 	const deletedBusiness = await deleteBusinessContactByBusinessId(id, contact);
@@ -237,24 +251,63 @@ export const deleteBusinessContact = requestHandler<{ contactType: string, value
 
 // #endregion
 
-export const confirmBusinessAccount = requestHandler(async (req, res) => {
-	const { id, code } = req.params;
-	if ( !id || !code ) 
+// #region DELETE 
+export const deleteBusiness = requestHandler(async (req, res) => {
+	const id = req.params.id;
+	if (!id)
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 
-	const business = await findBusinessByCustomQuery({ 
-		_id: id, 
+	const deletedBusiness = await deleteBusinessById(id);
+	if (!deletedBusiness)
+		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
+
+	respond(res, StatusCodes.OK, Message.SuccessDelete, deletedBusiness);
+});
+
+export const deleteUserBusinessesTransaction = requestHandler(async (req, res) => {
+	const session = await mongoose.startSession();
+	try {
+		const userId = req.params.id;
+		if (!userId)
+			return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
+
+		session.startTransaction();
+		await deleteBusinessesByUserId(userId);
+		await session.commitTransaction();
+
+		respond(res, StatusCodes.OK, Message.SuccessDelete);
+	} catch (error) {
+		console.log('Error in transaction');
+		console.log(error);
+		await session.abortTransaction();
+		respond(res, StatusCodes.INTERNAL_SERVER_ERROR, Message.ErrorDelete);
+	} finally {
+		await session.endSession();
+	}
+});
+
+// #endregion
+
+// #region Business Account Confirmation
+
+export const confirmBusinessAccount = requestHandler(async (req, res) => {
+	const { id, code } = req.params;
+	if (!id || !code)
+		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
+
+	const business = await findBusinessByCustomQuery({
+		_id: id,
 		confirmationCode: code,
 		confirmationCodeExpiry: { $gt: new Date() }
 	});
-	if ( !business ) 
+	if (!business)
 		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 
-	if ( business.userId.toString() !== req.identity!.id )
+	if (business.userId.toString() !== req.identity!.id)
 		return respond(res, StatusCodes.FORBIDDEN, Message.NotAuthorized);
 
-	if ( business.confirmed ) 
-		return respond(res, StatusCodes.CONFLICT, Message.BusinessAlreadyConfirmed);	
+	if (business.confirmed)
+		return respond(res, StatusCodes.CONFLICT, Message.BusinessAlreadyConfirmed);
 
 	business.confirmationCode = undefined;
 	business.confirmationCodeExpiry = undefined;
@@ -280,41 +333,6 @@ export const confirmBusinessAccount = requestHandler(async (req, res) => {
 		await business.save({ validateBeforeSave: false });
 
 		respond(res, StatusCodes.INTERNAL_SERVER_ERROR, Message.EmailPasswordResetError);
-	}
-});
-
-// #region DELETE 
-export const deleteBusiness = requestHandler(async (req, res) => {
-	const id = req.params.id;
-	if ( !id ) 
-		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
-
-	const deletedBusiness = await deleteBusinessById(id);
-	if ( !deletedBusiness ) 
-		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
-
-	respond(res, StatusCodes.OK, Message.SuccessDelete, deletedBusiness);
-});
-
-export const deleteUserBusinessesTransaction = requestHandler(async (req, res) => {
-	const session = await mongoose.startSession();
-	try {
-		const userId = req.params.id;
-		if ( !userId ) 
-			return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
-
-		session.startTransaction();
-		await deleteBusinessesByUserId(userId);
-		await session.commitTransaction();
-
-		respond(res, StatusCodes.OK, Message.SuccessDelete);
-	} catch (error) {
-		console.log('Error in transaction');
-		console.log(error);
-		await session.abortTransaction();
-		respond(res, StatusCodes.INTERNAL_SERVER_ERROR, Message.ErrorDelete);
-	} finally {
-		await session.endSession();
 	}
 });
 

@@ -12,30 +12,27 @@ export default () => {
 		try {
 			const { response, data } = await myFetch<LoggedInUser>('auth/check');
 
-			if (response.value?.ok) 
-				userStore.setNewLoginUser(data.value!);
-			else 
-				userStore.logoutUser();
+            response.value?.ok ?
+                userStore.setNewLoginUser(data.value!) :
+                userStore.logoutUser();
+                
 			return;
 		} catch (error) {
 			console.log(error);
-			userStore.logoutUser();
+            if (isAuth())
+			    userStore.logoutUser();
 		}
 	}
 
 	const hasRole = (roles: string[] | string) => {
-		debugger;
 		if (!Array.isArray(roles))
 			return userStore.user.roles.includes(roles);
 		else
 			return roles.some(role => userStore.user.roles.includes(role));
-
-			
 	}
 
-
 	/**
-	 * Login
+	 * Login new user
 	 * @param newUser - LoggedInUser
 	 * @returns 
 	 */

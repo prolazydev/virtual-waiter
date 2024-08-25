@@ -20,6 +20,7 @@ const _myFetch = createFetch({
 			}
 			if (error.response.status === 401 || error.response.status === 403) {
 				console.log(`Unauthorized Response: ${error.response.status}`);
+                
 				if ( useAuth().isAuth() )
 					useUserStore().logoutUser();
 			}
@@ -31,10 +32,12 @@ const _myFetch = createFetch({
 			if (response.response.ok) 
 				return await handleResponse(response.response)
 			else if (response.response.status === 401 || response.response.status === 403) {
-				debugger;
-				console.log(`Unauthorized Response: ${response.response.status}`);
-				const { logout } = useAuth();
-				await logout();
+                // TODO: refactor to use auth store
+                
+				// debugger;
+				// console.log(`Unauthorized Response: ${response.response.status}`);
+				// const { logout } = useAuth();
+				// await logout();
 			}
 			else 
 				return await response.response.json();
@@ -48,7 +51,12 @@ const _myFetch = createFetch({
  * @param url - Base is set to http://localhost:4069/api/
  * @param myOptions - Fetch options, Default method is set to GET
  */
-export default async <TResponse = any>(url: string, data: object | string = '', initOptions: RequestInit = {}, options: UseFetchOptions = {}): Promise<UseFetchReturn<TResponse>> => {
+export default async <TResponse = any>(
+    url: string, 
+    data: object | string = '', 
+    initOptions: RequestInit = {}, 
+    options: UseFetchOptions = {},
+): Promise<UseFetchReturn<TResponse>> => {
 	try {
 		if (typeof data === 'object')
 			initOptions.body = JSON.stringify(data);

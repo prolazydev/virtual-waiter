@@ -23,12 +23,12 @@ body {
 
 /* Reusable classes */
 
-.absolute-center {
+/* .absolute-center {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-} 
+}  */
 
 .page-main {
 	@apply py-16 px-32 flex flex-col
@@ -36,13 +36,33 @@ body {
 
 
 /* TRANSITION */
-/* .v-enter-active,
-.v-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.35s ease;
 }
 
-.v-enter-from,
-.v-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
-} */
+}
 
+
+/* TRANSITION-GROUP */
+
+.list-move, /* apply transition to moving elements */
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.list-leave-active {
+  position: absolute;
+}

@@ -1,14 +1,16 @@
 let progress = 0;
 let interval: NodeJS.Timeout | null = null;
+let progressBar: HTMLElement;
 
 export default () => {
-	const progressBar = document.getElementById('progressBar')!;
+    if (!progressBar) 
+       progressBar = document.getElementById('progressBar')!;
 
 	const startLoader = () => {
 		if (progress > 0) {
+			progressBar.style.transitionProperty = 'none';
 			progress = 0;
 
-			progressBar.style.transitionProperty = 'none';
 			
 			progressBar.style.width = `${progress}%`;
 			progressBar.style.opacity = '1';
@@ -38,7 +40,14 @@ export default () => {
 		
 		progress = 100;
 		progressBar.style.width = `${progress}%`;
-		setTimeout(() => progressBar.style.opacity = '0', 500);
+		setTimeout(() => {
+            progressBar.style.opacity = '0'
+            setTimeout(() => {
+                // progress = 0;
+                progressBar.style.width = `0%`;
+            }, 150);
+
+        }, 500);
 	};
 
 	return {

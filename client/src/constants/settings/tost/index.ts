@@ -1,0 +1,1 @@
+export const DEFAULT_TOST_DURATION = 3000;

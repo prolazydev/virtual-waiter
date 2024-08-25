@@ -110,7 +110,9 @@ export const isSelfUserOwner = requestHandler(async (req, res, next) => {
 		return next(new CustomError(Message.ServerError, 500));
 	}
 });
-
+/**
+ * Check if the user is the owner of the item
+ */
 export const isSelfItemOwner = requestHandler(async (req, res, next, collectionName: string) => {
 	try {
 		const id = req.params.id || req.query.id || req.body.id;

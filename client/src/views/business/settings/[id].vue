@@ -15,7 +15,8 @@
 				<div class="flex flex-col gap-3">
 					<button 
                         v-for="(item, index) in tabs" 
-                        :key="index" @click="tab = item.name" 
+                        :key="index" 
+                        @click="tab = item.name" 
                         :class="{ 'active-tab': tab === item.name }"
                         class="dashboard-link" 
                     >
@@ -24,64 +25,41 @@
 					</button>
 				</div>
 			</div>
-			<!-- <Transition mode="in-out"> -->
-				<Suspense :timeout="0">
-					<template #default>
-						<component :is="componentRenderer" />
-					</template>
-					<template #fallback>
-						<Loading />
-					</template>
-				</Suspense>
-			<!-- </Transition> -->
+            <Suspense :timeout="0">
+                <template #default>
+                    <component :is="componentRenderer" />
+                </template>
+                <template #fallback>
+                    <Loading />
+                </template>
+            </Suspense>
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import type { BusinessSettingsTab, BusinessSettingsTabTitles } from '@/types/models/business';
-
-const loader = useLoader();
+import type { BusinessSettingsTabTitles } from '@/types/models/business';
+import { tabs } from '@/constants/settings';
 
 const { params } = useRoute('/business/settings/[id]');
 
+const loader = useLoader();
 const { user, setTab } = useUserStore();
 
 const tab = ref<BusinessSettingsTabTitles>(user.lastBusinessSettingsTab || 'General');
 
 watch(tab, (newTab) => setTab('lastBusinessSettingsTab', newTab));
 
-const tabs: BusinessSettingsTab[] = [
-	{
-		name: 'General',
-		icon: 'Settings'
-	},
-	{
-		name: 'Access',
-		icon: 'Lock'
-	},
-	{
-		name: 'Notifications',
-		icon: 'Bell'
-	},
-	// {
-	// 	name: 'Account',
-	// 	icon: 'User'
-	// }
-	
-];
-
 const componentRenderer = computed(() => {
 	try {
 		loader.startLoader();
 		switch (tab.value) {
 			case 'General':
-				return defineAsyncComponent(() => import('@/components/business/settings/tabs/BusinessEditBasicDataTab.vue'));
+				return defineAsyncComponent(() => import('@/components/business/settings/tabs/BusinessSettingsGeneralTab.vue'));
 			case 'Access':
-				return defineAsyncComponent(() => import('@/components/business/settings/tabs/BusinessEditAccessControlTab.vue'));
-		
+				return defineAsyncComponent(() => import('@/components/business/settings/tabs/BusinessSettingsAccessTab.vue'));
 			default:
-				return defineAsyncComponent(() => import('@/components/business/settings/tabs/BusinessEditBasicDataTab.vue'));
+				return defineAsyncComponent(() => import('@/components/business/settings/tabs/BusinessSettingsGeneralTab.vue'));
 		}
 	} catch (error) {
         console.error(error);
@@ -89,7 +67,6 @@ const componentRenderer = computed(() => {
 		loader.finishLoader();
 	}
 });
-
 </script>
 
 <style scoped>
@@ -109,7 +86,7 @@ const componentRenderer = computed(() => {
 			hover:text-[#303030] transition-colors
 }
 
-.router-link-exact-activ, .active-tab {
+.router-link-exact-active, .active-tab, .active-tab > svg {
 	@apply font-semibold stroke-2
 }
 

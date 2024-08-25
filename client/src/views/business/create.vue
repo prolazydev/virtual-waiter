@@ -35,7 +35,6 @@
                 <label for="businessLocation">Location</label>
                 <input v-model="createBusinessFormData.location" type="text" id="businessLocation" placeholder="Google Maps" />
             </div>
-			<!-- TODO: Search for categories to add/remove -->
 			<div class="business-categories-input relative flex flex-col gap-2">
                 <label for="businessCategories">Business Categories</label>
 				<ul class="relative">
@@ -58,7 +57,6 @@
                 <label for="businessWebsite">Website</label>
                 <input v-model="createBusinessFormData.website" type="text" id="businessWebsite" placeholder="www.myBusiness.com" />
             </div>
-			<!-- TODO: Make popups for strees addresses -->
 			<div class="flex flex-col gap-2">
 				<button class="setup-address w-64 h-fit bg-[#1b1b1b] text-white px-2 border-4 border-[#1b1b1b] focus:outline-none focus-visible:border-b-rose-600 active:border-b-white transition-all" type="button">
 					Setup Primary Address
@@ -67,7 +65,7 @@
 				<div class="show-address-setup">
 					<div class="flex flex-col gap-2">
 						<label for="businessStreetAddress">Primary Street Address</label>
-						<input v-model="createBusinessFormData.streetAddress!.primary!.address" type="text" id="businessStreetAddress" placeholder="St. DC Boulevard" />
+						<input v-model="createBusinessFormData.streetAddress!.primary!.main" type="text" id="businessStreetAddress" placeholder="St. DC Boulevard" />
 					</div>
 					<div class="flex flex-col gap-2">
 						<label for="businessZipCode">Primary Zip Code</label>
@@ -75,7 +73,7 @@
 					</div>
 				</div>
 
-				<p class="h-6">{{ createBusinessFormData.streetAddress?.primary?.address }}</p>
+				<p class="h-6">{{ createBusinessFormData.streetAddress?.primary?.main }}</p>
             </div>
 
 			<div class="flex flex-col gap-2">
@@ -86,7 +84,7 @@
 				<div class="show-address-setup">
 					<div class="flex flex-col gap-2">
 						<label for="businessStreetAddress">Secondary Street Address</label>
-						<input v-model="createBusinessFormData.streetAddress!.secondary!.address" type="text" id="businessStreetAddress" placeholder="St. DC Boulevard" />
+						<input v-model="createBusinessFormData.streetAddress!.secondary!.main" type="text" id="businessStreetAddress" placeholder="St. DC Boulevard" />
 					</div>
 					<div class="flex flex-col gap-2">
 						<label for="businessZipCode">Secondary Zip Code</label>
@@ -94,7 +92,7 @@
 					</div>
 				</div>
 
-				<p class="h-6">{{ createBusinessFormData.streetAddress?.secondary?.address }}</p>
+				<p class="h-6">{{ createBusinessFormData.streetAddress?.secondary?.main }}</p>
 			</div>
 
 			<div class="w-full h-1  mb-0 bg-black"></div>
@@ -145,8 +143,8 @@
 				<div class="flex flex-col gap-3">
 					<div v-for="(day , index) in Object.keys(business24Hours) " :key="index" class="flex gap-5 items-center">
 						<label :for="`business${day}`" class="w-20 mr-5 font-bold text-lg capitalize">{{ day }}:</label>
-						<input v-model="createBusinessFormData.hours[day as Days]" :readonly="business24Hours.tuesday" type="text" placeholder="09:00-17:00">
-						<Checkbox @indeterminate="(isIndeterminate, checked) => setIndeterminateClosed(isIndeterminate, checked, day as Days)" indeterminate class="form-checkbox" _id="monday" _label="24h | Closed" /> 
+						<input v-model="createBusinessFormData.hours[day as Days]" :readonly="business24Hours[day as Days]" type="text" placeholder="09:00-17:00">
+						<Checkbox @indeterminate="(isIndeterminate, checked) => setIndeterminateClosed(isIndeterminate, checked!, day as Days)" indeterminate class="form-checkbox" _id="monday" _label="24h | Closed" /> 
 					</div>
 				</div>
 			</div>
@@ -168,7 +166,7 @@
 
 <script lang="ts" setup>
 import type { RequestStatus } from '@/enums/EFromValidations';
-import type { BusinessCategory, CreateBusinessModel, Days } from '@/types/business';
+import type { BusinessCategory, CreateBusinessModel, Days } from '@/types/models/business';
 
 const router = useRouter();
 const { user } = useUserStore();
@@ -194,11 +192,11 @@ const createBusinessFormData = ref<CreateBusinessModel>({
 	country: '',
 	streetAddress: {
 		primary: {
-			address: '',
+			main: '',
 			zipCode: '',
 		},
 		secondary: {
-			address: '',
+			main: '',
 			zipCode: '',
 		}
 	},
@@ -215,7 +213,7 @@ const openSetHours = ref(false);
 const business24Hours = ref({
 	monday: false,
 	tuesday: false,
-	wednesday: true,
+	wednesday: false,
 	thursday: false,
 	friday: false,
 	saturday: false,
@@ -289,6 +287,12 @@ const handlePop = () => {
 		selectedBusinessCategories.value.pop();
 };
 
+const resetHours = () => setAllHours('', false);
+
+const set24hourSchedule = () => createBusinessFormData.value.is24 
+	? setAllHours('')
+	: setAllHours('00:00-00:00', false);
+
 const setAllHours = (hour: string, boolVal: boolean = true) => {
 	Object.keys(createBusinessFormData.value.hours!).forEach((key) => {
 		createBusinessFormData.value.hours![key as Days] = hour;
@@ -317,12 +321,6 @@ const setIndeterminateClosed = (isIndeterminate: string, checked: boolean, day: 
 		business24Hours.value[day] = false;
 	}
 };
-
-const set24hourSchedule = () => createBusinessFormData.value.is24 
-	? setAllHours('')
-	: setAllHours('00:00-00:00', false);
-	
-const resetHours = () => setAllHours('', false);
 
 const handleBusinessCreation = async () => {
 	try {
@@ -507,7 +505,7 @@ const handleBusinessCreation = async () => {
 }
 
 .my-shadow {
-	@apply 	cursor-pointer transition-all
+	@apply 	cursor-pointer transition-all 
 			hover:scale-110 active:scale-95
 	;
 	--shadow-color: hsla(0, 100%, 50%, 0.075);

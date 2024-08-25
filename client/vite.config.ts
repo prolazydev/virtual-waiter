@@ -18,7 +18,7 @@ import { composableResolver, resolvePath } from './buildCofigs/build.config';
 export default defineConfig({
 	plugins: [
 		VueRouter({
-			routesFolder: 'src/views'
+			routesFolder: 'src/views',
 		}),
 		vue(),
         vueDevTools(),
@@ -35,7 +35,7 @@ export default defineConfig({
 					imports: ['Flip'],
 					type: true,
 					typeFrom: 'number-flip-ts'
-				},
+				}
 			],
 			resolvers: [ composableResolver ],
 			dirs: [
@@ -68,7 +68,7 @@ export default defineConfig({
 				// 'src/components/ui',
 			],
 			resolvers: [ 
-				(componentName: string) => resolvePath(componentName),
+				async (componentName: string) => await resolvePath(componentName),
 			],
 			dts: true,
 			exclude: [ 'tc-range-slider' ]

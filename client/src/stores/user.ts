@@ -7,7 +7,7 @@ const emptyUser: LoggedInUser = {
 	username: '',
 	roles: '',
 	isAuth: false,
-	hasBusiness: false,
+	hasBusiness: false, // TODO: Change property name to isBusinessOwner
 	avatar: '',
     lastBusinessDashboardTab: 'Home',
     lastBusinessSettingsTab: 'General',
@@ -15,21 +15,17 @@ const emptyUser: LoggedInUser = {
 
 export default 
 defineStore('user', () => {
-	const user = ref<LoggedInUser>({
-		id: '',
-		email: '',
-		username: '',
-		roles: '',
-		hasBusiness: false,
-		isAuth: false,
-		lastBusinessDashboardTab: 'Home',
-		lastBusinessSettingsTab: 'General',
-	});
+	const user = ref<LoggedInUser>({ ...emptyUser });
 
 	const setNewLoginUser = (newUser: LoggedInUser) => {
-		user.value = newUser
+        user.value.id = newUser.id;
+        user.value.email = newUser.email;
+        user.value.username = newUser.username;
+        user.value.roles = newUser.roles;
+        user.value.hasBusiness = newUser.hasBusiness;
+        // user.value.avatar = newUser.avatar;
+
 		user.value.isAuth = true;
-        
         user.value.lastBusinessDashboardTab = 'Home';
         user.value.lastBusinessSettingsTab = 'General';
 	}
@@ -40,7 +36,7 @@ defineStore('user', () => {
         user.value[tabKey] = tab as any;
     }
 
-	const logoutUser = () => user.value = emptyUser
+	const logoutUser = () => user.value = { ...emptyUser }
 
 	return {
 		user,

@@ -1,10 +1,14 @@
 <template>
 	<label :for="props._id" class="checkbox-container">
 		{{ props._label }}
-		<input 	@change="$emit('update:modelValue', returnValue($event.target as HTMLInputElement))"  
-				:checked="modelValue" :disabled="(disabled as boolean)"
-				:id="props._id" :class="_class" type="checkbox"
-				>
+		<input 	
+            @change="$emit('update:modelValue', returnValue($event.target as HTMLInputElement))"  
+            :checked="modelValue" 
+            :disabled="(disabled as boolean)"
+            :id="props._id" 
+            :class="_class" 
+            type="checkbox"
+        >
 		<span class="checkbox-label"></span>
 		<span class="checkbox-indeterminate-label"></span>
 	</label>
@@ -12,7 +16,7 @@
 
 <script lang="ts" setup>
 const emit = defineEmits<{
-	(e: 'indeterminate', value: string, checked: boolean): void,
+	(e: 'indeterminate', value: string, checked?: boolean): void,
 	(e: 'update:modelValue', value: boolean): void
 }>();
 

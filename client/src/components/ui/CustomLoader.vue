@@ -34,9 +34,10 @@
 </template>
 
 <script lang="ts" setup>
+import type { LoadingState } from '@/types';
 
 withDefaults(defineProps<{
-	state?: 'idle' | 'loading' | 'success' | 'error';
+	state?: LoadingState | 'preview';
 }>(), {
 	state: 'idle'
 });

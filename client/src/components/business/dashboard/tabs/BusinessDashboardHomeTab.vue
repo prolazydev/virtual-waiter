@@ -157,10 +157,10 @@
 </template>
 
 <script lang="ts" setup>
-import { type Business } from '@/types/models/business';
 import Glide from '@glidejs/glide';
-
 import Chart from 'chart.js/auto';
+
+import { type Business } from '@/types/models/business';
 
 const favoriteBusinesses = ref<Business[]>([]);
 

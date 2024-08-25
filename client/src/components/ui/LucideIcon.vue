@@ -1,9 +1,10 @@
 <template>
     <component
         :is="icon"
-        :size="size as number" 
-        :color="color as string"
-        :stroke-width="strokeWidth" >
+        :size="(size as number)" 
+        :color="(color as string)"
+        :stroke-width="strokeWidth"
+    >
 		<slot></slot>
 	</component>
 </template>
@@ -14,6 +15,7 @@ import * as icons from "lucide-vue-next";
 
 const props = withDefaults(defineProps<{
 	name: IconKeys,
+    /** Defaults to 32 */
 	size?: number | string | undefined,
 	color?: number | string | undefined,
 	strokeWidth?: number | string,

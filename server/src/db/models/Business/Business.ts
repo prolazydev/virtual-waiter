@@ -1,5 +1,5 @@
 import validator from 'validator';
-import  { Schema, type InferSchemaType, model, Document } from 'mongoose';
+import { Schema, type InferSchemaType, model, Document } from 'mongoose';
 
 import { cotactsSchema, hours } from './props';
 import { BusinessCategoryModel } from '../BusinessCategory';
@@ -7,9 +7,9 @@ import { BusinessCategoryModel } from '../BusinessCategory';
 export interface IBusiness extends Document {
 	userId: Schema.Types.ObjectId;
 
-	owners: [{ type: Schema.Types.ObjectId, ref: 'User', select: false }],
-	managers: [{ type: Schema.Types.ObjectId, ref: 'User', select: false }],
-	
+	owners: [{ type: Schema.Types.ObjectId, ref: 'User', select: false; }],
+	managers: [{ type: Schema.Types.ObjectId, ref: 'User', select: false; }],
+
 	displayName: string;
 	username: string;
 	contacts: {
@@ -31,8 +31,9 @@ export interface IBusiness extends Document {
 	phone?: string;
 	description?: string;
 	location?: string;
-	profileImage?: Buffer;
-	coverImage?: Buffer;
+	country?: string;
+	profileImage?: string;
+	coverImage?: string;
 	hours: typeof hours;
 	is24: boolean;
 	attributes?: string[];
@@ -56,23 +57,15 @@ const businessSchema = new Schema<IBusiness>({
 	},
 	owners: [ { type: Schema.Types.ObjectId, ref: 'User', select: false } ],
 	managers: [ { type: Schema.Types.ObjectId, ref: 'User', select: false } ],
-	// name: {
-	// 	type: String,
-	// 	required: true,
-	// 	unique: true,
-	// 	trim: true,
-	// 	lowercase: true,
-	// },
 	displayName: {
 		type: String,
 		trim: true,
 		required: false,
 	},
 	username: {
-		type: String, 
-		required: false,
-		// required: [ true, 'Username is required!' ], 
-		// unique: true, 
+		type: String,
+		required: [ true, 'Username is required!' ],
+		unique: true,
 		trim: true,
 		minLength: [ 2, 'Username must have at least 2 characters!' ],
 		maxLength: [ 30, 'Username cannot exceed 30 characters!' ], // Standard from Instagram
@@ -87,14 +80,14 @@ const businessSchema = new Schema<IBusiness>({
 	},
 	contacts: [ cotactsSchema ],
 	email: {
-		type: String, 
-		required: [ true, 'Business Email is required!' ], 
-		unique: true, 
+		type: String,
+		required: [ true, 'Business Email is required!' ],
+		unique: true,
 		validator: [ validator.isEmail, 'Invalid email!' ]
 	},
 	userEmail: {
-		type: String, 
-		required: [ true, 'User Email is required!' ], 
+		type: String,
+		required: [ true, 'User Email is required!' ],
 		// unique: true, 
 		validator: [ validator.isEmail, 'Invalid email!' ]
 	},
@@ -109,8 +102,13 @@ const businessSchema = new Schema<IBusiness>({
 		type: String,
 		required: false,
 	},
-	profileImage: Buffer,
-	coverImage: Buffer,
+	// TODO: be an item in a list of countries
+	country: {
+		type: String,
+		required: false,
+	},
+	profileImage: String,
+	coverImage: String,
 	hours,
 	is24: {
 		type: Boolean,
@@ -144,17 +142,17 @@ const businessSchema = new Schema<IBusiness>({
 		required: true,
 		min: 0,
 		default: 0,
-	},	
+	},
 	categories: {
 		type: [ String ],
 		required: false,
 		validate: {
-			validator: async function(categoriesValue: string[]) {
+			validator: async function (categoriesValue: string[]) {
 				if (!categoriesValue.length) return true;
 				const validCategories = (await BusinessCategoryModel.exists({ name: { $in: categoriesValue } }))?._id ? true : false;
-				return validCategories; 
+				return validCategories;
 			},
-			message: (props: { value: string[] }) => `Category "${props.value}" does not exist!`,
+			message: (props: { value: string[]; }) => `Category "${ props.value }" does not exist!`,
 		},
 	},
 	streetAddress: {
@@ -178,19 +176,25 @@ const businessSchema = new Schema<IBusiness>({
 				required: false,
 			},
 		},
-		// primary: String,
-		// secondary: String,
 	},
 	website: {
 		type: String,
 		required: false,
 		validate: {
 			validator: (websiteValue: string) => validator.isURL(websiteValue),
-			message: (props: { value: string }) => `"${props.value}" is not a valid URL!`,
+			message: (props: { value: string; }) => `"${ props.value }" is not a valid URL!`,
 		}
 	},
-	confirmationCode: Number,
-	confirmationCodeExpiry: Date,
+	confirmationCode: {
+		type: Number,
+		required: false,
+		select: false,
+	},
+	confirmationCodeExpiry: {
+		type: Date,
+		required: false,
+		select: false,
+	},
 	confirmed: {
 		type: Boolean,
 		required: false,
@@ -207,7 +211,7 @@ const businessSchema = new Schema<IBusiness>({
 		default: false,
 		select: false,
 	},
-}, { timestamps: true });
+}, { timestamps: true, versionKey: false });
 
 export type Business = InferSchemaType<typeof businessSchema>;
 export const BusinessModel = model('Businesses', businessSchema);

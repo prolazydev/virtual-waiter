@@ -149,6 +149,7 @@ export const logout = requestHandler(async (req, res) => {
 	res.clearCookie('accessToken');
 	respond(res, StatusCodes.OK);
 });
+
 // TODO: maybe refactor
 export const checkAuth = requestHandler(async (req, res) => 
 	respond(res, StatusCodes.OK, Message.SuccessLogin, req.identity!)

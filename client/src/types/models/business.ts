@@ -1,7 +1,7 @@
 import type { UserReview } from '../userReview';
-import type { IconKeys } from "@/types";
+import type { IconKeys, LoadingState } from "@/types";
 
-type Hours = {
+export type Hours = {
 	monday: string;
 	tuesday: string;
 	wednesday: string;
@@ -12,17 +12,17 @@ type Hours = {
 }
 export type KeyHours = keyof Hours;
 
-type StreetAddresses = {
+export type StreetAddresses = {
 	primary?: {
-		address: string;
+		main: string;
 		zipCode: string;
 	};
 	secondary?: {
-		address: string;
+		main: string;
 		zipCode: string;
 	};
 }
-
+// TODO: also add dineIn in front and backend
 export type Business = {
 	_id: string;
 	userId: string;
@@ -31,6 +31,9 @@ export type Business = {
 	email: string;
 	userEmail: string;
 	country?: string;
+    /**
+     * Object containing 2 properties (primary & secondary), street address and zip code for each prop
+     */
 	streetAddress?: StreetAddresses;
 	phone?: string;
 	/** List of owned email and/phone numbers */
@@ -39,6 +42,10 @@ export type Business = {
 	location?: string;
 	profileImage?: string;
 	coverImage?: string;
+    /**
+     * Object containing the hours of operation for each day of the week,
+     * in the form of string (09:00-17:00), boolean if it's 24hrs for true and closed for false
+     */
 	hours?: Hours;
 	is24: boolean;
 	averageRating: number;
@@ -59,10 +66,93 @@ export type Business = {
 	banned: boolean;
 }
 
-type BusinessContact = {
+type BusinessPropertyName = keyof Business;
+
+export type BusinessPropertyType<T extends BusinessPropertyName> = Business[T];
+
+export type BusinessFormFields = {
+    username: {
+        state: LoadingState | 'edit';
+        value?: string;
+    },
+    displayName: {
+        state: LoadingState | 'edit';
+        value?: string;
+    },
+    email: {
+        state: LoadingState | 'edit';
+        value?: string;
+    },
+    phone: {
+        state: LoadingState | 'edit';
+        value?: string;
+    },
+    streetAddress: {
+        state: LoadingState | 'edit';
+        value?: StreetAddresses;
+    },
+    description: {
+        state: LoadingState | 'edit';
+        value?: string;
+    },
+    location: {
+        state: LoadingState | 'edit';
+        value?: string;
+    },
+    country: {
+        state: LoadingState | 'edit';
+        // TODO: have it be a list of countries
+        value?: string
+    },
+    profileImage: {
+        state: LoadingState | 'edit' | 'preview';
+        value?: string;
+    },
+    coverImage: {
+        state: LoadingState | 'edit' | 'preview';
+        value?: string;
+    },
+    hours: {
+        state: LoadingState | 'edit';
+        value?: Hours;
+    },
+    is24: {
+        state: LoadingState | 'edit';
+        value?: boolean;
+    },
+    attributes: {
+        state: LoadingState | 'edit';
+        value?: string[];
+    },
+    categories: {
+        state: LoadingState | 'edit';
+        value?: string[];
+    },
+    website: {
+        state: LoadingState | 'edit';
+        value?: string;
+    },
+    takesReservations: {
+        state: LoadingState | 'edit';
+        value?: boolean;
+    },
+    delivery: {
+        state: LoadingState | 'edit';
+        value?: boolean;
+    },
+    takeout: {
+        state: LoadingState | 'edit';
+        value?: boolean;
+    },
+}
+export type BusinessContact = {
 	contactType: 'email' | 'phone';
 	value: string;
 }
+
+
+export type BusinessFormFieldKeys = keyof BusinessFormFields;
+
 
 export type BusinessEdit = {
 	userId: string;
@@ -135,3 +225,10 @@ export type TabMap = {
     lastBusinessDashboardTab: BusinessDashboardTabTitles;
     lastBusinessSettingsTab: BusinessSettingsTabTitles;
 };
+
+export type EditContactField = {
+	type: 'email' | 'phone';
+	value: string;
+	state?: 'edit' | 'idle' | 'save';
+	processingState?: 'idle' | 'loading'  | 'success' | 'error';
+}

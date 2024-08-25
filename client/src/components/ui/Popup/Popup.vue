@@ -12,7 +12,7 @@ withDefaults(defineProps<{
 	// toggleClass?: string;
 	_class?: string;
 	anchorName: string;
-	positioning?: string;
+	// positioning?: string;
 	// title?: string,
 	// size?: 'sm' | 'md' | 'lg' | 'full' | 'custom';
 }>(), {
@@ -20,7 +20,7 @@ withDefaults(defineProps<{
 	// toggleClass: '',
 	_class: '',
 	anchorName: '',
-	positioning: 'center',
+	// positioning: 'center',
 	// title: 'Dialog',
 	// size: 'lg'
 })

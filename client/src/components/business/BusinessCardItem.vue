@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Business } from '@/types/business';
+import type { Business } from '@/types/models/business';
 
 defineProps<{
 	business: Business

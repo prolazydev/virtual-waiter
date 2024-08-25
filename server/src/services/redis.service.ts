@@ -15,7 +15,6 @@ redisClient.on('error', async (err) => {
 
 			console.info('Redis Client disconnected!');
 			console.info(`Redis retried to connect ${retries} times before disconnecting the Client!`);
-		
 		}
 		retries++;
 	} catch (err) {

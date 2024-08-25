@@ -1,31 +1,34 @@
 <template>
 	<div class="flex flex-col">
-		<!-- NODE: Default custom slot -->
+		<!-- NOTE: Default custom slot -->
 		<slot></slot>
 
-		<dialog class="my-dialog " :class="_class" :style="boxSize">
-			<div class="dialog-head">
-				<slot name="header">
-					<div class="flex gap-5 justify-between items-center">
-						<h1 class="text-2xl font-semibold text-nowrap">{{ title }}</h1>
-						<LucideIcon 
-							@click="toggleDialog(_class && !toggleClass ? `.${props._class.split(' ')[0]}` : toggleClass)" 
-							class="dialog-default-close" 
-							name="X" 
-							:size="38" 
-							stroke-width="2"
-						/>
-					</div>
-					<hr class="border-[#1b1b1b]">
-				</slot>
-			</div>
-			<div class="dialog-body">
-				<slot name="body"></slot>
-			</div>
+		<dialog class="my-dialog" :class="_class" :style="boxSize">
+			<div class="h-full flex flex-col">
+                <div class="dialog-head">
+                    <div class="flex gap-5 justify-between items-center">
+                        <slot name="header">
+                            <h1 class="dialog-title">{{ title }}</h1>
+                        </slot>
+                        
+                        <LucideIcon 
+                            @click="handleToggleDialog" 
+                            class="dialog-default-close" 
+                            name="X" 
+                            :size="38" 
+                            stroke-width="2"
+                        />
+                    </div>
+                    <hr class="border-[#1b1b1b]">
+                </div>
+                <div class="dialog-body">
+                    <slot name="body"></slot>
+                </div>
 
-			<div class="dialog-footer">
-				<slot name="footer"></slot>
-			</div>
+                <div class="dialog-footer">
+                    <slot name="footer"></slot>
+                </div>
+            </div>
 		</dialog>
 	</div>
 </template>
@@ -35,6 +38,20 @@ import type { StyleValue } from 'vue';
 import { sizes } from '@/components/ui/Dialog/utils';
 
 const { toggleDialog } = myDialog();
+
+defineSlots<{
+    default: void;
+    header: void;
+    /**
+     * test
+     */
+    body: void;
+    footer: void;
+}>();
+
+const emit = defineEmits<{
+    toggleDialog: [];
+}>();
 
 const props = withDefaults(defineProps<{
 	toggleClass?: string;
@@ -46,12 +63,25 @@ const props = withDefaults(defineProps<{
 	_class: '',
 	title: 'Dialog',
 	size: 'lg'
-})
+});
 
-const boxSize: StyleValue = {
-	width: sizes[props.size].width,
-	height: sizes[props.size].height
+const boxSize = computed<StyleValue>(() => {
+    return {
+        width: sizes[props.size].width,
+        height: sizes[props.size].height,
+    }
+});
+
+const handleToggleDialog = () => {
+    toggleDialog(
+        (props._class && !props.toggleClass) 
+        ? `.${props._class.split(' ')[0]}` 
+        : props.toggleClass,
+        () => emit('toggleDialog'),
+        () => emit('toggleDialog')
+    )
 }
+
 </script>
 
 <style>
@@ -72,12 +102,18 @@ const boxSize: StyleValue = {
 			;
 }
 
+.dialog-title {
+    @apply text-2xl font-semibold text-nowrap
+}
+
 /*   Before-open state  */
 /* Needs to be after the previous .my-dialog[open] rule to take effect,
     as the specificity is the same */
 @starting-style {
 	.my-dialog[open] {
-		opacity: 0;
+        @apply opacity-0
+        ;
+		/* opacity: 0; */
 	}
 }
 
@@ -102,7 +138,6 @@ because the nesting selector cannot represent pseudo-elements. */
 }
 
 /* =========================================================================== */
-
 .dialog-head {
 	@apply flex flex-col gap-5
 }
@@ -124,7 +159,7 @@ because the nesting selector cannot represent pseudo-elements. */
 }
 
 .dialog-body {
-	@apply w-full h-full flex overflow-y-hidden 
+	@apply w-full flex  
 }
 
 .dialog-footer {

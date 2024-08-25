@@ -20,7 +20,7 @@ export const findUsersByCustomQuery = (filter: FilterQuery<User>, projection?: P
 
 export const userExists = async (filter: FilterQuery<User>) => UserModel.exists(filter);
 
-//PATCH
+// PATCH
 export const updateUserById = async (id: mongoId, values: Partial<User>) => 
 	await UserModel.findByIdAndUpdate(id, values, { new: true, runValidators: true });
 // export const updateUserPassword = async (id: mongoId, newPassword: string) => 

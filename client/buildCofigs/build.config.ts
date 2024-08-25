@@ -1,50 +1,54 @@
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
 import type { Resolver } from 'unplugin-auto-import/types';
 
 // Resolver for AutoImport
-export const composableResolver: Resolver = name => {
-	if ( name.endsWith('Store') ) {
+export const composableResolver: Resolver = async (name) => {
+	if (name.endsWith('Store')) {
 		const storeName = (name.slice(3, name.length - 5)).toLowerCase();
-		return `@/stores/${storeName}`;
+
+        const path = `@/stores/${storeName}`
+
+        logComponent('Store:', name, path)
+		return path;
 	}
 
 	if (name.includes('Service')) {
-		const componentPath = findComponent(name, './src/services');
-		console.log('Service: ', componentPath);
-
 		const serviceName = name.slice(0, name.indexOf('Service'))
-		return `@/services/${serviceName}.service`;
+        const path = await findComponent(`${serviceName}.service`, './src/services');
+        
+        logComponent('nService:', name, path!);
+        return path;
 	}	
 
-	// TODO: resolve the utils to find the file if it's nested inside a folder
-
 	if (name.startsWith('my')) {
-		const componentPath = findComponent(name, './src/utils');
-		console.log('Util: ', componentPath);
+		const path = await findComponent(name, './src/utils');
 
-		return componentPath;
+        logComponent('Util:', name, path!);
+		return path;
 	}
 
 	if (name.startsWith('use') || name.startsWith('tost')) {
-		console.log('Composable: ', name);
+        const path = `@/composables/${name}`;
+        logComponent('Store:', name, path);
+
 		return `@/composables/${name}`;
 	} 
 }
+export const resolvePath = async (componentName: string) => await findComponent(componentName);
 
 // Private
-export const resolvePath = (componentName: string) => findComponent(componentName);
 
-// find component locally t that is nested inside components folder knowing only the name
-export const findComponent = (componentName: string, startPath: string = './src/components'): string | null =>  {
-    const files = fs.readdirSync(startPath);
+// find component locally that is nested inside components folder knowing only the name
+const findComponent = async (componentName: string, startPath: string = './src/components'): Promise<string | null> =>  {
+    const files = await fs.readdir(startPath);
 
     for (let i = 0; i < files.length; i++) {
         const filename = path.join(startPath, files[i]);
-        const stat = fs.lstatSync(filename); // Retrieve the file status (whether it's a directory or not)
+        const stat = await fs.lstat(filename); // Retrieve the file status (whether it's a directory or not)
 
         if (stat.isDirectory()) {
-            const result = findComponent(componentName, filename);
+            const result = await findComponent(componentName, filename);
 
             if (result) 
 				return result;
@@ -52,4 +56,17 @@ export const findComponent = (componentName: string, startPath: string = './src/
             return path.join('@\\', filename.slice(4)).replace(/\\/g, '/');
     }
     return null;
+}
+
+/**
+ * Log the component name and path
+ * \n\x1b[94m - light blue 
+ * \x1b[0m - reset color
+ * @param title 
+ * @param componentName 
+ * @param path 
+ */
+function logComponent(title: string, componentName: string, path: string) {
+    const paddedTitle = title.padEnd(11, ' ');
+    console.log(`\n${paddedTitle}  \x1b[94m${componentName}\x1b[0m\nPath: \x1b[36m${path}\x1b[0m`);
 }

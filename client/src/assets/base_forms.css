@@ -1,0 +1,69 @@
+.setting {
+	@apply 	max-w-[54rem] w-full min-w-48 mx-auto p-5 px-10 flex flex-col gap-5 
+}
+
+.form-button-1 {
+	@apply 	h-fit px-3 py-2 border-2 border-transparent border-b-[#1b1b1b] outline-none transition-all
+			focus:outline-none focus:border-b-rose-600 active:border-b-rose-600 
+}
+
+.form-button-2 {
+	@apply 	h-fit px-3 py-2 border-2 border-transparent border-[#1b1b1b] outline-none transition-all
+            hover:bg-gray-100
+			focus:outline-none focus:border-b-rose-600 active:border-b-rose-600 
+}
+
+/* @layer utilities {
+    .form-input {
+        @apply 	w-60 p-2 border-2 border-[#1b1b1b] transition-colors 
+                focus:outline-none focus:border-b-rose-600
+    
+                read-only:bg-gray-200 read-only:text-gray-700 
+                read-only:focus:border-b-[#1b1b1b]
+                read-only:cursor-not-allowed 
+    }
+    
+    .form-input-with-icon {
+        @apply 	min-w-60 p-2 pl-9 border-2 border-[#1b1b1b] transition-colors 
+                focus:outline-none focus:border-b-rose-600
+    
+                read-only:bg-gray-200 read-only:text-gray-700 
+                read-only:focus:border-b-[#1b1b1b]
+                read-only:cursor-not-allowed 
+    }
+} */
+
+.form-part {
+	@apply flex justify-between bg-white 
+}
+
+.form-part button > div {
+	@apply gap-2
+}
+
+.form-part button svg {
+	@apply stroke-2
+}
+
+.form-part h3 {
+	@apply font-semibold text-xl
+}
+
+.input-group {
+	@apply flex flex-col gap-5
+}
+
+/* .input-group input, .input-group textarea {
+	@apply 	w-full 
+			read-only:bg-gray-200 read-only:text-gray-700 
+            read-only:focus:border-b-[#1b1b1b]
+			read-only:cursor-not-allowed 
+} */
+
+.input-group svg:has(+ input:read-only) {
+	@apply stroke-gray-700
+}
+
+.input-group svg {
+	@apply 	stroke-2 z-10
+}

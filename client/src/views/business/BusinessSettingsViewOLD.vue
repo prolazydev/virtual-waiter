@@ -524,16 +524,16 @@ const arrayBufferToBase64 = (buffer: ArrayBuffer, mimeType: string) => {
 </script>
 
 <style scoped>
-.form-group {
+.setting {
 	@apply flex flex-col gap-5 
 }
 
-.form-group input, .form-group textarea {
+.setting input, .setting textarea {
 	@apply 	w-60 p-2 border-2 border-[#1b1b1b] transition-colors cursor-pointer
 			focus:outline-none focus:border-b-rose-600
 }
 
-.form-group textarea {
+.setting textarea {
 	@apply 	h-[13.75rem]
 }
 

@@ -13,6 +13,8 @@ export enum ESortType {
 
 export type SortType = ESortType ;
 
+export type LoadingState = 'idle' | 'loading' | 'success' | 'error'; 
+
 export type SliderEvent<T> = {
 	detail: T
 } & Event;

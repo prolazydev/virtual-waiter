@@ -7,7 +7,8 @@ import { routes, handleHotUpdate } from 'vue-router/auto-routes'
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
-	routes
+	routes,
+    
 	// routes: [
 	// 	{
 	// 		path: '/',
@@ -122,32 +123,40 @@ const router = createRouter({
 	// 		component: () => import('@/views/error/BadRequestView.vue')
 	// 	}
 	// ]
-})
+});
 
 if (import.meta.hot) {
     handleHotUpdate(router);
 }
 
 router.beforeEach((to, {}, next) => {
-	const loader = useLoader();
-	loader.startLoader();
+	// const loader = useLoader();
+	// loader.startLoader();
 
-	const { isAuth, hasRole } = useAuth();
+	const { isAuth, 
+        // hasRole 
+    } = useAuth();
 
-    // TODO: handle auth and role
-	if (to.meta.auth && !isAuth()) {
-		if (to.meta.role && !hasRole(to.meta.role as string)) {
-			
-		}
-		next({ name: '/auth/login', query: { redirect: to.fullPath } })
-	} else {
-		next()
-	}
+    try {
+        // TODO: handle auth and role
+        if (to.meta.auth && !isAuth()) {
+            // if (to.meta.role && !hasRole(to.meta.role as string)) {
+                
+            // }
+            
+            next({ name: 'login', query: { redirect: to.fullPath } })
+        } else {
+            next()
+        }
+    } catch (error) {
+        console.log(error);
+        next({ name: '/error/bad-request' });
+    }
 });
 
 router.afterEach(() => {
-	const loader = useLoader();
-	loader.finishLoader();
+	// const loader = useLoader();
+	// loader.finishLoader();
 });
 
 export default router;

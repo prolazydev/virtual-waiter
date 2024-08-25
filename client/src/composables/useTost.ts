@@ -4,7 +4,13 @@ parentToast.classList.add('tost');
 document.body.append(parentToast);
 
 let tostId: number = -1;
+// TODO: add another parameter to change the type of tost (success, error, warning, info)
 
+/**
+ * Show a tost message
+ * @param {string} toastMessage 
+ * @param {number} duration - Default is 3000ms
+ */
 export default (toastMessage: string, duration: number = 3000) => {
 	const newTost = document.createElement('div');
 	newTost.setAttribute('popover', 'manual');

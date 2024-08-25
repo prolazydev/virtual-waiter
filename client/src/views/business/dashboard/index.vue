@@ -40,12 +40,14 @@
 </template>
 
 <script lang="ts" setup>
+import { definePage } from 'unplugin-vue-router/runtime';
+
 import type { BusinessDashboardTab, BusinessDashboardTabTitles } from '@/types/models/business';
 
 const { user, setTab } = useUserStore();
 const loader = useLoader();
 
-const tab = ref<BusinessDashboardTabTitles>(user.lastBusinessDashboardTab || 'Home');
+const tab = ref<BusinessDashboardTabTitles>(user.lastBusinessDashboardTab ?? 'Home');
 
 const tabs: BusinessDashboardTab[] = [
 	{ 
@@ -77,6 +79,14 @@ const tabs: BusinessDashboardTab[] = [
 		icon: 'Settings'
 	},
 ];
+
+definePage({
+    meta: {
+        title: 'Dashboard',
+        auth: true,
+    },
+    name: 'business-dashboard',
+});
 
 watch(tab, (newTab) => setTab('lastBusinessDashboardTab', newTab))
 
@@ -131,7 +141,6 @@ const componentRenderer = computed(() => {
 			text-xl cursor-pointer
 			hover:text-[#303030] transition-colors
 }
-
 
 .router-link-exact-activ, .active-tab, .active-tab > svg { 
 	@apply font-semibold stroke-2

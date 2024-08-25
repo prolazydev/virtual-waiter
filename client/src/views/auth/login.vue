@@ -33,12 +33,14 @@
 </template>
 
 <script lang="ts" setup>
+import { definePage } from 'unplugin-vue-router/runtime';
+
 import type { RequestStatus } from '@/enums/EFromValidations';
 import type { LoggedInUser, LoginModel } from '@/types/auth/user';
 import type { RouteNamedMap } from 'vue-router/auto-routes';
 
 const router = useRouter();
-const route = useRoute('/auth/login');
+const route = useRoute('login');
 
 const { login } = useAuth();
 
@@ -53,9 +55,18 @@ const usernameRegex = /^[a-zA-Z0-9._]{2,30}$/;
 
 const requestStatus = ref<RequestStatus>('Idle');
 
-onMounted(() => {
-    // TODO: check if user is already logged in
-})
+definePage({
+    meta: {
+        title: 'Login',
+        auth: false,
+    },
+    name: 'login',
+    // NOTE: If user is already logged in, redirect to home, also needs to use useAuth since using isAuth directly will be hoisted outside the setup() function
+    beforeEnter: ({}, {}, next) => 
+        useAuth().isAuth()
+            ? next({ name: '/' })
+            : next()
+});
 
 const identifierType = computed(() => {
     if (identifier.value === '') {
@@ -95,16 +106,27 @@ const handleLogin = async () => {
             requestStatus.value = 'Success';
 
             login(data.value)
+            useTost('Logged in!');
 
-            const redirect = (route.query.redirect ?? '/') as keyof RouteNamedMap;
-            setTimeout(async () =>
-                await tostRouterTo(router, redirect, {}, 'Logged in!'), 650);
+            setTimeout(async () => {
+                const redirect = (route.query.redirect ?? '/') as keyof RouteNamedMap;
+
+                // await router.push({ path: redirect, replace: true });
+
+
+                
+
+                await tostRouterTo(router, redirect, {}, 'Logged in!')
+            }, 650);
         } else {
+            
+
             requestStatus.value = 'Error';
             setTimeout(() => requestStatus.value = 'Idle', 1250)
             console.log(statusCode.value, error.value);
         }
     } catch (error) {
+        debugger;
         console.log(error);
     }
 }

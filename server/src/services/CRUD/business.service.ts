@@ -7,7 +7,7 @@ export const createBusiness = async (business: Business) =>
 	new BusinessModel(business).save();
 
 // GET
-export const findBusinesses = () => BusinessModel.find();
+export const findAllBusinesses = () => BusinessModel.find();
 
 export const findBusinessById = (id: string | mongoose.Schema.Types.ObjectId) => BusinessModel.findById(id);
 export const findBusinessByName = (displayName: string) => BusinessModel.findOne({ displayName });

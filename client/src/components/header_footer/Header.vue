@@ -19,7 +19,7 @@
                     <li @click.prevent="searchProps.searchType = 'foods'"><p>Foods</p></li>
                 </ul>
             </div>
-            <input v-model="searchProps.query" class="pl-3 py-2 border-x-2 border-[#1b1b1b] bg-transparent text-xl focus:outline-none outline-none transition-all" type="text" placeholder="Where are we dining?">
+            <input v-model="searchProps.query" class="pl-3 py-2 border-x-2 border-[#1b1b1b] bg-transparent text-xl focus:outline-none outline-none transition-all" type="text" placeholder="Where are we dining?" id="mainSearchBarInput">
             <button class="relative px-4" type="submit">
                 <!-- TODO: Finding animation -->
                 <LucideIcon class="animate-ping opacity-0 -z-[1] pointer-events-none" name="Search" :strokeWidth="2" :size="20" />
@@ -34,7 +34,15 @@
             <template v-else>
                 <!-- TODO: my restaurant -->
                 <li class="header-nav-icon">
-                    <router-link to="/business/dashboard" title="My Businesses Dashboard"><LucideIcon class="nav-icon cursor-pointer transition-all" name="ChefHat" :strokeWidth="2" tooltip="test" /></router-link>
+                    <router-link to="/business/dashboard" title="My Businesses Dashboard">
+                        <LucideIcon 
+                            :class="{ 'active-element': router.currentRoute.value.path.startsWith('/business/settings') }"
+                            class="nav-icon cursor-pointer transition-all" 
+                            name="ChefHat" 
+                            :strokeWidth="2" 
+                            tooltip="test"
+                        />
+                    </router-link>
                 </li>
                 <!-- TODO: Implement notifications -->
                 <li class="header-nav-icon">
@@ -47,10 +55,15 @@
                     <div v-if="user.avatar && user.avatar.length > 0"></div>
                     <div v-else class="header-nav-icon" id="">
                         <button type="button" class="dropdown-btn-user" id="authUser" aria-haspopup="menu">
-                            <LucideIcon :class="{ 'active-element': router.currentRoute.value.path === `/user/${user.username}`  }" class="transition-all" name="UserRound" :stroke-width="2" />
+                            <LucideIcon 
+                                :class="{ 'active-element': router.currentRoute.value.path === `/user/${user.username}` }" 
+                                class="transition-all" 
+                                name="UserRound" 
+                                :stroke-width="2" 
+                            />
                         </button>
                         <ul class="dropdown-content px-2 py-3 right-0">
-                            <li><router-link :to="{ name: 'user-profile', params: { username: user.username } }">Profile</router-link></li>
+                            <li><router-link :to="{ name: '/user/[username]', params: { username: user.username } }">Profile</router-link></li>
                             <li><button @click="handleLogout">Logout</button></li>
                         </ul>
                     </div>
