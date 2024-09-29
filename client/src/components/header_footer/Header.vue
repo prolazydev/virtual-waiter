@@ -3,9 +3,9 @@
         <h1 class="text-3xl font-bold">Virtual<span class="text-rose-600">Waiter</span></h1>
         <span class="w-[2px] bg-[#1b1b1b] mx-3"></span>
         <ul class="nav-links flex gap-5 items-center">
-            <li><router-link class="nav-link" to="/">Home</router-link></li>
-            <li><router-link class="nav-link" to="/search">Discover</router-link></li>
-            <li><router-link class="nav-link" to="/about">About</router-link></li>
+            <li><router-link class="nav-link" :to="{ name: 'home' }">Home</router-link></li>
+            <li><router-link class="nav-link" :to="{ name: 'search' }">Discover</router-link></li>
+            <li><router-link class="nav-link" :to="{ name: 'about' }">About</router-link></li>
         </ul>
         <form @submit.prevent="handleSearch" class="absolute-center flex items-center border-2 border-[#1b1b1b]">
             <div class="relative pl-2 pr-[0.625rem]">
@@ -28,13 +28,13 @@
         </form>
         <ul class="nav-links nav-right ml-auto flex gap-5 items-center">
             <template v-if="!isAuth()">
-                <li><router-link class="nav-link" to="/auth/register">Sign up</router-link></li>
-                <li><router-link class="nav-link" to="/auth/login">Login</router-link></li>
+                <li><router-link class="nav-link" :to="{ name: 'signup' }">Sign up</router-link></li>
+                <li><router-link class="nav-link" :to="{ name: 'login' }">Login</router-link></li>
             </template>
             <template v-else>
                 <!-- TODO: my restaurant -->
                 <li class="header-nav-icon">
-                    <router-link to="/business/dashboard" title="My Businesses Dashboard">
+                    <router-link :to="{ name: 'business-dashboard' }" title="My Businesses Dashboard">
                         <LucideIcon 
                             :class="{ 'active-element': router.currentRoute.value.path.startsWith('/business/settings') }"
                             class="nav-icon cursor-pointer transition-all" 
@@ -63,7 +63,7 @@
                             />
                         </button>
                         <ul class="dropdown-content px-2 py-3 right-0">
-                            <li><router-link :to="{ name: '/user/[username]', params: { username: user.username } }">Profile</router-link></li>
+                            <li><router-link :to="{ name: 'user-profile', params: { username: user.username } }">Profile</router-link></li>
                             <li><button @click="handleLogout">Logout</button></li>
                         </ul>
                     </div>
@@ -78,6 +78,7 @@
 
 <script lang="ts" setup>
 import type { IconKeys } from '@/types';
+
 
 const { user } = useUserStore();
 const { isAuth, logout } = useAuth();
@@ -121,7 +122,7 @@ async function handleSearch() {
 async function handleLogout() {
     await logout();
     // await router.push('/');
-    await tostRouterTo(router, '/', {}, 'Logged out successfully');
+    await tostRouterTo(router, 'home', '', 'Logged out successfully');
 }
 
 </script>

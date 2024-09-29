@@ -2,20 +2,36 @@
 	<div class="w-fit p-3 flex flex-col border-2 border-[#1b1b1b] ">
 		<div class="relative">
 			<router-link :to="{ path: `/business/${business._id}` }">
-				<div class="w-72 h-48 flex items-center ">
-					<img v-if="business.coverImage" src="" alt="">
-					<LucideIcon v-else class="m-auto opacity-50" name="ChefHat" :size="64" :stroke-width="2" />
+				<div class="w-72 h-48 pb-2 flex items-start">
+					<img 
+                    v-if="business.coverImage" 
+                        :src="business.coverImage" 
+                        alt="Business Cover Image"
+                        class="w-full h-full object-cover"
+                    />
+					<LucideIcon 
+                        v-else 
+                        name="ChefHat" 
+                        :size="64" 
+                        :stroke-width="2" 
+                        class="m-auto opacity-50" 
+                    />
 				</div>
 			</router-link>
-			
-			<router-link :to="{ name: '/business/settings/[id]', params: { id: business._id } }" class="absolute top-0 left-0 m-2 z-50 transition-all"  type="button">
-				<LucideIcon class="fill-transparent hover:rotate-90 transition-all duration-300" name="Settings" :stroke-width="2" />
-			</router-link>
+			<div 
+                class="top-links"
+                :class="shouldUseWhiteText(business.coverImage ?? '') ? 'light-text' : 'dark-text'"
+            >
+                <!-- TODO: shouldUseWhiteText() -->
+                <router-link :to="{ name: 'business-settings', params: { id: business._id } }" class="absolute top-0 left-0 m-2 z-50 transition-all"  type="button">
+                    <LucideIcon class="fill-transparent hover:rotate-90 transition-all duration-300" name="Settings" :stroke-width="2" />
+                </router-link>
 
-			<!-- TODO: add to favorite businesses -->
-			<button @click="() => console.log('blewh')" class="absolute top-0 right-0 m-2 z-50 transition-all" type="button">
-				<LucideIcon class="fill-transparent hover:fill-rose-500 hover:text-rose-500 transition-all" name="Heart" :stroke-width="2" />
-			</button>
+                <!-- TODO: add to favorite businesses -->
+                <button @click="() => console.log('blewh')" class="absolute top-0 right-0 m-2 z-50 transition-all" type="button">
+                    <LucideIcon class="fill-transparent hover:fill-rose-500 hover:text-rose-500 transition-all" name="Heart" :stroke-width="2" />
+                </button>
+            </div>
 		</div>
 
 		<div class="w-full mb-2 border-b-4 border-[#1b1b1b]"></div>
@@ -54,11 +70,23 @@
 <script lang="ts" setup>
 import type { Business } from '@/types/models/business';
 
+const { shouldUseWhiteText } = myMisc();
+
 defineProps<{
 	business: Business
 }>();
 </script>
 
 <style scoped>
+.top-links > button, .top-links > a {
+    @apply drop-shadow hover:drop-shadow-none
+}
 
+.dark-text > button, .dark-text > a {
+    @apply text-[#1b1b1b]  drop-shadow hover:drop-shadow-none
+}
+
+.light-text > button, .light-text > a {
+    @apply text-white drop-shadow hover:drop-shadow-none
+}
 </style>

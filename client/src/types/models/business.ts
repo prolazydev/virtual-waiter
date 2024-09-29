@@ -87,6 +87,14 @@ export type BusinessFormFields = {
         state: LoadingState | 'edit';
         value?: string;
     },
+	contacts: {
+        state: LoadingState | 'edit';
+        value?: BusinessContact[];
+	},
+	userEmail: {
+		state: LoadingState | 'edit';
+		value?: string
+	},
     streetAddress: {
         state: LoadingState | 'edit';
         value?: StreetAddresses;
@@ -150,9 +158,7 @@ export type BusinessContact = {
 	value: string;
 }
 
-
 export type BusinessFormFieldKeys = keyof BusinessFormFields;
-
 
 export type BusinessEdit = {
 	userId: string;
@@ -214,7 +220,7 @@ export type BusinessDashboardTab = {
 	icon: IconKeys;
 };
 
-export type BusinessSettingsTabTitles = 'General' | 'Access' | 'Account' | 'Billing' | 'Subscription' | 'Security' | 'Notifications';
+export type BusinessSettingsTabTitles = 'General' | 'Access & Roles' | 'Account' | 'Billing' | 'Subscription' | 'Security' | 'Notifications';
 
 export type BusinessSettingsTab = {
 	name: BusinessSettingsTabTitles;

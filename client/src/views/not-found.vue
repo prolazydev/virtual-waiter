@@ -25,7 +25,8 @@ import { definePage } from 'unplugin-vue-router/runtime';
 
 definePage({
     meta: {
-        title: 'Not Found'
+        title: 'Not Found',
+        auth: 'both',
     },
     name: 'not-found',
 });

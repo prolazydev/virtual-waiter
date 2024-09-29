@@ -11,6 +11,7 @@ export const findAllProducts = async () => await ProductModel.find();
 export const findProductById = (id: string | Types.ObjectId) => ProductModel.findById(id);
 export const findProductsByUserId = (userId: string | Types.ObjectId) => ProductModel.find({ userId });
 export const findProductsByName = (name: string | Types.ObjectId) => ProductModel.find({ name });
+export const findProductsByBusinessId = (businessId: string | Types.ObjectId) => ProductModel.find({ businessId });
 
 export const findProductByCustomQuery = (filter?: FilterQuery<Product>, projection?: ProjectionType<Product>, options?: QueryOptions<Product>) => ProductModel.findOne(filter, projection, options);
 export const findProductsByCustomQuery = (filter: FilterQuery<Product>, projection?: ProjectionType<Product>, options?: QueryOptions<Product>) => ProductModel.find(filter, projection, options);

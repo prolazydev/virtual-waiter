@@ -12,7 +12,7 @@
             <div class="w-32 relative">
                 <transition name="fade">
                     <p v-if="settingSearchInput.length > 0" :key="settingSearchInput.length" class="w-full font-semibold absolute-center">
-                        Found {{ filteredFields.length }} {{ filteredFields.length > 1 ? 'results' : 'result' }}
+                        Found {{ foundFields }} {{ foundFields > 1 ? 'results' : 'result' }}
                     </p>
                 </transition>
             </div>
@@ -112,7 +112,8 @@
                                                     <label :for="`${field.id}Setup`">
                                                         <img 
                                                             :src="parseBase64Image(businessFormFields[field.prop as BusinessFormFieldKeys].value as string)" 
-                                                            :alt="field.label" 
+                                                            :alt="field.label"
+                                                            class="hover:shadow-lg shadow-black hover:scale-[.990] scale-[.975] active:scale-[.975] transition-all duration-300"
                                                         />
                                                     </label>
                                                 </template>
@@ -123,8 +124,9 @@
     
                                                 <input 
                                                     @change="(e) => handleFileUpload(e, field.prop as BusinessFormFieldKeys)"
-                                                    type="file" 
                                                     :id="`${field.id}Setup`"
+                                                    type="file" 
+                                                    accept="image/*"
                                                     class="hidden" 
                                                 />
     
@@ -161,27 +163,19 @@
                                 <div class="mt-3 mb-2 flex flex-col gap-5">
                                     <div class="flex gap-5">
                                         <div v-for="(field) in nestingField.fields" :key="field.id" class="flex flex-col gap-2">
-                                            <template v-if="field.fieldType === 'field'">
-                                                <!-- <label :for="`${field.id}`">{{ field.label }}</label> -->
-                                                <!-- <input 
-                                                    v-model="businessFormFields.streetAddress.value!.primary!.main" 
-                                                    class="form-input setup-address"
-                                                    type="text" 
-                                                    id="businessPrimaryStreetAddress" 
-                                                    placeholder="St. DC Boulevard" 
-                                                /> -->
-                                            </template>
-                                            <template v-else v-for="(overNestingField) in field.fields" :key="overNestingField.id">
-                                                <label :for="overNestingField.id">{{ overNestingField.label }}</label>
-                                                <template v-if="overNestingField.fieldType === 'field'">
-                                                    <!-- @vue-expect-error typing -->
-                                                    <input 
-                                                        v-model="businessFormFields[nestingField.prop].value[field.prop][overNestingField.prop]" 
-                                                        class="form-input"
-                                                        :type="overNestingField.type" 
-                                                        :id="overNestingField.id" 
-                                                        :placeholder="overNestingField.placeholder" 
-                                                    />
+                                            <template v-if="field.fieldType != 'field'">
+                                                <template v-for="(overNestingField) in field.fields" :key="overNestingField.id">
+                                                    <label :for="overNestingField.id">{{ overNestingField.label }}</label>
+                                                    <template v-if="overNestingField.fieldType === 'field'">
+                                                        <!-- @vue-expect-error - Too unbothered to TS -->
+                                                        <input 
+                                                            v-model="businessFormFields[nestingField.prop].value![field.prop][overNestingField.prop]" 
+                                                            class="form-input"
+                                                            :type="overNestingField.type" 
+                                                            :id="overNestingField.id" 
+                                                            :placeholder="overNestingField.placeholder" 
+                                                        />
+                                                    </template>
                                                 </template>
                                             </template>
                                         </div>
@@ -295,7 +289,7 @@
                                         <div class="form-part flex flex-col gap-1">
                                             <label :for="nestedField.id">{{ `Setup ${nestedField.label}` }}</label>
                                             <button @click="toggleDialog(`.${nestedField.id}-dialog`)" class="form-button-1 min-w-52" :id="nestedField.id" type="button">
-                                                Setup Page Categories
+                                                Setup {{ nestedField.label }}
                                             </button>
                                         </div>
 
@@ -359,7 +353,6 @@
                     <div class="w-[1px] bg-black"></div>
                 </template>
             </template>
-
         </div>
     </div>
 </template>
@@ -375,7 +368,7 @@ import { placeholderPageSettings } from '@/constants/business/settings';
 import { sections } from '@/constants/business/settings/pageInformation';
 
 const router = useRouter();
-const { params } = useRoute('/business/settings/[id]');
+const { params } = useRoute('business-settings');
 
 const { updateBusiness } = businessService();
 const { toggleDialog, isDialogClosed } = myDialog();
@@ -419,8 +412,6 @@ onMounted(() => {
         console.warn('The hardwareConcurrency API is not supported by this browser.');
         cpuCores.value = 1; // Fallback to 1 core if the API is not supported
     }
-
-    console.log(cpuCores.value);
 }); 
 
 onUnmounted(() => {
@@ -460,7 +451,27 @@ const filteredFields = computed(() => {
     return filteredSections;
 });
 
-function searchFields(fields: FormField[], query: string): FormField[] {
+const foundFields = computed(() => {
+    // const fieldsFromSectionsCount = filteredFields.value.reduce((acc, section) => acc + section.fields.length, 0);
+    // const fieldsFromNestedSectionsCount = filteredFields.value.map(section => section.fields.filter(field => field.fieldType === 'nested-section').length).reduce((acc, val) => acc + val, 0);
+
+    // return fieldsFromSectionsCount + fieldsFromNestedSectionsCount;
+
+    // NOTE: Possibly remove the above code and use the below code instead since it's a bit more perfomant
+    return filteredFields.value.reduce((acc, section) => {
+        acc + section.fields.length;
+        for (const field of section.fields) {
+            if (field.fieldType === 'nested-section') {
+                acc += field.fields.length;
+            } else {
+                acc += 1;
+            }
+        }
+        return acc;
+    }, 0);
+});
+
+const searchFields = (fields: FormField[], query: string): FormField[] => {
     return fields
         .map(field => {
             if (field.fieldType === 'nested' || field.fieldType === 'nested-section') {
@@ -475,28 +486,19 @@ function searchFields(fields: FormField[], query: string): FormField[] {
                     return {
                         ...field,
                         match: parentMatches,
-                        // fields: field.fields.map(nestedField => {
-                        //     if (matchingNestedFields.some(match => match.id === nestedField.id)) {
-                        //         return matchField(nestedField);
-                        //     }
-                        //     return nestedField; // Keep other fields as they are
-                        // })
                     };
                 }
                 return null; // No match found in this nested structure
             } else if (field.fieldType === 'field') {
                 // Check if this simple field matches the query
                 if (field.label.toLowerCase().includes(query) || field.placeholder?.toLowerCase().includes(query) || field.prop.toLowerCase().includes(query))
-                    return matchField(field);
+                    return { ...field };
                 return null;
             } else {
                 return null;
             }
         })
         .filter(field => field !== null) as FormField[];
-}
-function matchField(field: FormField): FormField {
-    return { ...field };
 }
 
 const editFormState = computed(() => {
@@ -532,7 +534,6 @@ const editState = computed(() => {
     };
 });
 
-
 watch(() => businessFormFields.value.hours.value!, (val) => {
     const keys = Object.keys(val) as Days[];
 
@@ -563,7 +564,7 @@ const handleGetBusiness = async () => {
 			case 404:
 				return await router.push({ name: 'not-found' });
 			case 400:
-				return await router.push({ name: '/error/bad-request' });
+				return await router.push({ name: 'bad-request' });
 			// Add additional cases as needed
 			default:
 				return // Handle other status codes if necessary
@@ -642,7 +643,7 @@ const setAllHours = (hour: string, boolVal: boolean = true) => {
 		business24Hours.value[key as Days] = boolVal;
 	});
 
-	document.querySelectorAll<HTMLInputElement>('.page-hours-dialog input[type="checkbox"]')
+	document.querySelectorAll<HTMLInputElement>('.hours-dialog input[type="checkbox"]')
 		.forEach((el) => {
 			el.checked = boolVal;
 			el.readOnly = false;
@@ -683,10 +684,6 @@ const handleFileUpload = (e: Event, prop: BusinessFormFieldKeys) => {
 
 const parseBase64Image = (e: string) => {
     return e.startsWith('data') ? e : `data:image/png;base64,${e}`;
-    // const reader = new FileReader();
-    // reader.readAsDataURL(e);
-
-    // return reader.onload = () => reader.result as string;
 }
 
 const toggleEdit = async (prop: BusinessFormFieldKeys[] | BusinessFormFieldKeys, action: 'cancel' | 'edit' = 'cancel') => {
@@ -706,35 +703,31 @@ const toggleEdit = async (prop: BusinessFormFieldKeys[] | BusinessFormFieldKeys,
 
         else if (action === 'edit' && businessFormFields.value[prop].value !== business.value[prop]) {
             businessFormFields.value[prop].state = 'loading';
-            // loader.startLoader();
 
             const { response, statusCode, data } = await updateBusiness(business.value._id, { [prop]: businessFormFields.value[prop].value });
 
             if (response.value!.ok && data.value) {
                 business.value = data.value;
 
-                businessFormFields.value[prop].state = 'success';
                 loader.finishLoader();
+                businessFormFields.value[prop].state = 'success';
                 useTost('Business information updated successfully', 2000);
 
-                // setTimeout(() => {
-                //     businessFormFields.value[prop].state = 'idle';
-                // }, 2000);
-
-                // setTimeout(() => {
-                //     if (businessFormFields.value[prop].state === 'edit')
-                //         businessFormFields.value[prop].state = 'idle';
-                // }, 2000);
-            } else
+                setTimeout(() => {
+                    if (businessFormFields.value[prop].state === 'edit' || businessFormFields.value[prop].state === 'loading' || businessFormFields.value[prop].state === 'success')
+                        businessFormFields.value[prop].state = 'idle';
+                }, 2000);
+            } else {
                 switch (statusCode.value) {
                     case 404:
                         return await router.push({ name: 'not-found' });
                     case 400:
-                        return await router.push({ name: '/error/bad-request' });
+                        return await router.push({ name: 'bad-request' });
                     // Add additional cases as needed
                     default:
                         return; // Handle other status codes if necessary
                 }
+            }
         }
     }
 }
@@ -767,69 +760,74 @@ const reset = (prop: BusinessFormFieldKeys) => {
 }
 
 const handleEdit = async (dialogElement: string, prop: BusinessFormFieldKeys | BusinessFormFieldKeys[]) => {
-    let editObj: { [key: string]: any } = {};
-    let propChangedIndexes: number[] = [];
-
-    if(Array.isArray(prop)) {
-        // Check if all properties are not equal to the business props
-        for (let i = 0; i < prop.length; i++) {
-            const param = prop[i];
-            if (!areObjectsEqual(businessFormFields.value[param].value, business.value[param])) 
-                propChangedIndexes.push(i);
-        }
-
-        for (let i = 0; i < propChangedIndexes.length; i++) {
-            const propChangedIndex = propChangedIndexes[i];
-
-            editObj[prop[propChangedIndex]] = businessFormFields.value[prop[propChangedIndex]].value;
-            businessFormFields.value[prop[propChangedIndex]].state = 'loading';
-        }
-
-        if (propChangedIndexes.length === 0) 
-            return toggleDialog(dialogElement);
-    } else  {
-        if (areObjectsEqual(businessFormFields.value[prop].value, business.value[prop]))
-            return toggleDialog(dialogElement);
-
-        businessFormFields.value[prop].state = 'loading';
-        
-        editObj[prop] = businessFormFields.value[prop].value;
-    }
-
-    const { response, data } = await updateBusiness(business.value._id, editObj);
-
-    // TODO: refactor this
-    if (response.value!.ok && data.value) {
-        business.value = data.value;
+    try {
+        let editObj: { [key: string]: any; } = {};
+        let propChangedIndexes: number[] = [];
 
         if (Array.isArray(prop)) {
-            for (let i = 0; i < propChangedIndexes.length; i++) {
-                const param = prop[propChangedIndexes[i]]
-                businessFormFields.value[param].state = 'success';
+            // Check if all properties are not equal to the business props
+            for (let i = 0; i < prop.length; i++) {
+                const param = prop[i];
+                if (!areObjectsEqual(businessFormFields.value[param].value, business.value[param]))
+                    propChangedIndexes.push(i);
             }
 
-            setTimeout(() => {
-                for (let i = 0; i < propChangedIndexes.length; i++) {
-                    const param = prop[propChangedIndexes[i]]
-                    businessFormFields.value[param].state = 'idle';
-                }
+            for (let i = 0; i < propChangedIndexes.length; i++) {
+                const propChangedIndex = propChangedIndexes[i];
 
-                if (!isDialogClosed(dialogElement)) 
-                    toggleDialog(dialogElement);
-            }, 2000);
+                editObj[prop[propChangedIndex]] = businessFormFields.value[prop[propChangedIndex]].value;
+                businessFormFields.value[prop[propChangedIndex]].state = 'loading';
+            }
+
+            if (propChangedIndexes.length === 0)
+                return toggleDialog(dialogElement);
         } else {
-            businessFormFields.value[prop].state = 'success';
+            if (areObjectsEqual(businessFormFields.value[prop].value, business.value[prop]))
+                return toggleDialog(dialogElement);
 
-            setTimeout(() => {
-                businessFormFields.value[prop].state = 'idle';
+            businessFormFields.value[prop].state = 'loading';
 
-                if (!isDialogClosed(dialogElement)) 
-                    toggleDialog(dialogElement);
-            }, 2000);
+            editObj[prop] = businessFormFields.value[prop].value;
         }
 
+        const { response, data } = await updateBusiness(business.value._id, editObj);
+
+        if (response.value!.ok && data.value) {
+            business.value = data.value;
+
+            if (Array.isArray(prop)) {
+                for (let i = 0; i < propChangedIndexes.length; i++) {
+                    const param = prop[propChangedIndexes[i]];
+                    businessFormFields.value[param].state = 'success';
+                }
+
+                setTimeout(() => {
+                    for (let i = 0; i < propChangedIndexes.length; i++) {
+                        const param = prop[propChangedIndexes[i]];
+                        if (businessFormFields.value[param].state === 'edit' || businessFormFields.value[param].state === 'loading' || businessFormFields.value[param].state === 'success') 
+                            businessFormFields.value[param].state = 'idle';
+                    }
+
+                    if (!isDialogClosed(dialogElement))
+                        toggleDialog(dialogElement);
+                }, 2000);
+            } else {
+                businessFormFields.value[prop].state = 'success';
+
+                setTimeout(() => {
+                    businessFormFields.value[prop].state = 'idle';
+
+                    if (!isDialogClosed(dialogElement))
+                        toggleDialog(dialogElement);
+                }, 2000);
+            }
+
+            useTost('Business information updated successfully', 2000);
+        }
+    } catch (error) {
+        console.error(error);
+    } finally {
         loader.finishLoader();
-        useTost('Business information updated successfully', 2000);
     }
 }
 

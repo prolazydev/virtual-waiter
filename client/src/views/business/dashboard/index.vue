@@ -28,7 +28,7 @@
 			<!-- <Transition mode="in-out"> -->
 				<Suspense :timeout="0">
 					<template #default>
-						<component :is="componentRenderer" :key="tab" />
+						<component :is="businessDashboardTab" :key="tab" />
 					</template>
 					<template #fallback>
 						<Loading />
@@ -43,6 +43,14 @@
 import { definePage } from 'unplugin-vue-router/runtime';
 
 import type { BusinessDashboardTab, BusinessDashboardTabTitles } from '@/types/models/business';
+
+definePage({
+    meta: {
+        title: 'Dashboard',
+        auth: 'need-auth',
+    },
+    name: 'business-dashboard',
+});
 
 const { user, setTab } = useUserStore();
 const loader = useLoader();
@@ -80,17 +88,9 @@ const tabs: BusinessDashboardTab[] = [
 	},
 ];
 
-definePage({
-    meta: {
-        title: 'Dashboard',
-        auth: true,
-    },
-    name: 'business-dashboard',
-});
-
 watch(tab, (newTab) => setTab('lastBusinessDashboardTab', newTab))
 
-const componentRenderer = computed(() => {
+const businessDashboardTab = computed(() => {
 	try {
 		loader.startLoader();
 		switch (tab.value) {

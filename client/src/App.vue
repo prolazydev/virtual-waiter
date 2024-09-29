@@ -32,12 +32,13 @@ import Loading from '@/components/ui/Loading.vue';
 const { checkAuth, isAuth } = useAuth();
 
 onBeforeMount(async () => {
-    if (!!isAuth()) {
+    if (!isAuth()) {
         await checkAuth();
     }
 });
 
 onMounted(async () => {
+	// TODO: Implement this later
 	// const { runSocket } = webSocketService();
 	// runSocket();
 })

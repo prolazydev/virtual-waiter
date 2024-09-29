@@ -8,9 +8,9 @@
                         <img class="object-cover w-screen h-[872px]" src="@/assets/general/spaghetti_sm.jpg"
                             alt="spaghetti" />
                         <div class="absolute-center slide-1">
-                            <h1 class="text-4xl font-bold ">Hello there food enthusiast!</h1>
+                            <h1 class="text-4xl font-bold drop-shadow-[4px_4px_10px_rgba(0,0,0,0.25)]">For all of the Food Enthusiast!</h1>
                             <p>Explore and find the best food for your belly 😋</p>
-                            <p>Get started!</p>
+                            <p class="capitalize">Get started!</p>
                             <LucideIcon class="down-arrow relative top-[4.5rem]" name="MoveDown" :size="48" />
                             <div @click="scrollToAboutUs" class="absolute opacity-0 w-16 h-40 border-2 rounded-full cursor-pointer translate-y-[15rem]"></div>
                         </div>
@@ -21,9 +21,9 @@
                         <div class="absolute-center slide-2">
                             <div class="flex gap-2 items-baseline">
                                 <p class="flex items-baseline gap-2 text-3xl text-white">See what are the top rating places are serving</p>
-                                <h1>today!</h1> 
+                                <h1 class="text-5xl">today!</h1> 
                             </div>
-                            <button class="search-now-button px-3 py-2 bg-black">
+                            <button class="search-now-button px-4 py-3 bg-black">
                                 <p>Go now!</p>
                                 <LucideIcon name="ChefHat" :size="32" :stroke-width="2"  />
                             </button>
@@ -35,7 +35,7 @@
                         <div class="absolute-center slide-3">
                             <h1>Looking to show off your cuisine?</h1>
                             <p>We got you covered!</p>
-                            <button class="register-button">
+                            <button class="register-button" type="button">
                                 <router-link to="/register">Register Here!</router-link>
                             </button>
                         </div>
@@ -46,32 +46,37 @@
         <section id="aboutUs" class="home-container">
             <div class="w-3 h-3 mx-auto bg-rose-600 origin-center rounded-full"></div>
             <h2 class="mx-auto relative w-fit text-3xl font-semibold uppercase">About us</h2>
-            <p class="text-2xl  text-justify leading-normal">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum quisquam similique corporis fuga quia aliquam optio placeat repellendus molestiae? Quae dolorum reiciendis quam repellendus iure earum numquam nihil quaerat at.
-                Reprehenderit et vero accusamus illo voluptate distinctio ab quo adipisci aliquid, voluptates, repellat cum fugiat alias esse, dignissimos laborum sed eius hic culpa nihil reiciendis natus minus! Magnam, asperiores accusamus.
+            <p class="text-justify leading-normal">
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error, consequatur sunt nobis tenetur eos assumenda accusantium molestiae consequuntur, 
+                mollitia nostrum eius asperiores eum obcaecati inventore numquam fugiat. Officia impedit error inventore alias sapiente ratione voluptatum ab aliquid tenetur 
+                laudantium id quis adipisci, sit, aut at temporibus, quasi in repudiandae eius laboriosam expedita magni reiciendis dignissimos. Voluptas, ratione repellendus 
+                sequi ullam ipsa porro aperiam dolorum quidem at sit labore voluptate vel veniam corporis veritatis perspiciatis rem nihil molestias officiis incidunt ut. 
+                Possimus aliquid similique accusantium reprehenderit facere amet delectus pariatur architecto in, voluptatum repellat maxime voluptas ad dicta animi eaque 
+                atque quo explicabo molestiae voluptate perspiciatis eum praesentium nemo? Illum iure at facilis consectetur modi iste, ex, enim impedit consequuntur amet 
+                soluta itaque repellat doloribus a. Provident, eveniet repellat.
             </p>
             <h2 class="mx-auto relative w-fit text-3xl font-semibold uppercase">What we do</h2>
             <div class="flex justify-between">
                 <div class="max-w-[300px] flex flex-col gap-5">
-                    <div class="relative w-fit mx-auto ">
-                        <LucideIcon class="stroke-rose-600 relative hover:translate-x-1 hover:translate-y-3 z-10 transition-all" name="Search" :size="128" />
-                        <LucideIcon class="absolute top-3 left-1 stroke-rose-600 opacity-25" name="Search" :size="128" />
+                    <div class="relative w-fit mx-auto">
+                        <LucideIcon class="stroke-rose-600 relative -left-1 hover:translate-x-1 hover:translate-y-3 z-10 transition-all" name="Search" :size="128" />
+                        <LucideIcon class="absolute top-3 stroke-rose-600 opacity-25" name="Search" :size="128" />
                     </div>
                     <h3 class="font-bold text-center">Always on a Lookout</h3>
                     <p class="text-center">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ex, vero.</p>
                 </div>
                 <div class="max-w-[300px] flex flex-col gap-5">
                     <div class="relative w-fit mx-auto">
-                        <LucideIcon class="stroke-rose-600 relative hover:translate-x-1 hover:translate-y-3 z-10 transition-all" name="MessageCircleDashed" :size="128" />
-                        <LucideIcon class="absolute top-3 left-1 stroke-rose-600 opacity-25" name="MessageCircleDashed" :size="128" />
+                        <LucideIcon class="stroke-rose-600 relative hover:translate-x-0 hover:translate-y-3 z-10 transition-all" name="MessageCircleDashed" :size="128" />
+                        <LucideIcon class="absolute top-3 stroke-rose-600 opacity-25" name="MessageCircleDashed" :size="128" />
                     </div>
                     <h3 class="font-bold text-center">Less talk</h3>
                     <p class="text-center">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ex, vero.</p>
                 </div>
                 <div class="max-w-[300px] flex flex-col gap-5">
                     <div class="relative w-fit mx-auto">
-                        <LucideIcon class="stroke-rose-600 relative hover:translate-x-1 hover:translate-y-3 z-10 transition-all" name="Scan" :size="128" />
-                        <LucideIcon class="absolute top-3 left-1 stroke-rose-600 opacity-25" name="Scan" :size="128" />
+                        <LucideIcon class="stroke-rose-600 relative left-1 hover:-translate-x-1 hover:translate-y-3 z-10 transition-all" name="Scan" :size="128" />
+                        <LucideIcon class="absolute top-3 stroke-rose-600 opacity-25" name="Scan" :size="128" />
                     </div>
                     <h3 class="font-bold text-center">Optimized Search</h3>
                     <p class="text-center">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ex, vero.</p>
@@ -115,9 +120,18 @@
 </template>
 
 <script lang="ts" setup>
+import { definePage } from 'unplugin-vue-router/runtime';
+
 import Glide from '@glidejs/glide'
-// import { useScrollTo } from '@/composables/useScrollTo';
-// import { initGlideStatistics } from '@/composables';
+
+definePage({
+    meta: {
+        title: 'Home',
+        auth: 'both',
+    },
+    name: 'home',
+});
+
 const { observeSlide1, observeSlide2, observeSlide3 } = useSlider().homeSlider();
 
 // TODO: implement automatic fetching of statistics
@@ -173,8 +187,6 @@ onUnmounted(() => {
 function scrollToAboutUs() {
     useScrollTo('aboutUs');
 }
-
-
 </script>
 
 <style scoped>
@@ -191,9 +203,8 @@ function scrollToAboutUs() {
 }
 
 .slide-1 p, .slide-2 p, .slide-3 p {
-    @apply text-3xl opacity-0
+    @apply text-[2.0625rem] opacity-0 font-light leading-10 
     ;
-    font-weight: 300;
 }
 
 .slide-1 h1, .slide-2 h1, .slide-3 h1 {
@@ -211,17 +222,20 @@ function scrollToAboutUs() {
     filter: brightness(0.45);
 }
 
-.slide-2 h1, .slide-2 p {
+.slide-2 p {
     @apply text-4xl
     ;
 }
+.slide-2 h1 {
+    @apply text-4xl capitalize
+}
 
 .search-now-button {
-    @apply px-3 py-3 relative text-3xl overflow-hidden opacity-0 cursor-pointer transition-transform duration-500
+    @apply relative text-3xl overflow-hidden opacity-0 cursor-pointer transition-transform duration-500
 }
 
 .search-now-button > p {
-    @apply text-2xl opacity-100 transition-transform duration-500
+    @apply text-2xl opacity-100 capitalize transition-transform duration-500
     ;
 }
 
@@ -239,7 +253,7 @@ function scrollToAboutUs() {
 }
 
 .register-button {
-    @apply px-3 py-3 opacity-0 underline underline-offset-[1.5rem] overflow-hidden transition-all
+    @apply px-4 py-3 opacity-0 underline underline-offset-[1.5rem] overflow-hidden transition-all
     
     hover:text-black hover:underline-offset-8 hover:duration-500
     ;
@@ -363,5 +377,3 @@ function scrollToAboutUs() {
     }
 }
 </style>
-
-@/composables/use

@@ -20,6 +20,7 @@ declare module 'vue' {
     Loading: typeof import('@/components/ui/Loading.vue')['default']
     LucideIcon: typeof import('@/components/ui/LucideIcon.vue')['default']
     MainPageInformationSettings: typeof import('@/components/business/settings/tabs/BusinessSettingsGeneralTab_Components/MainPageInformationSettings.vue')['default']
+    MyDatePicker: typeof import('@/components/ui/MyDatePicker.vue')['default']
     MyDialog: typeof import('@/components/ui/Dialog/MyDialog.vue')['default']
     MyInput: typeof import('./src/components/ui/form/MyInput.vue')['default']
     PageInformationSettingsForm: typeof import('./src/components/business/settings/tabs/BusinessSettingsGeneralTab_Components/PageInformationSettings_Components/PageInformationSettingsForm.vue')['default']

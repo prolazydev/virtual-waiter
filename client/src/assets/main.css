@@ -1,7 +1,7 @@
 @import './base.css';
 
 #app {
-	@apply min-h-screen flex flex-col relative 
+	@apply flex flex-col relative 
 	;
 }
 
@@ -20,7 +20,6 @@
 	;
 
 	position-anchor: --tost-container;
-	/* inset-area: center; */
 	position-try-options: flip-block;
 
 	right: -50%;

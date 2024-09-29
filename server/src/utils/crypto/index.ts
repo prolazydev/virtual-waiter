@@ -44,12 +44,7 @@ export const signToken = (userObj: UserResult, tokenOptions: SignOptions = { exp
 		const defaultTokenOptions: SignOptions = { issuer: 'Virtual-Waiter' };
 		const mergedTokenOptions = mergeObjects(tokenOptions, defaultTokenOptions);
 
-		// const test = process.env.TEST_SECRET_PRIVATE_JWT;
-	
 		const signedToken = jwt.sign(userObj, `${TEST_SECRET_PRIVATE_JWT}`, mergedTokenOptions);
-		// jwt.sign(userObj, `${TEST_SECRET_PRIVATE_JWT}`, mergedTokenOptions, function(err, token) {
-		// 	console.log(token);
-		// });
 		return signedToken;
 	
 	} catch (err) {

@@ -26,7 +26,7 @@
 						<Review :stars="business.averageRating" :reviews="business.reviews" :sizes="28" _p-class="text-lg font-semibold" />
 					</Tooltip>
 
-					<div class="w-[1px] bg-gray-200"></div>
+					<div class="w-[1px] bg-gray-500"></div>
 
 					<router-link to="/"><b>#1 </b>of Restaurans in Ferizaj</router-link>
 				</div>
@@ -41,27 +41,34 @@
 			</div>
 			<div class="group-links flex gap-3">
 				<!-- TODO: Add to the business the google link address for router link -->
-				<a v-if="business.streetAddress && business.streetAddress.primary" href="#"><LucideIcon name="MapPin" :size="22" :stroke-width="1.5" />{{ business.streetAddress.primary.address }}</a>
+				<a v-if="business.streetAddress && business.streetAddress.primary" href="#"><LucideIcon name="MapPin" :size="22" :stroke-width="1.5" />{{ business.streetAddress.primary.main }}</a>
 
-				<div class="w-[1px] bg-gray-200"></div>
+				<div class="w-[1px] bg-gray-500"></div>
 				<a :href="`tel:+${business.phone}`"><LucideIcon name="Phone" :size="22" :stroke-width="1.5" />{{ business.phone }}</a>
 
-				<div class="w-[1px] bg-gray-200"></div>
+				<div class="w-[1px] bg-gray-500"></div>
 				<a href="#"><LucideIcon name='Laptop' :size="22" :stroke-width="1.5" />Website</a>
 
-				<div class="w-[1px] bg-gray-200"></div>
+				<div class="w-[1px] bg-gray-500"></div>
 				<a href="#"><LucideIcon name='SquareMenu' :size="22" :stroke-width="1.5" />Menu</a>
 
-				<div class="w-[1px] bg-gray-200"></div>
+				<div class="w-[1px] bg-gray-500"></div>
 				<div class="flex gap-1">
-					<a href="#"><LucideIcon class="text-emerald-800" name='Clock5' :size="22" :stroke-width="1.5" /><b class="text-emerald-600">Open now</b> <div class="w-1.5 h-1.5 bg-gray-400 rounded-full"></div> 10:00 AM - 10:00 PM</a>
+                    <a href="#">
+                        <LucideIcon class="text-emerald-800" name='Clock5' :size="22" :stroke-width="1.5" />
+                        <b class="text-emerald-600">Open now</b> 
+
+                        <div class="w-1.5 h-1.5 bg-black rounded-full"></div> 
+
+                        <span>10:00 AM - 10:00 PM</span>
+                    </a>
 					<div class="cursor-pointer my-auto">
 						<!-- TODO: Implement the business hours -->
 						<LucideIcon class=" " name='Info' :size="18" :stroke-width="1.5" />
 					</div>
 				</div>
 
-				<div class="w-[1px] bg-gray-200"></div>
+				<div class="w-[1px] bg-gray-400"></div>
 				<a href="#"><LucideIcon name='SquareMenu' :size="22" :stroke-width="1.5" />Book now</a>
 
 				<div class="ml-auto">
@@ -70,7 +77,7 @@
 			</div>
 		</div>
 		
-		<div class="border-b-4 border-b-[#1b1b1b]"></div>
+        <div class="border-b-4 border-b-[#1b1b1b]"></div>
 
 		<!-- TODO: make photos clickable to show the gallery of photos -->
 		<div class="flex gap-2 h-96 max-h-96">
@@ -162,19 +169,27 @@
 						<div class="flex flex-col gap-1">
 							<h2 class="text-xl font-semibold">About</h2>
 							<!-- TODO: show price range -->
-							<p class="text-lg">Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse eveniet culpa minus aliquid placeat eius quibusdam, in doloremque harum facere.</p>
+							<!-- <p class="text-lg">Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse eveniet culpa minus aliquid placeat eius quibusdam, in doloremque harum facere.</p> -->
+							<p class="text-lg  max-h-32 overflow-auto">
+                                {{ business.description }}
+                            </p>
 						</div>
 
 						<div class="flex flex-col gap-1">
 							<h2 class="text-xl font-semibold">Price range</h2>
 							<!-- TODO: show price range -->
-							<p class="text-lg">€5 - €35</p>
+							<p class="text-lg">
+                                €5 - €35 <!-- TODO: Implement badges to indicate if prices are fair or competetive prices based on the area -->
+                            </p>
 						</div>
 
 						<div class="flex flex-col gap-1">
 							<h2 class="text-xl font-semibold">Cuisines</h2>
-							<div v-if="business.categories" class="flex gap-2 group-links">
-								<a class="business-category" v-for="(item, index) in business.categories" :key="index" href="#">{{ item }}</a>
+							<div v-if="business.categories && business.categories.length > 0" class="flex gap-2 group-pill-links">
+                                <!-- TODO: Insert a star on the cusisine for it being a top picked cusine from users -->
+								<a class="business-category-item" v-for="(item) in business.categories" :key="item" href="#">
+                                    {{ item }}
+                                </a>
 							</div>
 						</div>
 					</div>
@@ -197,7 +212,14 @@
 									<button v-for="(item, index) in 25" :key="index" @click="handleShowProduct" class="slide" type="button">
 										<div class="relative">
 											<img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimagesvc.meredithcorp.io%2Fv3%2Fmm%2Fimage%3Fq%3D85%26c%3Dsc%26poi%3Dface%26w%3D2000%26h%3D1000%26url%3Dhttps%3A%252F%252Fstatic.onecms.io%252Fwp-content%252Fuploads%252Fsites%252F43%252F2020%252F03%252F6584062-2000.jpg&f=1&nofb=1&ipt=cc97d9ac7b239997687df92748b89d3a73fa1eb5e90b75c7330e6b3b6676426a&ipo=images" alt="Presentational image" >
-											<p class="text-xl text-white absolute bottom-2 left-1 drop-shadow">$3</p>
+                                            <!-- TODO: Add a badge to indicate if the product is a top pick -->
+                                            <!-- TODO: use shouldUseWhiteText() to determine if the text should be white or black
+                                                :class="shouldUseWhiteText() ? 'light-text' : 'dark-text'" -->
+											<p 
+                                                class="text-xl text-white absolute bottom-2 left-1 drop-shadow"
+                                            >
+                                                $3
+                                            </p>
 										</div>
 										<div class="flex flex-col text-start">
 											<h3>{{ item }} Pizza</h3>
@@ -227,7 +249,7 @@
 							<div class="flex justify-between">
 								<div class="flex flex-col">
 									<a href="#">Google map link</a>
-									<p>{{ business.streetAddress.primary.address }}</p>
+									<p>{{ business.streetAddress.primary.main }}</p>
 									<p>{{ business.streetAddress.primary.zipCode }}</p>
 								</div>
 								<div class="flex flex-col">
@@ -238,17 +260,16 @@
 							</div>
 						</template>
 					</div>
+                    <!-- TODO: maybe change this for showing any events (implement special events, eg: rock night [9PM]) since hours can be displayed above in form of tooltip -->
 					<div class="w-full p-5 flex flex-col gap-5 border-2 border-[#1b1b1b]">
 						<h2 class="text-2xl pb-3 font-semibold border-b border-b-[#1b1b1b]/50">Hours</h2>
-						<!-- <hr class="border-[#1b1b1b]/50" /> -->
 						
 						<!-- TODO: Show events (implement special events, eg: rock night [9PM]) -->
 						<div class="w-full h-full flex gap-3">
-							<!-- TODO: Show events (implement special events, eg: rock night [9PM]) -->
-							<div v-if="business.is24 && business.hours" class="w-64 flex flex-col justify-between">
+							<div v-if="!business.is24 && business.hours" class="w-64 flex flex-col justify-between">
 								<div class="flex" v-for="(key) in Object.keys(business.hours)" :key="key" >
 									<h3 class="w-1/2 text-xl font-semibold capitalize">{{ key }}</h3>
-									<p>{{ (business.hours)[key as KeyHours] }} test</p>
+									<p>{{ (business.hours)[key as KeyHours] }}</p>
 								</div>
 							</div>
 							<div v-else class="flex w-full items-center justify-center">
@@ -391,10 +412,10 @@
 					<div v-if="business.streetAddress" class="flex justify-between items-center">
 						<!-- TODO: Have it be a single link -->
 						<div class="flex flex-col">
-							<a class="font-semibold hover:underline" :href="`https://www.google.com/maps/search/?api=1&query=${business.streetAddress.primary!.address}`">Get directions</a>
-							<p class="font-semibold text-gray-500">{{ business.streetAddress.primary!.address }}</p>
+							<a class="font-semibold hover:underline" :href="`https://www.google.com/maps/search/?api=1&query=${business.streetAddress.primary!.main}`">Get directions</a>
+							<p class="font-semibold text-gray-500">{{ business.streetAddress.primary!.main }}</p>
 						</div>
-						<a :href="`https://www.google.com/maps/search/?api=1&query=${business.streetAddress.primary!.address}`">
+						<a :href="`https://www.google.com/maps/search/?api=1&query=${business.streetAddress.primary!.main}`">
 							<LucideIcon name="MapPin" :size="28" :stroke-width="2" />
 						</a>
 					</div>
@@ -412,14 +433,32 @@
 </template>
 
 <script lang="ts" setup>
+import { definePage } from 'unplugin-vue-router/runtime';
+
 import 'v-calendar/style.css';
 import type { Business, KeyHours } from '@/types/models/business';
 
-const { params } = useRoute('/business/[id]');
+definePage({
+	meta: {
+		title: 'Business',
+        auth: 'need-auth',
+	},
+    name: 'business',
+	props: {
+        id: {
+            type: String,
+            required: true
+        }
+    },
+});
+
+const { params } = useRoute('business');
 const router = useRouter();
 
 const { user } = useUserStore();
 const { isAuth } = useAuth();
+// const { shouldUseWhiteText } = myMisc();
+const { getProductsByBusinessId, } = productsService();
 
 const business = ref<Business>();
 
@@ -431,10 +470,11 @@ const reservationForm = ref({
 
 onMounted(async () => {
 	// useScrollX('.slider')
+    await getProductsByBusinessId(params.id);
 });
 
 async function handleGetBusiness() {
-	const { getBusinessSelfById } = businessService();
+	const { getBusinessSelfById, } = businessService();
 	try {
 		const { response, statusCode, data } = await getBusinessSelfById(params.id as string);
 
@@ -445,7 +485,7 @@ async function handleGetBusiness() {
 			case 404:
 				return await router.push({ name: 'not-found' });
 			case 400:
-				return await router.push({ name: '/error/bad-request' });
+				return await router.push({ name: 'bad-request' });
 			// Add additional cases as needed
 			default:
 				return; // Handle other status codes if necessary
@@ -525,16 +565,24 @@ const handleShowProduct = () => {
 } */
 
 .link-address {
-	@apply hover:border-b-gray-400 border-b border-b-transparent
+	@apply hover:border-b-gray-500 border-b border-b-transparent
 }
 
 .group-links a, .group-links button {
 	@apply 	flex gap-1 items-center
-			hover:border-b-gray-400 border-b border-b-transparent
+			hover:border-b-gray-500 border-b border-b-transparent
 }
 
 .group-links > div {
 	@apply flex gap-3 
+}
+
+.group-pill-links a {
+    @apply  px-3 py-1 transition-all
+            bg-[#1b1b1b] text-white rounded-2xl
+            hover:bg-[#303030] hover:shadow-md            
+    ;
+    /* border-2 border-[#1b1b1b] text-[#1b1b1b] font-semibold */
 }
 
 .image-item-container {
@@ -546,15 +594,15 @@ const handleShowProduct = () => {
 			hover:scale-110
 }
 
-.business-category {
+.business-category-item {
 	@apply relative
 }
 
-.business-category::after {
+.business-category-item::after {
 	@apply absolute -right-1 content-[','];
 }
 
-.business-category:last-child::after {
+.business-category-item:last-child::after {
 	@apply content-[''];
 }
 

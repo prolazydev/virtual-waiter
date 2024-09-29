@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router/auto'
+import { createRouter, createWebHistory, type RouteParamsRawGeneric } from 'vue-router/auto'
 import { routes, handleHotUpdate } from 'vue-router/auto-routes'
 
 // import HomeView from '@/views/HomeView.vue'
@@ -8,127 +8,13 @@ import { routes, handleHotUpdate } from 'vue-router/auto-routes'
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
 	routes,
-    
-	// routes: [
-	// 	{
-	// 		path: '/',
-	// 		name: 'home',
-	// 		component: HomeView
-	// 	},
-	// 	{
-	// 		path: '/about',
-	// 		name: 'about',
-	// 		component: () => import('../views/AboutView.vue')
-	// 	},
-	// 	{
-	// 		path: '/login',
-	// 		name: 'login',
-	// 		component: LoginView,
-	// 		props: route => ({ redirect: route.query.redirect }),
-	// 		beforeEnter: ({}, {}, next) =>
-	// 			useAuth().isAuth()
-	// 				? next({ name: 'home' })
-	// 				: next()
-	// 	},
-	// 	{
-	// 		path: '/register',
-	// 		name: 'register',
-	// 		component: RegisterView,
-	// 		beforeEnter: ({},{}, next) => 
-	// 			useAuth().isAuth()
-	// 				? next({ name: 'home' })
-	// 				: next()
-	// 	},
-	// 	{
-	// 		path: '/confirm_account/:token',
-	// 		name: 'confirmAccount',
-	// 		component: () => import('@/views/auth/ConfirmAccountView.vue'),
-	// 		meta: {
-	// 			auth: true
-	// 		},
-	// 	},
-	// 	{
-	// 		path: '/search',
-	// 		name: 'search',
-	// 		component: () => import('@/views/SearchView.vue'),
-	// 		// props: (route) => (
-	// 		// { 
-	// 		// 	query: route.query.query, searchType: route.query.searchType 
-	// 		// }),
-	// 	},
-	// 	{
-	// 		path: '/user/:username',
-	// 		name: 'userProfile',
-	// 		component: () => import('@/views/user/ProfileView.vue'),
-	// 		meta: {
-	// 			auth: true
-	// 		},
-	// 	},
-	// 	// {
-	// 	// 	path: '/profile/:username',
-	// 	// 	name: 'userProfile',
-	// 	// 	component: () => import('@/views/user/UserProfileView.vue'),
-	// 	// }
-	// 	{
-	// 		path:'/business/create',
-	// 		name: 'createBusiness',
-	// 		component: () => import('@/views/business/BusinessCreateView.vue'),
-	// 		meta: {
-	// 			auth: true
-	// 		},
-	// 	},
-	// 	{
-	// 		path: '/business_confirmation/:id',
-	// 		name: 'businessConfirmation',
-	// 		component: () => import('@/views/business/BusinessConfirmationView.vue'),
-	// 		meta: {
-	// 			auth: true
-	// 		},
-	// 	},
-	// 	{
-	// 		path: '/business/dashboard',
-	// 		name: 'businessDashboard',
-	// 		component: () => import('@/views/business/BusinessDashboardView.vue'),
-	// 		meta: {
-	// 			auth: true,
-	// 			roles: [ 'business' ]
-	// 		},
-	// 	},
-	// 	{
-	// 		path: '/business/:id',
-	// 		name: 'businessProfile',
-	// 		component: () => import('@/views/business/BusinessProfileView.vue'),
-	// 		meta: {
-	// 			auth: true
-	// 		},
-	// 	},
-	// 	// TODO: Add edit business page
-	// 	{
-	// 		path: '/business/settings/:id',
-	// 		name: 'businessSettings',
-	// 		component: () => import('@/views/business/BusinessSettingsView.vue'),
-	// 		meta: {
-	// 			auth: true
-	// 		},
-	// 	},
-	// 	// TODO: Add 404 page
-	// 	{
-	// 		path: '/:pathMatch(.*)*',
-	// 		name: 'notFound',
-	// 		component: () => import('@/views/error/NotFoundView.vue')
-	// 	},
-	// 	{
-	// 		path: '/bad_request',
-	// 		name: 'badRequest',
-	// 		component: () => import('@/views/error/BadRequestView.vue')
-	// 	}
-	// ]
 });
 
 if (import.meta.hot) {
     handleHotUpdate(router);
 }
 
+// TODO: change auth guard to check from 3 types of auth: need-auth, only-guest and none
 router.beforeEach((to, {}, next) => {
 	// const loader = useLoader();
 	// loader.startLoader();
@@ -139,18 +25,40 @@ router.beforeEach((to, {}, next) => {
 
     try {
         // TODO: handle auth and role
-        if (to.meta.auth && !isAuth()) {
-            // if (to.meta.role && !hasRole(to.meta.role as string)) {
+
+		if (to.meta.auth === 'both') {
+			next();
+		} else if (to.meta.auth === 'need-auth') {
+			if (isAuth()) {
+				next();
+			} else {
+				const listedParams = listParams(to.params);
+				next({ name: 'login', query: { redirect: to.name, params: listedParams } });
+			}
+        } else if (to.meta.auth === 'only-guest') {
+			if (isAuth()) {
+				next({ name: 'home' });
+			} else {
+				next();
+			}
+		} else if (to.meta.auth === 'none') {
+			next();
+		}
+		// else {
+        //     next()
+        // }
+        // if (to.meta.auth && !isAuth()) {
+        //     // if (to.meta.role && !hasRole(to.meta.role as string)) {
                 
-            // }
+        //     // }
             
-            next({ name: 'login', query: { redirect: to.fullPath } })
-        } else {
-            next()
-        }
+        //     next({ name: 'login', query: { redirect: to.fullPath } })
+        // } else {
+        //     next()
+        // }
     } catch (error) {
         console.log(error);
-        next({ name: '/error/bad-request' });
+        next({ name: 'bad-request' });
     }
 });
 
@@ -158,5 +66,27 @@ router.afterEach(() => {
 	// const loader = useLoader();
 	// loader.finishLoader();
 });
+
+// #region Private
+
+function listParams(params: RouteParamsRawGeneric) {
+	let listedParams = '';
+	const paramKeys = Object.keys(params);
+
+	if (paramKeys.length === 0) {
+		return listedParams;
+	}
+	for (let i = 0; i < paramKeys.length; i++) {
+		const paramKey = paramKeys[i];
+		if (i > 0) {
+			listedParams += ',';
+		}
+		listedParams += `${paramKey}:${params[paramKey]}`;
+	}
+
+	return listedParams;
+}
+
+// #endregion
 
 export default router;

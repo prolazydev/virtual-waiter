@@ -17,7 +17,7 @@ export const composableResolver: Resolver = async (name) => {
 		const serviceName = name.slice(0, name.indexOf('Service'))
         const path = await findComponent(`${serviceName}.service`, './src/services');
         
-        logComponent('nService:', name, path!);
+        logComponent('Service:', name, path!);
         return path;
 	}	
 
@@ -60,7 +60,8 @@ const findComponent = async (componentName: string, startPath: string = './src/c
 
 /**
  * Log the component name and path
- * \n\x1b[94m - light blue 
+ * \x1b[94m - light blue 
+ * \x1b[36m - cyan 
  * \x1b[0m - reset color
  * @param title 
  * @param componentName 

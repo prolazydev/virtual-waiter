@@ -1,7 +1,7 @@
 <template>
-<div id="progressBar" class="progress-bar">
-	<div class="progress-bar-fill"></div>
-</div>
+	<div id="progressBar" class="progress-bar">
+		<div class="progress-bar-fill"></div>
+	</div>
 </template>
 
 <script lang="ts" setup>

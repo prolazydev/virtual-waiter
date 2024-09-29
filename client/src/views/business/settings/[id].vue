@@ -3,7 +3,6 @@
 		<div class="flex gap-10 w-full">
 			<div class="sidenav">
 				<div class="flex flex-col gap-3">
-					<!-- TODO: figure out the naming -->
 					<div class="flex flex-col gap-1">
 						<h1 class="text-2xl font-semibold text-nowrap">Business Settings</h1>
 						<p class="text-xs">Id: {{ params.id }}</p>
@@ -14,21 +13,29 @@
 
 				<div class="flex flex-col gap-3">
 					<button 
-                        v-for="(item, index) in tabs" 
-                        :key="index" 
-                        @click="tab = item.name" 
-                        :class="{ 'active-tab': tab === item.name }"
+                        v-for="(tab) in businessSettingsTabs" 
+                        :key="tab.name" 
+                        @click="userSettingTab = tab.name" 
+                        :class="{ 'active-tab': userSettingTab === tab.name }"
                         class="dashboard-link" 
                     >
-						<LucideIcon :name="item.icon" :size="22" />
-						{{ item.name }}
+						<LucideIcon 
+                            :name="tab.icon" 
+                            :size="22" 
+                        />
+						{{ tab.name }}
 					</button>
 				</div>
 			</div>
             <Suspense :timeout="0">
                 <template #default>
-                    <component :is="componentRenderer" />
+                    <component 
+                        :is="businessSettingsTab" 
+                        :userSettingTab="userSettingTab" 
+                        :businessDisplayName="businessDisplayName" 
+                    />
                 </template>
+
                 <template #fallback>
                     <Loading />
                 </template>
@@ -38,25 +45,44 @@
 </template>
 
 <script lang="ts" setup>
-import type { BusinessSettingsTabTitles } from '@/types/models/business';
-import { tabs } from '@/constants/settings';
+import { definePage } from 'unplugin-vue-router/runtime';
 
-const { params } = useRoute('/business/settings/[id]');
+import type { BusinessSettingsTabTitles } from '@/types/models/business';
+import { businessSettingsTabs } from '@/constants/business/settings/tabs';
+
+definePage({
+    meta: {
+        title: 'Dashboard',
+        auth: 'need-auth',
+    },
+    name: 'business-settings',
+	props: {
+        id: {
+            type: String,
+            required: true
+        }
+    },
+});
+
+const { params } = useRoute('business-settings');
+const router = useRouter();
 
 const loader = useLoader();
 const { user, setTab } = useUserStore();
 
-const tab = ref<BusinessSettingsTabTitles>(user.lastBusinessSettingsTab || 'General');
+const userSettingTab = ref<BusinessSettingsTabTitles>(user.lastBusinessSettingsTab || 'General');
 
-watch(tab, (newTab) => setTab('lastBusinessSettingsTab', newTab));
+watch(userSettingTab, (newTab) => setTab('lastBusinessSettingsTab', newTab));
 
-const componentRenderer = computed(() => {
+const businessDisplayName = ref<string>('');
+
+const businessSettingsTab = computed(() => {
 	try {
 		loader.startLoader();
-		switch (tab.value) {
+		switch (userSettingTab.value) {
 			case 'General':
 				return defineAsyncComponent(() => import('@/components/business/settings/tabs/BusinessSettingsGeneralTab.vue'));
-			case 'Access':
+			case 'Access & Roles':
 				return defineAsyncComponent(() => import('@/components/business/settings/tabs/BusinessSettingsAccessTab.vue'));
 			default:
 				return defineAsyncComponent(() => import('@/components/business/settings/tabs/BusinessSettingsGeneralTab.vue'));
@@ -67,6 +93,30 @@ const componentRenderer = computed(() => {
 		loader.finishLoader();
 	}
 });
+
+const getBusinessDisplayName = async () => {
+    try {
+        const { getBusinessDisplayNameById } = businessService();
+
+        const { response, statusCode, data } = await getBusinessDisplayNameById(params.id)
+
+        if (response.value!.ok && data.value) 
+            businessDisplayName.value = data.value.displayName;
+
+        switch (statusCode.value) {
+            case 404:
+                return await router.push({ name: 'not-found' });
+            case 400:
+                return await router.push({ name: 'bad-request' });
+            // Add additional cases as needed
+            default:
+                return // Handle other status codes if necessary
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+getBusinessDisplayName();
 </script>
 
 <style scoped>

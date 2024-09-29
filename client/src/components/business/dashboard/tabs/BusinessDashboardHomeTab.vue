@@ -8,7 +8,7 @@
 
 					<div class="flex justify-between">
 						<div class="quick-graph">
-							<div class="flex flex-col gap-1">
+							<div class="h-full flex flex-col justify-between">
 								<Tooltip :text="'Total over 9000!'" _class="w-max mb-1 transition-all">
 									<h3>Weekly Income</h3>
 								</Tooltip>
@@ -21,7 +21,7 @@
 							<LucideIcon name="PiggyBank" :size="34" :stroke-width="1.5" />
 						</div>
 						<div class="quick-graph">
-							<div class="flex flex-col gap-1">
+							<div class="h-full flex flex-col justify-between">
 								<h3>Weekly Clients</h3>
 								<hr>
 								<p>17 Clients</p>
@@ -29,7 +29,7 @@
 							<LucideIcon name="UserRound" :size="34" :stroke-width="1.5" />
 						</div>
 						<div class="quick-graph">
-							<div class="flex flex-col gap-1">
+							<div class="h-full flex flex-col justify-between">
 								<h3>Weekly Reservations</h3>
 								<hr>
 								<p>5 Reservations</p>
@@ -37,11 +37,11 @@
 							<LucideIcon name="NotebookPen" :size="34" :stroke-width="1.5" />
 						</div>
 						<div class="quick-graph">
-							<div class="overflow-hidden w-full max-w-full flex flex-col gap-1">
+							<div class="overflow-hidden w-full max-w-full h-full flex flex-col justify-between">
 								<h3>Popular Dishes</h3>
 								<hr>
 								<div class="favorite-dish-slider">
-									<!-- TODO: Have them be links of the dishes for the specific restaurant -->
+									<!-- TODO: Have them be links of the dishes 0for the specific restaurant -->
 									<p class="favorite-dish-slide">Spaghetti</p>
 									<p class="favorite-dish-slide">Lasagna</p>
 									<p class="favorite-dish-slide">Carbonara</p>
@@ -250,7 +250,7 @@ hr {
 }
 
 .quick-graph {
-	@apply 	h-fit py-2 px-3 flex gap-5 items-center
+	@apply 	h-20 py-2 px-3 flex gap-5 items-center
 			border-2 border-[#1b1b1b]
 }
 
@@ -275,7 +275,7 @@ hr {
 }
 
 .favorite-dish-slide {
-	@apply 	px-[6px] py-[0.75px] bg-[#1b1b1b] text-white text-[0.9375rem] font-semibold rounded-full cursor-pointer 
+	@apply  px-[6px] bg-[#1b1b1b] text-white text-[0.9375rem] font-semibold rounded-full cursor-pointer 
 			box-border select-none
 			hover:bg-[#303030] hover:shadow-md transition-all
 			;

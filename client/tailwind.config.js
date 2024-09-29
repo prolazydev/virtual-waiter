@@ -27,18 +27,26 @@ const input_hover = {
 }
 
 /** @type {StyleValue} */
-const dark_shadow = {
+const hover_scale = {
     '&:hover': { 
-        'scale': '1.1',
+        'filter': 
+            'drop-shadow(0 1px 1px hsl(0deg 0% 0% / 0.075)) drop-shadow(0 4px 4px hsla(0, 0%, 0%, 0.075)) drop-shadow(0 8px 8px hsla(0, 0%, 0%, 0.075)) drop-shadow(0 16px 16px hsl(0deg 0% 0% / 0.075)) drop-shadow(0 2px 2px hsl(0deg 0% 0% / 0.075))',
+    },
+    '&:active': {
+        'filter': 
+            'drop-shadow(0 1px 1px hsl(0deg 0% 0% / 0.075)) drop-shadow(0 4px 4px hsla(0, 0%, 0%, 0.075)) drop-shadow(0 8px 8px hsla(0, 0%, 0%, 0.075)) drop-shadow(0 16px 16px hsl(0deg 0% 0% / 0.075)) drop-shadow(0 2px 2px hsl(0deg 0% 0% / 0.075))',
+    }
+}
+
+/** @type {StyleValue} */
+const hover_dark_shadow = {
+    '&:hover': { 
         'filter': 
             'drop-shadow(0 1px 1px hsl(0deg 0% 0% / 0.075)) drop-shadow(0 4px 4px hsla(0, 0%, 0%, 0.075)) drop-shadow(0 8px 8px hsla(0, 0%, 0%, 0.075)) drop-shadow(0 16px 16px hsl(0deg 0% 0% / 0.075)) drop-shadow(0 2px 2px hsl(0deg 0% 0% / 0.075))',
     },
     '&:active': {
         'scale': '.95',
-        'filter': 
-            'drop-shadow(0 1px 1px hsl(0deg 0% 0% / 0.075)) drop-shadow(0 4px 4px hsla(0, 0%, 0%, 0.075)) drop-shadow(0 8px 8px hsla(0, 0%, 0%, 0.075)) drop-shadow(0 16px 16px hsl(0deg 0% 0% / 0.075)) drop-shadow(0 2px 2px hsl(0deg 0% 0% / 0.075))',
     }
-
 }
 
 /** @type {import('tailwindcss').Config} */
@@ -90,14 +98,11 @@ export default {
                     'transitionProperty': 'all',
                     'transition-timing-function': 'cubic-bezier(0.4, 0, 0.2, 1)',
                     'transition-duration': '150ms',
-                    ...dark_shadow,
-                    // '&:hover': { 
-                    //     'scale': '1.1',
-                        
-                    // },
-                    // '&:active': {
-                    //     'scale': '.95',
-                    // }
+                    ...hover_dark_shadow,
+                    ...hover_scale,
+                },
+                '.my-dark-shadow': {
+                    ...hover_dark_shadow,
                 },
                 '.dialog-body-full': {
                     '.dialog-body': {

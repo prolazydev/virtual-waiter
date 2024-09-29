@@ -20,10 +20,27 @@
 </template>
 
 <script lang="ts" setup>
+import { definePage } from 'unplugin-vue-router/runtime';
+
 import type { RequestStatus } from '@/enums/EFromValidations';
 
+definePage({
+	meta: {
+		title: 'Business Account Confirmation',
+        auth: 'need-auth',
+	},
+    name: 'business-account-confirmation',
+	props: {
+        id: {
+            type: String,
+            required: true
+        }
+    },
+});
+
+
 const router = useRouter();
-const { params } = useRoute('/business/confirmation/[id]');
+const { params } = useRoute('business-account-confirmation');
 
 const codeNumbers = ref<{
 	number1: number,
@@ -116,7 +133,7 @@ const checkCodeStatus = async () => {
 		if ( response.value?.ok ) {
 			requestStatus.value = 'Success';
 
-			setTimeout( async() => await tostRouterTo(router, '/', {}, 'Account verified!'), 1000)
+			setTimeout( async() => await tostRouterTo(router, 'home', {}, 'Account verified!'), 1000)
 		} else 
 			requestStatus.value = 'Error';
 	} else 

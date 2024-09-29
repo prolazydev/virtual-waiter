@@ -47,30 +47,30 @@
                     </div>
                     <div class="w-3 h-3 mx-auto bg-rose-600 origin-center rounded-full"></div>
                     <div class="search-shortcuts flex gap-10">
-                        <button type="button">
+                        <div role="button" type="button">
                             <p>Hot now</p>
                             <LucideIcon name="Flame" :strokeWidth="2" />
-                        </button>
-                        <button type="button">
+                        </div>
+                        <div role="button" type="button">
                             <p>New</p>
                             <LucideIcon name="CookingPot" :strokeWidth="2" />
-                        </button>
-                        <button type="button">
+                        </div>
+                        <div role="button" type="button">
                             <p>Close to you</p>
                             <LucideIcon name="Telescope" :strokeWidth="2" />
-                        </button>
-                        <button type="button">
+                        </div>
+                        <div role="button" type="button">
                             <p>Surprise me</p>
                             <LucideIcon name="Cookie" :strokeWidth="2" />
-                        </button>
+                        </div>
                     </div>
                     <div class="w-3 h-3 mx-auto bg-rose-600 origin-center rounded-full"></div>
                 </div>
                 <div class="flex flex-col gap-5">
                     <!-- TODO: Show results here -->
                     <div class="search-items ">
-                        <SearchItem v-for="index in 10" :key="index" 
-                            r-name="Artro" 
+                        <SearchItem v-for="index in 10" :key="index"
+                            name="Artro"
                             city-of-origin="Ferizaj" 
                             photo="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fblog.myfitnesspal.com%2Fwp-content%2Fuploads%2F2017%2F12%2FEssential-Guide-to-Healthy-Eating-2.png&f=1&nofb=1&ipt=a0a4fe3926f2c453777359ed46a0c88354e9ab138068354c1c67fe44ff807eec&ipo=images"
                             type-of-business="Burgers" 
@@ -89,10 +89,19 @@
 </template>
 
 <script lang="ts" setup>
+import { definePage } from 'unplugin-vue-router/runtime';
 import 'toolcool-range-slider';
 
 import { type SliderEvent } from '@/types'
 import { ESortType } from '@/types';
+
+definePage({
+    meta: {
+        title: 'Search',
+        auth: 'both',
+    },
+    name: 'search',
+});
 
 const { toHourMinute } = myTime();
 
@@ -161,17 +170,16 @@ const test = `One of my go to places for salads in Frankfurt.
                     The staff is always friendly and helpful.`
 
 // TODO: Implement search
-// @ts-expect-error 
-async function handleSearch() {
-    if (!searching.value) 
-        searching.value = true;
-
-    // await router.push( { name: 'searchDashboard', query: { 
-    //         searchType: searchProps.value.searchType, 
-    //         query: searchProps.value.query
-    //     }
-    // });
-}
+// async function handleSearch() {
+//     if (!searching.value)
+//         searching.value = true;
+//
+//     // await router.push( { name: 'searchDashboard', query: {
+//     //         searchType: searchProps.value.searchType,
+//     //         query: searchProps.value.query
+//     //     }
+//     // });
+// }
 const setBudget = (e: SliderEvent<typeof budgetRangeValues.value>) => {
     budgetRangeValues.value.value1 = e.detail.value1;
     budgetRangeValues.value.value2 = e.detail.value2;
@@ -262,11 +270,11 @@ const setBudget = (e: SliderEvent<typeof budgetRangeValues.value>) => {
     font-family: 'Avenir', Helvetica, Arial, sans-serif; ; 
 }
 
-.search-shortcuts p, .search-shortcuts svg, .search-shortcuts button {
+.search-shortcuts p, .search-shortcuts svg, .search-shortcuts button, .search-shortcuts div[role="button"] {
     @apply transition-all duration-500 
 }
 
-.search-shortcuts button {
+.search-shortcuts button, .search-shortcuts div[role="button"] {
     @apply  px-6 py-2 bg-[#1b1b1b] border-4 border-black text-white text-xl relative duration-200
             capitalize overflow-hidden
             hover:cursor-pointer
@@ -279,11 +287,11 @@ const setBudget = (e: SliderEvent<typeof budgetRangeValues.value>) => {
 .search-shortcuts svg {
     @apply  absolute top-1/2 left-1/2 transform -translate-x-1/2 translate-y-12 
 }
-.search-shortcuts button:hover svg {
+.search-shortcuts button:hover svg, .search-shortcuts div[role="button"]:hover svg {
     @apply  -translate-y-1/2
 }
 
-.search-shortcuts button:hover p {
+.search-shortcuts button:hover p, .search-shortcuts div[role="button"]:hover p {
     @apply  -translate-y-14
 }
 

@@ -63,7 +63,7 @@ onMounted( async() => {
 			if ( response.value?.ok ) {
 				if ( data.value ) {
 					requestStatus.value = 'Success';
-					setTimeout(async () => await tostRouterTo(router, '/', {}, 'Account verified!'), 1000)
+					setTimeout(async () => await tostRouterTo(router, 'home', {}, 'Account verified!'), 1000)
 				} else 
 					requestStatus.value = 'Expired';
 			} else 

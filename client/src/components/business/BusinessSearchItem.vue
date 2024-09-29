@@ -5,7 +5,7 @@
 				<img :src="photo" alt="food">
 			</div>
 			<div class="flex flex-col gap-1">
-				<router-link to="/" class="hover:underline"><h3 class="text-2xl font-bold">{{ rName }}</h3></router-link>
+				<router-link :to="{ name: 'home' }" class="hover:underline"><h3 class="text-2xl font-bold">{{ name }}</h3></router-link>
 				<Review :stars="stars" :reviews="reviews" :sizes="20" />
 				<!-- Type of Business: Cafe, Restaurant, Grill, Stakehouse, Italian -->
 				<div class="flex gap-2 items-center">
@@ -29,11 +29,11 @@
 				<!-- TODO: Show the top rated review -->
 				<span v-if="topRatedReview && topRatedReview.length > 0" class="item-description">
 					<!-- NOTE: Need inline -->
-					<router-link class="mr-1 inline hover:underline" to="/">
+					<router-link class="mr-1 inline hover:underline" :to="{ name: 'home' }">
 						<LucideIcon class="inline hover:stroke-[3px]" name="MessageSquare" color="#1b1b1b" :size="14"  />
 					</router-link>
 					<p class="inline">{{ `${topRatedReview.slice(0, 305)}...` }}</p>
-					<router-link class="ml-1 inline hover:underline" to="/">more</router-link>
+					<router-link class="ml-1 inline hover:underline" :to="{ name: 'home' }">more</router-link>
 				</span>
 			</div>
 		</div>
@@ -55,7 +55,7 @@ const { getTimeValue } = myTime();
 
 const props = withDefaults(defineProps<{
 	photo: string,
-	rName: string,
+	name: string,
 	stars: number,
 	reviews: number,
 	typeOfBusiness: string,
@@ -69,7 +69,7 @@ const props = withDefaults(defineProps<{
 	tags?: string[],
 }>(), {
 	photo: '',
-	rName: '',
+	name: '',
 	stars: 0,
 	reviews: 0,
 	typeOfBusiness: '',

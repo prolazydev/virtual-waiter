@@ -165,8 +165,18 @@
 </template>
 
 <script lang="ts" setup>
+import { definePage } from 'unplugin-vue-router/runtime';
+
 import type { RequestStatus } from '@/enums/EFromValidations';
 import type { BusinessCategory, CreateBusinessModel, Days } from '@/types/models/business';
+
+definePage({
+	meta: {
+		title: 'Create Business',
+        auth: 'need-auth',
+	},
+    name: 'business-create',
+});
 
 const router = useRouter();
 const { user } = useUserStore();
@@ -331,7 +341,7 @@ const handleBusinessCreation = async () => {
 			console.log(data.value);
 			requestStatus.value = 'Success';
 			// `/business_confirmation/${data.value!.id}`
-			setTimeout(() => tostRouterTo(router, `/business/confirmation/[id]`, { id: data.value!.id }, 'Business created!'), 1250);
+			setTimeout(() => tostRouterTo(router, 'business-account-confirmation', { id: data.value!.id }, 'Business created!'), 1250);
 		} else {
 			requestStatus.value = 'Error';
 			setTimeout(() => requestStatus.value = 'Idle', 1250);

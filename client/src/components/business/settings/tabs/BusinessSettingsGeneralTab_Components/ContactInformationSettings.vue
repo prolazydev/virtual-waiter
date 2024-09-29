@@ -127,7 +127,7 @@
 import type { Business, BusinessEdit, EditContactField } from '@/types/models/business';
 
 const router = useRouter();
-const { params } = useRoute('/business/settings/[id]');
+const { params } = useRoute('business-settings');
 
 const { user } = useUserStore();
 
@@ -181,7 +181,7 @@ const handleGetBusiness = async () => {
 			case 404:
 				return await router.push({ name: 'not-found' });
 			case 400:
-				return await router.push({ name: '/error/bad-request' });
+				return await router.push({ name: 'bad-request' });
 			// Add additional cases as needed
 			default:
 				return // Handle other status codes if necessary
@@ -193,7 +193,7 @@ const handleGetBusiness = async () => {
 await handleGetBusiness();
 
 const goToUserSettings = async () => 
-    await router.push({ name: '/user/[username]', params: { username: user.username }, query: { setting: 'primary-email' } });
+    await router.push({ name: 'user-profile', params: { username: user.username }, query: { setting: 'primary-email' } });
 
 const handleToggleEditOrCreate = async (index: number) => 
     await toggleEditOrCreateContact(business, businessEdit, contactListFields, index);

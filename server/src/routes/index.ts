@@ -8,6 +8,7 @@ import restaurantRouter from './restaurant.router';
 // import restaurantRatingRouter from './restaurantRating.router';
 import businessRouter from './business.router';
 import businessCategoryRouter from './businessCategory.router';
+import productRouter from './products.router';
 
 const router = express.Router();
 
@@ -15,6 +16,7 @@ const router = express.Router();
  * Registers all the routes and middlewares for the respective routes
  */
 export default (): express.Router => {
+
 	// TODO: Add auth middleware
 	authRouter(router, [ isAuthenticated, isSelfUserOwner ]);
 
@@ -24,6 +26,8 @@ export default (): express.Router => {
 
 	businessRouter(router, [ isAuthenticated, isAdmin ]);
 	businessCategoryRouter(router, [ isAuthenticated, isAdmin ]);
+
+	productRouter(router, [ isAuthenticated ]);
 
 	return router;
 };

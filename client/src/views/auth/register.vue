@@ -59,6 +59,19 @@ import { definePage } from 'unplugin-vue-router/runtime';
 
 import type { InputValidity, RequestStatus } from '@/enums/EFromValidations';
 
+definePage({
+    meta: {
+        title: 'Sign up',
+        auth: 'only-guest',
+    },
+    name: 'signup',
+    // NOTE: If user is already logged in, redirect to home, also needs to use useAuth since using isAuth directly will be hoisted outside the setup() function
+    beforeEnter: ({}, {}, next) => 
+        useAuth().isAuth()
+            ? next({ name: 'home' })
+            : next()
+});
+
 const router = useRouter();
 
 // const becomeChef = ref(false);
@@ -79,20 +92,6 @@ const requestStatus = ref<RequestStatus>('Idle');
 const usernameRegex = /^[a-zA-Z0-9._]{2,30}$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/;
-
-definePage({
-    meta: {
-        title: 'Sign up',
-        auth: false,
-    },
-    name: 'signup',
-    // NOTE: If user is already logged in, redirect to home, also needs to use useAuth since using isAuth directly will be hoisted outside the setup() function
-    beforeEnter: ({}, {}, next) => 
-        useAuth().isAuth()
-            ? next({ name: '/' })
-            : next()
-});
-
 
 const validateUsername = async () => {
     if (registerForm.value.username.length === 0) 
@@ -172,7 +171,7 @@ const signUp = async () => {
          
             if (data.value) {
                 requestStatus.value = 'Success';
-                setTimeout( async() => await tostRouterTo(router, '/', {}, 'Please check your email to verify your account'), 1000)
+                setTimeout( async() => await tostRouterTo(router, 'home', {}, 'Please check your email to verify your account'), 1000)
             }
         } catch (error) {
             console.error(error);
