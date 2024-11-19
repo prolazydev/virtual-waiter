@@ -5,12 +5,12 @@
 			<form @submit.prevent="handleSearch">
 				<input class="px-2 py-1 border-2 border-[#1b1b1b] outline-none focus:border-b-rose-600 transition-colors" type="text" placeholder="Search" />
 			</form>
-			<router-link :to="{ name: 'business-create' }" class="px-2 py-1 text-white border-2 border-[#1b1b1b] bg-[#1b1b1b] active:border-b-white">Create your Business</router-link>
+			<router-link to="/business/create" class="px-2 py-1 text-white border-2 border-[#1b1b1b] bg-[#1b1b1b] active:border-b-white">Create your Business</router-link>
 		</div>
 		<div class="favorite-businesses">
 			<!-- TODO: Limit's to at most 4, maybe create a touch slider? But that may be overkill -->
 			<div v-for="business in favoriteBusinesses" :key="business._id" class="favorite-business-card">
-				<router-link :to="{ name: 'business', params: { id: business._id } }" class="overflow-hidden">
+				<router-link :to="{ path: `/business/${business._id}` }" class="overflow-hidden">
 					<div class="favorite-business-image">
 						<img 
                             v-if="business.coverImage" 
@@ -35,7 +35,7 @@
                         <LucideIcon class="fill-transparent hover:fill-rose-500 hover:text-rose-500 transition-all" name="Heart" :stroke-width="2" />
                     </button>
     
-                    <router-link :to="{ name: 'business-settings', params: { id: business._id } }" class="absolute top-0 left-0 m-2 z-50 transition-all"  type="button">
+                    <router-link :to="{ name: 'business-dashboard-settings', params: { id: business._id } }" class="absolute top-0 left-0 m-2 z-50 transition-all"  type="button">
                         <LucideIcon class="fill-transparent hover:rotate-90 transition-all duration-300" name="Settings" :stroke-width="2" />
                     </router-link>
                 </div>
@@ -60,7 +60,7 @@
 	</div>
 
 	<div v-else class="m-auto">
-		<router-link :to="{ name: 'business-create' }" title="Create your Business">
+		<router-link to="/business/create" title="Create your Business">
 			<LucideIcon class="text-gray-400 hover:text-[#1b1b1b] cursor-pointer transition-colors" name="CirclePlus" :size="148" />
 		</router-link>
 	</div>
@@ -98,10 +98,10 @@ const getBusinesses = async () => {
 		// TODO: handle error
 		switch (statusCode.value) {
 			case 400:
-				return await router.push({ name: 'bad-request' });
+				return await router.push({ name: '/error/bad-request' });
 			case 401:
 				// TODO: create bad request page
-				return await router.push({ name: 'bad-request' });
+				return await router.push({ name: '/error/bad-request' });
 			// Add additional cases as needed
 			default:
 				return // Handle other status codes if necessary

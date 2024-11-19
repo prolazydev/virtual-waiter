@@ -1,5 +1,6 @@
-import mongoose, { type FilterQuery, type ProjectionType, type QueryOptions, type Types } from 'mongoose';
-import { type ProductReview, ProductReviewModel } from '../../db/models/ProductReview';
+import { startSession, type FilterQuery, type ProjectionType, type QueryOptions, type Types } from 'mongoose';
+
+import { type ProductReview, ProductReviewModel } from '@/db/models/ProductReview';
 
 // POST
 export const createProductReview = async (productReview: ProductReview) =>
@@ -26,7 +27,7 @@ export const findAndUpdateProductReviewById = async (id: string | Types.ObjectId
 export const findAndDeleteProductReviewById = async (id: string | Types.ObjectId) =>
 	ProductReviewModel.findByIdAndUpdate(id, { 'deleted': true }, { new: true, runValidators: true });
 export const deleteProductReviewsByUserId = async (userId: string | Types.ObjectId) => {
-	const session = await mongoose.startSession();
+	const session = await startSession();
 	session.startTransaction();
 
 	try {

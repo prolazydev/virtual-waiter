@@ -34,7 +34,16 @@ export interface NestedSection {
     match?: boolean;
 }
 
-export type FormField = Field | NestedField | NestedSection;
+export interface DropdownField {
+	id: string;
+	label: string;
+	placeholder?: string;
+	fieldType: 'dropdown-field';
+	prop: PropType;
+	type: FieldType;
+}
+
+export type FormField = Field | NestedField | NestedSection | DropdownField;
 
 export interface Section {
     id: string;
@@ -155,7 +164,7 @@ export const sections: Section[] = [
             {
                 id: 'location',
                 label: 'Location',
-                fieldType: 'field',
+                fieldType: 'dropdown-field',
                 prop: 'location',
                 type: 'text',
                 placeholder: 'White House, Washington DC',

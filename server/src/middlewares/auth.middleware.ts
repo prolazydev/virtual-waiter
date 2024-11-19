@@ -1,19 +1,19 @@
+import mongoose from 'mongoose';
 import { NextFunction, Response, type CookieOptions } from 'express';
 
-import { ACCESS_TOKEN_DURATION } from '../utils/constants';
-import { rGet, rDel } from '../services/redis.service';
-import { findUserByEmail } from '../services/CRUD/user.service';
-import { UserResult, MyRequest } from '../types';
-import { Message } from '../utils/common/ServerResponseMessages';
-import { verifyToken, decodeToken, signToken } from '../utils/crypto';
-import { CustomError } from '../utils/errors';
-import { requestHandler } from '../utils/errors/asyncErrorHandler';
+import { ACCESS_TOKEN_DURATION } from '@/utils/constants';
+import { rGet, rDel } from '@/services/redis.service';
+import { findUserByEmail } from '@/services/CRUD/user.service';
+import { UserResult, MyRequest } from '@/types';
+import { Message } from '@/utils/common/ServerResponseMessages';
+import { verifyToken, decodeToken, signToken } from '@/utils/crypto';
+import { CustomError } from '@/utils/errors';
+import { requestHandler } from '@/utils/common/asyncErrorHandler';
 import { StatusCodes } from 'http-status-codes';
-import { respond } from '../utils/common/http';
-import mongoose from 'mongoose';
+import { respond } from '@/utils/common/http';
 
 export const isAuthenticated = requestHandler(async (req, res, next) => {
-	let accessToken = req.cookies.accessToken ?? req.signedCookies.accessToken;
+	let accessToken: string = req.cookies.accessToken ?? req.signedCookies.accessToken;
 
 	// Check if there is a token in the header, workaround
 	let myToken = req.headers.authorization;
@@ -28,9 +28,12 @@ export const isAuthenticated = requestHandler(async (req, res, next) => {
 
 	let userObj: UserResult;
 
-	const { payload } = verifyToken<UserResult>(accessToken);
+	// TODO: Refactor to validate the error
+	const { payload, err: payloadErr } = verifyToken<UserResult>(accessToken);
 
 	if ( !payload ) {
+		console.log(payloadErr);
+
 		const oldToken = decodeToken<UserResult>(accessToken);
 			
 		if ( !oldToken )
@@ -126,7 +129,7 @@ export const isSelfItemOwner = requestHandler(async (req, res, next, collectionN
 			return next(new CustomError(Message.MissingCredentials, 400));
 
 		// Set the collection to be used
-		const collection = mongoose.connection.db.collection(collectionName);
+		const collection = mongoose.connection!.db!.collection(collectionName);
 		if ( !collection )
 			return next(new CustomError(Message.NotFound, StatusCodes.NOT_FOUND));
 

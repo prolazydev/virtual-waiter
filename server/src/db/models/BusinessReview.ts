@@ -1,6 +1,7 @@
 import mongoose, { type InferSchemaType } from 'mongoose';
-import { findBusinessById } from '../../services/CRUD/business.service';
-import { findBusinessReviewsByBusinessId } from '../../services/CRUD/businessReview.service';
+
+import { findBusinessById } from '@/services/CRUD/business.service';
+import { findBusinessReviewsByBusinessId } from '@/services/CRUD/businessReview.service';
 
 export interface BusinessReviewDocument extends mongoose.Document {
 	businessId: mongoose.Schema.Types.ObjectId;

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { MONGODB_CONNECTION_URI } from '../utils/constants';
+import { MONGODB_CONNECTION_URI } from '@/utils/constants';
 
 export async function initDb() {
 	try {

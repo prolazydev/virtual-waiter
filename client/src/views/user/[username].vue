@@ -7,26 +7,26 @@
 </template>
 
 <script lang="ts" setup>
-import { definePage } from 'unplugin-vue-router/runtime';
+// import { definePage } from 'unplugin-vue-router/runtime';
 
-definePage({
-	meta: {
-        auth: 'need-auth',
-	},
-    name: 'user-profile',
-    props: {
-        username: {
-            type: String,
-            required: true
-        }
-    },
-});
+// definePage({
+// 	meta: {
+// 		auth: true
+// 	},
+//     name: 'user-profile',
+//     props: {
+//         username: {
+//             type: String,
+//             required: true
+//         }
+//     },
+// });
 
 // TODO: Handle autmatic prompting of specific action depending on the route query, eg: /user/:username?setting=primary-email
 
 const userData = ref();
 
-const { params } = useRoute('user-profile');
+const { params } = useRoute('/user/[username]');
 
 console.log(params);
 

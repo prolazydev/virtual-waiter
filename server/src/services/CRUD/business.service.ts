@@ -1,6 +1,7 @@
 import mongoose, { type AggregateOptions, type ClientSession, type FilterQuery, type PipelineStage, type ProjectionType, type QueryOptions, type UpdateQuery } from 'mongoose';
 import { UpdateOptions } from 'mongodb';
-import { type Business, BusinessModel } from '../../db/models/Business/Business';
+
+import { type Business, BusinessModel } from '@/db/models/Business/Business';
 
 // POST
 export const createBusiness = async (business: Business) =>

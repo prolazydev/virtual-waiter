@@ -1,11 +1,13 @@
 import mongoose, { FilterQuery } from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
 
-import { respond } from '../utils/common/http';
-import { Message } from '../utils/common/ServerResponseMessages';
-import { requestHandler } from '../utils/errors/asyncErrorHandler';
-import { Restaurant } from '../db/models/Restaurant';
-import { createRestaurant, deleteRestaurantById, deleteRestaurantsByUserIdTransaction, findAndUpdateRestaurantById, findRestaurantById, findRestaurants, findRestaurantsByCustomQuery, findRestaurantsByName, findRestaurantsByUserId } from '../services/CRUD/restaurant.service';
+import { Restaurant } from '@/db/models/Restaurant';
+
+import { respond } from '@/utils/common/http';
+import { Message } from '@/utils/common/ServerResponseMessages';
+import { requestHandler } from '@/utils/common/asyncErrorHandler';
+
+import { createRestaurant, deleteRestaurantById, deleteRestaurantsByUserIdTransaction, findAndUpdateRestaurantById, findRestaurantById, findRestaurants, findRestaurantsByCustomQuery, findRestaurantsByName, findRestaurantsByUserId } from '@/services/CRUD/restaurant.service';
 
 export const registerRestaurant = requestHandler<Restaurant>(async (req, res) => {
 	try {

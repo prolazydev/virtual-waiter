@@ -1,4 +1,3 @@
-
 /**
  * Convert a date to a cron expression
  * @param {DATE} date The date to convert

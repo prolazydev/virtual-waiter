@@ -1,27 +1,27 @@
 import express from 'express';
 import http from 'http';
 
-import { PORT } from '../constants';
-import mainRouting from '../../routes';
-import { globalErrorHandler } from '../../controllers/error.controller';
+import { PORT } from '@/utils/constants';
+import mainRouting from '@/routes';
+import { globalErrorHandler } from '@/controllers/error.controller';
 
 const app = express();
 
-export function createApp() {
-	return app;
-}
+export const createApp = () => app;
+// export function createApp() {
+// 	return app;
+// }
 
 export function initServer() {
 	const server = http.createServer(app);
 
-	server.listen(PORT, () => 
+	server.listen(PORT, '0.0.0.0', () => 
 		console.log(`Listening on port http://localhost:${PORT}/`)
 	);
 
 	handleMiscErrors(server);
 
 	return server;
-	// return app; 
 }
 
 export function handleMiscErrors(server: http.Server) {
@@ -62,7 +62,20 @@ export function handleMiscErrors(server: http.Server) {
  * Initializes the routing for the application
  */
 export function initRouting() {
-	app.use('/api', mainRouting());
+	const router = express.Router();
+
+	app.use('/api', mainRouting(router));
+
+	// TODO: Move this to a separate file
+	app.use('/api/test/static', (req, res) => res.send({ message: 'Test response' }));
+	app.get('/api/test/dynamic', (req, res) => {
+		const result = Array.from(
+			{ length: 100000 }, 
+			(_, i) => i * 2)
+			.reduce((acc, curr) => acc + curr, 0);
+
+		res.send({ result });
+	});
 
 	// Must be the last middleware
 	app.use(globalErrorHandler);

@@ -11,7 +11,11 @@
 
             <div class="w-32 relative">
                 <transition name="fade">
-                    <p v-if="settingSearchInput.length > 0" :key="settingSearchInput.length" class="w-full font-semibold absolute-center">
+                    <p 
+						v-if="settingSearchInput.length > 0" 
+						:key="settingSearchInput.length" 
+						class="w-full font-semibold absolute-center"
+					>
                         Found {{ foundFields }} {{ foundFields > 1 ? 'results' : 'result' }}
                     </p>
                 </transition>
@@ -30,20 +34,20 @@
                         <div class="max-w-[27rem] flex flex-wrap justify-between">
                             <template v-for="(field) in filteredSingleFields(section.fields)" :key="field.id">
                                 <EditFormPart 
-                                    v-if="field.type === 'text'"
+                                    v-if="field.type === 'text' && field.fieldType === 'field'"
                                     @toggle-edit="toggleEdit(field.prop as BusinessFormFieldKeys)"
                                     :state="editFormState(businessFormFields[field.prop as BusinessFormFieldKeys].state)"
-                                    class="form-part min-w-52"
                                     :id="field.id"
                                     :title="field.label"
+                                    class="form-part min-w-52"
                                 >
                                     <input 
                                         @keyup.enter="toggleEdit(field.prop as BusinessFormFieldKeys, 'edit')"
                                         v-model="businessFormFields[field.prop as BusinessFormFieldKeys].value"
                                         :disabled="businessFormFields[field.prop as BusinessFormFieldKeys].state === 'idle'"
-                                        type="text" 
                                         :id="field.id" 
                                         :placeholder="field.placeholder"
+                                        type="text" 
                                         class="form-input"
                                         autocomplete="off"
                                     />
@@ -149,6 +153,61 @@
                                     </MyDialog>
                                 </template>
                             </template>
+
+							<!-- TODO: implement dropdown search results of street addresses -->
+							<template v-for="(field) in filteredDropdownFields(section.fields)" :key="field.id">
+								<EditFormPart
+									v-if="field.fieldType === 'dropdown-field' && field.label === 'Location'"
+									@toggle-edit="toggleEdit(field.prop as BusinessFormFieldKeys)"
+									:state="editFormState(businessFormFields[field.prop as BusinessFormFieldKeys].state)"
+                                    :id="field.id"
+                                    :title="field.label"
+									class="form-part min-w-52"
+								>
+									<DebounceSearch
+										v-model="businessFormLocationField"
+										input-type="text"
+										:debounce-delay="500"
+										:id="field.id"
+										@debounce-fn="handleLocationSearch"
+
+										:disabled="businessFormFields[field.prop as BusinessFormFieldKeys].state === 'idle'"
+										:placeholder="field.placeholder"
+										input-class="form-input"
+									>
+										<template #bottom>
+											<ul :class="{ 'show-search-results': searchResults && searchResults.features && searchResults.features.length > 0 && businessFormFields[field.prop as BusinessFormFieldKeys].state !== 'idle' }" 
+												class="search-result" 
+											>
+												<li v-for="item in searchResults.features" :key="item.properties.osm_id">
+													<div 
+														@click="selectLocation(item)"
+														role="button" 
+														class="capitalize"
+													> 
+														<b>{{ `${item.properties.city}: ${item.properties.name}` }}</b>
+
+														{{ item.properties.country ? ` - ${item.properties.country ?? '' }` : '' }}
+													</div>
+												</li>
+											</ul>
+										</template>
+									</DebounceSearch>
+
+									<template #footer>
+										<div class="flex justify-end gap-5">
+											<button @click="toggleEdit(field.prop as BusinessFormFieldKeys)">
+												Cancel
+											</button>
+											<button @click="toggleEdit(field.prop as BusinessFormFieldKeys, 'edit')" class="form-button-1">
+												<CustomLoader :state="editState(businessFormFields[field.prop as BusinessFormFieldKeys].state)" class="edit-button">
+													Save
+												</CustomLoader>
+											</button>
+										</div>
+									</template>
+								</EditFormPart>
+							</template>
                         </div>
                     </template>
 
@@ -257,8 +316,16 @@
                                                             autocomplete="off"
                                                         />
 
-                                                        <ul :class="{ 'show-business-categories-input': categoriesResult.length > 0 && categoryInput.length > 0 }" class="business-categories-result" >
-                                                            <li v-for="(item, index) in categoriesResult" :key="index" @click="addCategory(item.name)" class="flex gap-1">
+                                                        <ul 
+															:class="{ 'show-business-categories-input': categoriesResult.length > 0 && categoryInput.length > 0 }" 
+															class="business-categories-result" 
+														>
+                                                            <li 
+																v-for="(item, index) in categoriesResult" 
+																:key="index" 
+																@click="addCategory(item.name)" 
+																class="flex gap-1"
+															>
                                                                 <p v-if="item.parentCategories[0]" class="capitalize">{{ item.parentCategories[0] }} - </p> <span v-html="formatText(item.name)"></span>
                                                             </li>
                                                         </ul>
@@ -361,14 +428,14 @@
 import type { WatchStopHandle } from 'vue';
 
 import type { LoadingState } from '@/types';
-import type { Business, BusinessCategory, BusinessFormFieldKeys, BusinessFormFields, Days } from '@/types/models/business';
+import type { Business, BusinessCategory, BusinessFormFieldKeys, BusinessFormFields, BusinessLocationData, Days } from '@/types/models/business';
 import type { FormField } from '@/constants/business/settings/pageInformation';
 
 import { placeholderPageSettings } from '@/constants/business/settings';
 import { sections } from '@/constants/business/settings/pageInformation';
 
 const router = useRouter();
-const { params } = useRoute('business-settings');
+const { params } = useRoute('business-dashboard-settings');
 
 const { updateBusiness } = businessService();
 const { toggleDialog, isDialogClosed } = myDialog();
@@ -377,11 +444,14 @@ const loader = useLoader();
 
 const business = ref<Business>({} as Business);
 const businessFormFields = ref<BusinessFormFields>(placeholderPageSettings);
+const businessFormLocationField = ref('');
 
 const settingSearchInput = ref('');
 
 const categoryInput = ref('');
 const categoriesResult = ref<BusinessCategory[]>([]);
+
+const searchResults = ref<BusinessLocationData>({} as BusinessLocationData);
 
 const business24Hours = ref({
 	monday: false,
@@ -419,10 +489,17 @@ onUnmounted(() => {
 });
 
 const filteredSingleFields = (fields: FormField[]) => {
-    if (fields && fields.length > 0 && fields.some(f => f.fieldType === 'field'))
-        return fields.filter(f => f.fieldType === 'field')
+    if (fields && fields.length > 0 && fields.some(f => f.fieldType === 'field' || f.fieldType === 'dropdown-field'))
+        return fields.filter(f => f.fieldType === 'field' || f.fieldType === 'dropdown-field')
     else
         return [];
+}
+
+const filteredDropdownFields = (fields: FormField[]) => {
+	if (fields && fields.length > 0 && fields.some(f => f.fieldType === 'dropdown-field'))
+		return fields.filter(f => f.fieldType === 'dropdown-field')
+	else
+		return [];
 }
 
 const filteredNestedFields = (fields: FormField[]) => {
@@ -489,7 +566,7 @@ const searchFields = (fields: FormField[], query: string): FormField[] => {
                     };
                 }
                 return null; // No match found in this nested structure
-            } else if (field.fieldType === 'field') {
+            } else if (field.fieldType === 'field' || field.fieldType === 'dropdown-field') {
                 // Check if this simple field matches the query
                 if (field.label.toLowerCase().includes(query) || field.placeholder?.toLowerCase().includes(query) || field.prop.toLowerCase().includes(query))
                     return { ...field };
@@ -499,6 +576,39 @@ const searchFields = (fields: FormField[], query: string): FormField[] => {
             }
         })
         .filter(field => field !== null) as FormField[];
+}
+
+const selectLocation = (item: BusinessLocationData['features'][0]) => {
+	businessFormFields.value.location.value = { 
+		name: item.properties.name ?? '',
+		city: item.properties.city ?? '', 
+		state: item.properties.state ?? '', 
+		zipCode: item.properties.postcode ?? '', 
+		id: item.properties.osm_id.toString()! 
+	};
+
+	searchResults.value = { features: [], type: '' } as BusinessLocationData;
+	businessFormLocationField.value = item.properties.name ?? item.properties.city ?? '';
+}
+
+const handleLocationSearch = async (searchQuery: string) => {
+	try {
+		loader.startLoader();
+        const encodedQuery = encodeURIComponent(searchQuery);
+        const url = `https://photon.komoot.io/api/?q=${encodedQuery}&lat=42.67272&lon=21.16688`;
+		const res = await fetch(url);
+
+		if (!res.ok) {
+			throw new Error('Failed to fetch location data');
+		}
+
+		searchResults.value = await res.json();
+		console.log(searchResults.value);
+	} catch (error) {
+        console.error('Location search failed:', error);
+	} finally {
+		loader.finishLoader();
+	}
 }
 
 const editFormState = computed(() => {
@@ -564,7 +674,7 @@ const handleGetBusiness = async () => {
 			case 404:
 				return await router.push({ name: 'not-found' });
 			case 400:
-				return await router.push({ name: 'bad-request' });
+				return await router.push({ name: '/error/bad-request' });
 			// Add additional cases as needed
 			default:
 				return // Handle other status codes if necessary
@@ -711,7 +821,7 @@ const toggleEdit = async (prop: BusinessFormFieldKeys[] | BusinessFormFieldKeys,
 
                 loader.finishLoader();
                 businessFormFields.value[prop].state = 'success';
-                useTost('Business information updated successfully', 2000);
+                useTost('Business Information updated successfully!', 2000);
 
                 setTimeout(() => {
                     if (businessFormFields.value[prop].state === 'edit' || businessFormFields.value[prop].state === 'loading' || businessFormFields.value[prop].state === 'success')
@@ -722,7 +832,7 @@ const toggleEdit = async (prop: BusinessFormFieldKeys[] | BusinessFormFieldKeys,
                     case 404:
                         return await router.push({ name: 'not-found' });
                     case 400:
-                        return await router.push({ name: 'bad-request' });
+                        return await router.push({ name: '/error/bad-request' });
                     // Add additional cases as needed
                     default:
                         return; // Handle other status codes if necessary
@@ -822,7 +932,7 @@ const handleEdit = async (dialogElement: string, prop: BusinessFormFieldKeys | B
                 }, 2000);
             }
 
-            useTost('Business information updated successfully', 2000);
+            useTost('Business Information updated successfully!', 2000);
         }
     } catch (error) {
         console.error(error);
@@ -859,6 +969,7 @@ const handleEdit = async (dialogElement: string, prop: BusinessFormFieldKeys | B
 
 .business-categories-input svg {
 	@apply  cursor-pointer stroke-2 text-gray-600 hover:text-black
+	;
 }
 
 .business-categories-input ul {
@@ -868,7 +979,8 @@ const handleEdit = async (dialogElement: string, prop: BusinessFormFieldKeys | B
 }
 
 #businessCategories {
-	@apply disabled:bg-transparent;
+	@apply disabled:bg-transparent
+	;
 	width: 100% !important;
 }
 
@@ -876,22 +988,26 @@ const handleEdit = async (dialogElement: string, prop: BusinessFormFieldKeys | B
 	@apply	max-h-64 flex flex-col flex-nowrap gap-0 bg-white shadow-lg absolute transition-all duration-300
             top-[calc(100%-3rem)] -left-[0.15rem] opacity-0 pointer-events-none 
             overflow-hidden overflow-y-scroll z-[500]
+	;
 }
 
 .business-categories-input > input:focus + .show-business-categories-input {
     @apply  opacity-100 pointer-events-auto top-[calc(100%+0.75rem)] 
+	;
 }
 
 .business-categories-input .show-business-categories-input {
-    @apply  
-            hover:top-[calc(100%+0.75rem)] hover:opacity-100 hover:pointer-events-auto
+    @apply  hover:top-[calc(100%+0.75rem)] hover:opacity-100 hover:pointer-events-auto
+	;
 }
 
 .business-categories-input ul li input:focus + .show-business-categories-input {
 	@apply top-[calc(100%+0.75rem)] opacity-100 pointer-events-auto
+	;
 }
 .business-categories-input ul li input:disabled + .show-business-categories-input {
 	@apply top-[calc(100%-3rem)] opacity-0 pointer-events-none 
+	;
 }
 
 .business-categories-result li {
@@ -901,4 +1017,42 @@ const handleEdit = async (dialogElement: string, prop: BusinessFormFieldKeys | B
 	;
 }
 
+/* DEBOUNCE */
+.debounce-search-input ul {
+	@apply 	h-fit flex gap-2 border-2 border-[#1b1b1b] transition-[border]
+			focus:outline-none focus:border-b-rose-600 
+	;
+}
+
+.search-result {
+	@apply	w-52 max-h-80 flex flex-col flex-nowrap gap-0 bg-white shadow-lg absolute transition-all duration-300
+            top-[calc(100%-3rem)] left-0 opacity-0 pointer-events-none 
+            overflow-hidden overflow-y-scroll z-[500]
+	;
+}
+
+.debounce-search-input .search-result {
+	@apply 	p-2 cursor-pointer border-b-2  
+			hover:border-b-rose-700
+			transition-all duration-300
+	;
+}
+
+.search-result li {
+	@apply 	p-2 cursor-pointer border-b-2  
+			hover:border-b-rose-700
+			transition-all duration-300
+	;
+}
+
+.show-search-results:hover {
+	@apply opacity-100 pointer-events-auto top-[calc(100%+0.75rem)]
+	/* @apply  opacity-100 pointer-events-auto top-[calc(100%+0.75rem)]
+	;  */
+}
+
+.debounce-search-input > input:focus + .show-search-results {
+    @apply  opacity-100 pointer-events-auto top-[calc(100%+0.75rem)] 
+	;
+}
 </style>

@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
-import { MAILTRAP_HOST, MAILTRAP_PASSWORD, MAILTRAP_USERNAME } from './constants';
-import { SendEmailOptions } from '../types';
 
+import { SendEmailOptions } from '@/types';
+import { MAILTRAP_HOST, MAILTRAP_PASSWORD, MAILTRAP_USERNAME } from '@/utils/constants';
 
 export const sendEmail = async (options: SendEmailOptions) => {
 	const emailOptions = {

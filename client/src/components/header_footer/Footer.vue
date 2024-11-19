@@ -9,19 +9,18 @@
             <div id="exploreLinks" class="footer-links">
                 <h2>Explore</h2>
                 <div class="flex flex-col gap-1 items-start">
-                    <router-link :to="{ name: 'home' }">Home</router-link>
-                    <router-link :to="{ name: 'search' }">Discover</router-link>
-                    <router-link :to="{ name: 'about' }">About</router-link>
-					<!-- TODO: Implement Contact -->
-                    <router-link :to="{ name: 'home' }">Contact</router-link>
+                    <router-link to="/">Home</router-link>
+                    <router-link to="/search">Discover</router-link>
+                    <router-link to="/about">About</router-link>
+                    <router-link to="/contact">Contact</router-link>
                 </div>
             </div>
             <div id="getStartedLinks" class="footer-links">
                 <h2>Get started</h2>
                 <div class="flex flex-col gap-1 items-start">
-                    <router-link :to="{ name: 'signup' }">Login</router-link>
-                    <router-link :to="{ name: 'login' }">Sign Up</router-link>
-                    <router-link :to="{ name: 'business-create' }">Create Your Business</router-link>
+                    <router-link to="/login">Login</router-link>
+                    <router-link to="/register">Sign Up</router-link>
+                    <router-link to="/business/create">Create Your Business</router-link>
                 </div>
             </div>
             

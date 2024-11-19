@@ -1,8 +1,11 @@
 import { Router } from 'express';
-import { middlewareRequest } from '../types';
-import { updatePassword, addRole, login, register, testAuth, resetPasswordRequest, resetPassword, removeRole, isUsernameTaken, verifyAccount, loginWithUsername, logout, checkAuth } from '../controllers/auth.controller';
-import { deleteSelf, deleteUser } from '../controllers/user.controller';
-import { isAuthenticated } from '../middlewares/auth.middleware';
+
+import { middlewareRequest } from '@/types';
+
+import { deleteSelf, deleteUser } from '@/controllers/user.controller';
+import { isAuthenticated } from '@/middlewares/auth.middleware';
+
+import { updatePassword, addRole, loginWithEmail, register, testAuth, resetPasswordRequest, resetPassword, removeRole, isUsernameTaken, verifyAccount, loginWithUsername, logout, checkAuth } from '@/controllers/auth.controller';
 
 /**
  * Registers all the routes and middlewares for the respective routes
@@ -15,7 +18,7 @@ export default (authRouter: Router, middlewares: middlewareRequest = []) => {
 
 	// Auth Process
 	authRouter.post('/auth/register', register);
-	authRouter.post('/auth/login', login);
+	authRouter.post('/auth/login', loginWithEmail);
 	authRouter.post('/auth/login_with_username', loginWithUsername);
 	authRouter.post('/auth/logout', isAuthenticated, logout);
 	

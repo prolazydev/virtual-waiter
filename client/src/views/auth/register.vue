@@ -1,5 +1,5 @@
 <template>
-    <div class="w-fit h-full m-auto py-20 ">
+    <div class="w-fit h-full m-auto py-20">
         <div class="register-form">
             <div class="w-32 flex items-center justify-center relative">
                 <div class="relative">
@@ -62,13 +62,13 @@ import type { InputValidity, RequestStatus } from '@/enums/EFromValidations';
 definePage({
     meta: {
         title: 'Sign up',
-        auth: 'only-guest',
+        auth: false,
     },
     name: 'signup',
     // NOTE: If user is already logged in, redirect to home, also needs to use useAuth since using isAuth directly will be hoisted outside the setup() function
     beforeEnter: ({}, {}, next) => 
         useAuth().isAuth()
-            ? next({ name: 'home' })
+            ? next({ name: '/' })
             : next()
 });
 
@@ -171,7 +171,7 @@ const signUp = async () => {
          
             if (data.value) {
                 requestStatus.value = 'Success';
-                setTimeout( async() => await tostRouterTo(router, 'home', {}, 'Please check your email to verify your account'), 1000)
+                setTimeout( async() => await tostRouterTo(router, '/', {}, 'Please check your email to verify your account'), 1000)
             }
         } catch (error) {
             console.error(error);

@@ -1,5 +1,6 @@
-import mongoose, { FilterQuery, ProjectionType, QueryOptions, type Types } from 'mongoose';
-import { type Product, ProductModel } from '../../db/models/Product';
+import { FilterQuery, ProjectionType, QueryOptions, startSession, type Types } from 'mongoose';
+
+import { type Product, ProductModel } from '@/db/models/Product';
 
 // POST
 export const createProduct = async (product: Product) => 
@@ -24,7 +25,7 @@ export const findAndUpdateProductById = async (id: string | Types.ObjectId, valu
 export const findAndDeleteProductById = async (id: string | Types.ObjectId) => 
 	ProductModel.findByIdAndUpdate(id, { 'deleted': true }, { new: true, runValidators: true });
 export const deleteProductsByUserId = async (userId: string | Types.ObjectId) => {
-	const session = await mongoose.startSession();
+	const session = await startSession();
 	session.startTransaction();
 
 	try {

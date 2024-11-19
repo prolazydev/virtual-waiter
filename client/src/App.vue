@@ -33,17 +33,16 @@ const { checkAuth, isAuth } = useAuth();
 
 onBeforeMount(async () => {
     if (!isAuth()) {
+		console.log('App.vue: checkAuth');
         await checkAuth();
     }
 });
 
 onMounted(async () => {
-	// TODO: Implement this later
 	// const { runSocket } = webSocketService();
 	// runSocket();
 })
 </script>
-
 
 <style scoped>
 .header-separator {

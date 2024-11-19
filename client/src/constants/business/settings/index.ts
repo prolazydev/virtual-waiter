@@ -35,7 +35,13 @@ export const placeholderPageSettings: BusinessFormFields = {
     },
     location: {
         state: 'idle',
-        value: '',
+        value: {
+			name: '',
+			city: '',
+			state: '',
+			zipCode: '',
+			id: '',
+		},
     },
     country: {
         state: 'idle',

@@ -2,8 +2,8 @@ import mongoose, { InferSchemaType, Query, model } from 'mongoose';
 import validator from 'validator';
 import crypto from 'crypto';
 
-import {  RestaurantModel } from './Restaurant';
-import { hashPassword, randomSalt } from '../../utils/crypto';
+import {  RestaurantModel } from '@/db/models/Restaurant';
+import { hashPassword, randomSalt } from '@/utils/crypto';
 
 const userSchema = new mongoose.Schema({
 	firstName: {

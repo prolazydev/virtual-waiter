@@ -1,56 +1,54 @@
 <template>
-    <div class="w-fit h-full m-auto py-20">
-		<div id="loginForm">
-			<form @submit.prevent="handleLogin">
-				<div class="flex flex-col mx-auto">
-					<h1 class="w-fit text-3xl font-bold text-[#1b1b1b] uppercase tracking-widest">Login</h1>
-					<div class="h-1 w-4 mb-5 bg-[#1b1b1b]"></div>
-				</div>
+    <div id="loginForm">
+        <form @submit.prevent="handleLogin">
+            <div class="flex flex-col mx-auto">
+                <h1 class="w-fit text-3xl font-bold text-[#1b1b1b] uppercase tracking-widest">Login</h1>
+                <div class="h-1 w-4 mb-5 bg-[#1b1b1b]"></div>
+            </div>
 
-				<div class="relative flex flex-col gap-2">
-					<label class="opacity-0 transition-all duration-700" :class="{ 'opacity-100': identifierType === 'empty' }" for="identifier">Email / Username</label>
-					<label class="absolute top-0 left-14 opacity-0 transition-all duration-700" :class="{ 'show-label': identifierType === 'username' }" for="identifier">Username</label>
-					<label class="absolute top-0 left-14 opacity-0 transition-all duration-700" :class="{ 'show-label': identifierType === 'email' }" for="identifier">Email</label>
-					<input v-model="identifier" type="text" id="identifier" autofocus autocomplete="off" />
-				</div>
-				<div class="relative flex flex-col gap-2">
-					<label for="password">Password</label>
-					<input v-model="loginFormData.password" type="password" id="password" />
-				</div>
+            <div class="relative flex flex-col gap-2">
+                <label class="opacity-0 transition-all duration-700" :class="{ 'opacity-100': identifierType === 'empty' }" for="identifier">Email / Username</label>
+                <label class="absolute top-0 left-14 opacity-0 transition-all duration-700" :class="{ 'show-label': identifierType === 'username' }" for="identifier">Username</label>
+                <label class="absolute top-0 left-14 opacity-0 transition-all duration-700" :class="{ 'show-label': identifierType === 'email' }" for="identifier">Email</label>
+                <input v-model="identifier" type="text" id="identifier" autofocus autocomplete="off" />
+            </div>
+            <div class="relative flex flex-col gap-2">
+                <label for="password">Password</label>
+                <input v-model="loginFormData.password" type="password" id="password" />
+            </div>
 
-				<Checkbox v-model="loginFormData.rememberMe" _label="Remember me" _id="rememberMe" />
-				
-				<div class="relative w-3 h-3 mx-auto">
-					<div :class="{ 'go-down': requestStatus === 'Loading' || requestStatus === 'Error' }" class="w-3 h-3 mx-auto bg-[#1b1b1b]  absolute top-0 rounded-full transition-all duration-700"></div>
-				</div>
-				<button class="login-button" :class="{ 'processing': requestStatus === 'Loading' }" type="submit">
-					<p :class="{ 'translate-y-[calc(0%+40px)]': requestStatus === 'Success' || requestStatus === 'Error' }" class="transition-transform duration-500 delay-100">Login</p>
-					<LucideIcon :class="{ 'mt-14': requestStatus === 'Success', '-mt-14': requestStatus === 'Idle' || requestStatus === 'Error' }" id="loaderIcon" class="absolute"  name="Loader" :size="32" :stroke-width="2" />
-					<LucideIcon :class="{ 'process-success': requestStatus === 'Success' }" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-16 transition-all duration-500" id="chefHatIcon" name="ChefHat"  :size="32" :stroke-width="2"  />
-					<LucideIcon :class="{ 'process-success': requestStatus === 'Error' }" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-16 transition-all duration-500" id="chefHatIcon" name="CircleX"  :size="32" :stroke-width="2"  />
-				</button>
-			</form>        
-		</div>
-	</div>
+            <Checkbox v-model="loginFormData.rememberMe" _label="Remember me" _id="rememberMe" />
+            
+            <div class="relative w-3 h-3 mx-auto">
+                <div :class="{ 'go-down': requestStatus === 'Loading' || requestStatus === 'Error' }" class="w-3 h-3 mx-auto bg-[#1b1b1b]  absolute top-0 rounded-full transition-all duration-700"></div>
+            </div>
+            <button class="login-button" :class="{ 'processing': requestStatus === 'Loading' }" type="submit">
+                <p :class="{ 'translate-y-[calc(0%+40px)]': requestStatus === 'Success' || requestStatus === 'Error' }" class="transition-transform duration-500 delay-100">Login</p>
+                <LucideIcon :class="{ 'mt-14': requestStatus === 'Success', '-mt-14': requestStatus === 'Idle' || requestStatus === 'Error' }" id="loaderIcon" class="absolute"  name="Loader" :size="32" :stroke-width="2" />
+                <LucideIcon :class="{ 'process-success': requestStatus === 'Success' }" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-16 transition-all duration-500" id="chefHatIcon" name="ChefHat"  :size="32" :stroke-width="2"  />
+                <LucideIcon :class="{ 'process-success': requestStatus === 'Error' }" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-16 transition-all duration-500" id="chefHatIcon" name="CircleX"  :size="32" :stroke-width="2"  />
+            </button>
+        </form>        
+    </div>
 </template>
 
 <script lang="ts" setup>
 import { definePage } from 'unplugin-vue-router/runtime';
+import type { RouteNamedMap } from 'vue-router/auto-routes';
 
 import type { RequestStatus } from '@/enums/EFromValidations';
 import type { LoggedInUser, LoginModel } from '@/types/auth/user';
-import type { RouteNamedMap } from 'vue-router/auto-routes';
 
 definePage({
     meta: {
         title: 'Login',
-        auth: 'only-guest',
+        auth: false,
     },
     name: 'login',
     // NOTE: If user is already logged in, redirect to home, also needs to use useAuth since using isAuth directly will be hoisted outside the setup() function
     beforeEnter: ({}, {}, next) => 
         useAuth().isAuth()
-            ? next({ name: 'home' })
+            ? next({ name: '/' })
             : next()
 });
 
@@ -109,33 +107,19 @@ const handleLogin = async () => {
             requestStatus.value = 'Success';
 
             login(data.value)
-            useTost('Logged in!');
-
-			let redirect: { 
-				name: keyof RouteNamedMap, 
-				params?: any 
-			} = { name: 'home' };
 
             setTimeout(async () => {
-				if (route.query.redirect) { 
-					if (route.query.params)
-						redirect = { name: route.query.redirect as keyof RouteNamedMap, params: route.query.params }
-					else
-						redirect = { name: route.query.redirect as keyof RouteNamedMap}
-				} else {
-					// const redirect = (route.query.redirect ?? 'home') as keyof RouteNamedMap;
-					redirect = { name: 'home' }
-				}
-
-				await tostRouterTo(router, redirect.name, redirect.params, 'Logged in!')
+                const redirect = (route.query.redirect ?? '/') as keyof RouteNamedMap;
+                await tostRouterTo(router, redirect, {}, 'Logged in!')
             }, 650);
         } else {
+            
+
             requestStatus.value = 'Error';
             setTimeout(() => requestStatus.value = 'Idle', 1250)
             console.log(statusCode.value, error.value);
         }
     } catch (error) {
-		// TODO: Show error message on form
         console.log(error);
     }
 }
@@ -143,7 +127,7 @@ const handleLogin = async () => {
 
 <style scoped>
 #loginForm {
-    @apply m-auto py-16 px-20 flex gap-20 bg-white border-4 border-[#1b1b1b]
+    @apply m-auto my-16 py-16 px-20 flex gap-20 bg-white border-4 border-[#1b1b1b]
     ;
 }
 

@@ -1,7 +1,7 @@
-import type { Business, BusinessEdit, BusinessFormFieldKeys } from '@/types/models/business';
+import type { Business, BusinessEdit, BusinessQueryFieldKeys } from '@/types/models/business';
 
 export default () => {
-    const getBusinessById = async (id: string, fields: BusinessFormFieldKeys[] = []) =>
+    const getBusinessById = async (id: string, fields: BusinessQueryFieldKeys[] = []) =>
         await myFetch<Business>(`business/${id}${setupFields(fields)}`);
     
     const getBusinessByName = async (name: string) =>
@@ -10,7 +10,7 @@ export default () => {
     const getBusinessesSelf = async () => 
 		await myFetch<Business[]>('business_self');
 
-    const getBusinessSelfById = async (id: string, fields: BusinessFormFieldKeys[] = []) => 
+    const getBusinessSelfById = async (id: string, fields: BusinessQueryFieldKeys[] = []) => 
         await myFetch<Business>(`business_self/${id}${setupFields(fields)}`);
 
     const getBusinessDisplayNameById = async (id: string) => 

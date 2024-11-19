@@ -68,6 +68,6 @@ const findComponent = async (componentName: string, startPath: string = './src/c
  * @param path 
  */
 function logComponent(title: string, componentName: string, path: string) {
-    const paddedTitle = title.padEnd(11, ' ');
-    console.log(`\n${paddedTitle}  \x1b[94m${componentName}\x1b[0m\nPath: \x1b[36m${path}\x1b[0m`);
+    const paddedTitle = title.padEnd(6, ' ').padStart(5, ' ');
+    console.log(`\n${paddedTitle} \x1b[94m${componentName}\x1b[0m\nPath:  \x1b[36m${path}\x1b[0m`);
 }

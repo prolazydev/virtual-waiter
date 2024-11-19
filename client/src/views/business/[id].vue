@@ -235,27 +235,40 @@
 						</div>
 					</div>
 				</div>
-				<div class="flex gap-5">
+				<div class="flex gap-5 items-start">
 					<div class="w-full h-fit p-5 flex flex-col gap-5 border-2 border-[#1b1b1b]">
 						<h2 class="text-2xl pb-3 font-semibold border-b border-b-[#1b1b1b]/50">Location</h2>
-						<!-- <hr class="border-[#1b1b1b]/50" /> -->
-
-						<div class="w-full h-64 border-2 border-[#1b1b1b]">
-							<p>google map here</p>
-						</div>
+						
+						<div
+							v-if="business.location"
+							class="w-full h-64 border-2 border-[#1b1b1b]"
+							v-html="business.location"
+						></div>
+						<h2 v-else class="text-gray-600 font-semibold">Google Location not provided</h2>
 
 						<template v-if="business.streetAddress && business.streetAddress.primary">
 							<hr class="border-[#1b1b1b]/50">
 							<div class="flex justify-between">
 								<div class="flex flex-col">
-									<a href="#">Google map link</a>
+									<h2 class="text-xl font-semibold">Address</h2>
 									<p>{{ business.streetAddress.primary.main }}</p>
 									<p>{{ business.streetAddress.primary.zipCode }}</p>
 								</div>
+
 								<div class="flex flex-col">
-									<button class="px-2 py-1 font-semibold text-white bg-[#1b1b1b] border-2 border-[#1b1b1b] active:border-b-white transition-all" type="button">
-										Get Directions
-									</button>
+									<Tooltip 
+										:show="!business.location" 
+										:text="business.location ? 'test' : 'No Location provided'"
+										_class="w-max text-center mb-6"
+									>
+										<button 
+											:disabled="!business.location"
+											class="px-2 py-1 font-semibold text-white bg-[#1b1b1b] border-2 border-[#1b1b1b] active:border-b-white transition-all disabled:opacity-75 disabled:cursor-not-allowed disabled:pointer-events-none"
+											type="button"
+										>
+											Get Directions
+										</button>
+									</Tooltip>
 								</div>
 							</div>
 						</template>
@@ -266,7 +279,7 @@
 						
 						<!-- TODO: Show events (implement special events, eg: rock night [9PM]) -->
 						<div class="w-full h-full flex gap-3">
-							<div v-if="!business.is24 && business.hours" class="w-64 flex flex-col justify-between">
+							<div v-if="!business.is24 && business.hours" class="w-64 flex flex-col gap-3 justify-between">
 								<div class="flex" v-for="(key) in Object.keys(business.hours)" :key="key" >
 									<h3 class="w-1/2 text-xl font-semibold capitalize">{{ key }}</h3>
 									<p>{{ (business.hours)[key as KeyHours] }}</p>
@@ -433,26 +446,13 @@
 </template>
 
 <script lang="ts" setup>
-import { definePage } from 'unplugin-vue-router/runtime';
-
 import 'v-calendar/style.css';
 import type { Business, KeyHours } from '@/types/models/business';
+import { b } from 'node_modules/unplugin-vue-router/dist/types-DBiN4-4c';
 
-definePage({
-	meta: {
-		title: 'Business',
-        auth: 'need-auth',
-	},
-    name: 'business',
-	props: {
-        id: {
-            type: String,
-            required: true
-        }
-    },
-});
+const myHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2947.672753648975!2d21.146266175250368!3d42.37081293442345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x13547e56ec9b8e29%3A0x47bae41a2a90f950!2sBallkan%20Restaurant!5e0!3m2!1sen!2s!4v1730668089760!5m2!1sen!2s" class="w-full h-full border-none"allowfullscreen="false" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`
 
-const { params } = useRoute('business');
+const { params } = useRoute('/business/[id]');
 const router = useRouter();
 
 const { user } = useUserStore();
@@ -485,7 +485,7 @@ async function handleGetBusiness() {
 			case 404:
 				return await router.push({ name: 'not-found' });
 			case 400:
-				return await router.push({ name: 'bad-request' });
+				return await router.push({ name: '/error/bad-request' });
 			// Add additional cases as needed
 			default:
 				return; // Handle other status codes if necessary
@@ -500,6 +500,13 @@ await handleGetBusiness();
 
 const handleShowProduct = () => {
 	console.log('Show product');
+}
+// TODO: finish this
+const generateGoogleMapsLink = (destination: string) => {
+  const baseUrl = 'https://www.google.com/maps/dir/?api=1';
+  const origin = 'current+location';  // or you could use specific coordinates
+  const url = `${baseUrl}&origin=${origin}&destination=${encodeURIComponent(destination)}`;
+  return url;
 }
 
 </script>

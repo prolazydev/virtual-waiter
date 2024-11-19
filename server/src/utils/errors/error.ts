@@ -1,8 +1,9 @@
 import type { Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
 import { Error } from 'mongoose';
-import { Message } from '../common/ServerResponseMessages';
-import { respond } from '../common/http';
+import { StatusCodes } from 'http-status-codes';
+
+import { Message } from '@/utils/common/ServerResponseMessages';
+import { respond } from '@/utils/common/http';
 
 export const handleError = (res: Response, error: unknown) => {
 	console.log('Error: ', error);

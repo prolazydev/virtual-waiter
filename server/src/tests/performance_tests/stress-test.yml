@@ -1,0 +1,25 @@
+config:
+  target: "http://localhost:4069" 
+  phases:
+    - duration: 10
+      arrivalRate: 10
+      name: Warm-up phase
+    # - duration: 10
+    #   arrivalRate: 20
+    #   name: Medium load phase
+    - duration: 10
+      arrivalRate: 125
+      name: High load phase
+    - duration: 10
+      arrivalRate: 330
+      name: Peak load phase
+  apdex:
+    threshold: 100
+  ensure:
+    thresholds:
+      - http.response_time.p99: 100
+      - http.response_time.p95: 75
+scenarios:
+  - flow:
+      - get:
+          url: "/api/test/static"

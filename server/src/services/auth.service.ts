@@ -1,6 +1,7 @@
-import { Message } from '../utils/common/ServerResponseMessages';
-import { verifyToken, decodeToken } from '../utils/crypto';
-import { rGet, rDel } from './redis.service';
+import { Message } from '@/utils/common/ServerResponseMessages';
+import { verifyToken, decodeToken } from '@/utils/crypto';
+
+import { rGet, rDel } from '@/services/redis.service';
 
 export const isAuth = async (accessToken: string) => {
 	const payload = verifyToken(accessToken);

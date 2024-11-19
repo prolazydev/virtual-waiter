@@ -1,12 +1,14 @@
+import mongoose from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
 
-import { respond } from '../utils/common/http';
-import { Message } from '../utils/common/ServerResponseMessages';
-import { requestHandler } from '../utils/errors/asyncErrorHandler';
-import { createBusinessCategory, findAllBusinessCategories, findBusinessCategoryById, findBusinessCategoriesByName, findBusinessCategoriesByCustomQuery, deleteBusinessCategoriesByUserId, findAndUpdateBusinessCategoryById, deleteBusinessCategoriesByUserIdTransaction } from '../services/CRUD/businessCategory.service';
-import type { BusinessCategory } from '../db/models/BusinessCategory';
-import { handleError } from '../utils/errors/error';
-import mongoose from 'mongoose';
+import type { BusinessCategory } from '@/db/models/BusinessCategory';
+
+import { respond } from '@/utils/common/http';
+import { Message } from '@/utils/common/ServerResponseMessages';
+import { requestHandler } from '@/utils/common/asyncErrorHandler';
+import { handleError } from '@/utils/errors/error';
+
+import { createBusinessCategory, findAllBusinessCategories, findBusinessCategoryById, findBusinessCategoriesByName, findBusinessCategoriesByCustomQuery, deleteBusinessCategoriesByUserId, findAndUpdateBusinessCategoryById, deleteBusinessCategoriesByUserIdTransaction } from '@/services/CRUD/businessCategory.service';
 
 export const registerBusinessCategory = requestHandler<BusinessCategory>(async (req, res) => {
 	try {

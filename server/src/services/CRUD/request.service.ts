@@ -1,4 +1,4 @@
-import { RequestModel } from '../../db/models/Request';
+import { RequestModel } from '@/db/models/Request';
 
 // POST
 export const createRequest = async (request: Request) =>

@@ -32,7 +32,8 @@ withDefaults(defineProps<{
 	@apply border-2 border-[#1b1b1b] shadow-lg
 	;
 	position-anchor: v-bind(anchorName);
-	/* inset-area: center; */ /* Deprecated */
+	/* TODO: Replace inset-area with position-area */
+	/* inset-area: center; */
 	position-area: center;
 	position-try-options: flip-block;
 }

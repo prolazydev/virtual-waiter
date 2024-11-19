@@ -1,4 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 import redis, { SetOptions } from 'redis';
 
 let retries = 1;

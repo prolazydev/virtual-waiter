@@ -28,7 +28,7 @@
 			<!-- <Transition mode="in-out"> -->
 				<Suspense :timeout="0">
 					<template #default>
-						<component :is="businessDashboardTab" :key="tab" />
+						<component :is="componentRenderer" :key="tab" />
 					</template>
 					<template #fallback>
 						<Loading />
@@ -47,7 +47,7 @@ import type { BusinessDashboardTab, BusinessDashboardTabTitles } from '@/types/m
 definePage({
     meta: {
         title: 'Dashboard',
-        auth: 'need-auth',
+        auth: true,
     },
     name: 'business-dashboard',
 });
@@ -57,6 +57,7 @@ const loader = useLoader();
 
 const tab = ref<BusinessDashboardTabTitles>(user.lastBusinessDashboardTab ?? 'Home');
 
+// TODO: Relocate this
 const tabs: BusinessDashboardTab[] = [
 	{ 
 		name: 'Home',
@@ -90,7 +91,7 @@ const tabs: BusinessDashboardTab[] = [
 
 watch(tab, (newTab) => setTab('lastBusinessDashboardTab', newTab))
 
-const businessDashboardTab = computed(() => {
+const componentRenderer = computed(() => {
 	try {
 		loader.startLoader();
 		switch (tab.value) {

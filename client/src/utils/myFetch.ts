@@ -1,7 +1,8 @@
 import { createFetch, type UseFetchOptions, type UseFetchReturn } from '@vueuse/core';
+import { SERVER_PORT } from './constants/env';
 
 const _myFetch = createFetch({
-	baseUrl: 'http://localhost:4069/api/',
+	baseUrl: `http://localhost:${SERVER_PORT}/api/`,
 	fetchOptions: {
 		headers: {
 			'Content-Type': 'application/json',
@@ -34,13 +35,13 @@ const _myFetch = createFetch({
 			else if (response.response.status === 401 || response.response.status === 403) {
                 // TODO: refactor to use auth store
                 
+				// debugger;
 				// console.log(`Unauthorized Response: ${response.response.status}`);
 				// const { logout } = useAuth();
 				// await logout();
 			}
 			else 
 				return await response.response.json();
-				
 		},	
 	}
 });
@@ -61,14 +62,7 @@ export default async <TResponse = any>(
 			initOptions.body = JSON.stringify(data);
 		else if (typeof data === 'string' && data.length > 0)
 			initOptions.body = data;
-
-		// myOptions.afterFetch = async (response) => {
-		// 	await response.response.json()
-		// 	return response;
-		// }
-
-		const response = _myFetch<TResponse>(url, initOptions, options);
-		return response;
+		return _myFetch<TResponse>(url, initOptions, options);
 	} catch (error) {
 		console.error('myFetch Error:', error);
 		throw error;

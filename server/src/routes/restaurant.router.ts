@@ -1,6 +1,6 @@
 import { RequestHandler, Router } from 'express';
-import { deleteUserRestaurantsTransaction, getAllRestaurants, getRestaurantById, getRestaurantsByCustomQuery, getRestaurantsByName, getRestaurantsByUserId, registerRestaurant, updateRestaurantById } from '../controllers/restaurant.controller';
-import { deleteRestaurantById } from '../services/CRUD/restaurant.service';
+import { deleteUserRestaurantsTransaction, getAllRestaurants, getRestaurantById, getRestaurantsByCustomQuery, getRestaurantsByName, getRestaurantsByUserId, registerRestaurant, updateRestaurantById } from '@/controllers/restaurant.controller';
+import { deleteRestaurantById } from '@/services/CRUD/restaurant.service';
 
 export default (restaurantRouter: Router, middlewares: RequestHandler[] | RequestHandler = []) => {
 	restaurantRouter.post('/restaurant', middlewares, registerRestaurant);

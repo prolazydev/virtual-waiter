@@ -1,10 +1,12 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { respond } from '../utils/common/http';
-import { Message } from '../utils/common/ServerResponseMessages';
-import { requestHandler } from '../utils/errors/asyncErrorHandler';
-import { createProduct, findProductById, findAllProducts, findProductsByBusinessId } from '../services/CRUD/product.service';
-import type { Product } from '../db/models/Product';
+import type { Product } from '@/db/models/Product';
+
+import { respond } from '@/utils/common/http';
+import { Message } from '@/utils/common/ServerResponseMessages';
+import { requestHandler } from '@/utils/common/asyncErrorHandler';
+
+import { createProduct, findProductById, findAllProducts, findProductsByBusinessId } from '@/services/CRUD/product.service';
 
 // #region POST
 export const registerProduct = requestHandler<Product>(async (req, res) => {

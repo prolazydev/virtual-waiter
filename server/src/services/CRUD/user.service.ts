@@ -1,14 +1,15 @@
 import crypto from 'crypto';
 import { FilterQuery, ProjectionType, QueryOptions } from 'mongoose';
-import { User, UserModel } from '../../db/models/User';
-import { mongoId } from '../../types';
+
+import { User, UserModel } from '@/db/models/User';
+import { mongoId } from '@/types';
 
 // POST
 export const createUser = async (userObj: User) => 
 	new UserModel(userObj).save({ validateBeforeSave: true, validateModifiedOnly: true });
 
 // GET
-export const findUsers = async () => await UserModel.find();
+export const findUsers = async () => await UserModel.find().getOptions();
 
 export const findUserById = (id: mongoId) => UserModel.findById(id);
 export const findUserByEmail = (email: string) => UserModel.findOne({ email });

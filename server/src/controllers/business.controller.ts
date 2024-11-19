@@ -1,15 +1,16 @@
 import mongoose, { type FilterQuery } from 'mongoose';
-
 import { StatusCodes } from 'http-status-codes';
 
-import { respond } from '../utils/common/http';
-import { type Business } from '../db/models/Business/Business';
-import { Message } from '../utils/common/ServerResponseMessages';
-import { requestHandler } from '../utils/errors/asyncErrorHandler';
-import { handleError } from '../utils/errors/error';
-import { createBusiness, findAllBusinesses, findBusinessById, findBusinessesByUserId, findBusinessByName, findBusinessesByCustomQuery, findAndUpdateBusinessById, deleteBusinessesByUserId, deleteBusinessById, findBusinessByCustomQuery, findAndUpdateBusinessContactById, findAndAddBusinessContactById, deleteBusinessContactByBusinessId } from '../services/CRUD/business.service';
-import { generateRandom4DigitNumber } from '../utils/crypto';
-import { sendEmail } from '../utils/email';
+import { type Business } from '@/db/models/Business/Business';
+
+import { respond } from '@/utils/common/http';
+import { Message } from '@/utils/common/ServerResponseMessages';
+import { requestHandler } from '@/utils/common/asyncErrorHandler';
+import { handleError } from '@/utils/errors/error';
+import { generateRandom4DigitNumber } from '@/utils/crypto';
+import { sendEmail } from '@/utils/email';
+
+import { createBusiness, findAllBusinesses, findBusinessById, findBusinessesByUserId, findBusinessByName, findBusinessesByCustomQuery, findAndUpdateBusinessById, deleteBusinessesByUserId, deleteBusinessById, findBusinessByCustomQuery, findAndUpdateBusinessContactById, findAndAddBusinessContactById, deleteBusinessContactByBusinessId } from '@/services/CRUD/business.service';
 
 // #region POST
 export const registerBusinessRequest = requestHandler<Business>(async (req, res) => {
@@ -202,6 +203,10 @@ export const updateBusiness = requestHandler(async (req, res) => {
 
 	}
 });
+
+// #endregion
+
+// #region PATCH Contact
 
 export const updateBusinessContact = requestHandler<{ oldValue: string, value: string; }>(async (req, res) => {
 	try {

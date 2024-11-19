@@ -1,5 +1,5 @@
 import type { RequestHandler, Router } from 'express';
-import { getAllProductsByBusinessId } from '../controllers/product.controller';
+import { getAllProductsByBusinessId } from '@/controllers/product.controller';
 
 /**
  * 

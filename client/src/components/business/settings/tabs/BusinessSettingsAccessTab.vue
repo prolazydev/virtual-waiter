@@ -23,7 +23,7 @@ defineProps<{
 }>();
 
 
-// const { params } = useRoute('business-settings');
+// const { params } = useRoute('/business/settings/[id]');
 // const router = useRouter();
 
 // const loader = useLoader();

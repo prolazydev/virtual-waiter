@@ -12,6 +12,7 @@ declare module 'vue' {
     Checkbox: typeof import('@/components/ui/Checkbox.vue')['default']
     ContactInformationSettings: typeof import('@/components/business/settings/tabs/BusinessSettingsGeneralTab_Components/ContactInformationSettings.vue')['default']
     CustomLoader: typeof import('@/components/ui/CustomLoader.vue')['default']
+    DebounceSearch: typeof import('@/components/ui/DebounceSearch.vue')['default']
     EditFormPart: typeof import('@/components/ui/EditFormPart.vue')['default']
     Flip: typeof import('number-flip')['Flip']
     Footer: typeof import('@/components/header_footer/Footer.vue')['default']
@@ -29,7 +30,9 @@ declare module 'vue' {
     Review: typeof import('@/components/ui/Review.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Search: typeof import('./src/components/ui/DebounceSearch.vue')['default']
     SearchItem: typeof import('@/components/business/BusinessSearchItem.vue')['default']
+    SelectList: typeof import('./src/components/ui/SelectList.vue')['default']
     Tooltip: typeof import('@/components/ui/Tooltip.vue')['default']
   }
 }

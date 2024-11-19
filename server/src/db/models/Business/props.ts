@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-import { BusinessModel } from './Business';
+
+import { BusinessModel } from '@/db/models/Business/Business';
 
 const isDateRange = /^\d{2}:\d{2}-\d{2}:\d{2}$|^closed$|^24$/;
 
@@ -85,7 +86,7 @@ export const cotactsSchema = new mongoose.Schema({
 	contactType: {
 		type: String,
 		required: true,
-		enum: ['phone', 'email'],
+		enum: [ 'phone', 'email' ],
 	},
 	value: {
 		type: String,

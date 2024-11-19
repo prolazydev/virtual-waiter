@@ -1,8 +1,8 @@
-import mongoose, { type ClientSession, type FilterQuery, type QueryOptions, type UpdateQuery } from 'mongoose';
-import { UpdateOptions } from 'mongodb';
+import { startSession, type ClientSession, type FilterQuery, type QueryOptions, type UpdateQuery } from 'mongoose';
+import type { UpdateOptions } from 'mongodb';
 
-import { type BusinessCategory, BusinessCategoryModel } from '../../db/models/BusinessCategory';
-import { regexFuzzySearch } from '../../utils/common';
+import { type BusinessCategory, BusinessCategoryModel } from '@/db/models/BusinessCategory';
+import { regexFuzzySearch } from '@/utils/common';
 
 // POST
 export const createBusinessCategory = async (businessCategory: BusinessCategory) =>
@@ -63,7 +63,7 @@ export const deleteBusinessCategoryById = async (id: string) =>
 	BusinessCategoryModel.findByIdAndUpdate(id, { deleted: true }, { new: true, runValidators: true });
 
 export const deleteBusinessCategoriesByUserId = async (userId: string) => {
-	const session = await mongoose.startSession();
+	const session = await startSession();
 	// session.startTransaction();
 
 	try {

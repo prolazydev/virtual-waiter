@@ -25,7 +25,11 @@
 <script lang="ts" setup>
 import type { BusinessSettingsTabTitles } from '@/types/models/business';
 
-defineProps<{
+onMounted(() => {
+	
+})
+
+const props = defineProps<{
     userSettingTab: BusinessSettingsTabTitles;
     businessDisplayName: string;
 }>();
@@ -206,6 +210,45 @@ defineProps<{
 #btnPopOverToggleTest {
 	anchor-name: --testPopover;
 }
+
+/* DEBOUNCE */
+.debounce-search-input ul {
+	@apply 	h-fit p-2 flex flex-wrap gap-2 border-2 border-[#1b1b1b] bg-transparent transition-[border]
+			focus:outline-none focus:border-b-rose-600 
+	;
+}
+
+.search-result {
+	@apply	max-h-64 flex flex-col flex-nowrap gap-0 bg-white shadow-lg absolute transition-all duration-300
+            top-[calc(100%-3rem)] -left-[0.15rem] opacity-0 pointer-events-none 
+            overflow-hidden overflow-y-scroll z-[500]
+	;
+}
+
+.debounce-search-input .search-result {
+	@apply 	p-2 cursor-pointer border-b-2  
+			hover:border-b-rose-700
+			transition-all duration-300
+	;
+}
+
+.search-result li {
+	@apply 	p-2 cursor-pointer border-b-2  
+			hover:border-b-rose-700
+			transition-all duration-300
+	;
+}
+
+.show-search-results {
+	@apply  opacity-100 pointer-events-auto top-[calc(100%+0.75rem)]
+	; 
+}
+
+.debounce-search-input > input:focus + .show-business-categories-input {
+    @apply  opacity-100 pointer-events-auto top-[calc(100%+0.75rem)] 
+	;
+}
+
 
 /* TESTING */
 /* .my-popover {

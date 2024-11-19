@@ -1,6 +1,5 @@
 import { rateLimit } from 'express-rate-limit';
 
-
 // TODO: maybe introduce .env constants?
 export const rateLimiter = rateLimit({
 	windowMs: 15 * 60 * 1000, // 15 minutes

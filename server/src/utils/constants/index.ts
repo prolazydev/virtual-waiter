@@ -1,5 +1,5 @@
-import dotenv from 'dotenv';
-dotenv.config({ path: '.env.local' });
+// import dotenv from 'dotenv';
+// dotenv.config({ path: '.env.local' });
 
 export const 
 	NODE_ENV = process.env.NODE_ENV || 'development',

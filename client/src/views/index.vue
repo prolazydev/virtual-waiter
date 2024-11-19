@@ -120,18 +120,9 @@
 </template>
 
 <script lang="ts" setup>
-import { definePage } from 'unplugin-vue-router/runtime';
-
 import Glide from '@glidejs/glide'
-
-definePage({
-    meta: {
-        title: 'Home',
-        auth: 'both',
-    },
-    name: 'home',
-});
-
+// import { useScrollTo } from '@/composables/useScrollTo';
+// import { initGlideStatistics } from '@/composables';
 const { observeSlide1, observeSlide2, observeSlide3 } = useSlider().homeSlider();
 
 // TODO: implement automatic fetching of statistics

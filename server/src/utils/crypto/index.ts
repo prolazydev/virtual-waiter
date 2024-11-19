@@ -1,4 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 import jwt, { SignOptions, type JwtPayload } from 'jsonwebtoken';
 import crypto from 'crypto';
 import { UserResult } from '../../types';
@@ -13,12 +12,20 @@ export const randomSalt = () =>
 /**
  * Hashes the password with the salt
  */
-export const hashPassword = (salt: string, password: string) => 
-	crypto
-		.createHmac('sha256', [ salt, password ]
-			.join('/'))
+export const hashPassword = (salt: string, password: string) => {
+	const hash = crypto.createHmac('sha256', [ salt, password ]
+		.join('/'))
 		.update(SECRET)
 		.digest('hex');
+
+	return hash;
+};
+
+export const passwordMatch = (password: string, dbPassword: string, salt: string) => 
+	hashPassword(salt, password) === dbPassword;
+	// const expectedHash = hashPassword(salt, password);
+	// return expectedHash === dbPassword;
+
 
 export const mergeObjects = (defaultObj: object, mergingObj: object) => {
 	const merged = { ...defaultObj };
@@ -34,17 +41,17 @@ export const mergeObjects = (defaultObj: object, mergingObj: object) => {
 	return merged;
 };
 
-export const passwordMatch = (password: string, dbPassword: string, salt: string) => 
-	hashPassword(salt, password) === dbPassword;
-	// const expectedHash = hashPassword(salt, password);
-	// return expectedHash === dbPassword;
-
 export const signToken = (userObj: UserResult, tokenOptions: SignOptions = { expiresIn: REFRESH_TOKEN_DURATION }) => {
 	try {
 		const defaultTokenOptions: SignOptions = { issuer: 'Virtual-Waiter' };
 		const mergedTokenOptions = mergeObjects(tokenOptions, defaultTokenOptions);
 
+		// const test = process.env.TEST_SECRET_PRIVATE_JWT;
+	
 		const signedToken = jwt.sign(userObj, `${TEST_SECRET_PRIVATE_JWT}`, mergedTokenOptions);
+		// jwt.sign(userObj, `${TEST_SECRET_PRIVATE_JWT}`, mergedTokenOptions, function(err, token) {
+		// 	console.log(token);
+		// });
 		return signedToken;
 	
 	} catch (err) {
@@ -58,13 +65,16 @@ export const verifyToken = <T extends JwtPayload>(token: string) => {
 		const payload = jwt.verify(token, TEST_SECRET_PUBLIC_JWT, { algorithms: [ 'RS256' ], } ) as T;
 		return { payload, err: null };
 	} catch (err: jwt.JsonWebTokenError | Error | any) {
-		// console.log('JWT ERROR: ', err);
-		if ( err.name === 'TokenExpiredError' )
-			return { payload: null, err: 'Expired' };
-		else if ( err.message === 'jwt malformed' )
-			return { payload: null, err: 'Malformed' };
+		const payload = null;
+		if (err instanceof jwt.TokenExpiredError) {
+			// console.log('JWT ERROR: ', err);
+			if ( err.name === 'TokenExpiredError' )
+				return { payload, err: 'Expired' };
+			else if ( err.message === 'jwt malformed' )
+				return { payload, err: 'Malformed' };
+		}
 		
-		return { payload: null, err };
+		return { payload, err };
 	}
 };
 	

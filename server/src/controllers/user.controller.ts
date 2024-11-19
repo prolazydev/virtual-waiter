@@ -1,11 +1,12 @@
 import mongoose from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
 
-import { findUserById, findUsers, deleteUserById, updateUserById, findUserByUsername } from '../services/CRUD/user.service.js';
-import { Message } from '../utils/common/ServerResponseMessages.js';
-import { requestHandler } from '../utils/errors/asyncErrorHandler.js';
-import { compressImageWebp } from '../utils/compression/index.js';
-import { respond } from '../utils/common/http';
+import { Message } from '@/utils/common/ServerResponseMessages.js';
+import { requestHandler } from '@/utils/common/asyncErrorHandler.js';
+import { compressImageWebp } from '@/utils/compression/index.js';
+import { respond } from '@/utils/common/http';
+
+import { findUserById, findUsers, deleteUserById, updateUserById, findUserByUsername } from '@/services/CRUD/user.service.js';
 
 export const getAllUsers = requestHandler(async (req, res) => {
 	const users = await findUsers();

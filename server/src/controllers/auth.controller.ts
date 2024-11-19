@@ -2,15 +2,17 @@ import crypto from 'crypto';
 import { CookieOptions, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import { LoginRequest, RegisterRequest, UpdatePasswordRequest, UserResult, type LoginWithUsernameRequest } from '../types';
-import { requestHandler } from '../utils/errors/asyncErrorHandler';
-import { Message } from '../utils/common/ServerResponseMessages';
-import { createConfirmAccountToken, createResetPasswordToken, createUser, findUserByCustomQuery, findUserByEmail, findUserById, userExists } from '../services/CRUD/user.service';
-import { randomSalt, passwordMatch, signToken } from '../utils/crypto';
-import { REFRESH_TOKEN_DURATION, ACCESS_TOKEN_DURATION, REDIS_REFRESH_TOKEN_EXPIRY_TIME, ACCESS_TOKEN_DURATION_EXTENDED, REFRESH_TOKEN_DURATION_EXTENDED, NODE_ENV, REDIS_REFRESH_TOKEN_EXPIRY_TIME_EXTENDED } from '../utils/constants';
-import { rDel, rExists, rSet } from '../services/redis.service';
-import { sendEmail } from '../utils/email';
-import { respond } from '../utils/common/http';
+import { LoginRequest, RegisterRequest, UpdatePasswordRequest, UserResult, type LoginWithUsernameRequest } from '@/types';
+
+import { requestHandler } from '@/utils/common/asyncErrorHandler';
+import { Message } from '@/utils/common/ServerResponseMessages';
+import { randomSalt, passwordMatch, signToken } from '@/utils/crypto';
+import { sendEmail } from '@/utils/email';
+import { respond } from '@/utils/common/http';
+import { REFRESH_TOKEN_DURATION, ACCESS_TOKEN_DURATION, REDIS_REFRESH_TOKEN_EXPIRY_TIME, ACCESS_TOKEN_DURATION_EXTENDED, REFRESH_TOKEN_DURATION_EXTENDED, NODE_ENV, REDIS_REFRESH_TOKEN_EXPIRY_TIME_EXTENDED } from '@/utils/constants';
+
+import { createConfirmAccountToken, createResetPasswordToken, createUser, findUserByCustomQuery, findUserByEmail, findUserById, userExists } from '@/services/CRUD/user.service';
+import { rDel, rExists, rSet } from '@/services/redis.service';
 
 export const testAuth = requestHandler(async (req, res) => {
 	console.log(req.body);
@@ -85,13 +87,13 @@ export const register = requestHandler<RegisterRequest>(async (req, res) => {
 	}
 });
 
-export const login = requestHandler<LoginRequest>(async (req, res) => {
+export const loginWithEmail = requestHandler<LoginRequest>(async (req, res) => {
 	const { email, password, rememberMe } = req.body;
 
 	if (!email || !password)
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidCredentials);
 
-	const user = await findUserByEmail(email).select('+auth.salt +auth.password');
+	const user = await findUserByEmail(email).select('auth.salt auth.password auth.roles email username');
 	if (!user)
 		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 
@@ -105,7 +107,7 @@ export const login = requestHandler<LoginRequest>(async (req, res) => {
 		roles: user.auth!.roles,
 	};
 
-	const accessToken = await tokenLoginUser(res, userObj, rememberMe);
+	const accessToken = await _tokenLoginUser(res, userObj, rememberMe);
 	if ( !accessToken )
 		return respond(res, StatusCodes.INTERNAL_SERVER_ERROR, Message.JWTError);
 
@@ -113,30 +115,35 @@ export const login = requestHandler<LoginRequest>(async (req, res) => {
 });
 
 export const loginWithUsername = requestHandler<LoginWithUsernameRequest>(async (req, res) => {
-	const { username, password, rememberMe } = req.body;
+	try {
+		const { username, password, rememberMe } = req.body;
 
-	if (!username || !password)
-		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidCredentials);
+		if (!username || !password)
+			return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidCredentials);
 
-	const user = await findUserByCustomQuery({ username }).select('+auth.salt +auth.password');
-	if (!user)
-		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
+		const user = await findUserByCustomQuery({ username }).select('auth.salt auth.password auth.roles email username').lean();
+		
+		if (!user) 
+			return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 
-	if (!passwordMatch(password, user.auth!.password, user.auth!.salt))
-		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidCredentials);
+		if (!passwordMatch(password, user.auth!.password, user.auth!.salt)) 
+			return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidCredentials);
+		
+		const userObj: UserResult = {
+			id: user._id.toString(),
+			email: user.email,
+			username: user.username,
+			roles: user.auth!.roles,
+		};
 
-	const userObj: UserResult = {
-		id: user._id.toString(),
-		email: user.email,
-		username: user.username,
-		roles: user.auth!.roles,
-	};
+		const accessToken = await _tokenLoginUser(res, userObj, rememberMe);
+		if ( !accessToken )
+			return respond(res, StatusCodes.INTERNAL_SERVER_ERROR, Message.JWTError);
 
-	const accessToken = await tokenLoginUser(res, userObj, rememberMe);
-	if ( !accessToken )
-		return respond(res, StatusCodes.INTERNAL_SERVER_ERROR, Message.JWTError);
-
-	respond(res, StatusCodes.OK, Message.SuccessLogin, userObj);
+		respond(res, StatusCodes.OK, Message.SuccessLogin, userObj);
+	} catch (error) {
+		console.log(error);
+	}
 });
 
 export const logout = requestHandler(async (req, res) => {
@@ -245,7 +252,7 @@ export const resetPassword = requestHandler(async (req, res) => {
 		username: user.username,
 		roles: user.auth!.roles,
 	};
-	const accessToken = await tokenLoginUser(res, userObj);
+	const accessToken = await _tokenLoginUser(res, userObj);
 	if ( !accessToken )
 		return respond(res, StatusCodes.UNAUTHORIZED, Message.JWTTokenError);
 
@@ -262,7 +269,7 @@ export const updatePassword = requestHandler<UpdatePasswordRequest>(async (req, 
 	if (newPassword !== confirmNewPassword)
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidCredentials);
 
-	const user = await findUserById(id).select('+auth.salt +auth.password');
+	const user = await findUserById(id).select('auth.salt auth.password');
 	if ( !user )
 		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 
@@ -314,7 +321,7 @@ export const verifyAccount = requestHandler(async (req, res) => {
 /**
  * Sets the users credentials in cookies and redis
  */
-async function tokenLoginUser(res: Response, userObj: UserResult, rememberMe: boolean = false) {
+async function _tokenLoginUser(res: Response, userObj: UserResult, rememberMe: boolean = false) {
 	const accessToken = signToken(userObj, { expiresIn: rememberMe ? ACCESS_TOKEN_DURATION_EXTENDED : ACCESS_TOKEN_DURATION, algorithm: 'RS256' });
 	
 	userObj.rememberMe = rememberMe;

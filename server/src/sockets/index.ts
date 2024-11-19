@@ -1,13 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Server } from 'http';
-import { WebSocketServer, WebSocket, type MyRawData } from 'ws';
-import { HEARTBEAT_INTERVAL, HEARTBEAT_VALUE } from '../utils/constants';
-import cookieParser from 'cookie-parser';
-
-import type { MyRequest } from '../types';
 import { Response, type NextFunction } from 'express';
-import { isAuthenticated } from '../middlewares/auth.middleware';
-import { isAuth } from '../services/auth.service';
+import cookieParser from 'cookie-parser';
+import { WebSocketServer, WebSocket, type MyRawData } from 'ws';
+
+import type { MyRequest } from '@/types';
+import { HEARTBEAT_INTERVAL, HEARTBEAT_VALUE } from '@/utils/constants';
+
+import { isAuthenticated } from '@/middlewares/auth.middleware';
+import { isAuth } from '@/services/auth.service';
 
 // TODO: Implement the WebSocket service
 export const initSocketIO = async (app: Server) => {

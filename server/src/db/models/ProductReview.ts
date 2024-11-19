@@ -1,6 +1,7 @@
 import mongoose, { InferSchemaType } from 'mongoose';
-import { findProductReviewsByBusinessId } from '../../services/CRUD/productReview.service';
-import { findProductById } from '../../services/CRUD/product.service';
+
+import { findProductReviewsByBusinessId } from '@/services/CRUD/productReview.service';
+import { findProductById } from '@/services/CRUD/product.service';
 
 const productReviewSchema = new mongoose.Schema({
 	productId: {

@@ -1,8 +1,10 @@
-import type { Validatable } from '../types';
-import { respond } from '../utils/common';
 import { StatusCodes } from 'http-status-codes';
-import { Message } from '../utils/common/ServerResponseMessages';
-import { requestHandler } from '../utils/errors/asyncErrorHandler';
+
+import type { Validatable } from '@/types';
+
+import { respond } from '@/utils/common/http';
+import { Message } from '@/utils/common/ServerResponseMessages';
+import { requestHandler } from '@/utils/common/asyncErrorHandler';
 
 // export const validateObject = <T extends Validatable>(req: Request, res: Response, next: NextFunction): boolean => {
 // 	// Check if all required properties are present and have correct types
@@ -53,13 +55,13 @@ export const validateObject = <T>() => requestHandler<Validatable<T>>(async (req
 	next(); // If validation passes, call next middleware
 });
 
-const validateObjectProperties = () => {
-	return requestHandler(async (req, res, next) => {
+// const validateObjectProperties = () => {
+// 	return requestHandler(async (req, res, next) => {
 
 		
-		next(); // If validation passes, call next middleware
-	});
-};
+// 		next(); // If validation passes, call next middleware
+// 	});
+// };
 
 
 // export const validateObject = <T extends Validatable>(obj: T) => {

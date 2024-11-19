@@ -1,6 +1,7 @@
-import mongoose, { FilterQuery, ProjectionType, QueryOptions, type ClientSession, type UpdateQuery  } from 'mongoose';
+import  { FilterQuery, ProjectionType, QueryOptions, startSession, type ClientSession, type UpdateQuery  } from 'mongoose';
 import { UpdateOptions } from 'mongodb';
-import { Restaurant, RestaurantModel } from '../../db/models/Restaurant';
+
+import { Restaurant, RestaurantModel } from '@/db/models/Restaurant';
 
 // POST
 export const createRestaurant = async (restaurant: Restaurant) => 
@@ -27,7 +28,7 @@ export const findAndUpdateRestaurantByCustomQuery = async (query: FilterQuery<Re
 export const deleteRestaurantById = async (id: string) => 
 	RestaurantModel.findByIdAndUpdate(id, { deleted: true }, { new: true, runValidators: true });
 export const deleteRestaurantsByUserId = async (userId: string) => {
-	const session = await mongoose.startSession();
+	const session = await startSession();
 	session.startTransaction();
 
 	try {

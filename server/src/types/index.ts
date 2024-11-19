@@ -1,6 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { Request } from 'express';
-import { RequestHandler } from 'express-serve-static-core';
+import { RequestHandler, type ParamsDictionary } from 'express-serve-static-core';
 // import { JwtPayload } from 'jsonwebtoken';
 import mongoose from 'mongoose';
 
@@ -36,7 +36,7 @@ export interface MyRequest<TBody = any, TItem = any> extends Request {
 	body: TBody,
 	// query: TQuery;
 	cookies: any,
-	// params: ParamsDictionary,
+	params: ParamsDictionary,
 	identity?: UserResult,
 	headers: any,
 	// db?: any,

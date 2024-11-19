@@ -1,8 +1,9 @@
 import type { Router, RequestHandler, Response, NextFunction } from 'express';
 
-import { registerBusinessRequest, getAllBusinesses, getBusinessById, getBusinessesByUserId, getBusinessByName, getBusinessesByCustomQuery, updateBusiness, deleteUserBusinessesTransaction, getBusinessesSelf, confirmBusinessAccount, getBusinessConfirmationCode, updateBusinessContact, addBusinessContact, deleteBusiness, deleteBusinessContact } from '../controllers/business.controller';
-import { isAuthenticated, isSelfItemOwner } from '../middlewares/auth.middleware';
-import type { MyRequest } from '../types';
+import type { MyRequest } from '@/types';
+
+import { registerBusinessRequest, getAllBusinesses, getBusinessById, getBusinessesByUserId, getBusinessByName, getBusinessesByCustomQuery, updateBusiness, deleteUserBusinessesTransaction, getBusinessesSelf, confirmBusinessAccount, getBusinessConfirmationCode, updateBusinessContact, addBusinessContact, deleteBusiness, deleteBusinessContact } from '@/controllers/business.controller';
+import { isAuthenticated, isSelfItemOwner } from '@/middlewares/auth.middleware';
 
 export default (businessRouter: Router, middlewares: RequestHandler[] | RequestHandler = []) => {
 	// Register business process
@@ -12,7 +13,6 @@ export default (businessRouter: Router, middlewares: RequestHandler[] | RequestH
 	
 	businessRouter.patch('/business/confirm_account/:id/:code', isAuthenticated, confirmBusinessAccount);
 	
-	// GET 
 	// TODO: Proper renaming
 	businessRouter.get('/business', middlewares, getAllBusinesses);
 	

@@ -37,3 +37,6 @@ yarn-error.log*
 logs/
 debug.log
 .run/Dev.run.xml
+client/bun.lockb
+client/vite.config.ts.timestamp-*.mjs
+server/bun.lockb

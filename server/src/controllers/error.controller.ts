@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import { CustomError } from '../utils/errors';
-import { respond } from '../utils/common/http';
+import { CustomError } from '@/utils/errors';
+import { respond } from '@/utils/common/http';
 
 const devErrors = (res: Response, error: CustomError) => {
 	// res.status(error.statusCode).json({

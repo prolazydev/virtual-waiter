@@ -1,8 +1,8 @@
 import validator from 'validator';
 import { Schema, type InferSchemaType, model, Document } from 'mongoose';
 
-import { cotactsSchema, hours } from './props';
-import { BusinessCategoryModel } from '../BusinessCategory';
+import { cotactsSchema, hours } from '@/db/models/Business/props';
+import { BusinessCategoryModel } from '@/db/models/BusinessCategory';
 
 export interface IBusiness extends Document {
 	userId: Schema.Types.ObjectId;
@@ -30,7 +30,13 @@ export interface IBusiness extends Document {
 	};
 	phone?: string;
 	description?: string;
-	location?: string;
+	location?: {
+		name?: string;
+		city?: string;
+		state?: string;
+		zipCode?: string;
+		id: string;
+	};
 	country?: string;
 	profileImage?: string;
 	coverImage?: string;
@@ -99,8 +105,26 @@ const businessSchema = new Schema<IBusiness>({
 	},
 	// TODO: have it be a google map pin
 	location: {
-		type: String,
-		required: false,
+		name: {
+			type: String,
+			required: false,
+		},
+		city: {
+			type: String,
+			required: false,
+		},
+		state: {
+			type: String,
+			required: false,
+		},
+		zipCode: {
+			type: String,
+			required: false,
+		},
+		id: {
+			type: String,
+			required: true,
+		},
 	},
 	// TODO: be an item in a list of countries
 	country: {

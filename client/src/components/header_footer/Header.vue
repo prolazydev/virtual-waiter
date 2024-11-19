@@ -1,11 +1,11 @@
 <template>
     <header>
-        <h1 class="text-3xl font-bold">Virtual<span class="text-rose-600">Waiter</span></h1>
+        <router-link to="/"><h1 class="text-3xl font-bold">Virtual<span class="text-rose-600">Waiter</span></h1></router-link>
         <span class="w-[2px] bg-[#1b1b1b] mx-3"></span>
         <ul class="nav-links flex gap-5 items-center">
-            <li><router-link class="nav-link" :to="{ name: 'home' }">Home</router-link></li>
-            <li><router-link class="nav-link" :to="{ name: 'search' }">Discover</router-link></li>
-            <li><router-link class="nav-link" :to="{ name: 'about' }">About</router-link></li>
+            <li><router-link class="nav-link" to="/">Home</router-link></li>
+            <li><router-link class="nav-link" to="/search">Discover</router-link></li>
+            <li><router-link class="nav-link" to="/about">About</router-link></li>
         </ul>
         <form @submit.prevent="handleSearch" class="absolute-center flex items-center border-2 border-[#1b1b1b]">
             <div class="relative pl-2 pr-[0.625rem]">
@@ -19,7 +19,7 @@
                     <li @click.prevent="searchProps.searchType = 'foods'"><p>Foods</p></li>
                 </ul>
             </div>
-            <input v-model="searchProps.query" class="pl-3 py-2 border-x-2 border-[#1b1b1b] bg-transparent text-xl focus:outline-none outline-none transition-all" type="text" placeholder="Where are we dining?" id="mainSearchBarInput">
+            <input v-model="searchProps.query" class="pl-3 py-2 border-x-2 border-[#1b1b1b] bg-transparent text-lg focus:outline-none outline-none transition-all placeholder:text-zinc-700 " type="text" placeholder="Where are we dining?" id="mainSearchBarInput">
             <button class="relative px-4" type="submit">
                 <!-- TODO: Finding animation -->
                 <LucideIcon class="animate-ping opacity-0 -z-[1] pointer-events-none" name="Search" :strokeWidth="2" :size="20" />
@@ -28,13 +28,13 @@
         </form>
         <ul class="nav-links nav-right ml-auto flex gap-5 items-center">
             <template v-if="!isAuth()">
-                <li><router-link class="nav-link" :to="{ name: 'signup' }">Sign up</router-link></li>
-                <li><router-link class="nav-link" :to="{ name: 'login' }">Login</router-link></li>
+                <li><router-link class="nav-link" to="/auth/register">Sign up</router-link></li>
+                <li><router-link class="nav-link" to="/auth/login">Login</router-link></li>
             </template>
             <template v-else>
                 <!-- TODO: my restaurant -->
                 <li class="header-nav-icon">
-                    <router-link :to="{ name: 'business-dashboard' }" title="My Businesses Dashboard">
+                    <router-link to="/business/dashboard" title="My Businesses Dashboard">
                         <LucideIcon 
                             :class="{ 'active-element': router.currentRoute.value.path.startsWith('/business/settings') }"
                             class="nav-icon cursor-pointer transition-all" 
@@ -63,7 +63,7 @@
                             />
                         </button>
                         <ul class="dropdown-content px-2 py-3 right-0">
-                            <li><router-link :to="{ name: 'user-profile', params: { username: user.username } }">Profile</router-link></li>
+                            <li><router-link :to="{ name: '/user/[username]', params: { username: user.username } }">Profile</router-link></li>
                             <li><button @click="handleLogout">Logout</button></li>
                         </ul>
                     </div>
@@ -78,7 +78,6 @@
 
 <script lang="ts" setup>
 import type { IconKeys } from '@/types';
-
 
 const { user } = useUserStore();
 const { isAuth, logout } = useAuth();
@@ -122,17 +121,18 @@ async function handleSearch() {
 async function handleLogout() {
     await logout();
     // await router.push('/');
-    await tostRouterTo(router, 'home', '', 'Logged out successfully');
+    await tostRouterTo(router, '/', {}, 'Logged out successfully');
 }
 
 </script>
 
 <style scoped>
 header {
-    @apply  w-full mb-[87px] px-32 py-[1.5625rem] flex text-2xl border-b border-b-[#1b1b1b] bg-[#f8f8f8]
+    @apply  w-full mb-[87px] px-32 py-[1.5625rem] flex text-2xl border-b border-b-[#1b1b1b] bg-[#f8f8f8]/75
             fixed z-[9999]
     ;
-
+	
+	backdrop-filter: blur(12px) brightness(1.15) grayscale(0.25);
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
 }
 

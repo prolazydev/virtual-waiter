@@ -1,7 +1,7 @@
 import type { Router, RequestHandler } from 'express';
 
-import { isAuthenticated } from '../middlewares/auth.middleware';
-import { registerBusinessCategory, getAllBusinessCategories, getBusinessCategoryById, getBusinessCategoriesByName, getBusinessCategoriesByCustomQuery, updateBusinessCategoryById, deleteBusinessCategoryById, deleteUserBusinessCategoriesTransaction } from '../controllers/businessCategory.controller';
+import { isAuthenticated } from '@/middlewares/auth.middleware';
+import { registerBusinessCategory, getAllBusinessCategories, getBusinessCategoryById, getBusinessCategoriesByName, getBusinessCategoriesByCustomQuery, updateBusinessCategoryById, deleteBusinessCategoryById, deleteUserBusinessCategoriesTransaction } from '@/controllers/businessCategory.controller';
 
 export default (businessCategoryRouter: Router, middlewares: RequestHandler[] | RequestHandler = []) => {
 	businessCategoryRouter.post('/business_category', middlewares, registerBusinessCategory);

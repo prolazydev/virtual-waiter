@@ -1,7 +1,8 @@
 import type { RequestHandler, Router } from 'express';
 import multer from 'multer';
-import { isAuthenticated, isSelfUserOwner } from '../middlewares/auth.middleware.js';
-import { getUserMe, getAllUsers, deleteUser, updateUser, updateUserAvatar, getUserByUsername } from '../controllers/user.controller.js';
+
+import { isAuthenticated, isSelfUserOwner } from '@/middlewares/auth.middleware.js';
+import { getUserMe, getAllUsers, deleteUser, updateUser, updateUserAvatar, getUserByUsername } from '@/controllers/user.controller.js';
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });

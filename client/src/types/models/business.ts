@@ -87,14 +87,6 @@ export type BusinessFormFields = {
         state: LoadingState | 'edit';
         value?: string;
     },
-	contacts: {
-        state: LoadingState | 'edit';
-        value?: BusinessContact[];
-	},
-	userEmail: {
-		state: LoadingState | 'edit';
-		value?: string
-	},
     streetAddress: {
         state: LoadingState | 'edit';
         value?: StreetAddresses;
@@ -105,7 +97,13 @@ export type BusinessFormFields = {
     },
     location: {
         state: LoadingState | 'edit';
-        value?: string;
+        value: {
+			name?: string;
+			city: string;
+			state?: string;
+			zipCode?: string;
+			id?: string;
+		};
     },
     country: {
         state: LoadingState | 'edit';
@@ -158,8 +156,6 @@ export type BusinessContact = {
 	value: string;
 }
 
-export type BusinessFormFieldKeys = keyof BusinessFormFields;
-
 export type BusinessEdit = {
 	userId: string;
 	username: string;
@@ -184,6 +180,9 @@ export type BusinessEdit = {
 	delivery: boolean;
 	takeout: boolean;
 }
+
+export type BusinessFormFieldKeys = keyof BusinessFormFields;
+export type BusinessQueryFieldKeys = keyof Business;
 
 export type BusinessCategory = {
 	userId: string;
@@ -238,3 +237,33 @@ export type EditContactField = {
 	state?: 'edit' | 'idle' | 'save';
 	processingState?: 'idle' | 'loading'  | 'success' | 'error';
 }
+
+export type BusinessLocationData = {
+	features: Array<{
+	  geometry: {
+		coordinates: Array<number>
+		type: string
+	  }
+	  type: string
+	  properties: {
+		osm_type: string
+		osm_id: number
+		extent?: Array<number>
+		country: string
+		osm_key: string
+		countrycode: string
+		osm_value: string
+		name: string
+		type: string
+		city?: string
+		postcode?: string
+		locality?: string
+		street?: string
+		district?: string
+		housenumber?: string
+		county?: string
+		state?: string
+	  }
+	}>
+	type: string
+  }

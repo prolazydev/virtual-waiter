@@ -7,17 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-import { definePage } from 'unplugin-vue-router/runtime';
-
 import LucideIcon from '@/components/ui/LucideIcon.vue';
-
-definePage({
-    meta: {
-        title: 'Bad Request',
-        auth: 'both',
-    },
-    name: 'bad-request',
-});
 </script>
 
 <style scoped>

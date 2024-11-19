@@ -7,7 +7,7 @@ import { xss } from 'express-xss-sanitizer';
 import hpp from 'hpp';
 import cors, { type CorsOptions } from 'cors';
 
-import { rateLimiter } from './rateLimiter.middleware';
+import { rateLimiter } from '@/middlewares/rateLimiter.middleware';
 
 const CORSOptions: CorsOptions  = {
 	origin: 'http://localhost:5173',
@@ -43,5 +43,4 @@ export function initMiddlewares(app: Express) {
 	app.use(cookieParser('secret'));
 
 	// TODO: caching
-
 }

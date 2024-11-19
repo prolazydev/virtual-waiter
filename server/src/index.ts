@@ -1,9 +1,10 @@
-import { initDb } from './db';
-import { initRedis } from './services/redis.service';
-import { createApp, initServer, initRouting } from './utils/server';
-import { seed } from '../seed';
-import { initMiddlewares } from './middlewares';
-import { initSocketIO } from './sockets';
+import { seed } from '@/../seed';
+
+import { initDb } from '@/db';
+import { createApp, initServer, initRouting } from '@/utils/server';
+import { initMiddlewares } from '@/middlewares';
+import { initSocketIO } from '@/sockets';
+import { initRedis } from '@/services/redis.service';
 
 const app = createApp();
 

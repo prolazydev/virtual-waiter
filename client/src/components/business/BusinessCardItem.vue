@@ -23,7 +23,7 @@
                 :class="shouldUseWhiteText(business.coverImage ?? '') ? 'light-text' : 'dark-text'"
             >
                 <!-- TODO: shouldUseWhiteText() -->
-                <router-link :to="{ name: 'business-settings', params: { id: business._id } }" class="absolute top-0 left-0 m-2 z-50 transition-all"  type="button">
+                <router-link :to="{ name: 'business-dashboard-settings', params: { id: business._id } }" class="absolute top-0 left-0 m-2 z-50 transition-all"  type="button">
                     <LucideIcon class="fill-transparent hover:rotate-90 transition-all duration-300" name="Settings" :stroke-width="2" />
                 </router-link>
 
