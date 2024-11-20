@@ -19,6 +19,7 @@
                 <MainPageInformationSettings />
             </div>
         </div>
+
 	</section>
 </template>
 

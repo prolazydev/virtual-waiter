@@ -6,12 +6,14 @@
             class="form-part-label" 
         >
             {{ title }}
-            <LucideIcon 
-                :class="{ 'form-part-edit-icon-toggle': state === 'edit' }"
-                class="form-part-edit-icon"
-                name="PencilLine" 
-                size="24"
-            />
+            <button type="button">
+				<LucideIcon 
+					:class="{ 'form-part-edit-icon-toggle': state === 'edit' }"
+					class="form-part-edit-icon"
+					name="PencilLine" 
+					size="24"
+				/>
+			</button>
         </label>
         
         <slot></slot>

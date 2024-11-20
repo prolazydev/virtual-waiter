@@ -200,7 +200,13 @@ export type CreateBusinessModel = {
 	streetAddress?: StreetAddresses;	
 	description?: string;
 	country?: string;
-	location?: string;
+	location?: {
+		name?: string;
+		city: string;
+		state?: string;
+		zipCode?: string;
+		id: string;
+	};
 	categories?: string[];
 	hours: Hours;
 	profileImage?: Buffer;

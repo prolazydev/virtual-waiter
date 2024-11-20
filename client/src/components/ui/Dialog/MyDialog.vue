@@ -13,7 +13,7 @@
                         
                         <LucideIcon 
                             @click="handleToggleDialog" 
-                            class="dialog-default-close" 
+                            class="hover-red-button" 
                             name="X" 
                             :size="38" 
                             stroke-width="2"
@@ -140,22 +140,6 @@ because the nesting selector cannot represent pseudo-elements. */
 /* =========================================================================== */
 .dialog-head {
 	@apply flex flex-col gap-5
-}
-
-.dialog-default-close {
-	@apply 	cursor-pointer transition-all
-			hover:scale-110 active:scale-95
-	;
-	--shadow-color: hsla(0, 100%, 50%, 0.075);
-}
-
-.dialog-default-close:hover, .dialog-default-close:active {
-    filter: 
-        drop-shadow(0 1px 1px hsl(0deg 0% 0% / 0.075))
-        drop-shadow(0 4px 4px var(--shadow-color))
-        drop-shadow(0 8px 8px var(--shadow-color))
-        drop-shadow(0 16px 16px hsl(0deg 0% 0% / 0.075))
-        drop-shadow(0 2px 2px hsl(0deg 0% 0% / 0.075));
 }
 
 .dialog-body {

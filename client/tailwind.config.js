@@ -63,6 +63,8 @@ export default {
             // TODO: maybe add more styles here
             addComponents({
                 '.form-input': { 
+					'background': '#fff',
+
                     'padding': '0.5rem',
                     'borderWidth': '2px',
                     'transitionProperty': 'color, background-color, border-color, text-decoration-color, fill, stroke',

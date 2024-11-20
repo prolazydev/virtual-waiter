@@ -26,7 +26,6 @@ declare module 'vue-router/auto-routes' {
     'signup': RouteRecordInfo<'signup', '/auth/register', Record<never, never>, Record<never, never>>,
     '/business/[id]': RouteRecordInfo<'/business/[id]', '/business/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'business-dashboard-settings': RouteRecordInfo<'business-dashboard-settings', '/business/:id/settings', { id: ParamValue<true> }, { id: ParamValue<false> }>,
-    '/business/BusinessSettingsViewOLD': RouteRecordInfo<'/business/BusinessSettingsViewOLD', '/business/BusinessSettingsViewOLD', Record<never, never>, Record<never, never>>,
     '/business/confirmation/[id]': RouteRecordInfo<'/business/confirmation/[id]', '/business/confirmation/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/business/create': RouteRecordInfo<'/business/create', '/business/create', Record<never, never>, Record<never, never>>,
     'business-dashboard': RouteRecordInfo<'business-dashboard', '/business/dashboard', Record<never, never>, Record<never, never>>,

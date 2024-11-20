@@ -1,9 +1,18 @@
+
 // TODO: make this a composable to call it on app level
 const parentToast = document.createElement('div');
 parentToast.classList.add('tost');
 document.body.append(parentToast);
 
 let tostId: number = -1;
+
+type TostOptions = {
+	type: 'success' | 'error' | 'warning' | 'info'
+}
+
+const defaultOptions: TostOptions = {
+	type: 'info'
+}
 // TODO: add another parameter to change the type of tost (success, error, warning, info)
 
 /**
@@ -11,7 +20,7 @@ let tostId: number = -1;
  * @param {string} toastMessage 
  * @param {number} duration - Default is 3000ms
  */
-export default (toastMessage: string, duration: number = 3000) => {
+export default (toastMessage: string, duration: number = 3000, options: TostOptions = defaultOptions) => {
 	const newTost = document.createElement('div');
 	newTost.setAttribute('popover', 'manual');
 	newTost.classList.add('tost-n');
@@ -22,6 +31,8 @@ export default (toastMessage: string, duration: number = 3000) => {
 	const tostContent = document.createElement('p');
 	tostContent.innerText = toastMessage;
 	newTost.appendChild(tostContent);
+
+	// TODO: figure out how to add the icons for each tost.type
 
 	parentToast.appendChild(newTost);
 

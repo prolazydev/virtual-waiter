@@ -33,8 +33,35 @@
             </div>
 			<div class="relative flex flex-col gap-2">
                 <label for="businessLocation">Location</label>
-                <input v-model="createBusinessFormData.location" type="text" id="businessLocation" placeholder="Google Maps" />
+				<DebounceSearch
+					v-model="createBusinessFormData.location!.name"
+					@debounce-fn="debounceSearchLocation"
+					:debounce-delay="500"
+					input-type="text"
+					id="businessLocation"
+					input-class="form-input w-64"
+				>
+					<template #bottom>
+						<ul :class="{ 'show-search-results': searchResults && searchResults.features && searchResults.features.length > 0 && createBusinessFormData.location!.name!.length > 0 }" 
+							class="search-result" 
+						>
+							<li v-for="item in searchResults.features" :key="item.properties.osm_id">
+								<div 
+									@click="selectLocation(item)"
+									role="button" 
+									class="capitalize"
+								> 
+									<b>{{ `${item.properties.city}: ${item.properties.name}` }}</b>
+
+									{{ item.properties.country ? ` - ${item.properties.country ?? '' }` : '' }}
+								</div>
+							</li>
+						</ul>
+					</template>
+				</DebounceSearch>
+                <!-- <input v-model="createBusinessFormData.location" type="text" id="businessLocation" placeholder="White House, Washington DC" /> -->
             </div>
+			
 			<div class="business-categories-input relative flex flex-col gap-2">
                 <label for="businessCategories">Business Categories</label>
 				<ul class="relative">
@@ -53,10 +80,12 @@
 					</li>
 				</ul>
             </div>
+
 			<div class="street-address-input relative flex flex-col gap-2">
                 <label for="businessWebsite">Website</label>
                 <input v-model="createBusinessFormData.website" type="text" id="businessWebsite" placeholder="www.myBusiness.com" />
             </div>
+
 			<div class="flex flex-col gap-2">
 				<button class="setup-address w-64 h-fit bg-[#1b1b1b] text-white px-2 border-4 border-[#1b1b1b] focus:outline-none focus-visible:border-b-rose-600 active:border-b-white transition-all" type="button">
 					Setup Primary Address
@@ -166,11 +195,14 @@
 
 <script lang="ts" setup>
 import type { RequestStatus } from '@/enums/EFromValidations';
-import type { BusinessCategory, CreateBusinessModel, Days } from '@/types/models/business';
+import type { BusinessCategory, BusinessLocationData, CreateBusinessModel, Days } from '@/types/models/business';
 
 const router = useRouter();
 const { user } = useUserStore();
 
+const loader = useLoader();
+
+// TODO: move this to a constants file
 const createBusinessFormData = ref<CreateBusinessModel>({
 	userId: user.id,
 	name: '',
@@ -200,6 +232,13 @@ const createBusinessFormData = ref<CreateBusinessModel>({
 			zipCode: '',
 		}
 	},
+	location: {
+		name: '',
+		city: '',
+		state: '',
+		zipCode: '',
+		id: ''
+	},
 });
 
 const categoryInput = ref('');
@@ -222,12 +261,16 @@ const business24Hours = ref({
 
 const requestStatus = ref<RequestStatus>('Idle');
 
+const searchResults = ref<BusinessLocationData>({} as BusinessLocationData);
+
+
 // type Business24HoursObjectKeys = keyof typeof business24Hours.value;
 
 onMounted(() => {
 	const textarea = document.querySelector<HTMLTextAreaElement>('#businessCategories')!;
 
 	autosizeWidth(textarea)
+
 });
 
 watch(() => useUserEmail.value, (newValue: boolean) => newValue
@@ -257,6 +300,38 @@ const debounceSearchCategories = useDebounceFn(async () => {
 		categoriesResult.value = data.value;
 	}
 }, 500);
+
+const debounceSearchLocation = async (searchQuery: string) => {
+	try {
+		loader.startLoader();
+		const encodedQuery = encodeURIComponent(searchQuery);
+		const url = `https://photon.komoot.io/api/?q=${encodedQuery}&lat=42.67272&lon=21.16688`;
+		const res = await fetch(url);
+
+		if (!res.ok) {
+			throw new Error('Failed to fetch location data');
+		}
+
+		searchResults.value = await res.json();
+		console.log(searchResults.value);
+	} catch (error) {
+		console.error('Location search failed:', error);
+	} finally {
+		loader.finishLoader();
+	}
+}
+
+const selectLocation = (item: BusinessLocationData['features'][0]) => {
+	createBusinessFormData.value.location! = { 
+		name: item.properties.name ?? '',
+		city: item.properties.city ?? '', 
+		state: item.properties.state ?? '', 
+		zipCode: item.properties.postcode ?? '', 
+		id: item.properties.osm_id.toString()! 
+	};
+
+	searchResults.value = { features: [], type: '' } as BusinessLocationData;
+}
 
 const addCategory = (name: string) => {
 	if (selectedBusinessCategories.value.length === 2)
@@ -325,7 +400,6 @@ const setIndeterminateClosed = (isIndeterminate: string, checked: boolean, day: 
 const handleBusinessCreation = async () => {
 	try {
 		const { response, data, error } = await myFetch<{ id: string; }>('/business', createBusinessFormData.value, { method: 'POST' });
-		
 
 		if (response.value?.ok) {
 			console.log(data.value);
@@ -335,8 +409,9 @@ const handleBusinessCreation = async () => {
 		} else {
 			requestStatus.value = 'Error';
 			setTimeout(() => requestStatus.value = 'Idle', 1250);
-			console.log(response.value?.status, data.value);
 			console.log(error);
+
+			useTost('Error, Failed to create business', );
 		}
 	} catch (error) {
 		console.log(error);
@@ -355,7 +430,7 @@ const handleBusinessCreation = async () => {
 }
 
 .create-business-form form input, .create-business-form form textarea {
-	@apply  w-64 p-2 border-2 border-[#1b1b1b] bg-transparent transition-[border]
+	@apply  w-64 p-2 border-2 border-[#1b1b1b] transition-[border]
 			focus:outline-none focus:border-b-rose-600 
 
 			read-only:bg-gray-200 read-only:cursor-not-allowed
@@ -388,13 +463,13 @@ const handleBusinessCreation = async () => {
 }
 
 .business-categories-input ul {
-	@apply 	w-64 h-fit p-2 flex flex-wrap gap-2 border-2 border-[#1b1b1b] bg-transparent transition-[border]
+	@apply 	w-64 h-fit p-2 flex flex-wrap gap-2 border-2 border-[#1b1b1b] transition-[border]
 			focus:outline-none focus:border-b-rose-600 
 	;
 }
 
 .business-categories-input ul li input, .business-categories-input ul li textarea {
-	@apply w-[10ch] p-0 border-none bg-transparent resize-none overflow-hidden
+	@apply w-[10ch] p-0 border-none resize-none overflow-hidden
 	;
 }
 
@@ -539,6 +614,44 @@ const handleBusinessCreation = async () => {
 .show-hours:focus + .hours-table, .hours-table:hover {
 	@apply 	opacity-100 pointer-events-auto z-10 shadow-lg
 			scale-100
+	;
+}
+
+/* DEBOUNCE */
+.debounce-search-input ul {
+	@apply 	h-fit flex gap-2 border-2 border-[#1b1b1b] transition-[border]
+			focus:outline-none focus:border-b-rose-600 
+	;
+}
+
+.search-result {
+	@apply	w-52 max-h-80 flex flex-col flex-nowrap gap-0 bg-white shadow-lg absolute transition-all duration-300
+            top-[calc(100%-3rem)] left-0 opacity-0 pointer-events-none 
+            overflow-hidden overflow-y-scroll z-[500]
+	;
+}
+
+.debounce-search-input .search-result {
+	@apply 	w-64 p-2 cursor-pointer border-b-2  
+			transition-all duration-300
+	;
+}
+
+.search-result li {
+	@apply 	p-2 cursor-pointer border-b-2  
+			hover:border-b-rose-700
+			transition-all duration-300
+	;
+}
+
+.show-search-results:hover {
+	@apply opacity-100 pointer-events-auto top-[calc(100%+0.75rem)]
+	/* @apply  opacity-100 pointer-events-auto top-[calc(100%+0.75rem)]
+	;  */
+}
+
+.debounce-search-input > input:focus + .show-search-results {
+    @apply  opacity-100 pointer-events-auto top-[calc(100%+0.75rem)] 
 	;
 }
 </style>

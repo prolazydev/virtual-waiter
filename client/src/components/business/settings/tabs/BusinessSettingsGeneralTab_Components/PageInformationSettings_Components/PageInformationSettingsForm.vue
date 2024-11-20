@@ -2,12 +2,29 @@
     <div class="input-group mt-5">
         <!-- TODO: create a search bar to search up a specific setting -->
         <div class="flex gap-5 items-center">
-            <input 
-                v-model="settingSearchInput"
-                type="text" 
-                placeholder="Search for a Setting"
-                class="form-input w-52"
-            />
+            <div class="relative">
+				<input 
+					v-model="settingSearchInput"
+					type="text" 
+					placeholder="Search for a Setting"
+					class="form-input w-52 pr-8"
+				/>
+
+				<transition name="fade">
+					<button  
+						v-if="settingSearchInput.length > 0"
+						class="absolute top-2.5 right-1.5" type="button"
+					>
+						<LucideIcon 
+							@click="settingSearchInput = ''"
+							class="hover:scale-110 active:scale-95 transition-all hover-red-button"
+							name='X' 
+							size="24" 
+							:stroke-width="2" 
+						/>
+					</button>
+				</transition>
+			</div>
 
             <div class="w-32 relative">
                 <transition name="fade">
@@ -24,7 +41,7 @@
         </div>
         
         <div class="flex gap-10">
-            <!-- TODO: Add an info widget "i" to each input to explain the purpose of each info -->
+            <!-- TODO: Add an info widget "i" (for each selected input like Email Address) to explain the purpose of each info -->
             <!-- TODO: setup profile, takeout, delivery -->
             <template v-for="(section) in filteredFields" :key="section.id">
                 <section class="options-section">
@@ -165,11 +182,10 @@
 									class="form-part min-w-52"
 								>
 									<DebounceSearch
+										@debounce-fn="debounceSearchLocation"
 										v-model="businessFormLocationField"
 										input-type="text"
-										:debounce-delay="500"
 										:id="field.id"
-										@debounce-fn="handleLocationSearch"
 
 										:disabled="businessFormFields[field.prop as BusinessFormFieldKeys].state === 'idle'"
 										:placeholder="field.placeholder"
@@ -444,7 +460,7 @@ const loader = useLoader();
 
 const business = ref<Business>({} as Business);
 const businessFormFields = ref<BusinessFormFields>(placeholderPageSettings);
-const businessFormLocationField = ref('');
+const businessFormLocationField = ref();
 
 const settingSearchInput = ref('');
 
@@ -591,7 +607,7 @@ const selectLocation = (item: BusinessLocationData['features'][0]) => {
 	businessFormLocationField.value = item.properties.name ?? item.properties.city ?? '';
 }
 
-const handleLocationSearch = async (searchQuery: string) => {
+const debounceSearchLocation = async (searchQuery: string) => {
 	try {
 		loader.startLoader();
         const encodedQuery = encodeURIComponent(searchQuery);
@@ -661,6 +677,8 @@ const handleGetBusiness = async () => {
         const { response, statusCode, data } = await getBusinessSelfById(params.id)
         if (response.value!.ok && data.value) {
             business.value = data.value;
+			// TODO: improve typing on business model
+			businessFormLocationField.value = (business.value.location as any).name ?? '';
 
             const { cloned: clonedBusiness } = useCloned(business.value);
 
@@ -844,14 +862,11 @@ const toggleEdit = async (prop: BusinessFormFieldKeys[] | BusinessFormFieldKeys,
 
 const toggleDialogEdit = async (dialogElement: string, prop: BusinessFormFieldKeys[] | BusinessFormFieldKeys, action: 'cancel' | 'edit' = 'cancel') => {
     if (action === 'cancel') {
-        handleCancel(dialogElement, prop)
+        handleReset(prop);
+    	toggleDialog(dialogElement);
     } else {
         await handleEdit(dialogElement, prop);
     }
-}
-const handleCancel = (dialogElement: string, prop: BusinessFormFieldKeys | BusinessFormFieldKeys[]) => {
-    handleReset(prop);
-    toggleDialog(dialogElement);
 }
 
 /** Resets the input to it's original value from business */
@@ -1033,7 +1048,6 @@ const handleEdit = async (dialogElement: string, prop: BusinessFormFieldKeys | B
 
 .debounce-search-input .search-result {
 	@apply 	p-2 cursor-pointer border-b-2  
-			hover:border-b-rose-700
 			transition-all duration-300
 	;
 }
