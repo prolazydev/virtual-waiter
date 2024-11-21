@@ -132,7 +132,7 @@ header {
             fixed z-[9999]
     ;
 	
-	backdrop-filter: blur(12px) brightness(1.15) grayscale(0.25);
+	backdrop-filter: blur(12px) brightness(2.5) grayscale(0.33);
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
 }
 
@@ -143,6 +143,7 @@ header {
 .nav-link {
     @apply  px-3 py-4 text-black rounded-lg transition-all
             hover:cursor-pointer
+	;
 }
 
 .nav-link::before {
@@ -161,19 +162,25 @@ header {
 }
 
 .nav-links a:hover::before {
-    transform-origin: left;
-    transform: scaleX(1);
+	@apply origin-left scale-100
+	;
+    /* transform-origin: left;
+    transform: scaleX(1); */
 }
 
 .nav-links .router-link-active:hover::before {
-    transform-origin: left;
-    height: 5px;
+	@apply h-1 origin-left 
+	;
+    /* transform-origin: left;
+    height: 5px; */
 }
 
 .nav-links .router-link-active::before {
-    transform-origin: left;
+	@apply h-[5px] origin-left scale-100 translate-x-0 translate-y-0 -z-10
+	;
+    /* transform-origin: left;
     transform: scaleX(1) translate(0, 0);
-    height: 5px;
+    height: 5px; */
 }
 
 .header-nav-icon .router-link-active > .nav-icon, .header-nav-icon > .router-link-active:hover > .nav-icon, .active-element, .active-element:hover {
@@ -197,17 +204,22 @@ header {
     @apply border-black visible opacity-100;
 } 
 .dropdown-btn:focus > .arrow {
-    transform: rotate(180deg);
+	@apply rotate-180 
+	;
+    /* transform: rotate(180deg); */
 }
 .dropdown-btn:focus + .dropdown-content li, .dropdown-btn-user:focus + .dropdown-content li {
     @apply opacity-100 pointer-events-auto;
 }
 
 .arrow {
-    border-left: 5px solid transparent;
+	@apply 	border-[5px] border-solid border-x-transparent border-t-black border-b-transparent 
+			origin-center transition-transform duration-300
+	;
+    /* border-left: 5px solid transparent;
     border-right: 5px solid transparent;
     border-top: 6px solid #000;
-    transition: transform ease-in-out 0.3s;
+    transition: transform ease-in-out 0.3s; */
 }
 
 .dropdown-content {

@@ -9,6 +9,10 @@ export const businessSettingsTabs: BusinessSettingsTab[] = [
         name: 'Access & Roles',
         icon: 'Lock'
     },
+	{
+		name: 'Analytics',
+		icon: 'ChartNoAxesCombined'
+	},
     {
         name: 'Notifications',
         icon: 'Bell'

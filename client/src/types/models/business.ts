@@ -218,14 +218,14 @@ export type CreateBusinessModel = {
 
 export type Days = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
 
-export type BusinessDashboardTabTitles = 'Home' | 'Business' | 'Conversations' | 'Orders' | 'Products' | 'Reports' | 'Settings';
+export type BusinessDashboardTabTitles = 'Home' | 'Business' | 'Conversations' | 'Orders' | 'Products' | 'Reports' | 'Analytics' | 'Settings';
 
 export type BusinessDashboardTab = {
 	name: BusinessDashboardTabTitles;
 	icon: IconKeys;
 };
 
-export type BusinessSettingsTabTitles = 'General' | 'Access & Roles' | 'Account' | 'Billing' | 'Subscription' | 'Security' | 'Notifications';
+export type BusinessSettingsTabTitles = 'General' | 'Access & Roles' | 'Account' | 'Billing' | 'Subscription' | 'Analytics' | 'Security' | 'Notifications';
 
 export type BusinessSettingsTab = {
 	name: BusinessSettingsTabTitles;

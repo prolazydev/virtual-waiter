@@ -42,7 +42,9 @@
 <script lang="ts" setup>
 import { definePage } from 'unplugin-vue-router/runtime';
 
-import type { BusinessDashboardTab, BusinessDashboardTabTitles } from '@/types/models/business';
+import type { BusinessDashboardTabTitles } from '@/types/models/business';
+
+import { tabs } from '@/constants/business/dashboard';
 
 definePage({
     meta: {
@@ -56,38 +58,6 @@ const { user, setTab } = useUserStore();
 const loader = useLoader();
 
 const tab = ref<BusinessDashboardTabTitles>(user.lastBusinessDashboardTab ?? 'Home');
-
-// TODO: Relocate this
-const tabs: BusinessDashboardTab[] = [
-	{ 
-		name: 'Home',
-		icon: 'LayoutDashboard'
-	},
-	{
-		name: 'Business',
-		icon: 'ChefHat'
-	},
-	{
-		name: 'Conversations',
-		icon: 'MessageCircle',
-	},
-	{
-		name: 'Orders',
-		icon: 'ShoppingCart'
-	},
-	{
-		name: 'Products',
-		icon: 'Box'
-	},
-	{
-		name: 'Reports',
-		icon: 'ChartBar'
-	},
-	{
-		name: 'Settings',
-		icon: 'Settings'
-	},
-];
 
 watch(tab, (newTab) => setTab('lastBusinessDashboardTab', newTab))
 

@@ -33,12 +33,14 @@
             </div>
 			<div class="relative flex flex-col gap-2">
                 <label for="businessLocation">Location</label>
+                <!-- <input v-model="createBusinessFormData.location" type="text" id="businessLocation" placeholder="White House, Washington DC" /> -->
 				<DebounceSearch
 					v-model="createBusinessFormData.location!.name"
 					@debounce-fn="debounceSearchLocation"
 					:debounce-delay="500"
 					input-type="text"
 					id="businessLocation"
+					placeholder="White House, Washington DC"
 					input-class="form-input w-64"
 				>
 					<template #bottom>
@@ -59,7 +61,6 @@
 						</ul>
 					</template>
 				</DebounceSearch>
-                <!-- <input v-model="createBusinessFormData.location" type="text" id="businessLocation" placeholder="White House, Washington DC" /> -->
             </div>
 			
 			<div class="business-categories-input relative flex flex-col gap-2">
@@ -189,6 +190,7 @@
 		</form>
 
 		<div class="divider"></div>
+		
 		<BusinessCreatePreview v-bind="createBusinessFormData" />
 	</div>
 </template>
@@ -425,7 +427,8 @@ const handleBusinessCreation = async () => {
 }
 
 .create-business-form form {
-	@apply max-w-[39rem] py-10 px-10 flex flex-wrap gap-x-6 gap-y-2 relative border-4 border-[#1b1b1b]
+	@apply 	max-w-[39rem] py-10 px-10 flex flex-wrap gap-x-6 gap-y-2 relative 
+			bg-white border-4 border-[#1b1b1b]
     ;
 }
 

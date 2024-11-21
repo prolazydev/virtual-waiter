@@ -127,7 +127,7 @@ const handleLogin = async () => {
 
 <style scoped>
 #loginForm {
-    @apply m-auto my-16 py-16 px-20 flex gap-20 bg-white border-4 border-[#1b1b1b]
+    @apply m-auto my-12 py-16 px-20 flex gap-20 bg-white border-4 border-[#1b1b1b]
     ;
 }
 

@@ -3,18 +3,19 @@
 		<header>
 			<h1 class="text-lg font-bold">Virtual<span class="text-rose-600">Waiter</span></h1>
 			<span class="w-[1px] bg-[#1b1b1b] mx-3"></span>
+			
 			<ul class="nav-links flex gap-2">
 				<li><span class="nav-link"></span></li>
 				<li><span class="nav-link"></span></li>
 				<li><span class="nav-link"></span></li>
 			</ul>
 
-			<div class="absolute-center w-32 h-8 flex bg-gray-200 border-2 border-gray-100 cursor-pointer">
-				<div class="w-7 h-full border-r-2 border-gray-100"></div>
-				<div class="w-7 ml-auto h-full border-l-2 border-gray-100"></div>
+			<div class="absolute-center w-52 h-8 flex bg-gray-200 border-2 border-gray-100 cursor-pointer">
+				<div class="w-10 h-full border-r-2 border-gray-100"></div>
+				<div class="w-10 ml-auto h-full border-l-2 border-gray-100"></div>
 			</div>
 
-			<div class="ml-auto relative flex">
+			<div class="ml-auto relative flex cursor-pointer">
 				<ul class="nav-links flex gap-2">
 					<li><span class="nav-link"></span></li>
 					<li><span class="nav-link"></span></li>
@@ -133,10 +134,10 @@
 							</template>
 						</div>
 						<div class="contact-pill">
-							<template v-if="location && location.length > 0">
+							<template v-if="location && location.name">
 								<div class="flex flex-col">
 									<h3 class="font-bold hover:underline cursor-pointer">Get directions</h3>
-									<p class="text-xs">{{ location }}</p>
+									<p class="text-xs">{{ location.name ?? location.city }}</p>
 								</div>
 								<LucideIcon name="Map" :size="16" :stroke-width="2" />
 							</template>
@@ -190,13 +191,13 @@ withDefaults(defineProps<CreateBusinessModel>(), {
 
 <style scoped>
 .main-preview {
-	@apply w-full pb-10 flex flex-col gap-5 border-4 border-black relative overflow-hidden z-50
+	@apply 	w-full pb-10 flex flex-col gap-5 border-4 
+			bg-white border-black relative overflow-hidden z-50
 }
 
 header {
-    @apply  w-full px-16 py-[calc(1.5625rem/2)] flex text-base border-b border-b-[#1b1b1b] bg-[#f8f8f8]
-			relative
-            
+    @apply  w-full px-16 py-[calc(1.5625rem/2)] flex text-base relative
+			bg-white border-b border-b-[#1b1b1b] 
     ;
 
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -212,13 +213,12 @@ header {
 }
 
 .nav-link::before {
-    @apply bg-rose-600 
+    @apply bottom-0 bg-rose-600 
     ;
     content: '';
     position: absolute;
     width: 100%;
     height: 1px;
-    bottom: 0;
     left: 0;
     transform-origin: right;
     transform: scaleX(0);
@@ -244,7 +244,7 @@ header {
 
  
 .nav-links:last-child .nav-link {
-	@apply px-3 py-1
+	@apply px-4
 }
 
 .nav-links:last-child li:first-child .nav-link {
