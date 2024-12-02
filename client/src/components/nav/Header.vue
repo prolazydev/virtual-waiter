@@ -1,8 +1,9 @@
 <template>
     <header>
-        <router-link to="/"><h1 class="text-3xl font-bold">Virtual<span class="text-rose-600">Waiter</span></h1></router-link>
-        <span class="w-[2px] bg-[#1b1b1b] mx-3"></span>
-        <ul class="nav-links flex gap-5 items-center">
+        <router-link to="/" class="main-logo"><h1>Virtual<span class="text-rose-600">Waiter</span></h1></router-link>
+        <router-link to="/" class="main-logo-responsive"><h1>V <span class="text-rose-600">W</span></h1></router-link>
+        <span class="w-[2px] bg-[#1b1b1b] mx-3 max-lg:ml-2 max-lg:mr-1"></span>
+        <ul class="nav-links">
             <li><router-link class="nav-link" to="/">Home</router-link></li>
             <li><router-link class="nav-link" to="/search">Discover</router-link></li>
             <li><router-link class="nav-link" to="/about">About</router-link></li>
@@ -52,18 +53,18 @@
                 </li>
                 <li>
                     <!-- TODO: Show Avatar -->
-                    <div v-if="user.avatar && user.avatar.length > 0"></div>
+                    <div v-if="userStore.user.avatar && userStore.user.avatar.length > 0"></div>
                     <div v-else class="header-nav-icon" id="">
                         <button type="button" class="dropdown-btn-user" id="authUser" aria-haspopup="menu">
                             <LucideIcon 
-                                :class="{ 'active-element': router.currentRoute.value.path === `/user/${user.username}` }" 
+                                :class="{ 'active-element': router.currentRoute.value.path === `/user/${userStore.user.username ?? ''}` }" 
                                 class="transition-all" 
                                 name="UserRound" 
                                 :stroke-width="2" 
                             />
                         </button>
                         <ul class="dropdown-content px-2 py-3 right-0">
-                            <li><router-link :to="{ name: '/user/[username]', params: { username: user.username } }">Profile</router-link></li>
+                            <li><router-link :to="{ name: '/user/[username]', params: { username: userStore.user.username ?? '' } }">Profile</router-link></li>
                             <li><button @click="handleLogout">Logout</button></li>
                         </ul>
                     </div>
@@ -79,7 +80,8 @@
 <script lang="ts" setup>
 import type { IconKeys } from '@/types';
 
-const { user } = useUserStore();
+const userStore = useUserStore();
+
 const { isAuth, logout } = useAuth();
 
 const router = useRouter();
@@ -127,6 +129,17 @@ async function handleLogout() {
 </script>
 
 <style scoped>
+.main-logo, .main-logo-responsive {
+	@apply 	text-3xl font-bold
+			max-lg:hidden
+}
+
+.main-logo-responsive {
+	@apply 	hidden
+			max-lg:block
+			max-[1525px]:gap-2.5
+} 
+
 header {
     @apply  w-full mb-[87px] px-32 py-[1.5625rem] flex text-2xl border-b border-b-[#1b1b1b] bg-[#f8f8f8]/75
             fixed z-[9999]
@@ -136,6 +149,13 @@ header {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
 }
 
+.nav-links {
+	@apply 	flex gap-5 items-center
+			max-[1525px]:gap-2.5
+			max-lg:gap-0 	
+
+}
+
 .nav-links li {
     @apply relative;
 }
@@ -143,6 +163,8 @@ header {
 .nav-link {
     @apply  px-3 py-4 text-black rounded-lg transition-all
             hover:cursor-pointer
+
+			max-[1525px]:px-1.5
 	;
 }
 
@@ -161,7 +183,7 @@ header {
     transition-property: transform, height;
 }
 
-.nav-links a:hover::before {
+.nav-links a:hover::before, .nav-links a:active::before {
 	@apply origin-left scale-100
 	;
     /* transform-origin: left;
@@ -247,6 +269,18 @@ header {
         drop-shadow(0 16px 16px hsl(0deg 0% 0% / 0.075))
         drop-shadow(0 2px 2px hsl(0deg 0% 0% / 0.075));
     scale: 1.1;
+}
+
+@media (max-width: 1710px) {
+	header {
+		@apply px-8
+	}
+}
+
+@media (max-width: 1024px) {
+	header {
+		@apply px-2
+	}
 }
 
 </style>
