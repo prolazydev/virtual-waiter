@@ -7,6 +7,7 @@
             :disabled="(disabled as boolean)"
             :id="props._id" 
             :class="_class" 
+			:required="(required as boolean)"
             type="checkbox"
         >
 		<span class="checkbox-label"></span>
@@ -26,7 +27,8 @@ const props = defineProps<{
 	_class?: string,
 	modelValue?: boolean, 
 	disabled?: Boolean | String
-	indeterminate?: boolean
+	indeterminate?: boolean,
+	required?: Boolean | boolean
 }>();
 
 const returnValue = (e: HTMLInputElement) => {

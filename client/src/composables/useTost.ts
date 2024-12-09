@@ -14,6 +14,7 @@ const defaultOptions: TostOptions = {
 	type: 'info'
 }
 // TODO: add another parameter to change the type of tost (success, error, warning, info)
+// TODO: figure out how to make position sticky 
 
 /**
  * Show a tost message

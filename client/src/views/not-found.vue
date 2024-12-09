@@ -1,7 +1,23 @@
 <template>
-	<div class="m-auto flex flex-col gap-10 justify-center items-center relative text-[#1b1b1b]">
+	<div class="mt-20 flex flex-col gap-10 justify-center items-center relative text-[#1b1b1b]">
 		<h1 id="errorTitle" class="text-4xl text-[#1b1b1b] font-bold">Not Found</h1>
-		<LucideIcon id="errorIcon" class="text-[#1b1b1b]" name="Turtle" :size="128" />
+
+
+		<div id="errorIcon" class="relative">
+			<LucideIcon 
+				:class="{ 'opacity-0': isLeftSide, 'rotate-12': randomLucideImage === 'ChefHat' }" 
+				class="text-[#1b1b1b] absolute top-0 left-0" 
+				id="" 
+				:name="randomLucideImage" 
+				:size="128" 
+			/>
+			<LucideIcon 
+				:class="{ 'opacity-0': !isLeftSide, '-rotate-12': randomLucideImage === 'ChefHat' }" 
+				class="text-[#1b1b1b] -scale-x-100" 
+				:name="randomLucideImage" 
+				:size="128" 
+			/>
+		</div>
 		
 		<p class="title-explanation">We couldn't find that page :/</p>
 		
@@ -20,35 +36,59 @@
 	</div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
+import { useMouse } from '@vueuse/core'
 import { definePage } from 'unplugin-vue-router/runtime';
+
+import type { IconKeys } from "@/types";
 
 definePage({
     meta: {
         title: 'Not Found'
     },
     name: 'not-found',
+	path: '/:slug(.*)',
 });
 
 const route = useRoute('not-found');
 
+// Todo: move to a constants folder 
+const notFoundRandomLucideImages: IconKeys[] = [
+	'Turtle',
+	'ChefHat',
+	'Cherry',
+	'Apple',
+	'Cable',
+	'Antenna',
+	'MonitorX'
+] 
+const randomLucideImage = getRandomLucideImage();
+
+const x = useMouse().x;
+let isLeftSide = computed(() => {
+	return x.value < window.innerWidth / 2;
+});
+
 onMounted(() => {
+	// @ts-expect-error typing
 	document.title = `Not Found - ${route.params.slug}`
 });
-</script>
 
-<route lang="json">
-{
-    "name": "not-found",
-    "path": "/:slug(.*)"
+onUnmounted(() => {
+});
+
+function getRandomLucideImage(): IconKeys {
+	const randomIndex = Math.floor(Math.random() * notFoundRandomLucideImages.length);
+	return notFoundRandomLucideImages[randomIndex];
 }
-</route>
+</script>
 
 <style scoped>
 #errorTitle, #errorIcon {
 	@apply opacity-0
 	;
 	animation: fade-up 0.5s ease forwards;
+	animation-iteration-count: 1;
 }
 
 #errorIcon {

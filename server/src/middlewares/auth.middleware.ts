@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import { NextFunction, Response, type CookieOptions } from 'express';
 
 import { ACCESS_TOKEN_DURATION } from '@/utils/constants';
-import { rGet, rDel } from '@/services/redis.service';
 import { findUserByEmail } from '@/services/CRUD/user.service';
 import { UserResult, MyRequest } from '@/types';
 import { Message } from '@/utils/common/ServerResponseMessages';
@@ -11,17 +10,10 @@ import { CustomError } from '@/utils/errors';
 import { requestHandler } from '@/utils/common/asyncErrorHandler';
 import { StatusCodes } from 'http-status-codes';
 import { respond } from '@/utils/common/http';
+import { getValidAccessToken, getValidRefreshToken } from '@/utils/common/auth.util';
 
 export const isAuthenticated = requestHandler(async (req, res, next) => {
-	let accessToken: string = req.cookies.accessToken ?? req.signedCookies.accessToken;
-
-	// Check if there is a token in the header, workaround
-	let myToken = req.headers.authorization;
-	if (myToken && myToken.startsWith('Bearer') && !accessToken) {
-		myToken = myToken.split(' ')[ 1 ];
-
-		accessToken = myToken;
-	}
+	const accessToken = getValidAccessToken(req);
 
 	if ( !accessToken ) 
 		return respond(res, StatusCodes.UNAUTHORIZED, Message.NotAuthorized);
@@ -31,25 +23,24 @@ export const isAuthenticated = requestHandler(async (req, res, next) => {
 	// TODO: Refactor to validate the error
 	const { payload, err: payloadErr } = verifyToken<UserResult>(accessToken);
 
-	if ( !payload ) {
-		console.log(payloadErr);
-
+	if (payload) {
+		userObj = {
+			id: payload.id!,
+			username: payload.username,
+			email: payload.email,
+			avatar: payload.avatar,
+			roles: payload.roles
+		};
+	} else {
 		const oldToken = decodeToken<UserResult>(accessToken);
-			
 		if ( !oldToken )
 			return respond(res, StatusCodes.UNAUTHORIZED, Message.NotAuthorized);
 
-		const refreshToken = await rGet(oldToken!.id!);
-		const { payload: refreshTokenPayload, err } = verifyToken<UserResult>(refreshToken!);
-		if ( refreshToken && err ) {
-			const deleted = await rDel(oldToken!.id!);
-			if ( !deleted )
-				return respond(res, StatusCodes.INTERNAL_SERVER_ERROR, Message.DatabaseError);
-			
+		const refreshToken = await getValidRefreshToken(oldToken!.id!);
+		if ( !refreshToken )
 			return respond(res, StatusCodes.UNAUTHORIZED, Message.NotAuthorized);
-		}
-
-		const user = await findUserByEmail(refreshTokenPayload!.email);
+		
+		const user = await findUserByEmail(refreshToken!.email);
 		if ( !user )
 			return respond(res, StatusCodes.UNAUTHORIZED, Message.NotAuthorized);
 
@@ -63,7 +54,7 @@ export const isAuthenticated = requestHandler(async (req, res, next) => {
 		const newAccessToken = signToken(userObj, { expiresIn: ACCESS_TOKEN_DURATION, algorithm: 'RS256' })!;
 		const cookieOptions: CookieOptions = {
 			// maxAge: 10000, // 10s, for testing
-			maxAge: refreshTokenPayload!.rememberMe ? 30 * 24 * 1 * 60 * 60 * 1000 : 5 * 60 * 1000, // 30d or 5m,
+			maxAge: refreshToken!.rememberMe ? 30 * 24 * 1 * 60 * 60 * 1000 : 5 * 60 * 1000, // 30d or 5m,
 			httpOnly: true,
 			secure: true, 
 			// secure: NODE_ENV === 'production', // leave to false in development
@@ -74,14 +65,8 @@ export const isAuthenticated = requestHandler(async (req, res, next) => {
 
 		res.setHeader('x-set-access-token', newAccessToken);
 		console.log(`New access token set for user: ${userObj.username}`);
-	}  else
-		userObj = {
-			id: payload.id!,
-			username: payload.username,
-			email: payload.email,
-			avatar: payload.avatar,
-			roles: payload.roles
-		};
+	} 
+		
 
 	req.identity = userObj;
 	
@@ -174,4 +159,3 @@ export const isAdmin = requestHandler(async (req, res, next) => {
 		return next(new CustomError(Message.ServerError, 500));
 	}
 } );
-

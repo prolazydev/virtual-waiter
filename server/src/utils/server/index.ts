@@ -23,7 +23,7 @@ export function initServer() {
 
 	return server;
 }
-
+// TODO: implement messages as constants
 export function handleMiscErrors(server: http.Server) {
 	server.on('error', (err) => {
 		console.log(`Server Error: ${err}`);

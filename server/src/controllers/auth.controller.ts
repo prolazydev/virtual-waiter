@@ -191,11 +191,70 @@ export const removeRole = requestHandler(async (req, res) => {
 	respond(res, StatusCodes.OK, '', Message.SuccessUpdate);
 });
 
+export const forgotPasswordRequest = requestHandler<{ email:string }>(async (req, res) => {
+	const email = req.body.email;
+	console.log(email);
+	if ( !email )
+		return respond(res, StatusCodes.BAD_REQUEST, Message.MissingCredentials);
+
+	const user = await findUserByEmail(email);
+	if ( !user )
+		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
+
+	const resetPasswordToken = createResetPasswordToken(user);
+	await user.save({ validateBeforeSave: false });
+
+	// SEND EMAIL
+	const resetURL = `http://localhost:5173/auth/reset-password/${resetPasswordToken}`;
+	// const resetURL = `${req.protocol}://${req.get('host')}/api/reset_password/${resetPasswordToken}`;
+	const message = `We have received a Password Reset Request! Please use the link attached to this email to reset your password: ${resetURL}.\n\nThis reset password link will be valid for only 10 minutes!\nIf you didn't forget your password, please ignore this email!`;
+	try {
+		await sendEmail({
+			email: user.email,
+			subject: 'Password Reset link request',
+			message
+		});
+
+		respond(res, StatusCodes.OK, Message.EmailPasswordSend, { resetPasswordToken });
+	} catch (error) {
+		user.passwordResetToken = undefined;
+		user.passwordResetTokenExpiry = undefined;
+		await user.save({ validateBeforeSave: false });
+
+		respond(res, StatusCodes.INTERNAL_SERVER_ERROR, Message.EmailPasswordResetError);
+	}
+});
+
+export const changeForgottenPassword = requestHandler(async (req, res) => {
+	const { resetPasswordToken, newPassword, confirmNewPassword } = req.body;
+
+	if (!resetPasswordToken || !newPassword || !confirmNewPassword)
+		return respond(res, StatusCodes.BAD_REQUEST, Message.MissingCredentials);
+
+	if (newPassword !== confirmNewPassword)
+		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidCredentials);
+
+	const token = crypto.createHash('sha256').update(resetPasswordToken).digest('hex');
+	const user = await findUserByCustomQuery({ 
+		passwordResetToken: token, 
+		passwordResetTokenExpiry: { $gt: Date.now() } 
+	}, { passwordResetToken: true, passwordResetTokenExpiry: true, auth: true });
+	if ( !user )
+		return respond(res, StatusCodes.BAD_REQUEST, Message.JWTTokenError);
+
+	user.auth!.password = newPassword;
+
+	user.passwordResetToken = undefined;
+	user.passwordResetTokenExpiry = undefined;
+	await user.save({ validateBeforeSave: false });
+
+	respond(res, StatusCodes.OK, Message.SuccessLogin);
+});
+
 export const resetPasswordRequest = requestHandler(async (req, res) => {
 	const { id } = req.identity!;
 	const user = await findUserById(id);
-	
-	if (!user)
+	if ( !user )
 		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 
 	const resetPasswordToken = createResetPasswordToken(user);
@@ -211,7 +270,7 @@ export const resetPasswordRequest = requestHandler(async (req, res) => {
 			message
 		});
 
-		respond(res, StatusCodes.OK, Message.EmailPasswordSend, { resetPasswordToken });
+		respond(res, StatusCodes.OK, Message.EmailPasswordSend);
 	} catch (error) {
 		user.passwordResetToken = undefined;
 		user.passwordResetTokenExpiry = undefined;

@@ -1,11 +1,12 @@
 <template>
     <div id="homePage">
-        <section class="glider-container relative w-full max-h-[872px] overflow-hidden max-w-[100vw]">
+		<!-- TODO: figure out programmatically the height -->
+        <section class="glider-container relative w-full max-h-[905px] overflow-hidden max-w-[100vw]">
             <div data-glide-el="track">
                 <!-- NOTE: Needs flex to work -->
                 <ul id="homeSliderImages" class="flex">
                     <li class="home-slide relative w-screen">
-                        <img class="object-cover w-screen h-[872px]" src="@/assets/general/spaghetti_sm.jpg"
+                        <img class="object-cover w-screen h-[905px]" src="@/assets/general/spaghetti_sm.jpg"
                             alt="spaghetti" />
                         <div class="absolute-center slide-1">
                             <h1 class="text-4xl font-bold drop-shadow-[4px_4px_10px_rgba(0,0,0,0.25)]">For all of the Food Enthusiast!</h1>
@@ -16,7 +17,7 @@
                         </div>
                     </li>
                     <li class="home-slide relative w-screen">
-                        <img class="object-cover w-screen h-[872px] object-[0px_-350px]"
+                        <img class="object-cover w-screen h-[905px] object-[0px_-350px]"
                             src="@/assets/general/pasta_sm.jpg" alt="spaghetti" />
                         <div class="absolute-center slide-2">
                             <div class="flex gap-2 items-baseline">
@@ -30,7 +31,7 @@
                         </div>
                     </li>
                     <li class="home-slide relative w-screen">
-                        <img class="object-cover w-screen h-[872px] object-[0px_-50px]"
+                        <img class="object-cover w-screen h-[905px] object-[0px_-50px]"
                             src="@/assets/general/beef_sm.jpg" alt="spaghetti" />
                         <div class="absolute-center slide-3">
                             <h1>Looking to show off your cuisine?</h1>

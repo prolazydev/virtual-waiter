@@ -116,11 +116,33 @@ export default () => {
         }
     };
 
+	const toggleCloseDialog = (
+		toggleClass: string,
+        contactListFields: Ref<EditContactField[]>, 
+		retryClose: Ref<boolean>,
+	) => {
+		if (contactListFields.value.some((field) => field.state === 'save' && field.value !== '')) {
+			if (retryClose.value) {
+				toggleDialog(toggleClass);
+				contactListFields.value = contactListFields.value.filter((field) => field.state !== 'save');
+				retryClose.value = false;
+				return;
+			}
+			// Notify the user that they have unsaved changes
+			useTost('Warning! You have unsaved changes that will be lost if you close the dialog.', 3000);
+			retryClose.value = true;
+		} else {
+			toggleDialog(toggleClass);
+			contactListFields.value = contactListFields.value.filter((field) => field.value !== '');
+		}
+	}
+
     return {
         addContactField,
         localDeleteContactField,
         toggleEditOrCreateContact,
         deleteContactField,
+		toggleCloseDialog
     }
 };
 

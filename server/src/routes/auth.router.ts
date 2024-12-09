@@ -5,7 +5,7 @@ import { middlewareRequest } from '@/types';
 import { deleteSelf, deleteUser } from '@/controllers/user.controller';
 import { isAuthenticated } from '@/middlewares/auth.middleware';
 
-import { updatePassword, addRole, loginWithEmail, register, testAuth, resetPasswordRequest, resetPassword, removeRole, isUsernameTaken, verifyAccount, loginWithUsername, logout, checkAuth } from '@/controllers/auth.controller';
+import { updatePassword, addRole, loginWithEmail, register, testAuth, forgotPasswordRequest, changeForgottenPassword, resetPasswordRequest, resetPassword, removeRole, isUsernameTaken, verifyAccount, loginWithUsername, logout, checkAuth } from '@/controllers/auth.controller';
 
 /**
  * Registers all the routes and middlewares for the respective routes
@@ -27,6 +27,9 @@ export default (authRouter: Router, middlewares: middlewareRequest = []) => {
 	authRouter.patch('/auth/confirm_account/:token', isAuthenticated, verifyAccount);
 
 	// Auth Password
+	authRouter.post('/auth/forgot_password_request', forgotPasswordRequest);
+	authRouter.post('/auth/change_forgotten_password', changeForgottenPassword);
+
 	authRouter.post('/auth/reset_password_request', resetPasswordRequest);
 	
 	authRouter.patch('/auth/reset_password/:resetPasswordToken', isAuthenticated, resetPassword);

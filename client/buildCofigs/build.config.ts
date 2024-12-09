@@ -28,7 +28,7 @@ export const composableResolver: Resolver = async (name) => {
 		return path;
 	}
 
-	if (name.startsWith('use') || name.startsWith('tost')) {
+	if ((name.startsWith('use') || name.startsWith('tost')) && !name.includes('username')) {
         const path = `@/composables/${name}`;
         logComponent('Store:', name, path);
 

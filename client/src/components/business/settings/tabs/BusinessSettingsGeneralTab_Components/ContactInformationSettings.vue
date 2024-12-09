@@ -86,7 +86,7 @@
                 <div class="w-full flex flex-col gap-5">
                     <hr class="border-[#1b1b1b]">
 
-                    <button @click="toggleDialog('.contact-info-dialog')" class="form-button-1 w-fit ml-auto">
+                    <button @click="closeDialog" class="form-button-1 w-fit ml-auto">
                         Close
                     </button>
                 </div>
@@ -130,13 +130,16 @@ const router = useRouter();
 const { params } = useRoute('business-dashboard-settings');
 
 const { user } = useUserStore();
+const retryClose = ref(false);
 
 const { toggleDialog } = myDialog();
+
 const { 
     addContactField,
     localDeleteContactField,
     toggleEditOrCreateContact,
     deleteContactField,
+	toggleCloseDialog,
 } = businessSettingsService();
 
 const business = ref<Business>({} as Business);
@@ -206,6 +209,24 @@ const handleFinishDelete = async (index: number) =>
 
 const handleLocalAdd = (type: 'email' | 'phone') => 
     addContactField(businessEdit, contactListFields, type);
+
+const closeDialog = () => toggleCloseDialog('.contact-info-dialog', contactListFields, retryClose);
+
+// const closeDialog = () => toggleDialog(
+// 	'.contact-info-dialog',
+// 	() => {},
+// 	() => {
+// 		// Validate if there are any unsaved changes and notify the user that they will be lost if the close the dialog
+// 		if (contactListFields.value.some((field) => field.state === 'save' && field.value !== '')) {
+// 			// Notify the user that they have unsaved changes
+			
+// 		}	
+// 		// contactListFields.value = [];
+// 		// Cleanup any emnpty fields
+// 		contactListFields.value = contactListFields.value.filter((field) => field.value !== '');
+		
+// 	}
+// )
 </script>
 
 <style>

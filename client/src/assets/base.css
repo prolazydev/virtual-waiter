@@ -5,7 +5,8 @@
 *, *::before, *::after {
 	box-sizing: border-box;
 }
- 
+
+
 /* TODO: Create a pallete */
 @layer base {
 	/* :root {/ */
@@ -16,6 +17,10 @@
 
 	} */
 }
+:root {
+	--header-height: 4rem;
+}
+
 
 body {
     background-color: #f8f8f8;
@@ -38,7 +43,7 @@ body {
 }
 
 
-/* TRANSITION */
+/* TRANSITIONS */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.35s ease;
@@ -51,11 +56,10 @@ body {
 
 
 /* TRANSITION-GROUP */
-
 .list-move, /* apply transition to moving elements */
 .list-enter-active,
 .list-leave-active {
-  transition: all 0.5s ease;
+  transition: all 650ms ease;
 }
 
 .list-enter-from,

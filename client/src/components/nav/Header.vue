@@ -27,71 +27,78 @@
                 <LucideIcon class="absolute-center hover:stroke-[3px] hover:cursor-pointer transition-all" name="Search" :size="24" :strokeWidth="2"  />
             </button>
         </form>
-        <ul class="nav-links nav-right ml-auto flex gap-5 items-center">
-            <template v-if="!isAuth()">
-                <li><router-link class="nav-link" to="/auth/register">Sign up</router-link></li>
-                <li><router-link class="nav-link" to="/auth/login">Login</router-link></li>
-            </template>
-            <template v-else>
-                <!-- TODO: my restaurant -->
-                <li class="header-nav-icon">
-                    <router-link to="/business/dashboard" title="My Businesses Dashboard">
-                        <LucideIcon 
-                            :class="{ 'active-element': router.currentRoute.value.path.startsWith('/business/settings') }"
-                            class="nav-icon cursor-pointer transition-all" 
-                            name="ChefHat" 
-                            :strokeWidth="2" 
-                            tooltip="test"
-                        />
-                    </router-link>
-                </li>
-                <!-- TODO: Implement notifications -->
-                <li class="header-nav-icon">
-                    <!-- title="Notifications" -->
-                    <!-- <router-link to="/"><LucideIcon class="nav-icon cursor-pointer transition-all" name="Bell" :strokeWidth="2" /></router-link> -->
-                    <button class="flex w-fit h-fit" type="button"><LucideIcon class="nav-icon cursor-pointer transition-all" name="Bell" :strokeWidth="2" /></button>
-                </li>
-                <li>
-                    <!-- TODO: Show Avatar -->
-                    <div v-if="userStore.user.avatar && userStore.user.avatar.length > 0"></div>
-                    <div v-else class="header-nav-icon" id="">
-                        <button type="button" class="dropdown-btn-user" id="authUser" aria-haspopup="menu">
-                            <LucideIcon 
-                                :class="{ 'active-element': router.currentRoute.value.path === `/user/${userStore.user.username ?? ''}` }" 
-                                class="transition-all" 
-                                name="UserRound" 
-                                :stroke-width="2" 
-                            />
-                        </button>
-                        <ul class="dropdown-content px-2 py-3 right-0">
-                            <li><router-link :to="{ name: '/user/[username]', params: { username: userStore.user.username ?? '' } }">Profile</router-link></li>
-                            <li><button @click="handleLogout">Logout</button></li>
-                        </ul>
-                    </div>
-                </li>
-            </template>
-            <li class="flex">
-                <button><LucideIcon class="shopping-bag transition-all" name="ShoppingBag" :strokeWidth="2"/></button>
-            </li>
-        </ul>
+		<ul class="nav-links nav-right ml-auto flex gap-5 items-center relative">
+			<transition-group name="list">
+				<template v-if="!isAuth()" key="guest">
+						<li><router-link class="nav-link" to="/auth/register">Sign up</router-link></li>
+						<li><router-link class="nav-link" to="/auth/login">Login</router-link></li>
+				</template>
+				<template v-else key="loggedIn">
+						<!-- TODO: Implement notifications -->
+						<li key="notifications" class="header-nav-icon" @click="showNotificationsMenu = !showNotificationsMenu">
+							<!-- title="Notifications" -->
+							<!-- <router-link to="/"><LucideIcon class="nav-icon cursor-pointer transition-all" name="Bell" :strokeWidth="2" /></router-link> -->
+							<button class="flex w-fit h-fit" type="button"><LucideIcon class="nav-icon cursor-pointer transition-all" name="Bell" :strokeWidth="2" /></button>
+						</li>
+	
+						<li v-if="user && user.roles.includes('business')" key="myBusiness" class="header-nav-icon">
+							<router-link to="/business/dashboard" title="My Businesses Dashboard">
+								<LucideIcon 
+									:class="{ 'active-element': router.currentRoute.value.path.startsWith('/business/settings') }"
+									class="nav-icon cursor-pointer transition-all" 
+									name="ChefHat" 
+									:strokeWidth="2" 
+									tooltip="test"
+								/>
+							</router-link>
+						</li>
+						
+						<!-- TODO: Show Avatar -->
+						<li key="user">
+							<div v-if="user.avatar && user.avatar.length > 0"></div>
+							<div v-else class="header-nav-icon">
+								<button type="button" class="nav-icon dropdown-btn-user transition-all" id="authUser" aria-haspopup="menu">
+									<LucideIcon 
+										:class="{ 'active-element': router.currentRoute.value.path === `/user/${user.username ?? ''}` }" 
+										class=" transition-all" 
+										name="UserRound" 
+										:stroke-width="2" 
+									/>
+								</button>
+								<ul class="dropdown-content px-2 py-3 right-0">
+									<li><router-link :to="{ name: '/user/[username]', params: { username: user.username ?? '' } }">Profile</router-link></li>
+									<li><button @click="handleLogout">Logout</button></li>
+								</ul>
+							</div>
+						</li>
+				</template>
+				<li class="flex" key="shopping">
+					<button><LucideIcon class="shopping-bag transition-all" name="ShoppingBag" :strokeWidth="2"/></button>
+				</li>
+			</transition-group>
+		</ul>
     </header>
 </template>
 
 <script lang="ts" setup>
 import type { IconKeys } from '@/types';
 
-const userStore = useUserStore();
+const { user } = storeToRefs(useUserStore());
 
 const { isAuth, logout } = useAuth();
 
 const router = useRouter();
+
+const showNotificationsMenu = ref(false);
 
 const searchProps = ref({
     searchType: 'general',
     query: ''
 });
 
-onMounted(() => {  });
+onMounted(() => { 
+
+});
 
 watch(() => searchProps.value.searchType, () => {
     setTimeout(() => {
@@ -141,9 +148,11 @@ async function handleLogout() {
 } 
 
 header {
-    @apply  w-full mb-[87px] px-32 py-[1.5625rem] flex text-2xl border-b border-b-[#1b1b1b] bg-[#f8f8f8]/75
+    @apply  w-full mb-[87px] px-32 py-[1rem] flex text-2xl border-b border-b-[#1b1b1b] bg-[#f8f8f8]/75
             fixed z-[9999]
     ;
+
+	margin-bottom: var(--header-height);
 	
 	backdrop-filter: blur(12px) brightness(2.5) grayscale(0.33);
     font-family: 'Avenir', Helvetica, Arial, sans-serif;

@@ -144,21 +144,25 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
     searching.value = false;
-    document.getElementById('budgetRangeSlider')!
-        // @ts-expect-error no typing for this event
-        .removeEventListener('change', (e: SliderEvent<typeof budgetRangeValues.value>) => setBudget(e))
+    const element = document.getElementById('budgetRangeSlider');
+
+	if (element) {
+		// @ts-expect-error no typing for this event
+		element.removeEventListener('change', (e: SliderEvent<typeof budgetRangeValues.value>) => setBudget(e));
+	}
 
     clearTimeout(timeNowIntervalId)
-})
+});
+
 onUnmounted(() => {});
 
 // TODO: Remove later
-const test = `One of my go to places for salads in Frankfurt. 
-                    It's not cheap, I would rather say good value. 
-                    Fresh ingredients and great add-ons that you can either buy as pre-set salads or build your own.
-                    The soups, wraps and curries are also good and contains fresh and healthy ingredients.
-                    This place really makes you feel good about eating healthy.
-                    The staff is always friendly and helpful.`
+const test = 	`One of my go to places for salads in Frankfurt. 
+				It's not cheap, I would rather say good value. 
+				Fresh ingredients and great add-ons that you can either buy as pre-set salads or build your own.
+				The soups, wraps and curries are also good and contains fresh and healthy ingredients.
+				This place really makes you feel good about eating healthy.
+				The staff is always friendly and helpful.`
 
 // TODO: Implement search
 // @ts-expect-error 

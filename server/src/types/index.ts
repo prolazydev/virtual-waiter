@@ -32,11 +32,11 @@ export interface UserResult {
  */
 // export interface MyRequest<TBody = any, TQuery extends Query = any> extends Express.Request {
 // eslint-disable-next-line  @typescript-eslint/no-unused-vars
-export interface MyRequest<TBody = any, TItem = any> extends Request {
+export interface MyRequest<TBody = any, TItem = any, TParams extends ParamsDictionary = any> extends Request {
 	body: TBody,
 	// query: TQuery;
 	cookies: any,
-	params: ParamsDictionary,
+	params: TParams,
 	identity?: UserResult,
 	headers: any,
 	// db?: any,

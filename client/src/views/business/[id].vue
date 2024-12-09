@@ -448,9 +448,8 @@
 <script lang="ts" setup>
 import 'v-calendar/style.css';
 import type { Business, KeyHours } from '@/types/models/business';
-import { b } from 'node_modules/unplugin-vue-router/dist/types-DBiN4-4c';
 
-const myHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2947.672753648975!2d21.146266175250368!3d42.37081293442345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x13547e56ec9b8e29%3A0x47bae41a2a90f950!2sBallkan%20Restaurant!5e0!3m2!1sen!2s!4v1730668089760!5m2!1sen!2s" class="w-full h-full border-none"allowfullscreen="false" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`
+// const myHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2947.672753648975!2d21.146266175250368!3d42.37081293442345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x13547e56ec9b8e29%3A0x47bae41a2a90f950!2sBallkan%20Restaurant!5e0!3m2!1sen!2s!4v1730668089760!5m2!1sen!2s" class="w-full h-full border-none"allowfullscreen="false" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`
 
 const { params } = useRoute('/business/[id]');
 const router = useRouter();
@@ -547,7 +546,7 @@ const generateGoogleMapsLink = (destination: string) => {
 
 .slide {
 	scroll-snap-align: start;
-	@apply min-w-64 h-fit flex flex-col gap-1
+	@apply min-w-48 h-64 flex flex-col gap-1
 }
 
 .slide img {

@@ -40,7 +40,7 @@ const toggleBusinessInformationComponent = ref(false);
 const { toggleDialog } = myDialog();
 const loader = useLoader();
 
-const emit = defineEmits<{
+defineEmits<{
     updatedPageInformation: [];
 }>();
 

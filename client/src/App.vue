@@ -46,7 +46,9 @@ onMounted(async () => {
 
 <style scoped>
 .header-separator {
-	@apply h-[87px]
-	;
+	/* @apply h-[87px]
+	; */
+
+	height: calc(var(--header-height) + 0px)
 }
 </style>

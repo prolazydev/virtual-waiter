@@ -34,7 +34,7 @@
             </div>
 		</div>
 
-		<div class="w-full mb-2 border-b-4 border-[#1b1b1b]"></div>
+		<div class="w-full my-[5px] border-b-2 border-[#1b1b1b]"></div>
 		
 		<div class="flex flex-col gap-3">
 			<div class="flex flex-col gap-3">
