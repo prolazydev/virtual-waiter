@@ -1,12 +1,12 @@
 <template>
     <div id="homePage">
 		<!-- TODO: figure out programmatically the height -->
-        <section class="glider-container relative w-full max-h-[905px] overflow-hidden max-w-[100vw]">
+        <section class="glider-container relative w-full slide-height-max overflow-hidden max-w-[100vw]">
             <div data-glide-el="track">
                 <!-- NOTE: Needs flex to work -->
                 <ul id="homeSliderImages" class="flex">
                     <li class="home-slide relative w-screen">
-                        <img class="object-cover w-screen h-[905px]" src="@/assets/general/spaghetti_sm.jpg"
+                        <img class="object-cover w-screen slide-height" src="@/assets/general/spaghetti_sm.jpg"
                             alt="spaghetti" />
                         <div class="absolute-center slide-1">
                             <h1 class="text-4xl font-bold drop-shadow-[4px_4px_10px_rgba(0,0,0,0.25)]">For all of the Food Enthusiast!</h1>
@@ -17,7 +17,7 @@
                         </div>
                     </li>
                     <li class="home-slide relative w-screen">
-                        <img class="object-cover w-screen h-[905px] object-[0px_-350px]"
+                        <img class="object-cover w-screen slide-height object-[0px_-350px]"
                             src="@/assets/general/pasta_sm.jpg" alt="spaghetti" />
                         <div class="absolute-center slide-2">
                             <div class="flex gap-2 items-baseline">
@@ -31,7 +31,7 @@
                         </div>
                     </li>
                     <li class="home-slide relative w-screen">
-                        <img class="object-cover w-screen h-[905px] object-[0px_-50px]"
+                        <img class="object-cover w-screen slide-height object-[0px_-50px]"
                             src="@/assets/general/beef_sm.jpg" alt="spaghetti" />
                         <div class="absolute-center slide-3">
                             <h1>Looking to show off your cuisine?</h1>
@@ -184,6 +184,16 @@ function scrollToAboutUs() {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Courgette&family=Montserrat:wght@200;300;400;500;600;800&family=Space+Mono&display=swap');
 
+.slide-height {
+    height: calc(100vh - 64px);
+}
+
+.slide-height-max {
+    max-height: calc(100vh - 64px);
+
+    background: transparent;
+}
+
 #homeSliderImages {
     @apply text-white
     ;
@@ -314,16 +324,16 @@ function scrollToAboutUs() {
     }
 
     55% {
-        transform: translateY(50px);
+        transform: translateY(35px);
         opacity: 1;
     }
     65% {
-        transform: translateY(50px);
+        transform: translateY(35px);
         opacity: 1;
     }
 
     100% {
-        transform: translateY(75px);
+        transform: translateY(70px);
         opacity: 0;
     }
 }

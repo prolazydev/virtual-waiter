@@ -16,7 +16,8 @@ export default () => {
                 (slide1.childNodes[1] as HTMLElement).style.animation = 'appear-from-right 1s ease 0.5s 1 normal forwards running';
                 (slide1.childNodes[2] as HTMLElement).style.animation = 'appear-from-bottom 1s ease 1s 1 normal forwards running';
                 // (slide1.childNodes[3] as HTMLElement).style.animation = 'go-down 2.5s ease 2s infinite';
-                (slide1.childNodes[3] as HTMLElement).style.animation = 'fade-in 2.5s ease 1.5s 1 forwards';
+                (slide1.childNodes[3] as HTMLElement).style.animation = 'go-down 2.5s ease 2s infinite';
+                (slide1.childNodes[4] as HTMLElement).style.animation = 'fade-in 2.5s ease 1.5s 1 forwards';
             } else {
                 (slide1.childNodes[0] as HTMLElement).style.animation = 'none';
                 (slide1.childNodes[1] as HTMLElement).style.animation = 'none';

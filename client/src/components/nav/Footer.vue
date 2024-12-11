@@ -46,6 +46,7 @@
 </script>
 
 <style scoped>
+/* TODO: Add bg-[#1b1b1b] as a tailwind color to have it everywhere */
 footer {
     @apply w-full mt-auto p-12 px-32 flex bg-[#1b1b1b] text-white text-center ;
 }

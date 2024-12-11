@@ -17,12 +17,11 @@
 				<input v-model="loginFormData.password" type="password" id="password" required />
 			</div>
 
-			<div class="flex justify-between">
-				<Checkbox v-model="loginFormData.rememberMe" _label="Remember me" _id="rememberMe" :required="false" />
-				<router-link to="/auth/forgot-password" class="underline underline-offset-2 decoration-dotted hover:underline-offset-4 transition-all">
-					Forgot Password?
-				</router-link>
-			</div>
+			<Checkbox v-model="loginFormData.rememberMe" _label="Remember me" _id="rememberMe" :required="false" />
+			
+			<router-link to="/auth/forgot-password" class="text-end underline underline-offset-2 decoration-dotted hover:underline-offset-4 transition-all">
+				Forgot Password?
+			</router-link>
             
             <div class="relative w-3 h-3 mx-auto">
                 <div :class="{ 'go-down': requestStatus === 'Loading' || requestStatus === 'Error' }" class="w-3 h-3 mx-auto bg-[#1b1b1b]  absolute top-0 rounded-full transition-all duration-700"></div>
