@@ -11,6 +11,7 @@ const emptyUser: LoggedInUser = {
 	avatar: '',
     lastBusinessDashboardTab: 'Home',
     lastBusinessSettingsTab: 'General',
+	isAuthLoading: false,
 }
 
 export default 
@@ -28,6 +29,7 @@ defineStore('user', () => {
 		user.value.isAuth = true;
         user.value.lastBusinessDashboardTab = 'Home';
         user.value.lastBusinessSettingsTab = 'General';
+		user.value.isAuthLoading = false;
 	}
 
 	// const setTab = (tabKey: 'lastBusinessDashboardTab' | 'lastBusinessSettingsTab', tab: BusinessDashboardTabTitles | BusinessSettingsTabTitles) => user!.value[tabKey] = tab as any;

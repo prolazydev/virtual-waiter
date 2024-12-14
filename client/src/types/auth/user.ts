@@ -14,6 +14,7 @@ export type LoggedInUser = {
 
 	lastBusinessDashboardTab?: BusinessDashboardTabTitles;
 	lastBusinessSettingsTab?: BusinessSettingsTabTitles;
+	isAuthLoading: boolean;
 };
 
 // export type LoginModel<TType extends 'email' | 'username'> = {

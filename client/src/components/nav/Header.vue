@@ -20,7 +20,13 @@
                     <li @click.prevent="searchProps.searchType = 'foods'"><p>Foods</p></li>
                 </ul>
             </div>
-            <input v-model="searchProps.query" class="pl-3 py-2 border-x-2 border-[#1b1b1b] bg-transparent text-lg focus:outline-none outline-none transition-all placeholder:text-zinc-700 " type="text" placeholder="Where are we dining?" id="mainSearchBarInput">
+            <input 
+				v-model="searchProps.query" 
+				class="w-64 px-4 py-2 border-x-2 border-[#1b1b1b] bg-transparent text-lg focus:outline-none outline-none transition-all placeholder:text-zinc-700 "
+				id="mainSearchBarInput"
+				type="text" 
+				placeholder="Where are we dining?" 
+			>
             <button class="relative px-4" type="submit">
                 <!-- TODO: Finding animation -->
                 <LucideIcon class="animate-ping opacity-0 -z-[1] pointer-events-none" name="Search" :strokeWidth="2" :size="20" />
@@ -29,7 +35,12 @@
         </form>
 		<ul class="nav-links nav-right ml-auto flex gap-5 items-center relative">
 			<transition-group name="list">
-				<template v-if="!isAuth()" key="guest">
+				<template v-if="user.isAuthLoading" key="loading">
+					<li class="mr-4">
+						<LucideIcon id="loaderIcon" class="absolute " name="Loader" :size="32" :stroke-width="2" />
+					</li>
+				</template>
+				<template v-else-if="!isAuth()" key="guest">
 						<li><router-link class="nav-link" to="/auth/register">Sign up</router-link></li>
 						<li><router-link class="nav-link" to="/auth/login">Login</router-link></li>
 				</template>
@@ -128,8 +139,8 @@ async function handleSearch() {
 }
 
 async function handleLogout() {
-    await logout();
-    // await router.push('/');
+    await logout(user);
+
     await tostRouterTo(router, '/', {}, 'Logged out successfully');
 }
 
@@ -278,6 +289,29 @@ header {
         drop-shadow(0 16px 16px hsl(0deg 0% 0% / 0.075))
         drop-shadow(0 2px 2px hsl(0deg 0% 0% / 0.075));
     scale: 1.1;
+}
+
+#loaderIcon {
+    @apply  absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-700
+}
+
+#loaderIcon {
+    @apply mt-0
+    ;
+    animation: loading 1s ease 0s infinite forwards;
+}
+
+@keyframes loading {
+    0% {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(90deg);
+    }
 }
 
 @media (max-width: 1710px) {

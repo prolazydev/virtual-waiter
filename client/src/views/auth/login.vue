@@ -80,6 +80,8 @@ definePage({
             : next()
 });
 
+const { user } = storeToRefs(useUserStore());
+
 const router = useRouter();
 const route = useRoute('login');
 
@@ -126,6 +128,7 @@ const handleLogin = async () => {
         return;
 
     try {
+		user.value.isAuthLoading = true;
         const { data, error, statusCode } = await myFetch<LoggedInUser>(url, loginFormData.value, { method: 'POST' })
 
         if (!error.value && data.value) {
@@ -144,7 +147,9 @@ const handleLogin = async () => {
         }
     } catch (error) {
         console.log(error);
-    }
+    } finally {
+		user.value.isAuthLoading = false;
+	}
 }
 </script>
 

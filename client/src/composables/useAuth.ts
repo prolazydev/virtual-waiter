@@ -1,4 +1,5 @@
 import type { LoggedInUser } from '@/types/auth/user';
+import type { Ref } from 'vue';
 
 export default () => {
 	const userStore = useUserStore();
@@ -42,14 +43,14 @@ export default () => {
 	/**
 	 * Empties the user store and logs out the user
 	 */
-	const logout = async () => {
+	const logout = async (authUser: Ref<LoggedInUser>) => {
 		try {
+			authUser.value.isAuthLoading = true;
 			await myFetch('auth/logout', '', { method: 'POST' });
 		} catch (error) {
 			console.log(error);
 		} finally {
 			userStore.logoutUser();
-
 		}
 	}
 
