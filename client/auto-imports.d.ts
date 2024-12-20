@@ -6,12 +6,15 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const EInputValidation: typeof import('./src/enums/EFromValidations')['EInputValidation']
+  const ERequestStatus: typeof import('./src/enums/EFromValidations')['ERequestStatus']
   const EffectScope: typeof import('vue')['EffectScope']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
   const asyncComputed: typeof import('@vueuse/core')['asyncComputed']
   const autoResetRef: typeof import('@vueuse/core')['autoResetRef']
-  const businessService: typeof import('@/services/CRUD/business.service.ts')['default']
-  const businessSettingsService: typeof import('@/services/businessSettings.service.ts')['default']
+  const businessService: typeof import('@
+  const businessSettingsService: typeof import('./src/services/businessSettings.service')['default']
+  const businessTESTService: typeof import('./src/services/businessTEST.service')['default']
   const computed: typeof import('vue')['computed']
   const computedAsync: typeof import('@vueuse/core')['computedAsync']
   const computedEager: typeof import('@vueuse/core')['computedEager']
@@ -19,6 +22,7 @@ declare global {
   const computedWithControl: typeof import('@vueuse/core')['computedWithControl']
   const controlledComputed: typeof import('@vueuse/core')['controlledComputed']
   const controlledRef: typeof import('@vueuse/core')['controlledRef']
+  const counter: typeof import('./src/stores/counter')['default']
   const createApp: typeof import('vue')['createApp']
   const createEventHook: typeof import('@vueuse/core')['createEventHook']
   const createGlobalState: typeof import('@vueuse/core')['createGlobalState']
@@ -60,9 +64,9 @@ declare global {
   const myBusinessDashboardGraph: typeof import('@/utils/business/businessDashboard/myBusinessDashboardGraph.ts')['default']
   const myDialog: typeof import('@/utils/common/myDialog.ts')['default']
   const myEqualComparator: typeof import('@/utils/common/myEqualComparator.ts')['default']
-  const myFetch: typeof import('@/utils/myFetch.ts')['default']
+  const myFetch: typeof import('./src/utils/myFetch')['default']
   const myMisc: typeof import('@/utils/misc/myMisc.ts')['default']
-  const myTime: typeof import('@/utils/myTime.ts')['default']
+  const myTime: typeof import('./src/utils/myTime')['default']
   const nextTick: typeof import('vue')['nextTick']
   const onActivated: typeof import('vue')['onActivated']
   const onBeforeMount: typeof import('vue')['onBeforeMount']
@@ -85,7 +89,7 @@ declare global {
   const onUpdated: typeof import('vue')['onUpdated']
   const onWatcherCleanup: typeof import('vue')['onWatcherCleanup']
   const pausableWatch: typeof import('@vueuse/core')['pausableWatch']
-  const productsService: typeof import('@/services/CRUD/products.service.ts')['default']
+  const productsService: typeof import('@
   const provide: typeof import('vue')['provide']
   const provideLocal: typeof import('@vueuse/core')['provideLocal']
   const reactify: typeof import('@vueuse/core')['reactify']
@@ -120,7 +124,7 @@ declare global {
   const toRef: typeof import('vue')['toRef']
   const toRefs: typeof import('vue')['toRefs']
   const toValue: typeof import('vue')['toValue']
-  const tostRouterTo: typeof import('@/composables/tostRouterTo')['default']
+  const tostRouterTo: typeof import('./src/composables/tostRouterTo')['default']
   const tostTimeoutId: typeof import('@/composables/tostTimeoutId')['default']
   const triggerRef: typeof import('vue')['triggerRef']
   const tryOnBeforeMount: typeof import('@vueuse/core')['tryOnBeforeMount']
@@ -148,7 +152,7 @@ declare global {
   const useAsyncQueue: typeof import('@vueuse/core')['useAsyncQueue']
   const useAsyncState: typeof import('@vueuse/core')['useAsyncState']
   const useAttrs: typeof import('vue')['useAttrs']
-  const useAuth: typeof import('@/composables/useAuth')['default']
+  const useAuth: typeof import('./src/composables/useAuth')['default']
   const useBase64: typeof import('@vueuse/core')['useBase64']
   const useBattery: typeof import('@vueuse/core')['useBattery']
   const useBluetooth: typeof import('@vueuse/core')['useBluetooth']
@@ -193,7 +197,7 @@ declare global {
   const useFetch: typeof import('@vueuse/core')['useFetch']
   const useFileDialog: typeof import('@vueuse/core')['useFileDialog']
   const useFileSystemAccess: typeof import('@vueuse/core')['useFileSystemAccess']
-  const useFlipStatistics: typeof import('@/composables/useFlipStatistics')['default']
+  const useFlipStatistics: typeof import('./src/composables/useFlipStatistics')['default']
   const useFocus: typeof import('@vueuse/core')['useFocus']
   const useFocusWithin: typeof import('@vueuse/core')['useFocusWithin']
   const useFps: typeof import('@vueuse/core')['useFps']
@@ -210,7 +214,7 @@ declare global {
   const useKeyModifier: typeof import('@vueuse/core')['useKeyModifier']
   const useLastChanged: typeof import('@vueuse/core')['useLastChanged']
   const useLink: typeof import('vue-router/composables')['useLink']
-  const useLoader: typeof import('@/composables/useLoader')['default']
+  const useLoader: typeof import('./src/composables/useLoader')['default']
   const useLocalStorage: typeof import('@vueuse/core')['useLocalStorage']
   const useMagicKeys: typeof import('@vueuse/core')['useMagicKeys']
   const useManualRefHistory: typeof import('@vueuse/core')['useManualRefHistory']
@@ -254,11 +258,11 @@ declare global {
   const useScriptTag: typeof import('@vueuse/core')['useScriptTag']
   const useScroll: typeof import('@vueuse/core')['useScroll']
   const useScrollLock: typeof import('@vueuse/core')['useScrollLock']
-  const useScrollTo: typeof import('@/composables/useScrollTo')['default']
-  const useScrollX: typeof import('@/composables/useScrollX')['default']
+  const useScrollTo: typeof import('./src/composables/useScrollTo')['default']
+  const useScrollX: typeof import('./src/composables/useScrollX')['default']
   const useSessionStorage: typeof import('@vueuse/core')['useSessionStorage']
   const useShare: typeof import('@vueuse/core')['useShare']
-  const useSlider: typeof import('@/composables/useSlider')['default']
+  const useSlider: typeof import('./src/composables/useSlider')['default']
   const useSlots: typeof import('vue')['useSlots']
   const useSorted: typeof import('@vueuse/core')['useSorted']
   const useSpeechRecognition: typeof import('@vueuse/core')['useSpeechRecognition']
@@ -271,7 +275,7 @@ declare global {
   const useSwipe: typeof import('@vueuse/core')['useSwipe']
   const useTemplateRef: typeof import('vue')['useTemplateRef']
   const useTemplateRefsList: typeof import('@vueuse/core')['useTemplateRefsList']
-  const useTest: typeof import('@/composables/useTest')['default']
+  const useTest: typeof import('./src/composables/useTest')['default']
   const useTextDirection: typeof import('@vueuse/core')['useTextDirection']
   const useTextSelection: typeof import('@vueuse/core')['useTextSelection']
   const useTextareaAutosize: typeof import('@vueuse/core')['useTextareaAutosize']
@@ -287,7 +291,7 @@ declare global {
   const useToNumber: typeof import('@vueuse/core')['useToNumber']
   const useToString: typeof import('@vueuse/core')['useToString']
   const useToggle: typeof import('@vueuse/core')['useToggle']
-  const useTost: typeof import('@/composables/useTost')['default']
+  const useTost: typeof import('./src/composables/useTost')['default']
   const useTransition: typeof import('@vueuse/core')['useTransition']
   const useUrlSearchParams: typeof import('@vueuse/core')['useUrlSearchParams']
   const useUserMedia: typeof import('@vueuse/core')['useUserMedia']
@@ -304,6 +308,7 @@ declare global {
   const useWindowFocus: typeof import('@vueuse/core')['useWindowFocus']
   const useWindowScroll: typeof import('@vueuse/core')['useWindowScroll']
   const useWindowSize: typeof import('@vueuse/core')['useWindowSize']
+  const user: typeof import('./src/stores/user')['default']
   const watch: typeof import('vue')['watch']
   const watchArray: typeof import('@vueuse/core')['watchArray']
   const watchAtMost: typeof import('@vueuse/core')['watchAtMost']
@@ -319,14 +324,18 @@ declare global {
   const watchThrottled: typeof import('@vueuse/core')['watchThrottled']
   const watchTriggerable: typeof import('@vueuse/core')['watchTriggerable']
   const watchWithFilter: typeof import('@vueuse/core')['watchWithFilter']
+  const webSocketService: typeof import('./src/services/webSocket.service')['default']
   const whenever: typeof import('@vueuse/core')['whenever']
 }
 // for type re-export
 declare global {
   // @ts-ignore
-  export type { Component, ComponentPublicInstance, ComputedRef, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, VNode, WritableComputedRef } from 'vue'
+  export type { Component, ComponentPublicInstance, ComputedRef, DirectiveBinding, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, MaybeRef, MaybeRefOrGetter, VNode, WritableComputedRef } from 'vue'
   import('vue')
   // @ts-ignore
   export type { Flip } from 'number-flip-ts'
   import('number-flip-ts')
+  // @ts-ignore
+  export type { EInputValidation, ERequestStatus } from './src/enums/EFromValidations'
+  import('./src/enums/EFromValidations')
 }
