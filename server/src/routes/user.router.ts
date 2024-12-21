@@ -7,7 +7,6 @@ import { getUserMe, getAllUsers, deleteUser, updateUser, updateUserAvatar, getUs
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// TODO: Implement Caching
 /**
  * Middleware for applying common middlewares and caching to specific routes.
  *

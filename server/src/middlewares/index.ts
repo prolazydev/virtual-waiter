@@ -22,9 +22,11 @@ const XSSOptions = {
 	allowedKeys: [ 'name' ],
 	allowedAttributes: { input: [ 'value' ] }
 };
+
 // TODO: add more options
 const HPPOptions: hpp.Options = { whitelist: [ 'name' ], };
  
+// TODO: Implement Caching
 export function initMiddlewares(app: Express) {
 	app.use(morgan('dev'));
 
