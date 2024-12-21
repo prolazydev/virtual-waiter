@@ -88,33 +88,44 @@
             <h2 class="mx-auto relative w-fit text-3xl font-semibold uppercase">We&#x2019;re Good with Numbers</h2>
             
             <!-- TODO: Add some statistics -->
-            <div class="w-full flex justify-center ">
-                <div class="w-full flex gap-20">
-                    <div class="w-full flex justify-end gap-20">
-                        <div class="flex flex-col justify-center items-center text-center gap-5">
-                            <h3 id="statisticsRestaurants" class="text-7xl font-bold text-center"></h3>
-                            <p class="text-center">Restaurants</p>
+            <div class="flex flex-col gap-8">
+                <div class="w-full flex justify-center ">
+                    <div class="w-full flex gap-20">
+                        <div class="w-full flex justify-end gap-20">
+                            <div class="flex flex-col justify-center items-center text-center gap-5">
+                                <h3 id="statisticsRestaurants" class="text-7xl font-bold text-center"></h3>
+                                <p class="text-center">Restaurants</p>
+                            </div>
+                            <LucideIcon class="stroke-rose-200 mt-9" name="Dot" :size="14" :stroke-width="14" />
+                             <!-- <div class="w-3 mb-[75px] border-b-4 border-b-rose-200 overflow-visible"></div> -->
+                            <div class="flex flex-col gap-5">
+                                <h3 id="statisticsProducts" class="text-7xl font-bold text-center"></h3>
+                                <p class="text-center">Products</p>
+                            </div>
                         </div>
-                        <LucideIcon class="stroke-rose-200 mt-9" name="Dot" :size="14" :stroke-width="14" />
-                        <div class="flex flex-col gap-5">
-                            <h3 id="statisticsProducts" class="text-7xl font-bold text-center"></h3>
-                            <p class="text-center">Products</p>
-                        </div>
-                    </div>
-                    <LucideIcon class="w-8 stroke-rose-200 mt-9" name="Dot" :size="14" :stroke-width="14" />
-                    <div class="w-full flex justify-start gap-20 overflow-visible">
-                        <div class="flex flex-col gap-5">
-                            <h3 id="statisticsUsers" class="text-7xl font-bold text-center overflow-visible"></h3>
-                            <p class="text-center">Users</p>
-                        </div>
-                        <LucideIcon class="stroke-rose-200 mt-9 overflow-visible" name="Dot" :size="14" :stroke-width="14" />
-                        <div class="flex flex-col gap-5">
-                            <h3 id="statisticReviews" class="text-7xl font-bold text-center overflow-visible"></h3>
-                            <p class="text-center">Reviews</p>
+                        <LucideIcon class="w-8 stroke-rose-200 mt-9" name="Dot" :size="14" :stroke-width="14" />
+                         <!-- <div class="w-3 min-w-3 mb-[75px] border-b-4 border-b-rose-200 overflow-visible"></div> -->
+                        <div class="w-full flex justify-start gap-20 overflow-visible">
+                            <div class="flex flex-col gap-5">
+                                <h3 id="statisticsUsers" class="text-7xl font-bold text-center overflow-visible"></h3>
+                                <p class="text-center">Users</p>
+                            </div>
+                            <LucideIcon class="stroke-rose-200 mt-9 overflow-visible" name="Dot" :size="14" :stroke-width="14" />
+                             <!-- <div class="w-3 mb-[75px] border-b-4 border-b-rose-200 overflow-visible"></div> -->
+                            <div class="flex flex-col gap-5">
+                                <h3 id="statisticReviews" class="text-7xl font-bold text-center overflow-visible"></h3>
+                                <p class="text-center">Reviews</p>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+
+                <h2 class="mx-auto relative w-fit text-sm text-gray-100">More coming soon</h2>
+
+                <!-- <LucideIcon class="mx-auto stroke-rose-200 mt-9" name="Dot" :size="14" :stroke-width="14" /> -->
             </div>
+
         </section>
     </div>
 </template>
