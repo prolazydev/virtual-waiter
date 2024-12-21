@@ -35,9 +35,7 @@
 
 			<p class="text-center">OR</p>
 
-			<!-- TODO: Implement an UI IconButton to easily implement button hover with icon effect -->
 			<div class="flex justify-between gap-3">
-				<!-- TODO: Figure out the google logo svg(since it's not on the lucide pack) -->
 				<button class="social-login-button login-button w-full" type="button">
 					<p>Google</p>
 					<LucideIcon class="absolute" name="SquareArrowUpRight" :size="24" :stroke-width="2" />

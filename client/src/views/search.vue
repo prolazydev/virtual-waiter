@@ -19,7 +19,6 @@
                 <div class="px-5 flex gap-2 flex-col">
                     <h3 class="text-lg font-semibold">Popular Filters:</h3>
                     <div class="flex flex-col gap-1">
-                        <!-- TODO: Custom style checkbox -->
                         <Checkbox _label="Open Now" class="popular-filter" _id="openNowFilter" />
                         <Checkbox _label="Parking" class="popular-filter" _id="parkingFilter" />
                         <Checkbox _label="Hotel" class="popular-filter" _id="hotelFilter" />
@@ -67,7 +66,6 @@
                     <div class="w-3 h-3 mx-auto bg-rose-600 origin-center rounded-full"></div>
                 </div>
                 <div class="flex flex-col gap-5">
-                    <!-- TODO: Show results here -->
                     <div class="search-items ">
                         <SearchItem v-for="index in 10" :key="index" 
                             r-name="Artro" 

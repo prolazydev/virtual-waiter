@@ -10,6 +10,7 @@ export default () => {
 	const isAuth = () => userStore.user.isAuth;
 
 	const checkAuth = async () => {
+		userStore.user.isAuthLoading = true;
 		try {
 			const { response, data } = await myFetch<LoggedInUser>('auth/check');
 
@@ -22,6 +23,8 @@ export default () => {
 			console.log(error);
             if (isAuth())
 			    userStore.logoutUser();
+		} finally {
+			userStore.user.isAuthLoading = false;
 		}
 	}
 

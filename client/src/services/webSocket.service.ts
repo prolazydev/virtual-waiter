@@ -1,11 +1,7 @@
+import { HEARTBEAT_TIMEOUT, HEARTBEAT_VALUE } from '@/utils/constants/env';
 
 let ws: WebSocket;
-// TODO: Import from .env
-const HEARTBEAT_TIMEOUT = (1000 * 6); // 6 seconds
-const HEARTBEAT_VALUE = 1;
 
-// TODO: import url from .env
-// TODO: implement socket.io-client
 export default () => {
 	const runSocket = () => {
 		if (ws) closeConnection();

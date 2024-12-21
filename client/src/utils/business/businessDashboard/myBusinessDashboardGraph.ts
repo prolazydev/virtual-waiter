@@ -1,6 +1,5 @@
 import Chart from 'chart.js/auto';
 
-// TODO: Handle async data fetching
 export default function (
 		inquiriesChart: Chart<"doughnut", number[], string>,
 		inquiriesPerMonthChart: Chart<"bar", number[], string>,
@@ -64,7 +63,6 @@ export default function (
 			},
 		}
 	});
-	// TODO: Show data for each type of inquiry
 	const inquiryChart3 = document.querySelector('.inquiriy-response-time-month-chart') as HTMLCanvasElement;
 	inquiriyResponseTimeChart = new Chart(inquiryChart3, {
 		type: 'line',

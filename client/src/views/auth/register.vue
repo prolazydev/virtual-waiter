@@ -91,8 +91,6 @@ const registerForm = ref({
 });
 const usernameValidity = ref<InputValidity>('Empty');
 const takenUsernames = ref(new Set<string>);
-// TODO: Add already taken/unavailable emails
-// const takenEmails = ref(new Set<string>);
 const requestStatus = ref<RequestStatus>('Idle');
 
 // TODO: place them to a constant file
@@ -115,14 +113,6 @@ watch(takenUsernames.value, () => {
     else 
         usernameValidity.value = 'Valid';
 });
-
-// TODO: Implement this
-// watch(takenEmails.value, () => {
-//     if (takenEmails.value.has(registerForm.value.email)) 
-//         emailValidity.value = 'Taken';
-//     else 
-//         emailValidity.value = 'Valid';
-// });
 
 const emailValidity = computed(() => {
     if (registerForm.value.email.length === 0)

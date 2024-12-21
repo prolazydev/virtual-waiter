@@ -33,9 +33,6 @@ const _myFetch = createFetch({
 			if (response.response.ok) 
 				return await handleResponse(response.response)
 			else if (response.response.status === 401 || response.response.status === 403) {
-                // TODO: refactor to use auth store
-                
-				// debugger;
 				// console.log(`Unauthorized Response: ${response.response.status}`);
 				// const { logout } = useAuth();
 				// await logout();

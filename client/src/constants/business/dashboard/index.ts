@@ -1,6 +1,5 @@
 import type { BusinessDashboardTab } from '@/types/models/business';
 
-// TODO: Relocate this and add Analytics tab to the dashboard
 export const tabs: BusinessDashboardTab[] = [
 	{ 
 		name: 'Home',

@@ -7,7 +7,7 @@ const emptyUser: LoggedInUser = {
 	username: '',
 	roles: '',
 	isAuth: false,
-	hasBusiness: false, // TODO: Change property name to isBusinessOwner
+	isBusinessOwner: false,
 	avatar: '',
     lastBusinessDashboardTab: 'Home',
     lastBusinessSettingsTab: 'General',
@@ -23,7 +23,7 @@ defineStore('user', () => {
         user.value.email = newUser.email;
         user.value.username = newUser.username;
         user.value.roles = newUser.roles;
-        user.value.hasBusiness = newUser.hasBusiness;
+        user.value.isBusinessOwner = newUser.isBusinessOwner;
         // user.value.avatar = newUser.avatar;
 
 		user.value.isAuth = true;

@@ -13,6 +13,7 @@ declare module 'vue' {
     ContactInformationSettings: typeof import('@/components/business/settings/tabs/BusinessSettingsGeneralTab_Components/ContactInformationSettings.vue')['default']
     CustomLoader: typeof import('@/components/ui/CustomLoader.vue')['default']
     DebounceSearch: typeof import('@/components/ui/DebounceSearch.vue')['default']
+    DraggableScroll: typeof import('./src/components/ui/DraggableScroll.vue')['default']
     EditFormPart: typeof import('@/components/ui/EditFormPart.vue')['default']
     Flip: typeof import('number-flip')['Flip']
     Footer: typeof import('@/components/nav/Footer.vue')['default']

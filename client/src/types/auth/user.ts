@@ -9,7 +9,7 @@ export type LoggedInUser = {
 	username: string;
 	roles: string[] | string;
 	isAuth: boolean;
-	hasBusiness: boolean;
+	isBusinessOwner: boolean;
 	avatar?: string;
 
 	lastBusinessDashboardTab?: BusinessDashboardTabTitles;

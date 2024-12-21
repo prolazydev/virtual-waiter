@@ -88,7 +88,6 @@ export const sections: Section[] = [
                 size: 'custom',
                 prop: 'streetAddress',
                 fields: [
-                    // TODO: figure out the accessing on nested fields
                     {
                         id: 'main-address',
                         label: 'Primary Street Address',

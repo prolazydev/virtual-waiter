@@ -1,6 +1,5 @@
 <template>
     <div id="homePage">
-		<!-- TODO: figure out programmatically the height -->
         <section class="glider-container relative w-full slide-height-max overflow-hidden max-w-[100vw]">
             <div data-glide-el="track">
                 <!-- NOTE: Needs flex to work -->
@@ -126,7 +125,6 @@ import Glide from '@glidejs/glide'
 // import { initGlideStatistics } from '@/composables';
 const { observeSlide1, observeSlide2, observeSlide3 } = useSlider().homeSlider();
 
-// TODO: implement automatic fetching of statistics
 // const virtualWaiterData = ref({
 //     restaurants: 45,
 //     products: 850,

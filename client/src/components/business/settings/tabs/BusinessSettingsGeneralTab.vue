@@ -30,7 +30,7 @@ onMounted(() => {
 	
 })
 
-const props = defineProps<{
+defineProps<{
     userSettingTab: BusinessSettingsTabTitles;
     businessDisplayName: string;
 }>();

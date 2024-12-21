@@ -1,5 +1,4 @@
 export default () => {
-    // TODO: May need to refactor this function if the objects are too large or complex in the future
     /**
      * Compare two objects via JSON.stringify
      * @param a - first object to compare

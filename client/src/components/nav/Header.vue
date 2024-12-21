@@ -127,6 +127,7 @@ const searchType = computed<IconKeys>(() => {
     return 'Zap';
 });
 
+    // TODO: Implement search
 async function handleSearch() {
     // await router.push( { name: 'search', query: { 
     //         searchType: searchProps.value.searchType, 
@@ -134,7 +135,6 @@ async function handleSearch() {
     //     }
     // })
 
-    // TODO: Implement search
     await router.push({ path: '/search' })
 }
 

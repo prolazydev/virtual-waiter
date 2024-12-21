@@ -106,8 +106,8 @@ export default () => {
                 }, DEFAULT_TOST_DURATION);
             }
             else {
-                // Handle the error
                 console.error(error.value);
+				useTost('Error: Something bad happened on our side :/ Please try again later.', 3000);
             }
         } catch (error) {
             console.log(error);
@@ -177,7 +177,7 @@ async function editContact(
         contactListFields.value[index].processingState = 'error';
         setTimeout(() => contactListFields.value[index].processingState = 'idle', 1000);
 
-        // Handle the error
+		useTost('Error: Something bad happened on our side :/ Please try again later.', 3000);
         console.error(error.value);
     }
 }
@@ -218,6 +218,7 @@ async function createContact(
         setTimeout(() => contactListFields.value[index].processingState = 'idle', 1000);
 
         // TODO: Handle the error
+		useTost('Error: Something bad happened on our side :/ Please try again later.', 3000);
         console.error(error.value);
     }
 }
