@@ -9,7 +9,6 @@ import { HEARTBEAT_INTERVAL, HEARTBEAT_VALUE } from '@/utils/constants';
 import { isAuthenticated } from '@/middlewares/auth.middleware';
 import { isAuth } from '@/services/auth.service';
 
-// TODO: Implement the WebSocket service
 export const initSocketIO = async (app: Server) => {
 	const wss = new WebSocketServer({ noServer: true });
 	app.on('upgrade', (req, socket, head) => {

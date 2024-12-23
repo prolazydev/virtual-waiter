@@ -79,7 +79,6 @@ export const getAllBusinesses = requestHandler(async (req, res) => {
 	}
 });
 
-// TODO: Rename function properly by it's implementation
 export const getBusinessById = requestHandler(async (req, res) => {
 	try {
 		const id = req.params.id;
@@ -93,40 +92,37 @@ export const getBusinessById = requestHandler(async (req, res) => {
 		const selectFields = fields ? fields.split(',').join(' ') : '';
 
 		const business = await findBusinessById(id).select(selectFields).lean();
-
-		// const business = await findBusinessById(id);
-
-		// // TODO: also get business with the ratings 
-		// const business = (await findBusinessesByAggregate([
-		// 	{ $match: { _id: new Types.ObjectId(id) } },
-		// 	{
-		// 		$lookup: {
-		// 			from: 'business_reviews',
-		// 			localField: '_id',
-		// 			foreignField: 'businessId',
-		// 			as: 'userReviews',
-		// 		},
-		// 	},
-		// 	{
-		// 		$lookup: {
-		// 			from: 'products',
-		// 			localField: '_id',
-		// 			foreignField: 'businessId',
-		// 			as: 'businessProducts',
-		// 		}
-		// 	}
-		// ]))[0];
-
-		// if ( !business ) 
-		// 	return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
-
-		// business.averageRating = parseFloat(business.averageRating!.toFixed(2));
+		if ( !business ) 
+			return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 
 		respond(res, StatusCodes.OK, Message.SuccessRead, business);
 	} catch (error) {
 		console.log(error);
 		handleError(res, error);
 	}
+});
+
+// TODO: Implement this
+export const getBusinessByIdWithProductsAndReviews = requestHandler(async (req, res) => {
+	// const business = (await findBusinessesByAggregate([
+	// 	{ $match: { _id: new Types.ObjectId(id) } },
+	// 	{
+	// 		$lookup: {
+	// 			from: 'business_reviews',
+	// 			localField: '_id',
+	// 			foreignField: 'businessId',
+	// 			as: 'userReviews',
+	// 		},
+	// 	},
+	// 	{
+	// 		$lookup: {
+	// 			from: 'products',
+	// 			localField: '_id',
+	// 			foreignField: 'businessId',
+	// 			as: 'businessProducts',
+	// 		}
+	// 	}
+	// ]))[0];
 });
 
 export const getBusinessByName = requestHandler(async (req, res) => {

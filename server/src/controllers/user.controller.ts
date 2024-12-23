@@ -56,7 +56,6 @@ export const getUserByUsername = requestHandler(async (req, res) => {
 });
 
 export const updateUser = requestHandler(async (req, res) => {
-	// TODO: update only allowed props
 	const id = req.params.id;
 	if ( !id ) 
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
