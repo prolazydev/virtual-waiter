@@ -1,67 +1,82 @@
 <template>
-  <nav class="breadcrumb">
-    <ul>
-      <li v-for="(title, index) in breadcrumbTitles" :key="index">
-          {{ title }}
-          <template v-if="breadcrumbTitles.length > 1 && index !== breadcrumbTitles.length - 1">
-            <span
-              :class="{ 'last-breadcrumb': breadcrumbTitles.length - 2 === index }"
-            >
-              /
-            </span>
-          </template>
-      </li>
-    </ul>
-  </nav>
+	<nav class="breadcrumb">
+		<ul>
+			<li 
+				v-for="(node, index) in breadcrumbTitles" :key="index"
+			>
+				<router-link 
+					v-if="node?.link"
+					:to="{ name: node.link }"
+					class="border-b-2 border-b-transparent transition-colors hover:border-b-[#1b1b1b] active:border-b-rose-600"
+				>
+					{{ node.title }}
+				</router-link>
+				<span v-else>
+					{{ node.title }}
+				</span>
+				<template 
+					v-if="breadcrumbTitles.length > 1 && index !== breadcrumbTitles.length - 1"
+				>
+					<span
+						:class="{ 'last-breadcrumb': breadcrumbTitles.length - 2 === index }"
+					>
+						/
+					</span>
+				</template>
+			</li>
+		</ul>
+	</nav>
 </template>
 
 <script setup lang="ts">
-type BreadcrumbNode = {
-  title: string;
-  node?: BreadcrumbNode;
-};
+import type { Breadcrumb, BreadcrumbNode } from '@/types/common';
 
 const props = defineProps<{
   node?: BreadcrumbNode;
 }>();
 
-const breadcrumbTitles = traverseNodes(props.node) as string[];
+const breadcrumbTitles = computed(() => traverseNodes(props.node));
+console.log(breadcrumbTitles);
 
-function traverseNodes(node?: BreadcrumbNode): string[] {
-  const result: string[] = [];
-  let currentNode: BreadcrumbNode | undefined = node;
-  if (!currentNode) 
-    return [];
-  while (currentNode) {
-    result.push(currentNode.title);
-    currentNode = currentNode.node;
-  }
-  return result;
+function traverseNodes(node?: BreadcrumbNode): BreadcrumbNode[] {
+	const result: Breadcrumb[] = [];
+	let currentNode: BreadcrumbNode | undefined = node;
+	if (!currentNode) 
+		return [];
+	while (currentNode) {
+		result.push({
+			title: currentNode.title,
+			link: currentNode.link,
+		});
+		currentNode = currentNode.node;
+	}
+	return result;
 }
 
 </script>
 
 <style scoped>
 .breadcrumb {
-  display: flex;
-  align-items: center;
-  font-size: 14px;
+	@apply text-lg
+	;
+	display: flex;
+	align-items: center;
 }
 
 .breadcrumb ul {
-  display: flex;
-  list-style: none;
-  padding: 0;
-  margin: 0;
+	display: flex;
+	list-style: none;
+	padding: 0;
+	margin: 0;
 }
 
 .breadcrumb li {
-  margin-right: 5px;
+  	margin-right: 5px;
 }
 
 .last-breadcrumb {
-  font-weight: 900;
-  font-size: 24px;
+	@apply font-bold
+	;
 }
 
 </style>

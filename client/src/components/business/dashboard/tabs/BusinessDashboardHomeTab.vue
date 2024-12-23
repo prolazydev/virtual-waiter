@@ -1,108 +1,110 @@
 <template>
-	<div class="w-full flex flex-col gap-5">
-		<div class="graph-group-1">
-			<!-- TODO: Make the cards dynamic -->
-			<div class="w-[-webkit-fill-available] flex flex-col gap-5">
-				<div class="quick-data-graphs">
-					<h2 class="text-2xl font-semibold">Quick Graphs</h2>
-
-					<div class="flex justify-between">
-						<div class="quick-graph">
-							<div class="flex flex-col gap-1">
-								<Tooltip :text="'Total over 9000!'" _class="w-max mb-1 transition-all">
-									<h3>Weekly Income</h3>
-								</Tooltip>
-								<hr>
-								<div class="flex gap-3 justify-between">
-									<p>9000$</p>
-									<LucideIcon name="TrendingUp" :size="24" class="stroke-emerald-600" :stroke-width="2" />
+	<div class="w-full mt-5 flex flex-col gap-5">
+		<div class="flex flex-col gap-3">
+			<div class="graph-group-1">
+				<!-- TODO: Make the cards dynamic -->
+				<div class="w-[-webkit-fill-available] flex flex-col gap-5">
+					<div class="quick-data-graphs">
+						<h2 class="text-2xl font-semibold">Quick Graphs</h2>
+	
+						<div class="flex justify-between">
+							<div class="quick-graph">
+								<div class="flex flex-col gap-1">
+									<Tooltip :text="'Total over 9000!'" _class="w-max mb-1 transition-all">
+										<h3>Weekly Income</h3>
+									</Tooltip>
+									<hr>
+									<div class="flex gap-3 justify-between">
+										<p>9000$</p>
+										<LucideIcon name="TrendingUp" :size="24" class="stroke-emerald-600" :stroke-width="2" />
+									</div>
 								</div>
+								<LucideIcon name="PiggyBank" :size="34" :stroke-width="1.5" />
 							</div>
-							<LucideIcon name="PiggyBank" :size="34" :stroke-width="1.5" />
-						</div>
-						<div class="quick-graph">
-							<div class="flex flex-col gap-1">
-								<h3>Weekly Clients</h3>
-								<hr>
-								<p>17 Clients</p>
-							</div>
-							<LucideIcon name="UserRound" :size="34" :stroke-width="1.5" />
-						</div>
-						<div class="quick-graph">
-							<div class="flex flex-col gap-1">
-								<h3>Weekly Reservations</h3>
-								<hr>
-								<p>5 Reservations</p>
-							</div>
-							<LucideIcon name="NotebookPen" :size="34" :stroke-width="1.5" />
-						</div>
-						<div class="quick-graph">
-							<div class="overflow-hidden w-full max-w-full flex flex-col gap-1">
-								<h3>Popular Dishes</h3>
-								<hr>
-								<div class="favorite-dish-slider">
-									<!-- TODO: Have them be links of the dishes for the specific restaurant -->
-									<p class="favorite-dish-slide">Spaghetti</p>
-									<p class="favorite-dish-slide">Lasagna</p>
-									<p class="favorite-dish-slide">Carbonara</p>
+							<div class="quick-graph">
+								<div class="flex flex-col gap-1">
+									<h3>Weekly Clients</h3>
+									<hr>
+									<p>17 Clients</p>
 								</div>
+								<LucideIcon name="UserRound" :size="34" :stroke-width="1.5" />
 							</div>
-							<LucideIcon name="ChefHat" :size="34" :stroke-width="1.5" />
+							<div class="quick-graph">
+								<div class="flex flex-col gap-1">
+									<h3>Weekly Reservations</h3>
+									<hr>
+									<p>5 Reservations</p>
+								</div>
+								<LucideIcon name="NotebookPen" :size="34" :stroke-width="1.5" />
+							</div>
+							<div class="quick-graph">
+								<div class="overflow-hidden w-full max-w-full flex flex-col gap-1">
+									<h3>Popular Dishes</h3>
+									<hr>
+									<div class="favorite-dish-slider">
+										<!-- TODO: Have them be links of the dishes for the specific restaurant -->
+										<p class="favorite-dish-slide">Spaghetti</p>
+										<p class="favorite-dish-slide">Lasagna</p>
+										<p class="favorite-dish-slide">Carbonara</p>
+									</div>
+								</div>
+								<LucideIcon name="ChefHat" :size="34" :stroke-width="1.5" />
+							</div>
 						</div>
 					</div>
-				</div>
-
-				<!-- charts -->
-				<!-- TODO: 	Table of Latest Orders, needs to show order Id, Client Name, Date, Status, Price and The Restaurant as link
-							Up to 5 latest orders, with a button to view all orders
-				-->
-				<div class="flex flex-col gap-2">
-					<div class="flex justify-between items-baseline">
-						<h2 class="text-2xl font-semibold">Latest Orders</h2>
-						<a href="#" class="text-[#1b1b1b] font-semibold border-b border-b-transparent hover:border-b-gray-400 ">View All</a>
+	
+					<!-- charts -->
+					<!-- TODO: 	Table of Latest Orders, needs to show order Id, Client Name, Date, Status, Price and The Restaurant as link
+								Up to 5 latest orders, with a button to view all orders
+					-->
+					<div class="flex flex-col gap-2">
+						<div class="flex justify-between items-baseline">
+							<h2 class="text-2xl font-semibold">Latest Orders</h2>
+							<a href="#" class="text-[#1b1b1b] font-semibold border-b border-b-transparent hover:border-b-gray-400 ">View All</a>
+						</div>
+	
+						<div class="latest-orders-table-container">
+							<table>
+								<thead>
+									<tr>
+										<th>Order ID</th>
+										<th>Client Name</th>
+										<th>Date</th>
+										<th>Status</th>
+										<th>Price</th>
+										<th>Restaurant</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="item in 5" :key="item">
+										<!-- TODO: make it be a router-link -->
+										<td><a href="#">{{ item }}</a></td>
+										<td>John Doe</td>
+										<td>2021-09-0{{ item }}</td>
+										<!-- TODO: style based on the status -->
+										<td>Delivered</td>
+										<td>{{ 20 * item }}$</td>
+										<td><a href="#">Business</a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</div>
-
-					<div class="latest-orders-table-container">
-						<table>
-							<thead>
-								<tr>
-									<th>Order ID</th>
-									<th>Client Name</th>
-									<th>Date</th>
-									<th>Status</th>
-									<th>Price</th>
-									<th>Restaurant</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr v-for="item in 5" :key="item">
-									<!-- TODO: make it be a router-link -->
-									<td><a href="#">{{ item }}</a></td>
-									<td>John Doe</td>
-									<td>2021-09-0{{ item }}</td>
-									<!-- TODO: style based on the status -->
-									<td>Delivered</td>
-									<td>{{ 20 * item }}$</td>
-									<td><a href="#">Business</a></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
+	
 				</div>
-
-			</div>
-			
-			<div v-if="favoriteBusinesses.length > 0" class="favorite-restaurants">
-				<!-- TODO: Switch between Business and Businesses if it's more than 1 and also switch to: "Add a favorite" placeholder if there are none -->
-				<h2 class="text-2xl font-semibold">Favorite Businesses</h2>
-
-				<div class="glider-container relative w-[316px] max-h-[872px] overflow-hidden">
-					<div data-glide-el="track">
-						<ul class="favorite-restaurant-slides">
-							<li v-for="business in favoriteBusinesses" :key="business._id">
-								<BusinessCardItem :business="business" />
-							</li>
-						</ul>
+				
+				<div v-if="favoriteBusinesses.length > 0" class="favorite-restaurants">
+					<!-- TODO: Switch between Business and Businesses if it's more than 1 and also switch to: "Add a favorite" placeholder if there are none -->
+					<h2 class="text-2xl font-semibold">Favorite Businesses</h2>
+	
+					<div class="glider-container relative w-[316px] max-h-[872px] overflow-hidden">
+						<div data-glide-el="track">
+							<ul class="favorite-restaurant-slides">
+								<li v-for="business in favoriteBusinesses" :key="business._id">
+									<BusinessCardItem :business="business" />
+								</li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -161,11 +163,11 @@ import Glide from '@glidejs/glide';
 import Chart from 'chart.js/auto';
 
 import { type Business } from '@/types/models/business';
+import type { BreadcrumbNode } from '@/types/common';
 
 const favoriteBusinesses = ref<Business[]>([]);
 
 let glide: Glide;
-
 // Charts
 let inquiriesChart: Chart<"doughnut", number[], string>;
 let inquiriesPerMonthChart: Chart<"bar", number[], string>;

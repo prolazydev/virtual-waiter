@@ -33,11 +33,10 @@
             </div>
 			<div class="relative flex flex-col gap-2">
                 <label for="businessLocation">Location</label>
-                <!-- <input v-model="createBusinessFormData.location" type="text" id="businessLocation" placeholder="White House, Washington DC" /> -->
 				<DebounceSearch
 					v-model="createBusinessFormData.location!.name"
-					@debounce-fn="debounceSearchLocation"
 					:debounce-delay="500"
+					@debounce-fn="debounceSearchLocation"
 					input-type="text"
 					id="businessLocation"
 					placeholder="White House, Washington DC"
@@ -140,7 +139,7 @@
 
 				<div class="w-64 mt-1 flex flex-col gap-1">
 					<div class="flex justify-between">
-						<Checkbox @change="set24hourSchedule" v-model="createBusinessFormData.is24" class="form-checkbox h-8 flex items-center" _id="useUserEmail" _label="Is open 24/7" />
+						<Checkbox @change="set24hourSchedule" v-model="createBusinessFormData.is24" class="form-checkbox h-8 flex items-center" _id="useUserEmail" _label="All open 24/7" />
 						<div v-if="!createBusinessFormData.is24" class="w-2 h-2 rounded-full my-auto bg-[#1b1b1b]"></div>
 						<button v-if="!createBusinessFormData.is24" @click="openSetHours = !openSetHours" class="w-fit h-fit bg-[#1b1b1b] text-white px-2 border-4 border-[#1b1b1b] focus:outline-none focus-visible:border-b-rose-600 active:border-b-white transition-all" type="button">
 							Set Hours

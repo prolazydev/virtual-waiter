@@ -1,7 +1,9 @@
 <template>
 	<div class="page-main dashboard">
 		<div class="flex gap-10 w-full">
-			<div class="sidenav">
+			<div class="sidenav-main">
+				<Breadcrumb :node="dashboardNode" />
+
 				<div class="flex flex-col gap-3">
 					<div class="flex flex-col gap-1">
 						<h1 class="text-2xl font-semibold text-nowrap">Business Settings</h1>
@@ -49,6 +51,7 @@ import { definePage } from 'unplugin-vue-router/runtime';
 
 import type { BusinessSettingsTabTitles } from '@/types/models/business';
 import { businessSettingsTabs } from '@/constants/business/settings/tabs';
+import type { BreadcrumbNode } from '@/types/common';
 
 definePage({
     meta: {
@@ -65,6 +68,11 @@ const loader = useLoader();
 const { user, setTab } = useUserStore();
 
 const userSettingTab = ref<BusinessSettingsTabTitles>(user.lastBusinessSettingsTab || 'General');
+	const dashboardNode = ref<BreadcrumbNode>({ 
+	title: 'Dashboard', 
+	link: 'business-dashboard', 
+	node: { title: 'tab.value', } 
+});
 
 watch(userSettingTab, (newTab) => setTab('lastBusinessSettingsTab', newTab));
 
@@ -118,7 +126,7 @@ getBusinessDisplayName();
 	@apply py-4 flex flex-col gap-20
 }
 
-.sidenav {
+.sidenav-main {
 	@apply 	min-w-64 w-64 flex flex-col gap-3 border-2 border-[#1b1b1b] p-5
 			sticky top-[6.4375rem] self-start
 	;

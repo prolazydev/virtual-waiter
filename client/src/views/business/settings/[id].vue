@@ -1,30 +1,33 @@
 <template>
 	<div class="page-main dashboard">
 		<div class="flex gap-10 w-full">
-			<div class="sidenav">
-				<div class="flex flex-col gap-3">
-					<div class="flex flex-col gap-1">
-						<h1 class="text-2xl font-semibold text-nowrap">Business Settings</h1>
-						<p class="text-xs">Id: {{ params.id }}</p>
+			<div class="sidenav-main">
+				<Breadcrumb :node="dashboardNode" />
+				<div class="sidenav">
+					<div class="flex flex-col gap-3">
+						<div class="flex flex-col gap-1">
+							<h1 class="text-2xl font-semibold text-nowrap">Business Settings</h1>
+							<p class="text-xs">Id: {{ params.id }}</p>
+						</div>
+
+						<hr class="border-b border-b-[#1b1b1b]/50">
 					</div>
 
-					<hr class="border-b border-b-[#1b1b1b]/50">
-				</div>
-
-				<div class="flex flex-col gap-3">
-					<button 
-                        v-for="(tab) in businessSettingsTabs" 
-                        :key="tab.name" 
-                        @click="userSettingTab = tab.name" 
-                        :class="{ 'active-tab': userSettingTab === tab.name }"
-                        class="dashboard-link" 
-                    >
-						<LucideIcon 
-                            :name="tab.icon" 
-                            :size="22" 
-                        />
-						{{ tab.name }}
-					</button>
+					<div class="flex flex-col gap-3">
+						<button 
+							v-for="(tab) in businessSettingsTabs" 
+							:key="tab.name" 
+							@click="userSettingTab = tab.name" 
+							:class="{ 'active-tab': userSettingTab === tab.name }"
+							class="dashboard-link" 
+						>
+							<LucideIcon 
+								:name="tab.icon" 
+								:size="22" 
+							/>
+							{{ tab.name }}
+						</button>
+					</div>
 				</div>
 			</div>
             <Suspense :timeout="0">
@@ -49,6 +52,7 @@ import { definePage } from 'unplugin-vue-router/runtime';
 
 import type { BusinessSettingsTabTitles } from '@/types/models/business';
 import { businessSettingsTabs } from '@/constants/business/settings/tabs';
+import type { BreadcrumbNode } from '@/types/common';
 
 definePage({
     meta: {
@@ -66,7 +70,16 @@ const { user, setTab } = useUserStore();
 
 const userSettingTab = ref<BusinessSettingsTabTitles>(user.lastBusinessSettingsTab || 'General');
 
-watch(userSettingTab, (newTab) => setTab('lastBusinessSettingsTab', newTab));
+const dashboardNode = ref<BreadcrumbNode>({ 
+	title: 'Dashboard', 
+	link: 'business-dashboard', 
+	node: { title: userSettingTab.value, } 
+});
+
+watch(userSettingTab, (newTab) => {
+	setTab('lastBusinessSettingsTab', newTab);
+	dashboardNode.value.node = { title: newTab };
+});
 
 const businessDisplayName = ref<string>('');
 
@@ -118,9 +131,14 @@ getBusinessDisplayName();
 	@apply py-4 flex flex-col gap-20
 }
 
+.sidenav-main {
+	@apply 	w-64 flex flex-col gap-1
+			sticky top-[6.75rem] self-start
+		;
+}
+
 .sidenav {
-	@apply 	min-w-64 w-64 flex flex-col gap-3 border-2 border-[#1b1b1b] p-5
-			sticky top-[6.4375rem] self-start
+	@apply flex flex-col gap-3 border-2 border-[#1b1b1b] p-5
 	;
 }
 

@@ -7,9 +7,9 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    Breadcrumb: typeof import('./src/components/ui/Breadcrumb.vue')['default']
+    Breadcrumb: typeof import('@/components/ui/Breadcrumb.vue')['default']
     BusinessCardItem: typeof import('@/components/business/BusinessCardItem.vue')['default']
-    BusinessCreatePreview: typeof import('./src/components/business/BusinessCreatePreview.vue')['default']
+    BusinessCreatePreview: typeof import('@/components/business/BusinessCreatePreview.vue')['default']
     BusinessDashboardBusinessTab: typeof import('./src/components/business/dashboard/tabs/BusinessDashboardBusinessTab.vue')['default']
     BusinessDashboardHomeTab: typeof import('./src/components/business/dashboard/tabs/BusinessDashboardHomeTab.vue')['default']
     BusinessSearchItem: typeof import('./src/components/business/BusinessSearchItem.vue')['default']

@@ -405,7 +405,7 @@
                                                         v-model="businessFormFields.is24.value" 
                                                         class="form-checkbox h-8 flex items-center" 
                                                         _id="useUserEmail" 
-                                                        _label="Is open 24/7" 
+                                                        _label="All open 24/7" 
                                                     />
 
                                                     <div class="w-full h-[1px] bg-black"></div>

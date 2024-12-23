@@ -2,22 +2,28 @@
 	<div class="page-main dashboard">
 		<div class="flex gap-10 w-full">
 			<div class="main-dashboard">
-				<div class="sidenav">
-					<div class="flex flex-col gap-3">
-						<h1 class="text-2xl font-semibold">Dashboard</h1>
-						<hr class="border-b border-b-[#1b1b1b]/50">
-					</div>
+				<div class="sidenav-main">
+					<Breadcrumb :node="dashboardNode" />
+					<div class="sidenav">
+						<div class="flex flex-col gap-3">
+							<h1 class="text-2xl font-semibold">Dashboard</h1>
+							<hr class="border-b border-b-[#1b1b1b]/50">
+						</div>
 
-					<div class="flex flex-col gap-3">
-						<button 
-                            v-for="(item, index) in tabs" 
-                            :key="index" @click="tab = item.name" 
-                            :class="{ 'active-tab': tab === item.name }"
-                            class="dashboard-link" 
-                        >
-							<LucideIcon :name="item.icon" :size="22" />
-							{{ item.name }}
-						</button>
+						<div class="flex flex-col gap-3">
+							<button 
+								v-for="(item, index) in tabs" 
+								:key="index" @click="tab = item.name" 
+								:class="{ 'active-tab': tab === item.name }"
+								class="dashboard-link" 
+							>
+								<LucideIcon 
+									:name="item.icon" 
+									:size="22" 
+								/>
+								{{ item.name }}
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -28,7 +34,7 @@
 			<!-- <Transition mode="in-out"> -->
 				<Suspense :timeout="0">
 					<template #default>
-						<component :is="componentRenderer" :key="tab" />
+						<component :is="componentTab" :key="tab" />
 					</template>
 					<template #fallback>
 						<Loading />
@@ -43,8 +49,8 @@
 import { definePage } from 'unplugin-vue-router/runtime';
 
 import type { BusinessDashboardTabTitles } from '@/types/models/business';
-
 import { tabs } from '@/constants/business/dashboard';
+import type { BreadcrumbNode } from '@/types/common';
 
 definePage({
     meta: {
@@ -58,10 +64,21 @@ const { user, setTab } = useUserStore();
 const loader = useLoader();
 
 const tab = ref<BusinessDashboardTabTitles>(user.lastBusinessDashboardTab ?? 'Home');
+const dashboardNode = ref<BreadcrumbNode>({ 
+	title: 'Dashboard', 
+	link: 'business-dashboard', 
+	node: { title: tab.value, } 
+});
 
-watch(tab, (newTab) => setTab('lastBusinessDashboardTab', newTab))
+watch(tab, (newTab) => {
+	setTab('lastBusinessDashboardTab', newTab);
 
-const componentRenderer = computed(() => {
+	dashboardNode.value.title = 'Dashboard';
+	dashboardNode.value.link = 'business-dashboard';
+	dashboardNode.value.node = { title: newTab };
+})
+
+const componentTab = computed(() => {
 	try {
 		loader.startLoader();
 		switch (tab.value) {
@@ -97,12 +114,17 @@ const componentRenderer = computed(() => {
 }
 
 .main-dashboard {
-	@apply flex
+	@apply flex flex-col gap-3
+}
+
+.sidenav-main {
+	@apply 	w-64 flex flex-col gap-1
+			sticky top-[6.75rem] self-start
+		;
 }
 
 .sidenav {
-	@apply 	w-64 flex flex-col gap-3 border-2 border-[#1b1b1b] p-5
-			sticky top-[6.4375rem] self-start
+	@apply flex flex-col gap-3 border-2 border-[#1b1b1b] p-5
 	;
 }
 
