@@ -79,13 +79,10 @@ export const getAllBusinesses = requestHandler(async (req, res) => {
 	}
 });
 
-// TODO: Rename function properly by it's implementation
 export const getBusinessById = requestHandler(async (req, res) => {
 	try {
 		const id = req.params.id;
-		if (!id)
-			return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
-		if (id.length !== 24)
+		if ( !id || id.length !== 24 )
 			return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 
 		// check if it has any query params to specifically select only the mentioned fields

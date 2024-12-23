@@ -39,11 +39,11 @@
 		</div>
 		<!-- TODO: Create Tags for the search item -->
 		<DraggableScroll class="w-72 max-w-72 flex gap-2 text-sm font-semibold overflow-x-auto overflow-y-hidden">
-			<span class="w-max px-[6px] bg-[#1b1b1b] text-white text-nowrap rounded-full cursor-pointer hover:bg-[#303030] hover:shadow-md transition-all">Foods</span>
-			<span class="w-max px-[6px] bg-[#1b1b1b] text-white text-nowrap rounded-full cursor-pointer hover:bg-[#303030] hover:shadow-md transition-all">Burger</span>
-			<span class="w-max px-[6px] bg-[#1b1b1b] text-white text-nowrap rounded-full cursor-pointer hover:bg-[#303030] hover:shadow-md transition-all">Close to you</span>
-			<span class="w-max px-[6px] bg-[#1b1b1b] text-white text-nowrap rounded-full cursor-pointer hover:bg-[#303030] hover:shadow-md transition-all">Traditional</span>
-			<span class="w-max px-[6px] bg-[#1b1b1b] text-white text-nowrap rounded-full cursor-pointer hover:bg-[#303030] hover:shadow-md transition-all">Pets Allowed</span>
+			<span class="w-max px-[6px] bg-[#1b1b1b] text-white text-nowrap cursor-pointer hover:bg-[#383838] hover:shadow-md transition-all">Foods</span>
+			<span class="w-max px-[6px] bg-[#1b1b1b] text-white text-nowrap cursor-pointer hover:bg-[#383838] hover:shadow-md transition-all">Burger</span>
+			<span class="w-max px-[6px] bg-[#1b1b1b] text-white text-nowrap cursor-pointer hover:bg-[#383838] hover:shadow-md transition-all">Close to you</span>
+			<span class="w-max px-[6px] bg-[#1b1b1b] text-white text-nowrap cursor-pointer hover:bg-[#383838] hover:shadow-md transition-all">Traditional</span>
+			<span class="w-max px-[6px] bg-[#1b1b1b] text-white text-nowrap cursor-pointer hover:bg-[#383838] hover:shadow-md transition-all">Pets Allowed</span>
 		</DraggableScroll>
 	</div>  
 </template>

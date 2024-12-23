@@ -59,25 +59,7 @@ async function seedAdmin() {
 	} else {
 		adminUser = admin;
 		console.log('Seed for "admin" exists!');
-	} 
-
-	// TODO: second admin
-	// const salt = randomSalt();		
-	// const password = 'admin.123';
-
-	// const user: User = {
-	// 	username: 'admin',
-	// 	email: 'admin@admin.com',
-	// 	auth:  {
-	// 		salt,
-	// 		password: hashPassword(salt, password),
-	// 		roles: [ 'admin' ],
-	// 	},
-	// 	createdAt: new Date(),
-	// 	updatedAt: new Date(),
-	// };
-
-	// const admin  = await createUser(user);
+	}
 }
 
 async function seedUser() {

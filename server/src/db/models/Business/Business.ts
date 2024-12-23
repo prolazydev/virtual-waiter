@@ -126,7 +126,6 @@ const businessSchema = new Schema<IBusiness>({
 			required: true,
 		},
 	},
-	// TODO: be an item in a list of countries
 	country: {
 		type: String,
 		required: false,

@@ -196,6 +196,7 @@
 </template>
 
 <script lang="ts" setup>
+import { defaultFormData } from '@/constants/business/create';
 import type { RequestStatus } from '@/enums/EFromValidations';
 import type { BusinessCategory, BusinessLocationData, CreateBusinessModel, Days } from '@/types/models/business';
 
@@ -205,43 +206,7 @@ const { user } = useUserStore();
 const loader = useLoader();
 
 // TODO: move this to a constants file
-const createBusinessFormData = ref<CreateBusinessModel>({
-	userId: user.id,
-	name: '',
-	email: '',
-	userEmail: user.email ?? '',
-	phone: '',
-	description: '',
-	is24: false,
-	hours: {
-		monday: '',
-		tuesday: '',
-		wednesday: '',
-		thursday: '',
-		friday: '',
-		saturday: '',
-		sunday: '',
-	},
-	categories: [ '' ],
-	country: '',
-	streetAddress: {
-		primary: {
-			main: '',
-			zipCode: '',
-		},
-		secondary: {
-			main: '',
-			zipCode: '',
-		}
-	},
-	location: {
-		name: '',
-		city: '',
-		state: '',
-		zipCode: '',
-		id: ''
-	},
-});
+const createBusinessFormData = ref<CreateBusinessModel>(defaultFormData(user.id, user.email));
 
 const categoryInput = ref('');
 const categoriesResult = ref<BusinessCategory[]>([]);

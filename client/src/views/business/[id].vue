@@ -22,7 +22,7 @@
 			</div>
 			<div class="group-links flex gap-3 justify-between">
 				<div>
-					<Tooltip _class="mb-3" :text="`${business.averageRating} stars`">
+					<Tooltip _class="mb-3" :delay="1000" :text="`${business.averageRating.toFixed(2)} Stars`">
 						<Review :stars="business.averageRating" :reviews="business.reviews" :sizes="28" _p-class="text-lg font-semibold" />
 					</Tooltip>
 
@@ -120,8 +120,10 @@
 					<div class="w-full h-auto p-5 flex flex-col gap-5 border-2 border-[#1b1b1b]">
 						<h1 class="text-2xl pb-3 font-semibold border-b border-b-[#1b1b1b]/50">Ratings</h1>
 
-						<h1 class="flex gap-1 text-2xl font-semibold items-center">{{ business.averageRating }} 
-							<Review :stars="business.averageRating" :reviews="business.reviews" :sizes="24" _p-class="text-lg font-semibold" />
+						<h1 class="flex gap-1 text-2xl font-semibold items-center">
+							<Tooltip _class="mb-3" :delay="1000" :text="`${business.averageRating.toFixed(2)} Stars`">
+								<Review :stars="business.averageRating" :reviews="business.reviews" :sizes="24" _p-class="text-lg font-semibold" />
+							</Tooltip>
 						</h1>
 						<div class="flex flex-col gap-1">
 							<p><b>#1 </b>of 30 Steakhouse in Ferizaj</p>
@@ -183,14 +185,14 @@
                             </p>
 						</div>
 
-						<div class="flex flex-col gap-1">
+						<div class="flex flex-col gap-3">
 							<h2 class="text-xl font-semibold">Cuisines</h2>
-							<div v-if="business.categories && business.categories.length > 0" class="flex gap-2 group-pill-links">
-                                <!-- TODO: Insert a star on the cusisine for it being a top picked cusine from users -->
-								<a class="business-category-item" v-for="(item) in business.categories" :key="item" href="#">
-                                    {{ item }}
-                                </a>
-							</div>
+							<!-- TODO: Insert a star on the cusisine for it being a top picked cusine from users -->
+							<DraggableScroll v-if="business.categories && business.categories.length > 0" class="group-pill-links">
+								<span v-for="(item) in business.categories" :key="item" class="business-category-item">
+									{{ item }}
+								</span>
+							</DraggableScroll>
 						</div>
 					</div>
 				</div>
@@ -293,8 +295,6 @@
 				</div>
 				<div class="w-full p-5 flex flex-col gap-5 border-2 border-[#1b1b1b]">
 					<h2 class="text-2xl pb-3 font-semibold border-b border-b-[#1b1b1b]/50">Amenities and More</h2>
-					<!-- TODO: Show a list of other properties/attributes -->
-					<!-- TODO: Make custom component to forloop this -->
 					<div class="h-[35rem] w-[30rem] flex flex-wrap text-lg font-semibold justify-around">
 						<div class="amedety-item">
 							<LucideIcon name="CalendarDays" :size="28" :stroke-width="1.5" />
@@ -454,6 +454,8 @@ import type { Business, KeyHours } from '@/types/models/business';
 const { params } = useRoute('/business/[id]');
 const router = useRouter();
 
+const { startLoader, finishLoader } = useLoader();
+
 const { user } = useUserStore();
 const { isAuth } = useAuth();
 // const { shouldUseWhiteText } = myMisc();
@@ -473,10 +475,10 @@ onMounted(async () => {
 });
 
 async function handleGetBusiness() {
+	startLoader();
 	const { getBusinessSelfById, } = businessService();
 	try {
 		const { response, statusCode, data } = await getBusinessSelfById(params.id as string);
-
 		if (response.value!.ok && data.value)
 			return business.value = data.value;
 
@@ -492,6 +494,8 @@ async function handleGetBusiness() {
 			
 	} catch (error) {
 		console.error(error);
+	} finally {
+		finishLoader();
 	}
 }
 await handleGetBusiness();
@@ -583,12 +587,15 @@ const generateGoogleMapsLink = (destination: string) => {
 	@apply flex gap-3 
 }
 
-.group-pill-links a {
-    @apply  px-3 py-1 transition-all
-            bg-[#1b1b1b] text-white rounded-2xl
-            hover:bg-[#303030] hover:shadow-md            
+.group-pill-links {
+	@apply flex gap-2 overflow-x-auto w-[563.625px] cursor-default
+}
+
+.group-pill-links a, .group-pill-links span {
+    @apply  px-2.5 py-0.5 transition-all cursor-pointer
+            bg-[#1b1b1b] text-white 
+            hover:bg-[#383838] hover:shadow-md            
     ;
-    /* border-2 border-[#1b1b1b] text-[#1b1b1b] font-semibold */
 }
 
 .image-item-container {
@@ -601,7 +608,9 @@ const generateGoogleMapsLink = (destination: string) => {
 }
 
 .business-category-item {
-	@apply relative
+	@apply relative ;
+
+	user-select: none;
 }
 
 .business-category-item::after {

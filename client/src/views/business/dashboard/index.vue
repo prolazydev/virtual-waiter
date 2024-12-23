@@ -69,7 +69,6 @@ const componentRenderer = computed(() => {
 				return defineAsyncComponent(() => import('@/components/business/dashboard/tabs/BusinessDashboardHomeTab.vue'));
 			case 'Business':
 				return defineAsyncComponent(() => import('@/components/business/dashboard/tabs/BusinessDashboardBusinessTab.vue'));
-			// TODO: Implement the rest of the dashboard tabs 
 			// case 'Conversations':
 			// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardConversations.vue'));
 			// case 'Orders':

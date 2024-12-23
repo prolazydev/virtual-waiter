@@ -34,8 +34,9 @@ const castErrorHandler = (error: CustomError) => {
 	// const errValue: string = get(error, 'value.path');
 	// const errPath: string = get(error, 'path');
 
-	const errValue: string = error.value.path;
-	const errPath: string = error.path;
+	// TODO: Fix typing
+	const errValue: string = (error.value as any).path;
+	const errPath: string = error.path as any;
 
 	const msg = `Invalid value for ${errPath}: ${errValue}`;
 

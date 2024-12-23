@@ -28,7 +28,6 @@ const restaurantSchema = new mongoose.Schema({
 		required: false,
 	},
 	image: { type: Buffer },
-	// TODO: fix rating schema
 	averageRating: {
 		type: Number,
 		default: 0,

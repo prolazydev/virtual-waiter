@@ -6,11 +6,6 @@ const productSchema = new mongoose.Schema({
 		ref: 'users',
 		required: true, 
 	},
-	// restaurantId: {
-	// 	type: mongoose.Schema.Types.ObjectId,
-	// 	ref: 'restaurants',
-	// 	required: true,
-	// },
 	businessId: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'businesses',
@@ -25,16 +20,6 @@ const productSchema = new mongoose.Schema({
 		trim: true,
 	},
 	price: Number,
-	// TODO: Show currency globally not per product
-	// currency: {
-	// 	type: String,
-	// 	required: false,
-	// 	default: 'EURO',
-	// },
-	// quantity: {
-	// 	type: Number,
-	// 	required: true,
-	// },
 	image: {
 		type: [ Buffer ],
 		required: [ true, 'Image is required!' ], 
