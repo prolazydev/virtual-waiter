@@ -1,5 +1,5 @@
 <template>
-	<div class="loading-content m-auto">
+	<div class="loading-content">
 		<LucideIcon name="ChefHat" class="text-gray-200 " :size="148" :stroke-width="2">
 			<filter id='myfilters'>
 				<!-- Shadow blur -->
@@ -42,7 +42,15 @@
 </script>
 
 <style scoped>
+.loading-content {
+	@apply w-[inherit] flex flex-col items-center justify-center
+	;
+	height: calc(100vh - 328px);
+}
+
 .loading-content > svg {
+	@apply m-auto
+	;
 	filter: url(#myfilters);
 }
 </style>

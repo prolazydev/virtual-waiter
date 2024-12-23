@@ -22,13 +22,13 @@
 		<p class="title-explanation">We couldn't find that page :/</p>
 		
 		<div class="links relative flex flex-col items-center gap-1">
-			<router-link to="/" class="px-2 py-1 border-b-2 border-b-transparent hover:border-b-[#1b1b1b] transition-colors" >
+			<router-link to="/" class="px-2 py-1 border-b-2 border-b-transparent transition-colors hover:border-b-[#1b1b1b] active:border-b-rose-600">
 				Go Home
 			</router-link>
 
 			<span class="pb-2">or</span>
 
-			<router-link to="/" id="searchLink" class="relative px-2 py-1 border-2 border-[#1b1b1b] overflow-hidden" >
+			<router-link to="/" id="searchLink" class="relative px-3 py-1 border-2 border-[#1b1b1b] overflow-hidden transition-colors active:border-b-rose-600">
 				<p class="transition-all duration-300">Discover food</p>
 				<LucideIcon name="ArrowRight" :size="16" :stroke-width="1.5" />
 			</router-link>
@@ -87,7 +87,7 @@ function getRandomLucideImage(): IconKeys {
 #errorTitle, #errorIcon {
 	@apply opacity-0
 	;
-	animation: fade-up 0.5s ease forwards;
+	animation: fade-up 0.5s 0s ease forwards;
 	animation-iteration-count: 1;
 }
 
@@ -100,14 +100,14 @@ function getRandomLucideImage(): IconKeys {
 .title-explanation {
 	@apply text-2xl font-semibold opacity-0
 	;
-	animation: fade-up 0.5s 0.75s ease forwards;
+	animation: fade-up 0.5s 0.60s ease forwards;
 
 }
 
 .links > a, .links > span {
 	@apply opacity-0
 	;
-	animation: fade-up 0.5s 1s ease forwards;
+	animation: fade-up 0.5s 0.85s ease forwards;
 
 }
 

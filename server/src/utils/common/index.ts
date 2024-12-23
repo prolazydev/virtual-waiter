@@ -39,11 +39,11 @@ export const mergeSameObjects = (defaultObj: object, mergingObj: object) => {
 	const merged = { ...defaultObj };
 
 	// TODO: Add property validation, if the mergingObj contains 1 or more mismatched properties, throw an error
-	const defaultKeys = Object.keys(defaultObj);
-	const mergingKeys = Object.keys(mergingObj);
-	const diff = defaultKeys.filter(key => !mergingKeys.includes(key));
-	if (diff.length > 0) 
-		throw new Error(`Merging object contains mismatched properties: ${diff.join(', ')}`);	
+	// const defaultKeys = Object.keys(defaultObj);
+	// const mergingKeys = Object.keys(mergingObj);
+	// const diff = defaultKeys.filter(key => !mergingKeys.includes(key));
+	// if (diff.length > 0) 
+	// 	throw new Error(`Merging object contains mismatched properties: ${diff.join(', ')}`);	
 	
 	for (const key in mergingObj) 
 		if (Object.prototype.hasOwnProperty.call(mergingObj, key)) 
