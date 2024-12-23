@@ -8,8 +8,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 /**
- * Middleware for applying common middlewares and caching to specific routes.
- *
+ * User Routes
  * @param {Router} router - The Express router to which routes will be added.
  * @param {RequestHandler[] | RequestHandler} [middlewares=[]] - Middlewares to be applied to all routes.
  */

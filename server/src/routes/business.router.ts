@@ -6,34 +6,50 @@ import { registerBusinessRequest, getAllBusinesses, getBusinessById, getBusiness
 import { isAuthenticated, isSelfItemOwner } from '@/middlewares/auth.middleware';
 
 export default (businessRouter: Router, middlewares: RequestHandler[] | RequestHandler = []) => {
-	// Register business process
-	businessRouter.get('/business/confirm_account/:id', isAuthenticated, getBusinessConfirmationCode);
+	registerBusinessCreationProcessRoutes(businessRouter);
 	
-	businessRouter.post('/business', isAuthenticated, registerBusinessRequest);
-	
-	businessRouter.patch('/business/confirm_account/:id/:code', isAuthenticated, confirmBusinessAccount);
-	
+	// GET
+	registerGetRoutes(businessRouter, middlewares);
+
+	// PATCH
+	registerPatchRoutes(businessRouter, middlewares);
+
+	// DELETE
+	registerDeleteRoutes(businessRouter, middlewares);
+};
+
+function registerDeleteRoutes(businessRouter: Router, middlewares: RequestHandler[] | RequestHandler = []) {
+	businessRouter.delete('business/:id/contact', middlewares, deleteBusinessContact);
+	businessRouter.delete('/business/:id', middlewares, deleteBusiness);
+	businessRouter.delete('/business/user/:userId', middlewares, deleteUserBusinessesTransaction);
+}
+
+function registerPatchRoutes(businessRouter: Router, middlewares: RequestHandler[] | RequestHandler = []) {
+	businessRouter.patch('/business/add/:id/contact', middlewares, addBusinessContact);
+	businessRouter.patch('/business/edit/:id/contact', isAuthenticated, updateBusinessContact);
+	businessRouter.patch('/business/delete/:id/contact', middlewares, deleteBusinessContact);
+	businessRouter.patch('/business/:id', updateBusiness);
+}
+
+function registerGetRoutes(businessRouter: Router, middlewares: RequestHandler[] | RequestHandler = []) {
 	// TODO: Proper renaming
 	businessRouter.get('/business', middlewares, getAllBusinesses);
-	
+
 	businessRouter.get('/business_self', isAuthenticated, getBusinessesSelf);
 	businessRouter.get('/business_self/:id', isAuthenticated, (req: MyRequest, res: Response, next: NextFunction) => isSelfItemOwner(req, res, next, 'businesses'), getBusinessById);
-	
+
 	businessRouter.get('/business/:id', isAuthenticated, getBusinessById);
 
 	businessRouter.get('/business/name/:name', middlewares, getBusinessByName);
 	businessRouter.get('/business/user/:userId', middlewares, getBusinessesByUserId);
-	
+
 	businessRouter.get('/business/custom', middlewares, getBusinessesByCustomQuery);
+}
 
-	// PATCH
-	businessRouter.patch('/business/add/:id/contact', middlewares, addBusinessContact);
-	businessRouter.patch('/business/edit/:id/contact', isAuthenticated, updateBusinessContact);
-	businessRouter.patch('/business/delete/:id/contact', middlewares, deleteBusinessContact);
-	businessRouter.patch('/business/:id',  updateBusiness);
-
-	// DELETE
-	businessRouter.delete('business/:id/contact', middlewares, deleteBusinessContact);
-	businessRouter.delete('/business/:id', middlewares, deleteBusiness);
-	businessRouter.delete('/business/user/:userId', middlewares, deleteUserBusinessesTransaction);
-};
+function registerBusinessCreationProcessRoutes(businessRouter: Router) {
+	businessRouter.post('/business', isAuthenticated, registerBusinessRequest);
+	// Get the Confirmation Code from the token
+	businessRouter.get('/business/confirm_account/:id', isAuthenticated, getBusinessConfirmationCode);
+	// Finalize the Registration
+	businessRouter.patch('/business/confirm_account/:id/:code', isAuthenticated, confirmBusinessAccount);
+}

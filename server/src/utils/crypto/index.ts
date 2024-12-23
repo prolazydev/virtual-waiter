@@ -2,6 +2,7 @@ import jwt, { SignOptions, type JwtPayload } from 'jsonwebtoken';
 import crypto from 'crypto';
 import { UserResult } from '../../types';
 import { REFRESH_TOKEN_DURATION, TEST_SECRET_PRIVATE_JWT, TEST_SECRET_PUBLIC_JWT, SECRET } from '../constants';
+import { mergeSameObjects } from '../common';
 
 /**
  * Creates random base64 salt of the password
@@ -26,25 +27,10 @@ export const passwordMatch = (password: string, dbPassword: string, salt: string
 	// const expectedHash = hashPassword(salt, password);
 	// return expectedHash === dbPassword;
 
-
-export const mergeObjects = (defaultObj: object, mergingObj: object) => {
-	const merged = { ...defaultObj };
-
-	// for (const key in mergingObj) 
-	// 	if (mergingObj.hasOwnProperty(key)) 
-	// 		merged[ key ] = mergingObj[ key ];
-	// TODO: May need fixing
-	for (const key in mergingObj) 
-		if (Object.prototype.hasOwnProperty.call(mergingObj, key)) 
-			(merged as any)[ key ] = (mergingObj as any)[ key ];
-
-	return merged;
-};
-
 export const signToken = (userObj: UserResult, tokenOptions: SignOptions = { expiresIn: REFRESH_TOKEN_DURATION }) => {
 	try {
 		const defaultTokenOptions: SignOptions = { issuer: 'Virtual-Waiter' };
-		const mergedTokenOptions = mergeObjects(tokenOptions, defaultTokenOptions);
+		const mergedTokenOptions = mergeSameObjects(tokenOptions, defaultTokenOptions);
 
 		// const test = process.env.TEST_SECRET_PRIVATE_JWT;
 	

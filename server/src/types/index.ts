@@ -1,22 +1,9 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { Request } from 'express';
 import { RequestHandler, type ParamsDictionary } from 'express-serve-static-core';
-// import { JwtPayload } from 'jsonwebtoken';
 import mongoose from 'mongoose';
 
 export type middlewareRequest = RequestHandler[] | RequestHandler;
-
-// TODO: maybe delete this
-// export interface MyJwtPayload extends JwtPayload {
-// 	/**
-// 	 * User Id
-// 	 */
-// 	id: string | undefined;
-// 	username: string,
-// 	email: string,
-// 	avatar?: string,
-// 	roles?: string[];
-// }
 
 export interface UserResult {
 	id: string,

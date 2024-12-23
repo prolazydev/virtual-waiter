@@ -26,7 +26,6 @@ const XSSOptions = {
 // TODO: add more options
 const HPPOptions: hpp.Options = { whitelist: [ 'name' ], };
  
-// TODO: Implement Caching
 export function initMiddlewares(app: Express) {
 	app.use(morgan('dev'));
 
@@ -43,6 +42,4 @@ export function initMiddlewares(app: Express) {
 
 	app.use(express.urlencoded({ extended: true }));
 	app.use(cookieParser('secret'));
-
-	// TODO: caching
 }
