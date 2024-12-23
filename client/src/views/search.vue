@@ -94,10 +94,6 @@ import { ESortType } from '@/types';
 
 const { toHourMinute } = myTime();
 
-// const { isAuth } = useAuth();
-// const { user } = useUserStore();
-// const query = useRoute().query;
-
 // const searchProps = ref({
 //     searchType: 'general',
 //     query: ''
@@ -113,16 +109,10 @@ const budgetRangeValues = ref({
 
 const currentTime = ref('');
 
-// const timeNow = ref<Date>(new Date(Date.now() - (2 * 60 * 60 * 1000)));
 const timeNow = ref<string>(toHourMinute(new Date()));
 let timeNowIntervalId: NodeJS.Timeout;
 
 onMounted(() => {
-	// console.log(query);
-    // if (query.searchType && query.query) {
-    //     // TODO: Implement automatic search
-    // }
-
     timeNowIntervalId = setInterval(() => 
         timeNow.value = toHourMinute(new Date())
     , 60000); // Update every minute

@@ -33,7 +33,7 @@ const { checkAuth, isAuth } = useAuth();
 
 onBeforeMount(async () => {
     if (!isAuth()) {
-		console.log('App.vue: checkAuth');
+		console.log('App: checkAuth');
         await checkAuth();
     }
 });

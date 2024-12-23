@@ -84,15 +84,7 @@ const getBusinesses = async () => {
 		if (response.value!.ok && data.value) {
 			businesses.value = data.value;
 
-            console.log(businesses.value);
-			
 			favoriteBusinesses.value = businesses.value;
-
-            for (const businessItem of data.value) {
-                const isblack = await shouldUseWhiteText(businessItem.coverImage ?? '')
-
-                console.log(isblack);
-            }
 		}
 
 		// TODO: handle error

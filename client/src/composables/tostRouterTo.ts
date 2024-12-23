@@ -16,7 +16,8 @@ export default async <T extends keyof RouteNamedMap>(router: Router, path: T , p
         
         useTost(message, timeout);
     } catch (error) {
-        console.log(error);
+		// TODO: Handle Routing error
+        console.error(error);
     }
 }
 		

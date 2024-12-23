@@ -20,7 +20,8 @@ const _myFetch = createFetch({
 				throw error;
 			}
 			if (error.response.status === 401 || error.response.status === 403) {
-				console.log(`Unauthorized Response: ${error.response.status}`);
+				// TODO: Handle error
+				console.error(`Unauthorized Response: ${error.response.status}`);
                 
 				if ( useAuth().isAuth() )
 					useUserStore().logoutUser();
@@ -33,9 +34,10 @@ const _myFetch = createFetch({
 			if (response.response.ok) 
 				return await handleResponse(response.response)
 			else if (response.response.status === 401 || response.response.status === 403) {
-				// console.log(`Unauthorized Response: ${response.response.status}`);
-				// const { logout } = useAuth();
-				// await logout();
+				console.error(`Unauthorized Response: ${response.response.text()}`);
+                
+				if ( useAuth().isAuth() )
+					useUserStore().logoutUser();
 			}
 			else 
 				return await response.response.json();

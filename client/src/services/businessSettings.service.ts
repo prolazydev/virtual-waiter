@@ -47,7 +47,8 @@ export default () => {
             else 
                 contactListFields.value[index].state = 'save';
         } catch (error) {
-            console.log(error);
+			// TODO: Handle error
+            console.error(error);
         } finally {
             loader.finishLoader();
         }
@@ -110,7 +111,8 @@ export default () => {
 				useTost('Error: Something bad happened on our side :/ Please try again later.', 3000);
             }
         } catch (error) {
-            console.log(error);
+			// TODO: Handle error
+            console.error(error);
         } finally {
             loader.finishLoader();
         }

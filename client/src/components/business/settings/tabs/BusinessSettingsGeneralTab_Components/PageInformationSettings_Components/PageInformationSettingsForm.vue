@@ -619,7 +619,6 @@ const debounceSearchLocation = async (searchQuery: string) => {
 		}
 
 		searchResults.value = await res.json();
-		console.log(searchResults.value);
 	} catch (error) {
         console.error('Location search failed:', error);
 	} finally {

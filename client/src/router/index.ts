@@ -11,7 +11,6 @@ if (import.meta.hot) {
 }
 
 router.beforeEach((to, {}, next) => {
-
 	const { isAuth, 
         // hasRole 
     } = useAuth();
@@ -28,7 +27,8 @@ router.beforeEach((to, {}, next) => {
             next()
         }
     } catch (error) {
-        console.log(error);
+		// TODO: Handle Routing error
+		console.error(error);
         next({ name: '/error/bad-request' });
     }
 });

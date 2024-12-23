@@ -20,7 +20,8 @@ export default () => {
                 
 			return;
 		} catch (error) {
-			console.log(error);
+			// TODO: Handle error
+			console.error(error);
             if (isAuth())
 			    userStore.logoutUser();
 		} finally {
@@ -51,7 +52,8 @@ export default () => {
 			authUser.value.isAuthLoading = true;
 			await myFetch('auth/logout', '', { method: 'POST' });
 		} catch (error) {
-			console.log(error);
+			// TODO: Handle error
+            console.error(error);
 		} finally {
 			userStore.logoutUser();
 		}
