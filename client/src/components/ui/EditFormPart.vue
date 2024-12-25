@@ -30,6 +30,12 @@
 <script lang="ts" setup>
 import type { LoadingState } from '@/types';
 
+defineSlots<{
+    default: void;
+    footer: void;
+}>();
+
+
 defineProps<{
     id: string;
     title?: string;

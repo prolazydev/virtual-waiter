@@ -12,6 +12,10 @@
 </template>
 
 <script lang="ts" setup>
+defineSlots<{
+    default: void;
+}>();
+
 const props = withDefaults(defineProps<{
 	walkMultiplier?: number;
 }>(), {

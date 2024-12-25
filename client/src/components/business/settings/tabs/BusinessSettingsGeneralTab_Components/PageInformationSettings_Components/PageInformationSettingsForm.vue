@@ -1,6 +1,5 @@
 <template>
     <div class="input-group mt-5">
-        <!-- TODO: create a search bar to search up a specific setting -->
         <div class="flex gap-5 items-center">
             <div class="relative">
 				<input 

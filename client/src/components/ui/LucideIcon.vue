@@ -13,6 +13,10 @@
 import type { IconKeys } from "@/types";
 import * as icons from "lucide-vue-next";
 
+defineSlots<{
+    default: void;
+}>();
+
 const props = withDefaults(defineProps<{
 	name: IconKeys,
     /** Defaults to 32 */

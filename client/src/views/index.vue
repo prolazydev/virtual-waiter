@@ -70,7 +70,7 @@
                         <LucideIcon class="stroke-rose-600 relative hover:translate-x-0 hover:translate-y-3 z-10 transition-all" name="MessageCircleDashed" :size="128" />
                         <LucideIcon class="absolute top-3 stroke-rose-600 opacity-25" name="MessageCircleDashed" :size="128" />
                     </div>
-                    <h3 class="font-bold text-center">Less talk</h3>
+                    <h3 class="font-bold text-center">Less talk, more Food</h3>
                     <p class="text-center">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ex, vero.</p>
                 </div>
                 <div class="max-w-[300px] flex flex-col gap-5">

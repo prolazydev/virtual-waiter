@@ -16,7 +16,6 @@ declare module 'vue' {
     BusinessSettingsAccessTab: typeof import('./src/components/business/settings/tabs/BusinessSettingsAccessTab.vue')['default']
     BusinessSettingsGeneralTab: typeof import('./src/components/business/settings/tabs/BusinessSettingsGeneralTab.vue')['default']
     Checkbox: typeof import('@/components/ui/Checkbox.vue')['default']
-    ComponentLoader: typeof import('./src/components/ui/ComponentLoader.vue')['default']
     ContactInformationSettings: typeof import('@/components/business/settings/tabs/BusinessSettingsGeneralTab_Components/ContactInformationSettings.vue')['default']
     CustomLoader: typeof import('@/components/ui/CustomLoader.vue')['default']
     DebounceSearch: typeof import('@/components/ui/DebounceSearch.vue')['default']
@@ -25,7 +24,6 @@ declare module 'vue' {
     Flip: typeof import('number-flip')['Flip']
     Footer: typeof import('@/components/nav/Footer.vue')['default']
     Header: typeof import('@/components/nav/Header.vue')['default']
-    Input: typeof import('./src/components/ui/form/Input.vue')['default']
     Loading: typeof import('@/components/ui/Loading.vue')['default']
     LucideIcon: typeof import('@/components/ui/LucideIcon.vue')['default']
     MainPageInformationSettings: typeof import('@/components/business/settings/tabs/BusinessSettingsGeneralTab_Components/MainPageInformationSettings.vue')['default']
@@ -41,7 +39,6 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     Search: typeof import('./src/components/ui/DebounceSearch.vue')['default']
     SearchItem: typeof import('@/components/business/BusinessSearchItem.vue')['default']
-    SelectList: typeof import('./src/components/ui/SelectList.vue')['default']
     Toast: typeof import('./src/components/ui/Toast.vue')['default']
     Tooltip: typeof import('@/components/ui/Tooltip.vue')['default']
   }

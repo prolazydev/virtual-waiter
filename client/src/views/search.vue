@@ -3,7 +3,7 @@
         <div class="w-full h-fit flex gap-6 items-baseline bg-[#f8f8f8] z-50 relative top-0 transition-all duration-700">
             <div class="w-[27.5rem]"></div>
             <!-- TODO: Create Filter -->
-            <div class="h-fit py-4 fixed flex flex-col gap-4 border border-gray-500 rounded-xl">
+            <div class="h-fit py-4 fixed flex flex-col gap-4 border border-black rounded-xl">
                 <h2 class="px-3 pb-4 text-xl font-bold border-b border-b-gray-500">Filter By:</h2>
                 <!-- TODO: Implement range filter for price with 2 inputs -->
                 <div class="px-5 pb-4 flex flex-col gap-2 border-b border-b-gray-500">
@@ -28,14 +28,13 @@
                 </div>
             </div>
             <div class="w-full relative flex flex-col ">
-                <div class="h-[6.25rem] inline-block opacity-0 pointer-events-none">placeholder</div>
-                <div class="search-board h-32 pt-9 fixed top-16 flex items-center justify-start bg-[#f8f8f8] border-b-4 border-[#1b1b1b] z-[1000]">
+                <div class="h-[4.5rem] inline-block opacity-0 pointer-events-none">placeholder</div>
+                <div class="search-board">
                     <div class="flex items-center">
-                        <div class="relative px-1 py-2 border border-gray-500 hover:bg-neutral-800/5 rounded-full transition-all">
+                        <div class="relative px-1 py-2 border border-black hover:bg-neutral-800/5 rounded-full transition-all">
                             <button type="button" class="dropdown-btn font-semibold text-lg" aria-haspopup="menu">
                                 <LucideIcon name="ArrowUpDown" :size="32" />
-                                    Sort by: {{ sortOption }}
-                                <LucideIcon  name="ChevronsUpDown" :size="32" />
+								Sort by: {{ sortOption }}
                             </button>
                             <ul class="dropdown-sort-options left-[-10px]">
                                 <li @click="sortOption = item" v-for="(item, index) in ESortType" class="px-4" :key="index">
@@ -65,22 +64,20 @@
                     </div>
                     <div class="w-3 h-3 mx-auto bg-rose-600 origin-center rounded-full"></div>
                 </div>
-                <div class="flex flex-col gap-5">
-                    <div class="search-items ">
-                        <SearchItem v-for="index in 10" :key="index" 
-                            r-name="Artro" 
-                            city-of-origin="Ferizaj" 
-                            photo="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fblog.myfitnesspal.com%2Fwp-content%2Fuploads%2F2017%2F12%2FEssential-Guide-to-Healthy-Eating-2.png&f=1&nofb=1&ipt=a0a4fe3926f2c453777359ed46a0c88354e9ab138068354c1c67fe44ff807eec&ipo=images"
-                            type-of-business="Burgers" 
-                            :stars="4"
-                            :reviews="5"
-                            :time-open="'10:00'" 
-                            :time-closing="'23:00'"
-                            :time-now="timeNow"
-                            :top-rated-review="test"
-                        />
-                    </div>
-                </div>
+				<div class="search-items">
+					<SearchItem v-for="index in 10" :key="index" 
+						r-name="Artro" 
+						city-of-origin="Ferizaj" 
+						photo="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fblog.myfitnesspal.com%2Fwp-content%2Fuploads%2F2017%2F12%2FEssential-Guide-to-Healthy-Eating-2.png&f=1&nofb=1&ipt=a0a4fe3926f2c453777359ed46a0c88354e9ab138068354c1c67fe44ff807eec&ipo=images"
+						type-of-business="Burgers" 
+						:stars="4"
+						:reviews="5"
+						:time-open="'10:00'" 
+						:time-closing="'23:00'"
+						:time-now="timeNow"
+						:top-rated-review="test"
+					/>
+				</div>
             </div>
         </div>
 	</div>
@@ -183,13 +180,15 @@ const setBudget = (e: SliderEvent<typeof budgetRangeValues.value>) => {
     @apply  left-[4.5px] top-[0.075rem] w-[0.5rem] h-[0.9rem] border-r-[4px] border-b-[4px] 
 	;
 }
-
 </style>
 
 <style scoped>
-#searchTypeIcon {
-    stroke-dasharray: 70;
-    stroke-dashoffset: 0;
+.search-board {
+	@apply h-24 pt-6 pl-2 fixed top-16 flex items-center justify-start border-b-4 border-[#1b1b1b] z-[1000]
+	;
+	backdrop-filter: blur(32px) grayscale(0.25) saturate(1.75);
+	
+    width: calc(100% - 622px);
 }
 
 .dropdown-btn {
@@ -283,15 +282,11 @@ const setBudget = (e: SliderEvent<typeof budgetRangeValues.value>) => {
     @apply -top-5 opacity-0 pointer-events-none
 }
 
-.search-board {
-    width: calc(100% - 622px);
-}
-
 .search-results {
     @apply mt-1 opacity-100 pointer-events-auto
 }
 
 .search-items {
-    @apply h-full flex flex-wrap justify-between gap-y-10 overflow-hidden
+    @apply h-full flex flex-wrap justify-between gap-y-5 overflow-hidden
 }
 </style>

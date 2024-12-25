@@ -6,6 +6,10 @@
 </template>
 
 <script lang="ts" setup>
+defineSlots<{
+	default: void;
+}>();
+
 withDefaults(defineProps<{
 	show?: boolean;
 	text?: string;

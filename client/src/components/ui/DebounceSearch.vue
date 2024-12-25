@@ -18,6 +18,10 @@
 <script lang="ts" setup>
 import type { InputTypeHTMLAttribute } from 'vue';
 
+defineSlots<{
+    bottom: void;
+}>();
+
 const { 
 	debounceDelay = 500, 
 } = defineProps<{

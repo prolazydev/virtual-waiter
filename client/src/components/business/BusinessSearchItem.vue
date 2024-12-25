@@ -1,7 +1,7 @@
 <template>
 	<div class="search-item">
 		<div class="flex gap-5">
-			<div class="w-72 h-72 overflow-hidden">
+			<div class="w-80 min-w-72 h-72 overflow-hidden">
 				<img :src="photo" alt="food">
 			</div>
 			<div class="flex flex-col gap-1">
@@ -38,7 +38,7 @@
 			</div>
 		</div>
 		<!-- TODO: Create Tags for the search item -->
-		<DraggableScroll class="w-72 max-w-72 flex gap-2 text-sm font-semibold overflow-x-auto overflow-y-hidden">
+		<DraggableScroll class="w-80 min-w-72 max-w-80 text-orange-600 flex gap-2 text-sm font-semibold overflow-x-auto overflow-y-hidden">
 			<span class="w-max px-[6px] bg-[#1b1b1b] text-white text-nowrap cursor-pointer hover:bg-[#383838] hover:shadow-md transition-all">Foods</span>
 			<span class="w-max px-[6px] bg-[#1b1b1b] text-white text-nowrap cursor-pointer hover:bg-[#383838] hover:shadow-md transition-all">Burger</span>
 			<span class="w-max px-[6px] bg-[#1b1b1b] text-white text-nowrap cursor-pointer hover:bg-[#383838] hover:shadow-md transition-all">Close to you</span>
@@ -108,6 +108,8 @@ const rState = computed<BusinessOpenState>(() => {
 </script>
 
 <style scoped>
+
+
 .search-item {
     @apply w-fit pb-3 flex flex-col gap-3 border-b-4 border-b-[#1b1b1b] bg-inherit
 }

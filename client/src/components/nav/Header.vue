@@ -1,5 +1,5 @@
 <template>
-    <header>
+    <header class="header-main">
         <router-link to="/" class="main-logo"><h1>Virtual<span class="text-rose-600">Waiter</span></h1></router-link>
         <router-link to="/" class="main-logo-responsive"><h1>V <span class="text-rose-600">W</span></h1></router-link>
         <span class="w-[2px] bg-[#1b1b1b] mx-3 max-lg:ml-2 max-lg:mr-1"></span>
@@ -49,7 +49,7 @@
 						<li key="notifications" class="header-nav-icon" @click="showNotificationsMenu = !showNotificationsMenu">
 							<!-- title="Notifications" -->
 							<!-- <router-link to="/"><LucideIcon class="nav-icon cursor-pointer transition-all" name="Bell" :strokeWidth="2" /></router-link> -->
-							<button class="flex w-fit h-fit" type="button"><LucideIcon class="nav-icon cursor-pointer transition-all" name="Bell" :strokeWidth="2" /></button>
+							<button class="top-[0.125rem] relative flex w-fit h-fit" type="button"><LucideIcon class="nav-icon cursor-pointer transition-all" name="Bell" :strokeWidth="2" /></button>
 						</li>
 	
 						<li v-if="user && user.roles.includes('business')" key="myBusiness" class="header-nav-icon">
@@ -147,6 +147,17 @@ async function handleLogout() {
 </script>
 
 <style scoped>
+.header-main {
+    @apply  w-full mb-[87px] px-32 py-[1rem] flex text-2xl border-b border-b-[#1b1b1b] bg-[#f8f8f8]/75
+            fixed z-[9999]
+    ;
+
+	margin-bottom: var(--header-height);
+	
+	backdrop-filter: blur(12px) brightness(2.5) grayscale(0.33);
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+}
+
 .main-logo, .main-logo-responsive {
 	@apply 	text-3xl font-bold
 			max-lg:hidden
@@ -158,16 +169,7 @@ async function handleLogout() {
 			max-[1525px]:gap-2.5
 } 
 
-header {
-    @apply  w-full mb-[87px] px-32 py-[1rem] flex text-2xl border-b border-b-[#1b1b1b] bg-[#f8f8f8]/75
-            fixed z-[9999]
-    ;
 
-	margin-bottom: var(--header-height);
-	
-	backdrop-filter: blur(12px) brightness(2.5) grayscale(0.33);
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-}
 
 .nav-links {
 	@apply 	flex gap-5 items-center

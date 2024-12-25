@@ -35,14 +35,14 @@
 </template>
 
 <script lang="ts" setup>
-const toggleBusinessInformationComponent = ref(false);
+defineEmits<{
+    updatedPageInformation: [];
+}>();
 
 const { toggleDialog } = myDialog();
 const loader = useLoader();
 
-defineEmits<{
-    updatedPageInformation: [];
-}>();
+const toggleBusinessInformationComponent = ref(false);
 
 const customToggleDialog = () => {
     toggleDialog('.page-information-settings-dialog');

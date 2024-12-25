@@ -5,6 +5,9 @@
 </template>
 
 <script lang="ts" setup>
+defineSlots<{
+	default: void;
+}>();
 
 // Implement the popover component
 withDefaults(defineProps<{
