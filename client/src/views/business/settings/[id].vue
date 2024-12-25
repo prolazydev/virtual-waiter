@@ -1,6 +1,6 @@
 <template>
 	<div class="page-main dashboard">
-		<div class="flex gap-10 w-full">
+		<div class="flex gap-10 w-full h-full">
 			<div class="sidenav-main">
 				<Breadcrumb :node="dashboardNode" />
 				<div class="sidenav">
@@ -40,7 +40,9 @@
                 </template>
 
                 <template #fallback>
-                    <Loading />
+                    <Loading :style="{
+						'height': 'calc(100vh - 328px)'
+					}" />
                 </template>
             </Suspense>
 		</div>
@@ -53,6 +55,7 @@ import { definePage } from 'unplugin-vue-router/runtime';
 import type { BusinessSettingsTabTitles } from '@/types/models/business';
 import { businessSettingsTabs } from '@/constants/business/settings/tabs';
 import type { BreadcrumbNode } from '@/types/common';
+import { needAuthGuard } from '@/utils/guards/auth';
 
 definePage({
     meta: {
@@ -60,6 +63,8 @@ definePage({
         auth: true,
     },
     name: 'business-dashboard-settings',
+
+	beforeEnter: (_, __, next) => needAuthGuard(next)
 });
 
 const { params } = useRoute('business-dashboard-settings');
@@ -129,11 +134,13 @@ getBusinessDisplayName();
 <style scoped>
 .dashboard {
 	@apply py-4 flex flex-col gap-20
+	;
+	height: calc(100vh - 328px)
 }
 
 .sidenav-main {
 	@apply 	w-64 flex flex-col gap-1
-			sticky top-[6.75rem] self-start
+			sticky top-[5.5rem] self-start
 		;
 }
 

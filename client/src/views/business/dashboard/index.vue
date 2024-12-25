@@ -37,7 +37,9 @@
 						<component :is="componentTab" :key="tab" />
 					</template>
 					<template #fallback>
-						<Loading />
+						<Loading :style="{
+							'height': 'calc(100vh - 328px)'
+						}" />
 					</template>
 				</Suspense>
 			<!-- </Transition> -->

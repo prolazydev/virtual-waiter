@@ -1,5 +1,5 @@
 <template>
-	<div class="loading-content">
+	<div class="loading-content" :style="style">
 		<LucideIcon name="ChefHat" class="text-gray-200 " :size="148" :stroke-width="2">
 			<filter id='myfilters'>
 				<!-- Shadow blur -->
@@ -38,14 +38,18 @@
 </template>
 
 <script lang="ts" setup>
+import type { StyleValue } from 'vue';
 
+defineProps<{
+	style?: StyleValue
+}>()
 </script>
 
 <style scoped>
 .loading-content {
 	@apply w-[inherit] flex flex-col items-center justify-center
 	;
-	height: calc(100vh - 328px);
+	/* height: calc(100vh - 400px); */
 }
 
 .loading-content > svg {

@@ -64,6 +64,7 @@ import type { RouteNamedMap } from 'vue-router/auto-routes';
 
 import type { RequestStatus } from '@/enums/EFromValidations';
 import type { LoggedInUser, LoginModel } from '@/types/auth/user';
+import { needGuestGuard } from '@/utils/guards/auth';
 
 definePage({
     meta: {
@@ -72,10 +73,7 @@ definePage({
     },
     name: 'login',
     // NOTE: If user is already logged in, redirect to home, also needs to use useAuth since using isAuth directly will be hoisted outside the setup() function
-    beforeEnter: ({}, {}, next) => 
-        useAuth().isAuth()
-            ? next({ name: '/' })
-            : next()
+    beforeEnter: (_, __, next) => needGuestGuard(next)
 });
 
 const { user } = storeToRefs(useUserStore());
@@ -133,11 +131,12 @@ const handleLogin = async () => {
             requestStatus.value = 'Success';
 
             login(data.value);
+			useTost('Logged in!');
 			
-            setTimeout(() => {
+            setTimeout(async () => {
                 const redirect = (route.query.redirect ?? '/') as keyof RouteNamedMap;
-                tostRouterTo(router, redirect, {}, 'Logged in!')
-            }, 650);
+				await router.push(redirect);
+			}, 650);
         } else {
             requestStatus.value = 'Error';
             setTimeout(() => requestStatus.value = 'Idle', 1250)
