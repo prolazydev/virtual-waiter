@@ -119,7 +119,7 @@ const componentTab = computed(() => {
 
 .sidenav-main {
 	@apply 	w-64 flex flex-col gap-1
-			sticky top-[6.75rem] self-start
+			sticky top-[5.5rem] self-start
 		;
 }
 

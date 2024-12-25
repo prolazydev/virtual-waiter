@@ -38,6 +38,5 @@ withDefaults(defineProps<{
 	/* TODO: Replace inset-area with position-area */
 	/* inset-area: center; */
 	position-area: center;
-	position-try-options: flip-block;
 }
 </style>

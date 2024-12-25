@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full mt-5 flex flex-col gap-5">
+	<div class="w-full flex flex-col gap-5">
 		<div class="flex flex-col gap-3">
 			<div class="graph-group-1">
 				<!-- TODO: Make the cards dynamic -->
