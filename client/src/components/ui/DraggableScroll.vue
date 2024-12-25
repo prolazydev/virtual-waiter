@@ -3,7 +3,7 @@
 		@pointerdown="startDragging" 
 		@pointermove="dragging"
 		@pointerup="stopDragging" 
-		@pointerleave="stopDragging"
+		:style="noScrollStyle"
 		ref="scrollContainer" 
 		class="scroll-container" 
 	>
@@ -12,14 +12,18 @@
 </template>
 
 <script lang="ts" setup>
+import type { StyleValue } from 'vue';
+
 defineSlots<{
     default: void;
 }>();
 
 const props = withDefaults(defineProps<{
 	walkMultiplier?: number;
+	hideScrollbar?: boolean;
 }>(), {
 	walkMultiplier: 1.5,
+	hideScrollbar: true,
 });
 
 const scrollContainer = ref<HTMLElement | null>(null);
@@ -29,6 +33,15 @@ let scrollLeft = 0;
 let lastX = 0;
 let velocity = 0;
 let animationFrame: number | null = null;
+
+const noScrollStyle = computed<StyleValue>(() => {
+	if (props.hideScrollbar) {
+		return {
+			'scrollbar-width': 'none',
+			'-ms-overflow-style': 'none',
+		};
+	}
+}); 
 
 const calculateVelocity = (currentX: number) => {
 	velocity = currentX - lastX; // Calculate velocity based on position change
@@ -90,16 +103,10 @@ const stopDragging = () => {
 	display: flex;
 	white-space: nowrap;
 	cursor: grab;
-	user-select: none;
 	/* Prevents text selection during drag */
+	user-select: none;
 
-	/* Hide scrollbar */
-	scrollbar-width: none; /* Firefox */
-  	-ms-overflow-style: none; /* IE and Edge */
-}
-
-.scroll-container::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+	
 }
 
 .scroll-container.dragging {

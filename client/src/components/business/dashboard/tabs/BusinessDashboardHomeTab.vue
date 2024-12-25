@@ -38,15 +38,15 @@
 								<LucideIcon name="NotebookPen" :size="34" :stroke-width="1.5" />
 							</div>
 							<div class="quick-graph">
-								<div class="overflow-hidden w-full max-w-full flex flex-col gap-1">
+								<div class="w-[235px] max-w-[235px] overflow-hidden flex flex-col gap-1">
 									<h3>Popular Dishes</h3>
 									<hr>
-									<div class="favorite-dish-slider">
-										<!-- TODO: Have them be links of the dishes for the specific restaurant -->
+									<!-- TODO: Have them be links of the dishes for the specific restaurant -->
+									<DraggableScroll class="favorite-dish-slider">
 										<p class="favorite-dish-slide">Spaghetti</p>
 										<p class="favorite-dish-slide">Lasagna</p>
 										<p class="favorite-dish-slide">Carbonara</p>
-									</div>
+									</DraggableScroll>
 								</div>
 								<LucideIcon name="ChefHat" :size="34" :stroke-width="1.5" />
 							</div>
@@ -163,7 +163,6 @@ import Glide from '@glidejs/glide';
 import Chart from 'chart.js/auto';
 
 import { type Business } from '@/types/models/business';
-import type { BreadcrumbNode } from '@/types/common';
 
 const favoriteBusinesses = ref<Business[]>([]);
 
@@ -177,8 +176,6 @@ let incomePerQuarterChart: Chart<"doughnut", number[], string>;
 let incomePerMonthChart: Chart<"line", number[], string>;
 
 onMounted(() => {
-    useScrollX('.favorite-dish-slider');
-    
 	if (favoriteBusinesses.value.length > 1) {
 		glide = new Glide('.glider-container', {
 			type: 'carousel',
@@ -223,15 +220,12 @@ onUnmounted(() => {
 	if (incomePerMonthChart) incomePerMonthChart.destroy();
 });
 
-const getBusinesses = async () => {
+await (async () => {
 	const { response, data } = await myFetch<Business[]>('business_self');
 	
 	if (response.value!.ok && data.value) 
 		favoriteBusinesses.value = data.value;
-}
-
-await getBusinesses();
-
+})();
 </script>
 
 <style scoped>
@@ -265,22 +259,15 @@ hr {
 } */
 
 .favorite-dish-slider {
-	@apply flex gap-2 border-hidden overflow-x-scroll transition-transform duration-300
+	@apply 	w-full p-0 flex gap-2 border-hidden overflow-x-scroll transition-transform duration-300
 	;
-
-	-ms-overflow-style: none;  /* IE and Edge */
-	scrollbar-width: none;  /* Firefox */
-}
-
-.favorite-dish-slider::-webkit-scrollbar {
-	@apply  hidden 
 }
 
 .favorite-dish-slide {
-	@apply 	px-[6px] py-[0.75px] bg-[#1b1b1b] text-white text-[0.9375rem] font-semibold rounded-full cursor-pointer 
+	@apply 	px-[6px] py-[0.75px] bg-[#1b1b1b] text-white text-[0.9375rem] font-semibold cursor-pointer 
 			box-border select-none
 			hover:bg-[#303030] hover:shadow-md transition-all
-			;
+	;
 }
  
 .favorite-restaurants {
@@ -311,7 +298,7 @@ hr {
 
 .latest-orders-table-container table th {
 	@apply text-start border-b-2 border-[#1b1b1b]/50 
-			;
+	;
 }
 
 .latest-orders-table-container table tr {
