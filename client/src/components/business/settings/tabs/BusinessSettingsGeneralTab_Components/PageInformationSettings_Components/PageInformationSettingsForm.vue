@@ -1,5 +1,5 @@
 <template>
-    <div class="input-group mt-5">
+    <div class="input-group w-full mt-5">
         <div class="flex gap-5 items-center">
             <div class="relative">
 				<input 
@@ -36,9 +36,10 @@
                     </p>
                 </transition>
             </div>
-            
         </div>
-        
+
+		<hr class="border-black">
+
         <div class="flex gap-10">
             <!-- TODO: Add an info widget "i" (for each selected input like Email Address) to explain the purpose of each info -->
             <!-- TODO: setup profile, takeout, delivery -->

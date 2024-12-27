@@ -1,5 +1,5 @@
 
-import { icons as myIcons } from 'lucide-vue-next'
+import { icons as myIcons } from 'lucide-vue-next';
 
 export type IconKeys = keyof typeof myIcons;
 
@@ -11,33 +11,33 @@ export enum ESortType {
 	RestaurantRatingHighToLow = 'Restaurant Rating (High to Low)',
 };
 
-export type SortType = ESortType ;
+export type SortType = ESortType;
 
-export type LoadingState = 'idle' | 'loading' | 'success' | 'error'; 
+export type LoadingState = 'idle' | 'loading' | 'success' | 'error';
 
 export type SliderEvent<T> = {
-	detail: T
+	detail: T;
 } & Event;
 
 
 type BusinessOpen = {
 	openingState: 'Open',
-	closingTime: string
-}
+	closingTime: string;
+};
 
 type BusinessClose = {
 	openingState: 'Closed',
-	openingTime: string
-}
+	openingTime: string;
+};
 
 type BusinessClosingSoon = {
 	openingState: 'ClosingSoon',
-	closingTime: string
-}
+	closingTime: string;
+};
 
 type BusinessOpeningSoon = {
 	openingState: 'OpeningSoon',
-	openingTime: string
-}
+	openingTime: string;
+};
 
-export type BusinessOpenState = | BusinessOpen | BusinessClose | BusinessClosingSoon | BusinessOpeningSoon
+export type BusinessOpenState = | BusinessOpen | BusinessClose | BusinessClosingSoon | BusinessOpeningSoon;
