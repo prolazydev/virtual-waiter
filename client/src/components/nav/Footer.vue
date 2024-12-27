@@ -24,7 +24,7 @@
                 </div>
             </div>
             
-            <div id="socialLinks" class="footer-links ">
+            <div id="socialLinks" class="footer-links">
                 <h2>Socials</h2>
                 <div class="my-auto -translate-y-5 flex gap-2 -translate-x-2">
                     <a href="#"><LucideIcon name="Facebook" :size="36" :stroke-width="2" /></a>
@@ -63,7 +63,7 @@ a {
 }
 
 .footer-links h2 {
-    @apply relative w-fit uppercase
+    @apply relative w-fit uppercase font-semibold
 }
 
 .footer-links h2::before {

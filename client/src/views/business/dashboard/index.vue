@@ -37,9 +37,7 @@
 						<component :is="componentTab" :key="tab" />
 					</template>
 					<template #fallback>
-						<Loading :style="{
-							'height': 'calc(100vh - 328px)'
-						}" />
+						<Loading :style="defaultLoadingStyle" />
 					</template>
 				</Suspense>
 			<!-- </Transition> -->
@@ -53,6 +51,7 @@ import { definePage } from 'unplugin-vue-router/runtime';
 import type { BusinessDashboardTabTitles } from '@/types/models/business';
 import { tabs } from '@/constants/business/dashboard';
 import type { BreadcrumbNode } from '@/types/common';
+import { defaultLoadingStyle } from '@/constants/common/style';
 
 definePage({
     meta: {

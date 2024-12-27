@@ -13,7 +13,7 @@
 					</template>
 
 					<template #fallback>
-						<Loading />
+						<Loading :style="defaultLoadingStyle" />
 					</template>
 				</Suspense>
 			</Transition>
@@ -28,6 +28,7 @@
 
 <script setup lang="ts">
 import Loading from '@/components/ui/Loading.vue';
+import { defaultLoadingStyle } from './constants/common/style';
 
 const { checkAuth, isAuth } = useAuth();
 

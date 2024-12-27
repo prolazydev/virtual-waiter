@@ -40,9 +40,7 @@
                 </template>
 
                 <template #fallback>
-                    <Loading :style="{
-						'height': 'calc(100vh - 328px)'
-					}" />
+					<Loading :style="defaultLoadingStyle" />
                 </template>
             </Suspense>
 		</div>
@@ -56,6 +54,7 @@ import type { BusinessSettingsTabTitles } from '@/types/models/business';
 import { businessSettingsTabs } from '@/constants/business/settings/tabs';
 import type { BreadcrumbNode } from '@/types/common';
 import { needAuthGuard } from '@/utils/guards/auth';
+import { defaultLoadingStyle } from '@/constants/common/style';
 
 definePage({
     meta: {
