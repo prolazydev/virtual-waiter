@@ -99,6 +99,7 @@ const componentRenderer = computed(() => {
 				return defineAsyncComponent(() => import('@/components/business/settings/tabs/BusinessSettingsGeneralTab.vue'));
 		}
 	} catch (error) {
+		useTost('Server Error! Something unexpected happened :/ Please try again late!')
         console.error(error);
     } finally {
 		loader.finishLoader();

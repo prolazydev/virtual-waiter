@@ -1,7 +1,7 @@
 <template>
 	<div class="w-full flex flex-col gap-5">
 		<div class="flex flex-col gap-3">
-			<div class="graph-group-1">
+			<div class="graph-group justify-between">
 				<!-- TODO: Make the cards dynamic -->
 				<div class="w-[-webkit-fill-available] flex flex-col gap-5">
 					<div class="quick-data-graphs">
@@ -109,48 +109,46 @@
 				</div>
 			</div>
 		</div>
-		<div class="graph-group-2">
-			<div class="flex gap-5">
-				<div class="flex flex-col gap-2">
-					<div class="w-[21.75rem] max-h-[18.5rem] py-2 px-3 flex flex-col gap-2 border-2 border-[#1b1b1b]">
-						<h2 class="text-2xl font-semibold">Inquiry Breakdown</h2>
-						<hr>
-						
-						<canvas class="inquiry-breakdown-chart w-full h-full"></canvas>
-					</div>
+		<div class="graph-group gap-5">
+			<div class="flex flex-col gap-5">
+				<div class="w-[21.75rem] max-h-[18.5rem] py-2 px-3 flex flex-col gap-2 border-2 border-[#1b1b1b]">
+					<h2 class="text-2xl font-semibold">Inquiry Breakdown</h2>
+					<hr>
 					
-					<div class="w-[21.75rem] max-h-[18.5rem] py-2 px-3 flex flex-col gap-2 border-2 border-[#1b1b1b]">
-						<h2 class="text-2xl font-semibold">Income Per Quarter</h2>
-						<hr>
-						
-						<canvas class="income-per-quarter-chart"></canvas>
-					</div>
+					<canvas class="inquiry-breakdown-chart w-full h-full"></canvas>
 				</div>
 				
-				<div class="w-full max-h-[18.5rem] flex gap-x-5 gap-y-2 flex-wrap">
-					<div class="w-full flex gap-x-5">
-						<div class="w-full h-fit py-2 px-3 flex flex-col gap-2 border-2 border-[#1b1b1b]">
-							<h2 class="text-2xl font-semibold">Monthly Inquiries</h2>
-							<hr>
-							
-							<canvas class="inquiries-per-month-chart"></canvas>
-						</div>
-
-						<div gap-x-5 class="w-full h-fit py-2 px-3 flex flex-col gap-2 border-2 border-[#1b1b1b]">
-							<h2 class="text-2xl font-semibold">Inquiry Response Time</h2>
-							<hr>
-							
-							<canvas class="inquiriy-response-time-month-chart"></canvas>
-						</div>
+				<div class="w-[21.75rem] max-h-[18.5rem] py-2 px-3 flex flex-col gap-2 border-2 border-[#1b1b1b]">
+					<h2 class="text-2xl font-semibold">Income Per Quarter</h2>
+					<hr>
+					
+					<canvas class="income-per-quarter-chart"></canvas>
+				</div>
+			</div>
+			
+			<div class="w-full max-h-[18.5rem] flex gap-5 flex-wrap">
+				<div class="w-full flex gap-x-5">
+					<div class="w-full h-fit py-2 px-3 flex flex-col gap-2 border-2 border-[#1b1b1b]">
+						<h2 class="text-2xl font-semibold">Monthly Inquiries</h2>
+						<hr>
+						
+						<canvas class="inquiries-per-month-chart"></canvas>
 					</div>
 
-					<div class="w-full flex gap-x-5 justify-between">
-						<div class="w-full py-2 px-3 flex flex-col gap-2 border-2 border-[#1b1b1b]">
-							<h2 class="text-2xl font-semibold">Income Per Month</h2>
-							<hr>
-							
-							<canvas class="income-per-month-chart"></canvas>
-						</div>
+					<div gap-x-5 class="w-full h-fit py-2 px-3 flex flex-col gap-2 border-2 border-[#1b1b1b]">
+						<h2 class="text-2xl font-semibold">Inquiry Response Time</h2>
+						<hr>
+						
+						<canvas class="inquiriy-response-time-month-chart"></canvas>
+					</div>
+				</div>
+
+				<div class="w-full flex gap-x-5 justify-between">
+					<div class="w-full py-2 px-3 flex flex-col gap-2 border-2 border-[#1b1b1b]">
+						<h2 class="text-2xl font-semibold">Income Per Month</h2>
+						<hr>
+						
+						<canvas class="income-per-month-chart"></canvas>
 					</div>
 				</div>
 			</div>
@@ -233,8 +231,8 @@ await (async () => {
 	@apply flex gap-5 justify-between
 }
 
-.graph-group-1 {
-	@apply w-full flex gap-5 justify-between
+.graph-group {
+	@apply w-full flex gap-5
 }
 
 hr {

@@ -7,7 +7,6 @@
 			<div class="h-1 w-4 mb-5 bg-[#1b1b1b]"></div>
 		</div>
 
-        <!-- TODO: Implement the component, make it so it gives the data and emits the save method for the specific data to save -->
         <div class="setting">
             <div class="form-part">
                 <ContactInformationSettings />

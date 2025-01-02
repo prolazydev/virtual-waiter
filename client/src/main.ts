@@ -19,4 +19,3 @@ app.use(router);
 app.use(setupCalendar, {});
 
 app.mount('#app')
-
