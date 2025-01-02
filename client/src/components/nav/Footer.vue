@@ -1,7 +1,7 @@
 <template>
     <footer>
         <div class="min-w-64 w-64 flex flex-col gap-3 text-start">
-            <h1 class="text-3xl font-bold text-white">Virtual<span class="text-[#07B889]">Waiter</span></h1>
+            <h1 class="text-3xl font-bold text-white">Virtual<span class="color-theme-green">Waiter</span></h1>
             <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Inventore aspernatur fuga consequuntur laborum quae commodi.</p>
         </div>
             
