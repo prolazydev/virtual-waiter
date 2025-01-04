@@ -2,6 +2,13 @@
 	@apply 	max-w-[54rem] w-full min-w-48 mx-auto p-5 px-10 flex flex-col gap-5 
 }
 
+.base-button {
+	@apply 	
+			focus:outline-none active:border-b-rose-600 -outline-offset-4
+			focus-visible:outline focus-visible:outline-black focus-visible:-outline-offset-[0.375rem]
+	;
+}
+
 .form-button-1 {
 	@apply 	h-fit px-3 py-2 border-2 border-transparent border-b-[#1b1b1b] outline-none transition-all
 			focus:outline-none focus:border-b-rose-600 active:border-b-rose-600 
@@ -9,8 +16,9 @@
 
 .form-button-2 {
 	@apply 	h-fit px-3 py-2 border-2 border-transparent border-[#1b1b1b] outline-none transition-all
-            hover:bg-gray-100
-			focus:outline-none focus:border-b-rose-600 active:border-b-rose-600 
+            
+			focus:outline-none active:border-b-rose-600 
+			focus-visible:outline-dashed focus-visible:outline-black	
 }
 
 /* @layer utilities {

@@ -18,7 +18,6 @@
                 <MainPageInformationSettings />
             </div>
         </div>
-
 	</section>
 </template>
 
@@ -27,7 +26,7 @@ import type { BusinessSettingsTabTitles } from '@/types/models/business';
 
 onMounted(() => {
 	
-})
+});
 
 defineProps<{
     userSettingTab: BusinessSettingsTabTitles;

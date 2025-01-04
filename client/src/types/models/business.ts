@@ -225,7 +225,7 @@ export type BusinessDashboardTab = {
 	icon: IconKeys;
 };
 
-export type BusinessSettingsTabTitles = 'General' | 'Access & Roles' | 'Account' | 'Billing' | 'Subscription' | 'Analytics' | 'Security' | 'Notifications';
+export type BusinessSettingsTabTitles = 'General' | 'Access & Roles' | 'Account' | 'Billing' | 'Products' | 'Subscription' | 'Analytics' | 'Security' | 'Notifications';
 
 export type BusinessSettingsTab = {
 	name: BusinessSettingsTabTitles;

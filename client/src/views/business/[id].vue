@@ -211,7 +211,13 @@
 							<div class="slider-container">
 								<div class="slider">
 									<!-- TODO: show a list of products -->
-									<button v-for="(item, index) in 25" :key="index" @click="handleShowProduct" class="slide" type="button">
+									<button 
+										v-for="(item, index) in 25" 
+										:key="index" 
+										@click="handleShowProduct" 
+										class="slide" 
+										type="button"
+									>
 										<div class="relative">
 											<img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimagesvc.meredithcorp.io%2Fv3%2Fmm%2Fimage%3Fq%3D85%26c%3Dsc%26poi%3Dface%26w%3D2000%26h%3D1000%26url%3Dhttps%3A%252F%252Fstatic.onecms.io%252Fwp-content%252Fuploads%252Fsites%252F43%252F2020%252F03%252F6584062-2000.jpg&f=1&nofb=1&ipt=cc97d9ac7b239997687df92748b89d3a73fa1eb5e90b75c7330e6b3b6676426a&ipo=images" alt="Presentational image" >
                                             <!-- TODO: Add a badge to indicate if the product is a top pick -->
@@ -499,18 +505,17 @@ async function handleGetBusiness() {
 	}
 }
 await handleGetBusiness();
-// NOTE: Needs to be called here since vue bugs out when changing routes for some strange reason
 
 const handleShowProduct = () => {
 	console.log('Show product');
 }
 // TODO: finish this
-const generateGoogleMapsLink = (destination: string) => {
-  const baseUrl = 'https://www.google.com/maps/dir/?api=1';
-  const origin = 'current+location';  // or you could use specific coordinates
-  const url = `${baseUrl}&origin=${origin}&destination=${encodeURIComponent(destination)}`;
-  return url;
-}
+// const generateGoogleMapsLink = (destination: string) => {
+//   const baseUrl = 'https://www.google.com/maps/dir/?api=1';
+//   const origin = 'current+location';  // or you could use specific coordinates
+//   const url = `${baseUrl}&origin=${origin}&destination=${encodeURIComponent(destination)}`;
+//   return url;
+// }
 
 </script>
 
