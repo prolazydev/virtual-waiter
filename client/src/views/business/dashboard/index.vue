@@ -107,9 +107,8 @@ const componentTab = computed(() => {
         
 	} catch (error) {
         console.error(error);
-    } finally {
-		// loader.finishLoader();
-	}
+		loader.finishLoader();
+    }
 });
 </script>
 

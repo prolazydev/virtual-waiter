@@ -56,9 +56,9 @@ onMounted(async () => {
 const fetchProducts = async () => {
 	loader.startLoader();
 	isLoadingProducts.value = true;
-	await new Promise((resolve) => setTimeout(async () => {
-		resolve('resolved');
-	}, 2000));
+	// await new Promise((resolve) => setTimeout(async () => {
+	// 	resolve('resolved');
+	// }, 2000));
 	try {
 		const { getProductsByBusinessId } = productsService();
 		// const { response, statusCode, data } = await getProductsByBusinessId(params.id);

@@ -60,7 +60,21 @@
 .button-main {
 	@apply 	h-fit px-3 py-2 border-2 border-transparent border-[#1b1b1b] outline-none transition-all
 			hover:bg-gray-100
+
+			disabled:bg-gray-200 disabled:text-gray-700 disabled:cursor-not-allowed
+			disabled:placeholder:text-gray-500
 }
+
+/* .button-main:read-only {
+	background-color: #e5e7eb;
+	color: #374151;
+	cursor: 'not-allowed';
+	
+}
+
+.base-button:read-only:focus {
+	border-color;: #1b1b1b
+} */
 
 /* BUTTON COLORS */
 .button-main-hollow {

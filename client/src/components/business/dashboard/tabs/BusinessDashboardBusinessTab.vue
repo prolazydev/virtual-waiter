@@ -94,12 +94,13 @@ import { type Business } from '@/types/models/business';
 
 const router = useRouter();
 
+const loader = useLoader();
 const { shouldUseWhiteText } = myMisc();
 
 const businesses = ref<Business[]>([]);
 const favoriteBusinesses = ref<Business[]>([]);
 
-const getBusinesses = async () => {
+await (async () => {
 	const { getAllOwnedBusinesses } = businessService();
 	try {
 		const { response, statusCode, data } = await getAllOwnedBusinesses();
@@ -123,9 +124,10 @@ const getBusinesses = async () => {
 		}
 	} catch (error) {
 		console.error(error);
+	} finally {
+		loader.finishLoader();
 	}
-};
-await getBusinesses();
+})();
 
 const handleSearch = (e: Event) => {
 	console.log('searching...');

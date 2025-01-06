@@ -11,6 +11,10 @@ export const sizes = {
 		width: '1024px',
 		height: '768px',
 	},
+	xl: {
+		width: '1280px',
+		height: '1042px',
+	},
 	full: {
 		width: '100%',
 		height: '100%',

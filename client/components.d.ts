@@ -33,7 +33,7 @@ declare module 'vue' {
     MyDatePicker: typeof import('@/components/ui/MyDatePicker.vue')['default']
     MyDialog: typeof import('@/components/ui/Dialog/MyDialog.vue')['default']
     MyInput: typeof import('./src/components/ui/form/MyInput.vue')['default']
-    NewProductModal: typeof import('./src/components/business/dashboard/tabs/BusinessDashboardProductsTab_Components/NewProductModal.vue')['default']
+    NewProductModal: typeof import('@/components/business/dashboard/tabs/BusinessDashboardProductsTab_Components/NewProductModal.vue')['default']
     NotFound: typeof import('./src/components/ui/NotFound.vue')['default']
     PageInformationSettingsForm: typeof import('./src/components/business/settings/tabs/BusinessSettingsGeneralTab_Components/PageInformationSettings_Components/PageInformationSettingsForm.vue')['default']
     Popup: typeof import('@/components/ui/Popup/Popup.vue')['default']

@@ -57,7 +57,7 @@ const props = withDefaults(defineProps<{
 	toggleClass?: string;
 	_class?: string;
 	title?: string,
-	size?: 'sm' | 'md' | 'lg' | 'full' | 'custom';
+	size?: 'sm' | 'md' | 'lg' | 'xl' | 'full' | 'custom';
 }>(), {
 	toggleClass: '',
 	_class: '',

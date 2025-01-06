@@ -162,6 +162,8 @@ import Chart from 'chart.js/auto';
 
 import { type Business } from '@/types/models/business';
 
+const loader = useLoader();
+
 const favoriteBusinesses = ref<Business[]>([]);
 
 let glide: Glide;
@@ -219,11 +221,17 @@ onUnmounted(() => {
 });
 
 await (async () => {
-	const { getAllOwnedBusinesses } = businessService();
-	const { response, data } = await getAllOwnedBusinesses();
-	
-	if (response.value!.ok && data.value) 
-		favoriteBusinesses.value = data.value;
+	try {
+		const { getAllOwnedBusinesses } = businessService();
+		const { response, data } = await getAllOwnedBusinesses();
+		
+		if (response.value!.ok && data.value) 
+			favoriteBusinesses.value = data.value;
+	} catch (error) {
+		useTost('Erorr! Something happened while trying to process your request!')
+	} finally {
+		loader.finishLoader();
+	} 
 })();
 </script>
 
