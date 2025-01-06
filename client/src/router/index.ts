@@ -33,9 +33,9 @@ router.beforeEach((to, { }, next) => {
 	}
 });
 
-router.afterEach(() => {
+// router.afterEach(() => {
 	// const loader = useLoader();
 	// loader.finishLoader();
-});
+// });
 
 export default router;

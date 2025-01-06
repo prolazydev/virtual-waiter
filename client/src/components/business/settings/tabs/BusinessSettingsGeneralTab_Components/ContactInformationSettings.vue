@@ -140,7 +140,7 @@ const {
     localDeleteContactField,
     toggleEditOrCreateContact,
     deleteContactField,
-	toggleCloseDialog,
+	toggleCloseContactDialog,
 } = businessSettingsService();
 
 const business = ref<Business>({} as Business);
@@ -174,9 +174,9 @@ const handleDataMapping = (data: Business) => {
 }
 const handleGetBusiness = async () => {
     try {
-        const { getBusinessSelfById } = businessService();
+        const { getOwnedBusinessById } = businessService();
 
-        const { response, statusCode, data } = await getBusinessSelfById(params.id, [ 'contacts', 'email', 'userEmail', 'phone' ]);
+        const { response, statusCode, data } = await getOwnedBusinessById(params.id, [ 'contacts', 'email', 'userEmail', 'phone' ]);
 
 		if (response.value!.ok && data.value) 
 			handleDataMapping(data.value);
@@ -211,7 +211,7 @@ const handleFinishDelete = async (index: number) =>
 const handleLocalAdd = (type: 'email' | 'phone') => 
     addContactField(businessEdit, contactListFields, type);
 
-const closeDialog = () => toggleCloseDialog('.contact-info-dialog', contactListFields, retryClose);
+const closeDialog = () => toggleCloseContactDialog('.contact-info-dialog', contactListFields, retryClose);
 
 // const closeDialog = () => toggleDialog(
 // 	'.contact-info-dialog',

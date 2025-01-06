@@ -4,10 +4,10 @@ export default () => {
 	const getBusinessByName = async (name: string) =>
 		await myFetch<Business>(`business/name/${name}`);
 
-	const getBusinessesSelf = async () => 
+	const getAllOwnedBusinesses = async () => 
 		await myFetch<Business[]>('business_self');
 	
-	const getBusinessSelfById = async (id: string) =>
+	const getOwnedBusinessById = async (id: string) =>
 		await myFetch<Business>(`business_self/${id}`);
 
 	const updateBusiness = async (id: string, business: Partial<BusinessEdit>) => 
@@ -15,8 +15,8 @@ export default () => {
     
 	return {
 		getBusinessByName,
-		getBusinessesSelf,
-		getBusinessSelfById,
+		getAllOwnedBusinesses,
+		getOwnedBusinessById,
 		updateBusiness,
 	}
 }

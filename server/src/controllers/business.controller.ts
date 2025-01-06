@@ -11,27 +11,24 @@ import { generateRandom4DigitNumber } from '@/utils/crypto';
 import { sendEmail } from '@/utils/email';
 
 import { createBusiness, findAllBusinesses, findBusinessById, findBusinessesByUserId, findBusinessByName, findBusinessesByCustomQuery, findAndUpdateBusinessById, deleteBusinessesByUserId, deleteBusinessById, findBusinessByCustomQuery, findAndUpdateBusinessContactById, findAndAddBusinessContactById, deleteBusinessContactByBusinessId } from '@/services/CRUD/business.service';
+import type { MyRequest } from '@/types';
 
 // #region POST
 export const registerBusinessRequest = requestHandler<Business>(async (req, res) => {
-	try {
-		const business = req.body;
-		if (!business)
-			return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
+	const business = req.body;
+	if (!business)
+		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 
-		// business.username = 'contosso2';
+	// business.username = 'contosso2';
 
-		const newBusiness = await createBusiness(business);
+	const newBusiness = await createBusiness(business);
 
-		respond(res, StatusCodes.CREATED, Message.SuccessCreate, { id: newBusiness._id });
-	} catch (error) {
-		handleError(res, error);
-	}
+	respond(res, StatusCodes.CREATED, Message.SuccessCreate, { id: newBusiness._id });
 });
 
 export const getBusinessConfirmationCode = requestHandler(async (req, res) => {
 	const id = req.params.id;
-	if (!id)
+	if ( !id )
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 
 	const business = await findBusinessById(id);
@@ -80,24 +77,18 @@ export const getAllBusinesses = requestHandler(async (req, res) => {
 });
 
 export const getBusinessById = requestHandler(async (req, res) => {
-	try {
-		const id = req.params.id;
-		if ( !id || id.length !== 24 )
-			return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
+	const id = req.params.id;
+	if ( !id || id.length !== 24 )
+		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 
-		// check if it has any query params to specifically select only the mentioned fields
-		const fields = req.query.fields as string;
-		const selectFields = fields ? fields.split(',').join(' ') : '';
+	// check if it has any query params to specifically select only the mentioned fields
+	const selectFields = getSelectedFields(req.query.fields as string);
 
-		const business = await findBusinessById(id).select(selectFields).lean();
-		if ( !business ) 
-			return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
+	const business = await findBusinessById(id).select(selectFields).lean();
+	if ( !business ) 
+		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 
-		respond(res, StatusCodes.OK, Message.SuccessRead, business);
-	} catch (error) {
-		console.log(error);
-		handleError(res, error);
-	}
+	respond(res, StatusCodes.OK, Message.SuccessRead, business);
 });
 
 // TODO: Implement this
@@ -148,12 +139,14 @@ export const getBusinessesByUserId = requestHandler(async (req, res) => {
 	respond(res, StatusCodes.OK, Message.SuccessRead, businesses);
 });
 
-export const getBusinessesSelf = requestHandler(async (req, res) => {
+export const getAllOwnedBusinesses = requestHandler(async (req, res) => {
 	const userId = req.identity!.id;
 	if (!userId)
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
+	
+	const selectFields = getSelectedFields(req.query.fields as string);
 
-	const businesses = await findBusinessesByUserId(userId);
+	const businesses = await findBusinessesByUserId(userId).select(selectFields).lean();
 	if (!businesses)
 		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 
@@ -334,5 +327,9 @@ export const confirmBusinessAccount = requestHandler(async (req, res) => {
 		respond(res, StatusCodes.INTERNAL_SERVER_ERROR, Message.EmailPasswordResetError);
 	}
 });
-
 // #endregion
+
+// Private
+function getSelectedFields(fields: string) {
+	return fields ? fields.split(',').join(' ') : '';
+}

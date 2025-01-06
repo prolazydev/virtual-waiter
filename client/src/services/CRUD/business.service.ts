@@ -7,11 +7,11 @@ export default () => {
     const getBusinessByName = async (name: string) =>
 		await myFetch<Business>(`business/name/${name}`);
 
-    const getBusinessesSelf = async () => 
-		await myFetch<Business[]>('business_self');
+    const getAllOwnedBusinesses = async (fields: BusinessQueryFieldKeys[] = []) => 
+		await myFetch<Business[]>(`business/owned${setupFields(fields)}`);
 
-    const getBusinessSelfById = async (id: string, fields: BusinessQueryFieldKeys[] = []) => 
-        await myFetch<Business>(`business_self/${id}${setupFields(fields)}`);
+    const getOwnedBusinessById = async (id: string, fields: BusinessQueryFieldKeys[] = []) => 
+        await myFetch<Business>(`business/owned/${id}${setupFields(fields)}`);
 
     const getBusinessDisplayNameById = async (id: string) => 
         await myFetch<{ _id: number, displayName: string }>(`business/${id}?fields=displayName`);
@@ -22,8 +22,8 @@ export default () => {
     return {
         getBusinessById,
         getBusinessByName,
-        getBusinessesSelf,
-        getBusinessSelfById,
+        getAllOwnedBusinesses,
+        getOwnedBusinessById,
         getBusinessDisplayNameById,
         updateBusiness
     }

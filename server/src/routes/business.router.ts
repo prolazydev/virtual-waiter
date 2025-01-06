@@ -2,7 +2,7 @@ import type { Router, RequestHandler, Response, NextFunction } from 'express';
 
 import type { MyRequest } from '@/types';
 
-import { registerBusinessRequest, getAllBusinesses, getBusinessById, getBusinessesByUserId, getBusinessByName, getBusinessesByCustomQuery, updateBusiness, deleteUserBusinessesTransaction, getBusinessesSelf, confirmBusinessAccount, getBusinessConfirmationCode, updateBusinessContact, addBusinessContact, deleteBusiness, deleteBusinessContact } from '@/controllers/business.controller';
+import { registerBusinessRequest, getAllBusinesses, getBusinessById, getBusinessesByUserId, getBusinessByName, getBusinessesByCustomQuery, updateBusiness, deleteUserBusinessesTransaction, getAllOwnedBusinesses, confirmBusinessAccount, getBusinessConfirmationCode, updateBusinessContact, addBusinessContact, deleteBusiness, deleteBusinessContact } from '@/controllers/business.controller';
 import { isAuthenticated, isSelfItemOwner } from '@/middlewares/auth.middleware';
 
 export default (businessRouter: Router, middlewares: RequestHandler[] | RequestHandler = []) => {
@@ -33,10 +33,10 @@ function registerPatchRoutes(businessRouter: Router, middlewares: RequestHandler
 
 function registerGetRoutes(businessRouter: Router, middlewares: RequestHandler[] | RequestHandler = []) {
 	// TODO: Proper renaming
-	businessRouter.get('/business', middlewares, getAllBusinesses);
+	businessRouter.get('/business/all', middlewares, getAllBusinesses);
 
-	businessRouter.get('/business_self', isAuthenticated, getBusinessesSelf);
-	businessRouter.get('/business_self/:id', isAuthenticated, (req: MyRequest, res: Response, next: NextFunction) => isSelfItemOwner(req, res, next, 'businesses'), getBusinessById);
+	businessRouter.get('/business/owned', isAuthenticated, getAllOwnedBusinesses);
+	businessRouter.get('/business/owned/:id', isAuthenticated, (req: MyRequest, res: Response, next: NextFunction) => isSelfItemOwner(req, res, next, 'businesses'), getBusinessById);
 
 	businessRouter.get('/business/:id', isAuthenticated, getBusinessById);
 

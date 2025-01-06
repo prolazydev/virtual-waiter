@@ -33,7 +33,7 @@ export default () => {
 		progress = value;
 		progressBar.style.width = `${progress}%`;
 	}
-
+	/** Finishes the loader and hides it. */
 	const finishLoader = () => {
 		if (interval) 
 			clearInterval(interval);
@@ -50,10 +50,41 @@ export default () => {
         }, 500);
 	};
 
+	/**
+	 * Waits for the loader to finish and invokes the callback or the timeout handler.
+	 * @param callback The function to invoke when the loader finishes.
+	 * @param timeout Timeout duration in milliseconds.
+	 * @param timeoutCallback The function to invoke if the timeout is reached.
+	 */
+	const waitForLoader = (
+		callback: () => void,
+		timeout: number,
+		timeoutCallback: () => void
+	): void => {
+		let timeoutId: NodeJS.Timeout | null = null;
+		let intervalChecker: NodeJS.Timeout | null = null;
+
+		// Start a timeout handler
+		timeoutId = setTimeout(() => {
+			if (intervalChecker) clearInterval(intervalChecker);
+			timeoutCallback();
+		}, timeout);
+
+		// Periodically check the progress
+		intervalChecker = setInterval(() => {
+			if (progress >= 100) {
+				if (timeoutId) clearTimeout(timeoutId);
+				if (intervalChecker) clearInterval(intervalChecker);
+				callback();
+			}
+		}, 100); // Check every 100ms
+	};
+
 	return {
 		startLoader,
 		finishLoader,
 		setProgress,
 		clearProgress,
+		waitForLoader,
 	}
 };

@@ -1,34 +1,36 @@
 <template>
 	<button 
-		:class="`base-button ${computedStyleType}`" 
+		:class="`base-button ${computedOverallProps}`" 
 		:type="type" 
-		:disabled="disabled" 
+		:disabled="disabled"
 	>
-		<slot name="leading">
+		<slot name="leading"></slot>
+		
+		<slot></slot>
 
-		</slot>
-		<slot>
-
-		</slot>
-
-		<slot name="trailing">
-
-		</slot>
+		<slot name="trailing"></slot>
 	</button>
 </template>
 
 <script lang="ts" setup>
+import type { ButtonHTMLAttributes } from 'vue';
+
 const props = withDefaults(defineProps<{
-    type?: 'submit' | 'button';
+    type?: ButtonHTMLAttributes['type'];
+    // type?: 'submit' | 'button';
 	styleType?: 'full' | 'hollow' | 'link' | 'clean';
+	color?: 'primary' | 'inverted-primary'
+	size?: 'xs' | 'sm' | 'md' | 'lg';
     disabled?: boolean;
 }>(), {
 	type: 'button',
 	styleType: 'full',
+	color: 'primary',
+	size: 'md',
 	disabled: false,
 });
 
-defineSlots<{
+const slots = defineSlots<{
 	default: void;
 	/**
 	 * An element to display before the title.
@@ -42,8 +44,25 @@ defineSlots<{
 	trailing: void;
 }>();
 
-const computedStyleType = computed(() => {
-	// debugger;
+const computedOverallProps = computed(
+	() => `${getSize()} ${getStyleType()} ${getColor()} `);
+
+function getSize() {
+	switch (props.size) {
+		case 'xs':
+			return 'button-xs';
+		case 'sm':
+			return 'button-sm';
+		case 'md':
+			return 'button-md';
+		case 'lg':
+			return 'button-lg';
+		default:
+			return 'button-md';
+	}
+}
+
+function getStyleType() {
 	switch (props.styleType) {
 		case 'full':
 			return 'button-main';
@@ -56,31 +75,21 @@ const computedStyleType = computed(() => {
 		default:
 			return 'button-main';
 	}
-});
+}
+
+function getColor() {
+	switch (props.color) {
+		case 'primary':
+			return 'button-primary-color';
+		case 'inverted-primary':
+			return 'button-primary-inverted';
+		default:
+			return 'button-primary-color';
+	}
+}
 </script>
 
 
 <style>
-.button-main {
-	@apply 	h-fit px-3 py-2 border-2 border-transparent border-[#1b1b1b] outline-none transition-all
-			hover:bg-gray-100
-}
-
-.button-main-hollow {
-	@apply 	h-fit px-3 py-2 border-2 border-transparent border-b-[#1b1b1b] outline-none transition-all
-}
-
-.button-main-link {
-	@apply 	px-1 py-2 text-lg flex gap-2 items-center border-b-2 border-transparent outline-none transition-all 
-			hover:border-b-rose-600 
-			active:border-b-rose-800
-}
-
-.button-main-clean {
-	@apply 	h-fit outline-none transition-all
-}
-
-</style>
-<style scoped>
 
 </style>

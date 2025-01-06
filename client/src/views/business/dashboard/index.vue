@@ -34,7 +34,11 @@
 			<!-- <Transition mode="in-out"> -->
 				<Suspense :timeout="0">
 					<template #default>
-						<component :is="componentTab" :key="tab" />
+						<component 
+							:is="componentTab" 
+							:key="tab" 
+							class="min-h-[30rem]"
+						/>
 					</template>
 					<template #fallback>
 						<Loading :style="defaultLoadingStyle" />
@@ -91,8 +95,8 @@ const componentTab = computed(() => {
 			// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardConversations.vue'));
 			// case 'Orders':
 			// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardOrders.vue'));
-			// case 'Products':
-			// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardProducts.vue'));
+			case 'Products':
+				return defineAsyncComponent(() => import('@/components/business/dashboard/tabs/BusinessDashboardProductsTab.vue'));
 			// case 'Reports':
 			// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardReports.vue'));
 			// case 'Settings':
@@ -104,14 +108,15 @@ const componentTab = computed(() => {
 	} catch (error) {
         console.error(error);
     } finally {
-		loader.finishLoader();
+		// loader.finishLoader();
 	}
 });
 </script>
 
 <style scoped>
+/* TODO: Make a reusable css component since it's used 2 times exactly on business dashboard and settings */
 .dashboard {
-	@apply py-4 flex flex-col gap-20
+	@apply py-5 flex flex-col gap-20
 }
 
 .main-dashboard {
@@ -120,7 +125,7 @@ const componentTab = computed(() => {
 
 .sidenav-main {
 	@apply 	w-64 min-w-64 flex flex-col gap-1
-			sticky top-[5.5rem] self-start
+			sticky top-[5.75rem] self-start
 		;
 }
 

@@ -1,13 +1,5 @@
 <template>
 	<div class="w-full flex flex-col h-full">
-        <section class="flex flex-col mx-auto">
-			<h1 class="w-fit text-3xl font-bold text-[#1b1b1b] uppercase tracking-widest">
-                {{ userSettingTab }} Settings for ...
-                <!-- {{ business?.username }} -->
-            </h1>
-			<div class="h-1 w-4 mb-5 bg-[#1b1b1b]"></div>
-        </section>
-
         <section class="max-w-screen-md">
             test
         </section>
@@ -38,8 +30,8 @@ defineProps<{
 // const handleGetBusiness = async () => {
 // 	try {
 //         loader.startLoader();
-// 	    const { getBusinessSelfById } = businessService();
-// 		const { response, statusCode, data } = await getBusinessSelfById(params.id);
+// 	    const { getOwnedBusinessById } = businessService();
+// 		const { response, statusCode, data } = await getOwnedBusinessById(params.id);
 
 // 		if (response.value!.ok && data.value) 
 // 			handleDataMapping(data.value);

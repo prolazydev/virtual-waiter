@@ -29,6 +29,11 @@ body {
     flex-direction: column;
 }
 
+
+/* hr {
+	@apply border-b-2 border-black
+} */
+
 /* Reusable classes */
 
 /* .absolute-center {

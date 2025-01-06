@@ -219,7 +219,8 @@ onUnmounted(() => {
 });
 
 await (async () => {
-	const { response, data } = await myFetch<Business[]>('business_self');
+	const { getAllOwnedBusinesses } = businessService();
+	const { response, data } = await getAllOwnedBusinesses();
 	
 	if (response.value!.ok && data.value) 
 		favoriteBusinesses.value = data.value;

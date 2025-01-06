@@ -671,10 +671,10 @@ watch(() => businessFormFields.value.hours.value!, (val) => {
 
 const handleGetBusiness = async () => {
 	try {
-        const { getBusinessSelfById } = businessService();
+        const { getOwnedBusinessById } = businessService();
 
-        const { response, statusCode, data } = await getBusinessSelfById(params.id)
-        if (response.value!.ok && data.value) {
+        const { response, statusCode, data } = await getOwnedBusinessById(params.id)
+        if (response.value?.ok && data.value) {
             business.value = data.value;
 			// TODO: improve typing on business model
 			businessFormLocationField.value = (business.value.location as any).name ?? '';
@@ -686,7 +686,7 @@ const handleGetBusiness = async () => {
                 if (business.value[key]) 
                     businessFormFields.value[key].value = clonedBusiness.value[key]
         }
-
+		
 		switch (statusCode.value) {
 			case 404:
 				return await router.push({ name: 'not-found' });

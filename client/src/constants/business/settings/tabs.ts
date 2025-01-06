@@ -5,10 +5,10 @@ export const businessSettingsTabs: BusinessSettingsTab[] = [
         name: 'General',
         icon: 'Settings'
     },
-	{
-		name: 'Products',
-		icon: 'Box'
-	},
+	// {
+	// 	name: 'Products',
+	// 	icon: 'Box'
+	// },
     {
         name: 'Access & Roles',
         icon: 'Lock'

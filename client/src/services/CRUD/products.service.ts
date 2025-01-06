@@ -1,3 +1,5 @@
+import type { Product } from '@/types/models/product';
+
 export default () => {
     const getProductsByBusinessId = async (businessId: string) => 
         await myFetch<Product[]>(`products/business/${businessId}`);
@@ -5,16 +7,4 @@ export default () => {
     return {
         getProductsByBusinessId,
     }
-}
-
-type Product = {
-    _id: string;
-    name: string;
-    description: string;
-    price: number;
-    businessId: string;
-    image: string;
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
 }

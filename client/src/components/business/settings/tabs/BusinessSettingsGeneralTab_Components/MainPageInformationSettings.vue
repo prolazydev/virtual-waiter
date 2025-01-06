@@ -58,8 +58,9 @@ const PageSettings = computed(() => {
         else null;
     } catch (error) {
         console.error(error);   
-        loader.finishLoader();
-    } 
+    } finally {
+		loader.finishLoader();
+	}
 })
 </script>
 

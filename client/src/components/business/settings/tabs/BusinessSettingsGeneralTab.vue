@@ -1,12 +1,5 @@
 <template>
-	<section class="w-full flex flex-col h-full">
-		<div class="flex flex-col mx-auto">
-			<h1 class="w-fit text-3xl font-bold text-[#1b1b1b] uppercase tracking-widest">
-                {{ userSettingTab }} Settings for {{ businessDisplayName }}
-            </h1>
-			<div class="h-1 w-4 mb-5 bg-[#1b1b1b]"></div>
-		</div>
-
+	<section class="flex flex-col">
         <div class="setting">
             <div class="form-part">
                 <ContactInformationSettings />

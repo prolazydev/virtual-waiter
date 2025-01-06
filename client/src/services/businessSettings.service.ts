@@ -118,7 +118,7 @@ export default () => {
         }
     };
 
-	const toggleCloseDialog = (
+	const toggleCloseContactDialog = (
 		toggleClass: string,
         contactListFields: Ref<EditContactField[]>, 
 		retryClose: Ref<boolean>,
@@ -144,7 +144,7 @@ export default () => {
         localDeleteContactField,
         toggleEditOrCreateContact,
         deleteContactField,
-		toggleCloseDialog
+		toggleCloseContactDialog
     }
 };
 

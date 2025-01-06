@@ -8,7 +8,10 @@
 				<form @submit.prevent="handleSearch">
 					<input class="w-64 px-2 py-1 border-2 border-[#1b1b1b] outline-none focus:border-b-rose-600 transition-colors" type="text" placeholder="Search" />
 				</form>
-				<router-link to="/business/create" class="px-2 py-1 text-white border-2 border-[#1b1b1b] bg-[#1b1b1b] active:border-b-white">Create your Business</router-link>
+				<MyButton style-type="full" color="inverted-primary" size="sm">
+					<router-link to="/business/create">Create your Business</router-link>
+				</MyButton>
+				<!-- <router-link to="/business/create" class="px-2 py-1 text-white border-2 border-[#1b1b1b] bg-[#1b1b1b] active:border-b-white">Create your Business</router-link> -->
 			</div>
 		</div>
 		<div class="favorite-businesses">
@@ -97,9 +100,9 @@ const businesses = ref<Business[]>([]);
 const favoriteBusinesses = ref<Business[]>([]);
 
 const getBusinesses = async () => {
-	const { getBusinessesSelf } = businessService();
+	const { getAllOwnedBusinesses } = businessService();
 	try {
-		const { response, statusCode, data } = await getBusinessesSelf();
+		const { response, statusCode, data } = await getAllOwnedBusinesses();
 
 		if (response.value!.ok && data.value) {
 			businesses.value = data.value;

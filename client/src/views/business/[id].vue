@@ -482,9 +482,9 @@ onMounted(async () => {
 
 async function handleGetBusiness() {
 	startLoader();
-	const { getBusinessSelfById, } = businessService();
+	const { getOwnedBusinessById, } = businessService();
 	try {
-		const { response, statusCode, data } = await getBusinessSelfById(params.id as string);
+		const { response, statusCode, data } = await getOwnedBusinessById(params.id as string);
 		if (response.value!.ok && data.value)
 			return business.value = data.value;
 

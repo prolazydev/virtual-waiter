@@ -30,19 +30,28 @@
 					</div>
 				</div>
 			</div>
-            <Suspense :timeout="0">
-                <template #default>
-                    <component 
-                        :is="componentRenderer" 
-                        :userSettingTab="userSettingTab" 
-                        :businessDisplayName="businessDisplayName" 
-                    />
-                </template>
+            <div class="w-full h-full flex flex-col ">
+                <div class="flex flex-col mx-auto">
+					<h1 class="w-fit text-3xl font-bold text-[#1b1b1b] uppercase tracking-widest">
+						{{ userSettingTab }} Settings for {{ businessDisplayName }}
+					</h1>
+					<div class="h-1 w-4 mb-5 bg-[#1b1b1b]"></div>
+				</div>
 
-                <template #fallback>
-					<Loading :style="defaultLoadingStyle" />
-                </template>
-            </Suspense>
+				<Suspense :timeout="0">
+					<template #default>
+						<component 
+							:is="componentRenderer" 
+							:userSettingTab="userSettingTab" 
+							:businessDisplayName="businessDisplayName" 
+						/>
+					</template>
+
+					<template #fallback>
+						<Loading :style="defaultLoadingStyle" />
+					</template>
+				</Suspense>
+			</div>
 		</div>
 	</div>
 </template>
@@ -89,7 +98,7 @@ const businessDisplayName = ref<string>('');
 
 const componentRenderer = computed(() => {
 	try {
-		loader.startLoader();
+		// loader.startLoader();
 		switch (userSettingTab.value) {
 			case 'General':
 				return defineAsyncComponent(() => import('@/components/business/settings/tabs/BusinessSettingsGeneralTab.vue'));
@@ -99,11 +108,10 @@ const componentRenderer = computed(() => {
 				return defineAsyncComponent(() => import('@/components/business/settings/tabs/BusinessSettingsGeneralTab.vue'));
 		}
 	} catch (error) {
+		loader.finishLoader();
 		useTost('Server Error! Something unexpected happened :/ Please try again late!')
         console.error(error);
-    } finally {
-		loader.finishLoader();
-	}
+    } 
 });
 
 const getBusinessDisplayName = async () => {
@@ -133,14 +141,14 @@ getBusinessDisplayName();
 
 <style scoped>
 .dashboard {
-	@apply py-4 flex flex-col gap-20
+	@apply py-5 flex flex-col gap-20
 	;
 	height: calc(100vh - 328px)
 }
 
 .sidenav-main {
-	@apply 	w-64 flex flex-col gap-1
-			sticky top-[5.5rem] self-start
+	@apply 	w-64 min-w-64 flex flex-col gap-1
+			sticky top-[5.75rem] self-start
 		;
 }
 
