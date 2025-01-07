@@ -171,10 +171,22 @@
 				<LucideIcon @click="openSetHours = false" class="absolute right-4 my-shadow" name="X" :stroke-width="2" />
 
 				<div class="flex flex-col gap-3">
-					<div v-for="(day , index) in Object.keys(business24Hours) " :key="index" class="flex gap-5 items-center">
+					<div v-for="day in days" :key="day" class="flex gap-5 items-center">
 						<label :for="`business${day}`" class="w-20 mr-5 font-bold text-lg capitalize">{{ day }}:</label>
-						<input v-model="createBusinessFormData.hours[day as Days]" :readonly="business24Hours[day as Days]" type="text" placeholder="09:00-17:00">
-						<Checkbox @indeterminate="(isIndeterminate, checked) => setIndeterminateClosed(isIndeterminate, checked!, day as Days)" indeterminate class="form-checkbox" _id="monday" _label="24h | Closed" /> 
+						<input 
+							v-model="createBusinessFormData.hours[day]" 
+							:readonly="business24Hours[day]" 
+							type="text" 
+							placeholder="09:00-17:00"
+						>
+						<Checkbox 
+							v-model="business24Hours[day]"
+							@indeterminate="(isIndeterminate, checked) => toggleIndeterminateState(isIndeterminate, checked, day)" 
+							indeterminate 
+							class="form-checkbox" 
+							:_id="`hoursFor${capitalize(day)}`" 
+							_label="24h | Closed" 
+						/> 
 					</div>
 				</div>
 			</div>
@@ -199,6 +211,7 @@
 import { defaultFormData } from '@/constants/business/create';
 import type { RequestStatus } from '@/enums/EFromValidations';
 import type { BusinessCategory, BusinessLocationData, CreateBusinessModel, Days } from '@/types/models/business';
+import { capitalize } from 'vue';
 
 const router = useRouter();
 const { user } = useUserStore();
@@ -225,6 +238,7 @@ const business24Hours = ref({
 	saturday: false,
 	sunday: false
 });
+const days: Days[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
 const requestStatus = ref<RequestStatus>('Idle');
 
@@ -349,7 +363,7 @@ const setAllHours = (hour: string, boolVal: boolean = true) => {
 		});
 };
 
-const setIndeterminateClosed = (isIndeterminate: string, checked: boolean, day: Days) => {
+const toggleIndeterminateState = (isIndeterminate: string, checked: boolean | undefined, day: Days) => {
 	if (!isIndeterminate && checked) {
 		createBusinessFormData.value.hours![day] = '24';
 		business24Hours.value[day] = true;
