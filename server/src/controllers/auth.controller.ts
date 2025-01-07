@@ -9,7 +9,7 @@ import { Message } from '@/utils/common/ServerResponseMessages';
 import { randomSalt, passwordMatch, signToken } from '@/utils/crypto';
 import { sendEmail } from '@/utils/email';
 import { respond } from '@/utils/common/http';
-import { REFRESH_TOKEN_DURATION, ACCESS_TOKEN_DURATION, REDIS_REFRESH_TOKEN_EXPIRY_TIME, ACCESS_TOKEN_DURATION_EXTENDED, REFRESH_TOKEN_DURATION_EXTENDED, NODE_ENV, REDIS_REFRESH_TOKEN_EXPIRY_TIME_EXTENDED } from '@/utils/constants';
+import { REFRESH_TOKEN_DURATION, ACCESS_TOKEN_DURATION, REDIS_REFRESH_TOKEN_EXPIRY_TIME, ACCESS_TOKEN_DURATION_EXTENDED, REFRESH_TOKEN_DURATION_EXTENDED, NODE_ENV, REDIS_REFRESH_TOKEN_EXPIRY_TIME_EXTENDED, SECRET } from '@/utils/constants';
 
 import { createConfirmAccountToken, createResetPasswordToken, createUser, findUserByCustomQuery, findUserByEmail, findUserById, userExists } from '@/services/CRUD/user.service';
 import { rDel, rExists, rSet } from '@/services/redis.service';
@@ -192,7 +192,6 @@ export const removeRole = requestHandler(async (req, res) => {
 
 export const forgotPasswordRequest = requestHandler<{ email:string }>(async (req, res) => {
 	const email = req.body.email;
-	console.log(email);
 	if ( !email )
 		return respond(res, StatusCodes.BAD_REQUEST, Message.MissingCredentials);
 

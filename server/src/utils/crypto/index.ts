@@ -21,7 +21,7 @@ export const hashPassword = (salt: string, password: string) => {
 
 	return hash;
 };
-
+/** Hashes the incoming password and compares it with the Users password hash */
 export const passwordMatch = (password: string, dbPassword: string, salt: string) => 
 	hashPassword(salt, password) === dbPassword;
 	// const expectedHash = hashPassword(salt, password);
@@ -32,8 +32,6 @@ export const signToken = (userObj: UserResult, tokenOptions: SignOptions = { exp
 		const defaultTokenOptions: SignOptions = { issuer: 'Virtual-Waiter' };
 		const mergedTokenOptions = mergeSameObjects(tokenOptions, defaultTokenOptions);
 
-		// const test = process.env.TEST_SECRET_PRIVATE_JWT;
-	
 		const signedToken = jwt.sign(userObj, `${TEST_SECRET_PRIVATE_JWT}`, mergedTokenOptions);
 		// jwt.sign(userObj, `${TEST_SECRET_PRIVATE_JWT}`, mergedTokenOptions, function(err, token) {
 		// 	console.log(token);

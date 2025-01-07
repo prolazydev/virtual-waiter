@@ -1,8 +1,25 @@
-import redis, { SetOptions } from 'redis';
+import { createClient, RedisClientType, SetOptions } from 'redis';
+
+console.log('online mode:', process.env.ONLINE_MODE)
 
 let retries = 1;
 const maxRetries = 1000;
-const redisClient = redis.createClient();
+let redisClient: RedisClientType;
+
+if (process.env.ONLINE_MODE === 'on') {
+	console.log('Using online Redis Client');
+	redisClient = createClient({
+		username: 'default',
+		password: 'ZMbhzhEdNw6EPzZEtTjBrbsc3t7baZfw',
+		socket: {
+			host: 'redis-13720.c250.eu-central-1-1.ec2.redns.redis-cloud.com',
+			port: 13720
+		}
+	});
+} else {
+	console.log('Using local Redis Client');
+	redisClient = createClient();
+}
 
 redisClient.on('error', async (err) => {
 	try {
@@ -29,6 +46,7 @@ export async function initRedis() {
 	await redisClient.connect();
 }
 
+// TODO: Log actions to database
 export const rSet = async (key: string, value: string, options: SetOptions = {}) => 
 	redisClient.set(key, value, options);
 
