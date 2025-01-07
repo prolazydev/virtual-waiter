@@ -32,6 +32,9 @@ declare global {
 			HEARTBEAT_INTERVAL: string,
 			HEARTBEAT_VALUE: string,
 			// HEARTBEAT_TIMEOUT: string,
+
+			// Online Only settings
+			ONLINE_MODE: string,
 		}
 	}
 }

@@ -33,6 +33,7 @@
             </div>
 			<div class="relative flex flex-col gap-2">
                 <label for="businessLocation">Location</label>
+				<!-- TODO: Autofill the primary street address (if aplicable) when selecting a location -->
 				<DebounceSearch
 					v-model="createBusinessFormData.location!.name"
 					:debounce-delay="500"

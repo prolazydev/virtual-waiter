@@ -147,6 +147,7 @@ export const getAllOwnedBusinesses = requestHandler(async (req, res) => {
 	const selectFields = getSelectedFields(req.query.fields as string);
 
 	const businesses = await findBusinessesByUserId(userId).select(selectFields).lean();
+	console.log('businesses', businesses);
 	if (!businesses)
 		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 

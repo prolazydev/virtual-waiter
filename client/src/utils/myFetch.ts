@@ -1,12 +1,16 @@
 import { createFetch, type UseFetchOptions, type UseFetchReturn } from '@vueuse/core';
-import { SERVER_PORT } from './constants/env';
+import { API_URL, MODE } from './constants/env';
+
+console.log('API_URL:', API_URL);
+console.log('MODE:', MODE);
 
 const _myFetch = createFetch({
-	baseUrl: `http://localhost:${SERVER_PORT}/api/`,
+	baseUrl: API_URL,
 	fetchOptions: {
 		headers: {
 			'Content-Type': 'application/json',
-			'Access-Control-Allow-Origin': '*'
+			'Access-Control-Allow-Origin': '*',
+			'ngrok-skip-browser-warning': 'true',
 		},
 		credentials: 'include',
 		mode: 'cors',

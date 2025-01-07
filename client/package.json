@@ -5,6 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"bun": "vite --host",
+		"bun:online": "vite --host --mode online",
 		"dev": "vite --host",
 		"build": "run-p type-check \"build-only {@}\" --",
 		"preview": "vite preview",

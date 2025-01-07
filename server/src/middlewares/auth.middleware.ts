@@ -13,64 +13,70 @@ import { respond } from '@/utils/common/http';
 import { getValidAccessToken, getValidRefreshToken } from '@/utils/common/auth.util';
 
 export const isAuthenticated = requestHandler(async (req, res, next) => {
-	const accessToken = getValidAccessToken(req);
-
-	if ( !accessToken ) 
-		return respond(res, StatusCodes.UNAUTHORIZED, Message.NotAuthorized);
-
-	let userObj: UserResult;
-
-	// TODO: Refactor to validate the error
-	const { payload, err: payloadErr } = verifyToken<UserResult>(accessToken);
-
-	if (payload) {
-		userObj = {
-			id: payload.id!,
-			username: payload.username,
-			email: payload.email,
-			avatar: payload.avatar,
-			roles: payload.roles
-		};
-	} else {
-		const oldToken = decodeToken<UserResult>(accessToken);
-		if ( !oldToken )
+	try {
+		const accessToken = getValidAccessToken(req);
+		console.log('Access Token:', accessToken);
+		
+		if ( !accessToken ) 
 			return respond(res, StatusCodes.UNAUTHORIZED, Message.NotAuthorized);
 
-		const refreshToken = await getValidRefreshToken(oldToken!.id!);
-		if ( !refreshToken )
-			return respond(res, StatusCodes.UNAUTHORIZED, Message.NotAuthorized);
-		
-		const user = await findUserByEmail(refreshToken!.email);
-		if ( !user )
-			return respond(res, StatusCodes.UNAUTHORIZED, Message.NotAuthorized);
+		let userObj: UserResult;
 
-		userObj = {
-			id: user._id.toString(),
-			email: user.email,
-			username: user.username,
-			roles: user.auth!.roles,
-		};
-		
-		const newAccessToken = signToken(userObj, { expiresIn: ACCESS_TOKEN_DURATION, algorithm: 'RS256' })!;
-		const cookieOptions: CookieOptions = {
-			// maxAge: 10000, // 10s, for testing
-			maxAge: refreshToken!.rememberMe ? 30 * 24 * 1 * 60 * 60 * 1000 : 5 * 60 * 1000, // 30d or 5m,
-			httpOnly: true,
-			secure: true, 
-			// secure: NODE_ENV === 'production', // leave to false in development
-			sameSite: 'none',
-			signed: true,
-		};
-		res.cookie('accessToken', newAccessToken, cookieOptions);
+		// TODO: Refactor to validate the error
+		const { payload, err: payloadErr } = verifyToken<UserResult>(accessToken);
 
-		res.setHeader('x-set-access-token', newAccessToken);
-		console.log(`New access token set for user: ${userObj.username}`);
-	} 
-		
+		if (payload) {
+			userObj = {
+				id: payload.id!,
+				username: payload.username,
+				email: payload.email,
+				avatar: payload.avatar,
+				roles: payload.roles
+			};
+		} else {
+			const oldToken = decodeToken<UserResult>(accessToken);
+			if ( !oldToken )
+				return respond(res, StatusCodes.UNAUTHORIZED, Message.NotAuthorized);
 
-	req.identity = userObj;
-	
-	return next();
+			const refreshToken = await getValidRefreshToken(oldToken!.id!);
+			if ( !refreshToken )
+				return respond(res, StatusCodes.UNAUTHORIZED, Message.NotAuthorized);
+			
+			const user = await findUserByEmail(refreshToken!.email);
+			if ( !user )
+				return respond(res, StatusCodes.UNAUTHORIZED, Message.NotAuthorized);
+
+			userObj = {
+				id: user._id.toString(),
+				email: user.email,
+				username: user.username,
+				roles: user.auth!.roles,
+			};
+			
+			const newAccessToken = signToken(userObj, { expiresIn: ACCESS_TOKEN_DURATION, algorithm: 'RS256' })!;
+			const cookieOptions: CookieOptions = {
+				// maxAge: 10000, // 10s, for testing
+				maxAge: refreshToken!.rememberMe ? 30 * 24 * 1 * 60 * 60 * 1000 : 5 * 60 * 1000, // 30d or 5m,
+				httpOnly: true,
+				secure: true, 
+				// secure: NODE_ENV === 'production', // leave to false in development
+				sameSite: 'none',
+				signed: true,
+			};
+			res.cookie('accessToken', newAccessToken, cookieOptions);
+
+			res.setHeader('x-set-access-token', newAccessToken);
+			console.log(`New access token set for user: ${userObj.username}`);
+		} 
+			
+
+		req.identity = userObj;
+		
+		return next();
+	} catch (error) {
+		console.error('Error occurred while getting Refresh Token:', error);
+		return null;
+	}
 });
 
 export const isSelfUserOwner = requestHandler(async (req, res, next) => {

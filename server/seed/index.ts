@@ -45,7 +45,7 @@ async function seedAdmin() {
 			email: 'admin@admin.com',
 			auth:  {
 				salt,
-				password: hashPassword(salt, password),
+				password: password,
 				roles: [ 'admin' ],
 			},
 			createdAt: new Date(),
@@ -70,10 +70,11 @@ async function seedUser() {
 	while (iterations > 0) {
 		const salt = randomSalt();		
 		const firstName = faker.person.firstName();
+		const lastName = faker.person.lastName();
 		const password = faker.internet.password();
 
 		const user: User = {
-			username: faker.internet.userName({ firstName }),
+			username: faker.internet.username({ firstName: firstName, lastName: lastName }),
 			email: faker.internet.email({ firstName }),
 			auth:  {
 				salt,

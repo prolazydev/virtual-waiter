@@ -82,7 +82,7 @@
 		</div>
 	</div>
 
-	<div v-else class="m-auto">
+	<div v-else class="w-full flex items-center justify-center">
 		<router-link to="/business/create" title="Create your Business">
 			<LucideIcon class="text-gray-400 hover:text-[#1b1b1b] cursor-pointer transition-colors" name="CirclePlus" :size="148" />
 		</router-link>

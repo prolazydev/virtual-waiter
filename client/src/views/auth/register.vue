@@ -167,6 +167,9 @@ const signUp = async () => {
         } catch (error) {
             console.error(error);
         } 
+    } else {
+        console.error('Form Invalid')
+        useTost('Form Invalid!')
     }
 }
 </script>

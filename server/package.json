@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "bun": "bun --hot src/index.ts",
+    "bun:online": "bun --env-file=.env.online --hot src/index.ts",
     "dev": "tsx watch src/index.ts",
     "start": "node --env-file=.env --import=tsx --watch ./src/index.ts",
-	"stress-test": "artillery run src/tests/performance_tests/stress-test.yml"
+    "stress-test": "artillery run src/tests/performance_tests/stress-test.yml"
   },
   "dependencies": {
     "cookie-parser": "^1.4.6",
