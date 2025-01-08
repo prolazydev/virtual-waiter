@@ -48,15 +48,16 @@
 							class="search-result" 
 						>
 							<li v-for="item in searchResults.features" :key="item.properties.osm_id">
-								<div 
+								<button 
 									@click="selectLocation(item)"
-									role="button" 
-									class="capitalize"
+									class="capitalize text-start"
+									type="button" 
 								> 
-									<b>{{ `${item.properties.city}: ${item.properties.name}` }}</b>
+									<b v-if="item.properties.city">{{ `${item.properties.city}: ${item.properties.name}` }}</b>
+									<b v-else>{{ item.properties.name }}</b>
 
 									{{ item.properties.country ? ` - ${item.properties.country ?? '' }` : '' }}
-								</div>
+								</button>
 							</li>
 						</ul>
 					</template>
@@ -125,9 +126,10 @@
 				<p class="h-6">{{ createBusinessFormData.streetAddress?.secondary?.main }}</p>
 			</div>
 
-			<div class="w-full h-1  mb-0 bg-black"></div>
+			<!-- <div class="w-full h-1  mb-0 bg-black"></div> -->
+			<hr class="w-full border-b border-black" />
 
-			<div class="w-full  flex justify-between">
+			<div class="w-full flex justify-between">
 				<div class="w-64 mt-2 flex flex-col gap-1">
 					<Checkbox v-model="useUserEmail" :class="{ 'use-another-email': !useUserEmail }" class="form-checkbox" _id="businessIs24" _label="Use my Email" />
 					<p v-if="useUserEmail" class="mt-2 text-gray-400">{{ user.email }}</p>
@@ -191,7 +193,8 @@
 				</div>
 			</div>
 
-			<div class="w-full h-1 my-5 mt-3 bg-black"></div>
+			<!-- <div class="w-full h-0.5 my-5 mt-3 bg-black"></div> -->
+			<hr class="w-full border-b border-black" />
 
             <button class="create-business-button" :class="{ 'processing': requestStatus === 'Loading' }" type="submit">
                 <p :class="{ 'translate-y-[calc(0%+40px)]': requestStatus === 'Success' || requestStatus === 'Error' }" class="transition-transform duration-500 delay-100">Create</p>
@@ -201,7 +204,6 @@
             </button>
 		</form>
 
-		<div class="divider"></div>
 		
 		<BusinessCreatePreview v-bind="createBusinessFormData" />
 	</div>
@@ -218,11 +220,11 @@ const { user } = useUserStore();
 
 const loader = useLoader();
 
-// TODO: move this to a constants file
 const createBusinessFormData = ref<CreateBusinessModel>(defaultFormData(user.id, user.email));
 
 const categoryInput = ref('');
 const categoriesResult = ref<BusinessCategory[]>([]);
+const isLocationSelectedDebounce = ref(false);
 
 const selectedBusinessCategories = ref<string[]>([]);
 
@@ -240,24 +242,41 @@ const business24Hours = ref({
 });
 const days: Days[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
-const requestStatus = ref<RequestStatus>('Idle');
-
 const searchResults = ref<BusinessLocationData>({} as BusinessLocationData);
 
-
-// type Business24HoursObjectKeys = keyof typeof business24Hours.value;
+const requestStatus = ref<RequestStatus>('Idle');
 
 onMounted(() => {
 	const textarea = document.querySelector<HTMLTextAreaElement>('#businessCategories')!;
 
 	autosizeWidth(textarea)
-
 });
 
 watch(() => useUserEmail.value, (newValue: boolean) => newValue
 	? createBusinessFormData.value.userEmail = user.email
 	: createBusinessFormData.value.userEmail = ''
 );
+
+const handleBusinessCreation = async () => {
+	try {
+		const { response, data, error } = await myFetch<{ id: string; }>('/business', createBusinessFormData.value, { method: 'POST' });
+
+		if (response.value?.ok) {
+			console.log(data.value);
+			requestStatus.value = 'Success';
+			// `/business_confirmation/${data.value!.id}`
+			setTimeout(() => tostRouterTo(router, `/business/confirmation/[id]`, { id: data.value!.id }, 'Business created!'), 1250);
+		} else {
+			requestStatus.value = 'Error';
+			setTimeout(() => requestStatus.value = 'Idle', 1250);
+			console.log(error);
+
+			useTost('Error, Failed to create business', );
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
 
 const autosizeWidth = async (e: Event | HTMLTextAreaElement) => {
 	if (e instanceof Event) {
@@ -283,6 +302,10 @@ const debounceSearchCategories = useDebounceFn(async () => {
 }, 500);
 
 const debounceSearchLocation = async (searchQuery: string) => {
+	if (isLocationSelectedDebounce.value) {
+		isLocationSelectedDebounce.value = false;
+		return;
+	}
 	try {
 		loader.startLoader();
 		const encodedQuery = encodeURIComponent(searchQuery);
@@ -303,6 +326,8 @@ const debounceSearchLocation = async (searchQuery: string) => {
 }
 
 const selectLocation = (item: BusinessLocationData['features'][0]) => {
+	isLocationSelectedDebounce.value = true;
+
 	createBusinessFormData.value.location! = { 
 		name: item.properties.name ?? '',
 		city: item.properties.city ?? '', 
@@ -311,7 +336,7 @@ const selectLocation = (item: BusinessLocationData['features'][0]) => {
 		id: item.properties.osm_id.toString()! 
 	};
 
-	searchResults.value = { features: [], type: '' } as BusinessLocationData;
+	// searchResults.value = { features: [], type: '' } as BusinessLocationData;
 }
 
 const addCategory = (name: string) => {
@@ -377,32 +402,11 @@ const toggleIndeterminateState = (isIndeterminate: string, checked: boolean | un
 		business24Hours.value[day] = false;
 	}
 };
-
-const handleBusinessCreation = async () => {
-	try {
-		const { response, data, error } = await myFetch<{ id: string; }>('/business', createBusinessFormData.value, { method: 'POST' });
-
-		if (response.value?.ok) {
-			console.log(data.value);
-			requestStatus.value = 'Success';
-			// `/business_confirmation/${data.value!.id}`
-			setTimeout(() => tostRouterTo(router, `/business/confirmation/[id]`, { id: data.value!.id }, 'Business created!'), 1250);
-		} else {
-			requestStatus.value = 'Error';
-			setTimeout(() => requestStatus.value = 'Idle', 1250);
-			console.log(error);
-
-			useTost('Error, Failed to create business', );
-		}
-	} catch (error) {
-		console.log(error);
-	}
-};
 </script>
 
 <style scoped>
 .create-business-form {
-	@apply h-fit w-full my-5 px-10 flex;
+	@apply h-fit w-full my-5 px-10 flex gap-10;
 }
 
 .create-business-form form {
@@ -518,7 +522,7 @@ const handleBusinessCreation = async () => {
 }
 
 .create-business-button {
-    @apply  h-fit mx-auto p-2 bg-[#1b1b1b] text-white uppercase tracking-widest font-semibold border-4 border-[#1b1b1b]
+    @apply  h-fit mx-auto mt-auto p-2 bg-[#1b1b1b] text-white uppercase tracking-widest font-semibold border-4 border-[#1b1b1b]
             relative overflow-hidden transition-all
             focus:outline-none
             focus-visible:border-b-rose-600
@@ -557,7 +561,7 @@ const handleBusinessCreation = async () => {
 }
 
 .divider {
-	@apply w-2 mx-10 bg-[#1b1b1b]
+	@apply w-2 bg-[#1b1b1b]
 	;
 }
 
@@ -610,6 +614,8 @@ const handleBusinessCreation = async () => {
 	@apply	w-52 max-h-80 flex flex-col flex-nowrap gap-0 bg-white shadow-lg absolute transition-all duration-300
             top-[calc(100%-3rem)] left-0 opacity-0 pointer-events-none 
             overflow-hidden overflow-y-scroll z-[500]
+
+			hover:opacity-100 hover:pointer-events-auto hover:top-[calc(100%+0.75rem)]
 	;
 }
 
@@ -620,7 +626,7 @@ const handleBusinessCreation = async () => {
 }
 
 .search-result li {
-	@apply 	p-2 cursor-pointer border-b-2  
+	@apply 	p-2 pt-[0.25ßrem] cursor-pointer border-b-2  
 			hover:border-b-rose-700
 			transition-all duration-300
 	;
@@ -636,4 +642,12 @@ const handleBusinessCreation = async () => {
     @apply  opacity-100 pointer-events-auto top-[calc(100%+0.75rem)] 
 	;
 }
+
+/* Show dropdown when the input is focused or the dropdown is hovered */
+.search-result:has(button:focus-visible) {
+	@apply  opacity-100 pointer-events-auto top-[calc(100%+0.75rem)] 
+	;
+}
+
+
 </style>

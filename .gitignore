@@ -17,6 +17,11 @@ client/.env.local
 .env.test.local
 .env.production.local
 
+# Alternative Environment variables, and other utility files for online use with github codespaces
+.env.online
+client/.env.online
+ngrok*
+
 # IDE/Editor specific files
 .vscode/
 .idea/
@@ -40,3 +45,4 @@ debug.log
 client/bun.lockb
 client/vite.config.ts.timestamp-*.mjs
 server/bun.lockb
+client/.env.online
