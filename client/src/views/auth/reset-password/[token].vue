@@ -27,7 +27,7 @@
 
 <script lang="ts" setup>
 import type { RequestStatus } from '@/enums/EFromValidations';
-import { needGuestGuard } from '@/utils/guards/auth';
+import { onlyGuestGuard } from '@/utils/guards/auth';
 import { definePage } from 'unplugin-vue-router/runtime';
 
 definePage({
@@ -43,7 +43,7 @@ definePage({
 		}
 	},
     // NOTE: If user is already logged in, redirect to home, also needs to use useAuth since using isAuth directly will be hoisted outside the setup() function
-    beforeEnter: (_, __, next) => needGuestGuard(next)
+    beforeEnter: (_, __, next) => onlyGuestGuard(next)
 })
 const router = useRouter();
 const { params: { token } } = useRoute('reset-password');

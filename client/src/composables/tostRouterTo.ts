@@ -1,4 +1,4 @@
-import type { RouteNamedMap } from 'vue-router/auto-routes';
+import type { RouteNamedMap, routes } from 'vue-router/auto-routes';
 import type { Router } from 'vue-router';
 
 /**

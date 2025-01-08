@@ -41,7 +41,7 @@
 					</li>
 				</template>
 				<template v-else-if="!isAuth()" key="guest">
-						<li><router-link class="nav-link" to="/auth/register">Sign up</router-link></li>
+						<li><router-link @mouseover="() => preloadRoute('/auth/register')" class="nav-link" to="/auth/register">Sign up</router-link></li>
 						<li><router-link class="nav-link" to="/auth/login">Login</router-link></li>
 				</template>
 				<template v-else key="loggedIn">
@@ -92,6 +92,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { RouteLocationRaw } from 'vue-router/auto';
+
 import type { IconKeys } from '@/types';
 
 const { user } = storeToRefs(useUserStore());
@@ -126,6 +128,30 @@ const searchType = computed<IconKeys>(() => {
         
     return 'Zap';
 });
+
+
+// Preload a route by its path
+const preloadRoute = (path: RouteLocationRaw): void => {
+  const route = router.resolve(path);
+
+  // Check if the route has matched records
+  if (route.matched && route.matched.length > 0) {
+    route.matched.forEach((record) => {
+      if (record.components) {
+        // Iterate over all components in the record
+        for (const key in record.components) {
+          const component = record.components[key];
+
+          // If it's a dynamic import, preload it
+          if (typeof component === 'function') {
+            // @ts-expect-error stupid
+            component();
+          }
+        }
+      }
+    });
+  }
+};
 
     // TODO: Implement search
 async function handleSearch() {

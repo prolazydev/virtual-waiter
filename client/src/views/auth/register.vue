@@ -65,7 +65,7 @@ import { definePage } from 'unplugin-vue-router/runtime';
 
 import type { InputValidity, RequestStatus } from '@/enums/EFromValidations';
 import { emailRegex, passwordRegex, usernameRegex } from '@/constants/auth';
-import { needGuestGuard } from '@/utils/guards/auth';
+import { onlyGuestGuard } from '@/utils/guards/auth';
 
 definePage({
     meta: {
@@ -73,8 +73,9 @@ definePage({
         auth: false,
     },
     name: 'signup',
+    
     // NOTE: If user is already logged in, redirect to home, also needs to use useAuth since using isAuth directly will be hoisted outside the setup() function
-    beforeEnter: (_, __, next) => needGuestGuard(next)
+    beforeEnter: (_, __, next) => onlyGuestGuard(next)
 });
 
 const router = useRouter();

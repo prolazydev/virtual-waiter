@@ -16,7 +16,7 @@ export const needAuthGuard = (next: NavigationGuardNext) => {
  * Needs to be a guest (Not logged in)
  * @param next 
  */
-export const needGuestGuard = (next: NavigationGuardNext) => {
+export const onlyGuestGuard = (next: NavigationGuardNext) => {
 	if (useAuth().isAuth())
     	next({ name: '/' })
 	else

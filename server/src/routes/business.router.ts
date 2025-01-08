@@ -5,6 +5,11 @@ import type { MyRequest } from '@/types';
 import { registerBusinessRequest, getAllBusinesses, getBusinessById, getBusinessesByUserId, getBusinessByName, getBusinessesByCustomQuery, updateBusiness, deleteUserBusinessesTransaction, getAllOwnedBusinesses, confirmBusinessAccount, getBusinessConfirmationCode, updateBusinessContact, addBusinessContact, deleteBusiness, deleteBusinessContact } from '@/controllers/business.controller';
 import { isAuthenticated, isSelfItemOwner } from '@/middlewares/auth.middleware';
 
+/**
+ * Registers all the routes for the business entity
+ * @param {Router} businessRouter - Main router for all routes
+ * @param {RequestHandler[] | RequestHandler} [middlewares=[]] - Middlewares to be applied to all routes
+ */
 export default (businessRouter: Router, middlewares: RequestHandler[] | RequestHandler = []) => {
 	registerBusinessCreationProcessRoutes(businessRouter);
 	
