@@ -3,7 +3,7 @@
 		<!-- TODO: Implement the products (needs to be able to switch between a list and a grid, all virtual) -->
 		<div class="products-main">
 			<div class="flex flex-col gap-2">
-				<div class="flex justify-between items-center">
+				<div class="flex justify-between items-baseline">
 					<h2 class="text-2xl font-semibold">Products</h2>
 					<div class="relative">
 						<button type="button" class="dropdown-btn" aria-haspopup="menu">
