@@ -15,8 +15,6 @@ import { getValidAccessToken, getValidRefreshToken } from '@/utils/common/auth.u
 export const isAuthenticated = requestHandler(async (req, res, next) => {
 	try {
 		const accessToken = getValidAccessToken(req);
-		console.log('Access Token:', accessToken);
-		
 		if ( !accessToken ) 
 			return respond(res, StatusCodes.UNAUTHORIZED, Message.NotAuthorized);
 

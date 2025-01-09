@@ -9,16 +9,14 @@ import { requestHandler } from '@/utils/common/asyncErrorHandler';
 import { createProduct, findProductById, findAllProducts, findProductsByBusinessId } from '@/services/CRUD/product.service';
 
 // #region POST
-export const registerProduct = requestHandler<Product>(async (req, res) => {
+export const addProduct = requestHandler<Product>(async (req, res) => {
 	const product = req.body;
 	if ( !product ) 
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
-		// return next(new CustomError(Message.InvalidInput, StatusCodes.BAD_REQUEST));
 
 	const newProduct = await createProduct(product);
 	if ( !newProduct ) 
 		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
-		// return next(new CustomError(Message.NotFound, StatusCodes.NOT_FOUND));
 	
 	respond(res, StatusCodes.OK, Message.SuccessCreate, newProduct);
 });

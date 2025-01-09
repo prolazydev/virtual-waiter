@@ -11,7 +11,6 @@ import { generateRandom4DigitNumber } from '@/utils/crypto';
 import { sendEmail } from '@/utils/email';
 
 import { createBusiness, findAllBusinesses, findBusinessById, findBusinessesByUserId, findBusinessByName, findBusinessesByCustomQuery, findAndUpdateBusinessById, deleteBusinessesByUserId, deleteBusinessById, findBusinessByCustomQuery, findAndUpdateBusinessContactById, findAndAddBusinessContactById, deleteBusinessContactByBusinessId } from '@/services/CRUD/business.service';
-import type { MyRequest } from '@/types';
 
 // #region POST
 export const registerBusinessRequest = requestHandler<Business>(async (req, res) => {
@@ -141,14 +140,13 @@ export const getBusinessesByUserId = requestHandler(async (req, res) => {
 
 export const getAllOwnedBusinesses = requestHandler(async (req, res) => {
 	const userId = req.identity!.id;
-	if (!userId)
+	if ( !userId )
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
 	
 	const selectFields = getSelectedFields(req.query.fields as string);
 
 	const businesses = await findBusinessesByUserId(userId).select(selectFields).lean();
-	console.log('businesses', businesses);
-	if (!businesses)
+	if ( !businesses )
 		return respond(res, StatusCodes.NOT_FOUND, Message.NotFound);
 
 	respond(res, StatusCodes.OK, Message.SuccessRead, businesses);
