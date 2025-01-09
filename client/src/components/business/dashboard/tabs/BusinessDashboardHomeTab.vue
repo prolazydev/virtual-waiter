@@ -223,7 +223,7 @@ onUnmounted(() => {
 await (async () => {
 	try {
 		const { getAllOwnedBusinesses } = businessService();
-		const { response, data } = await getAllOwnedBusinesses();
+		const { response, data } = await getAllOwnedBusinesses([ 'username', 'displayName', '_id', 'profileImage', 'coverImage', 'reviewPoints', 'averageRating', ]);
 		
 		if (response.value!.ok && data.value) 
 			favoriteBusinesses.value = data.value;

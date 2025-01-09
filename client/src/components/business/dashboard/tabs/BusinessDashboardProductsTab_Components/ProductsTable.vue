@@ -1,22 +1,24 @@
 <template>
 	<table class="products-table">
-		<tr>
-			<th>
-				Id
-			</th>
-			<th>
-				Name
-			</th>
-			<th>
-				Description
-			</th>
-			<th>
-				Image
-			</th>
-			<th>
-				Price
-			</th>
-		</tr>
+		<thead>
+			<tr>
+				<th>
+					Id
+				</th>
+				<th>
+					Name
+				</th>
+				<th>
+					Description
+				</th>
+				<th>
+					Image
+				</th>
+				<th>
+					Price
+				</th>
+			</tr>
+		</thead>
 		<!-- TODO: Products here -->
 		<template v-if="isLoadingProducts">
 			<tr>

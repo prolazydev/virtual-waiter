@@ -38,6 +38,7 @@
 					<div class="w-1/2 flex flex-col">
 						<label for="product-name">Product Name</label>
 						<input 
+							v-model="productData.name"
 							id="product-name" 
 							type="text" 
 							placeholder="Product Name"
@@ -80,7 +81,7 @@
 										<img 
 											:src="parseBase64Image(mediaData)" 
 											alt="field.label"
-											class="hover:shadow-lg shadow-black hover:scale-[.990] scale-[.975] active:scale-[.975] transition-all duration-300"
+											class="max-w-[35rem] mx-auto shadow-black scale-[.975] transition-all duration-300 hover:shadow-lg hover:scale-[.990] active:scale-[.975]"
 										/>
 									</label>
 								</template>
@@ -121,9 +122,12 @@
 			<div class="w-full flex flex-col gap-5">
 				<hr class="border-[#1b1b1b]">
 				<div class="w-full flex justify-end gap-3">
-					<!-- TODO: Save new Product -->
-					<MyButton @click="closeDialog('.add-product-dialog')" style-type="full">
-						Save
+					<!-- TODO: Save new Product, use animation -->
+					 
+					<MyButton @click="handleAddProduct" style-type="full">
+						<CustomLoader :state="editFormState(loadingState)">
+							Save
+						</CustomLoader>
 					</MyButton>
 					<MyButton @click="closeDialog('.add-product-dialog')" style-type="hollow">
 						Close
@@ -135,7 +139,9 @@
 </template>
 
 <script lang="ts" setup>
+import type { LoadingState } from '@/types';
 import type { Business } from '@/types/models/business';
+import type { ProductForm } from '@/types/models/product';
 
 defineProps<{
 	businesses: Business[];
@@ -145,12 +151,45 @@ const { toggleDialog, isDialogClosed } = myDialog();
 
 const selectedCreateProductBusiness = ref('');
 
+const productData = ref<ProductForm>({
+	name: '',
+	description: '',
+	price: 0,
+	businessId: '',
+	image: '',
+});
 const mediaData = ref('');
 
-watch(() => selectedCreateProductBusiness, (value) => {
-	// TODO:
-	console.log(value);
-});
+const loadingState = ref<LoadingState>('idle');
+
+const editFormState = computed(() => 
+    (state: LoadingState | 'edit' | 'preview') => {
+        switch (state) {
+            case 'edit':
+                return 'idle';
+            case 'loading':
+                return 'loading';
+            case 'success':
+                return 'success';
+            case 'preview':
+                return 'idle';
+            case 'error':
+            default:
+                return 'idle';
+        }
+    }
+);
+
+const handleAddProduct = () => {
+	const { addProduct } = productsService();
+	try {
+		loadingState.value = 'loading';
+		// const {  } = addProduct(productData.value);
+	} catch (error) {
+		console.error(error);
+		
+	}
+};
 
 const closeDialog = (dialogElement: string) => {
 	if (isDialogClosed(dialogElement)) return;
@@ -167,7 +206,6 @@ const handleFileUpload = (e: Event) => {
 
         reader.onload = () => {
             mediaData.value = reader.result as string;
-
             // mediaData.state = 'preview';
         }
     }

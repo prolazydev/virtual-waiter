@@ -9,3 +9,11 @@ export type Product = {
     updatedAt: string;
     __v: number;
 }
+
+export type ProductForm = {
+	name: string;
+	description: string;
+	price: number;
+	businessId: string;
+	image: string;
+}

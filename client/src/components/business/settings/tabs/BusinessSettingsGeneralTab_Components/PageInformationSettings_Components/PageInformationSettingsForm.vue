@@ -626,8 +626,8 @@ const debounceSearchLocation = async (searchQuery: string) => {
 	}
 }
 
-const editFormState = computed(() => {
-    return (state: LoadingState | 'edit' | 'preview') => {
+const editFormState = computed(() => 
+    (state: LoadingState | 'edit' | 'preview') => {
         switch (state) {
             case 'edit':
             case 'loading':
@@ -638,8 +638,8 @@ const editFormState = computed(() => {
             default:
                 return 'idle';
         }
-    };
-});
+    }
+);
 
 const editState = computed(() => {
     return (state: LoadingState | 'edit' | 'preview') => {
