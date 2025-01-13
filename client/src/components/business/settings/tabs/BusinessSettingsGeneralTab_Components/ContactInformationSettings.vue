@@ -197,7 +197,7 @@ const handleGetBusiness = async () => {
 await handleGetBusiness();
 
 const goToUserSettings = async () => 
-    await router.push({ name: '/user/[username]', params: { username: user.username }, query: { setting: 'primary-email' } });
+    await router.push({ name: 'user-profile', params: { username: user.username }, query: { setting: 'primary-email' } });
 
 const handleToggleEditOrCreate = async (index: number) => 
     await toggleEditOrCreateContact(business, businessEdit, contactListFields, index);

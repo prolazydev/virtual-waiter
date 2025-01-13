@@ -193,7 +193,7 @@ export type BusinessCategory = {
 
 export type CreateBusinessModel = {
 	userId: string;
-	name: string;
+	displayName: string;
 	email: string;
 	userEmail: string;
 	phone?: string;
@@ -218,14 +218,14 @@ export type CreateBusinessModel = {
 
 export type Days = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
 
-export type BusinessDashboardTabTitles = 'Home' | 'Business' | 'Conversations' | 'Orders' | 'Products' | 'Reports' | 'Analytics' | 'Settings';
+export type BusinessDashboardTabTitles = 'home' | 'business' | 'conversations' | 'orders' | 'products' | 'reports' | 'analytics' | 'settings';
 
 export type BusinessDashboardTab = {
 	name: BusinessDashboardTabTitles;
 	icon: IconKeys;
 };
 
-export type BusinessSettingsTabTitles = 'General' | 'Access & Roles' | 'Account' | 'Billing' | 'Products' | 'Subscription' | 'Analytics' | 'Security' | 'Notifications';
+export type BusinessSettingsTabTitles = 'general' | 'access & roles' | 'account' | 'billing' | 'products' | 'subscription' | 'analytics' | 'security' | 'notifications';
 
 export type BusinessSettingsTab = {
 	name: BusinessSettingsTabTitles;

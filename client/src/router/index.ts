@@ -1,3 +1,4 @@
+import usePerformanceMetrics from '@/composables/usePerformanceMetrics';
 import { createRouter, createWebHistory } from 'vue-router/auto';
 import { routes, handleHotUpdate } from 'vue-router/auto-routes';
 
@@ -10,7 +11,10 @@ if (import.meta.hot) {
 	handleHotUpdate(router);
 }
 
+const { start, end, timeToLoad } = usePerformanceMetrics();
 router.beforeEach((to, { }, next) => {
+	start();
+	
 	const { isAuth,
 		// hasRole 
 	} = useAuth();
@@ -30,7 +34,14 @@ router.beforeEach((to, { }, next) => {
 		// TODO: Handle Routing error
 		console.error(error);
 		next({ name: '/error/bad-request' });
+	} finally {
+
 	}
+});
+
+router.afterEach(() => {
+	end();
+	console.log(timeToLoad.value);
 });
 
 // router.afterEach(() => {

@@ -7,26 +7,29 @@
 </template>
 
 <script lang="ts" setup>
+import { needAuthGuard } from '@/utils/guards/auth';
+
 // import { definePage } from 'unplugin-vue-router/runtime';
 
-// definePage({
-// 	meta: {
-// 		auth: true
-// 	},
-//     name: 'user-profile',
-//     props: {
-//         username: {
-//             type: String,
-//             required: true
-//         }
-//     },
-// });
+definePage({
+	meta: {
+		auth: true
+	},
+    name: 'user-profile',
+    props: {
+        username: {
+            type: String,
+            required: true
+        }
+    },
+	beforeEnter: (_, __, next) => needAuthGuard(next)
+});
 
 // TODO: Handle autmatic prompting of specific action depending on the route query, eg: /user/:username?setting=primary-email
 
 const userData = ref();
 
-const { params } = useRoute('/user/[username]');
+const { params } = useRoute('user-profile');
 
 console.log(params);
 

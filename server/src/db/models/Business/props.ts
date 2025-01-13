@@ -23,12 +23,13 @@ const isDateRange = /^\d{2}:\d{2}-\d{2}:\d{2}$|^closed$|^24$/;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function hoursValidation(this: any, dateRange: string) {
 	try {
-		BusinessModel.findById(this._conditions._id).lean().then((business) => {
-			if (business!.is24)
-				return !dateRange || dateRange.trim() === '';
-			else
-				return isDateRange.test(dateRange);
-		});
+		return isDateRange.test(dateRange);
+		// BusinessModel.findById(this._conditions._id).lean().then((business) => {
+		// 	if (business!.is24)
+		// 		return !dateRange || dateRange.trim() === '';
+		// 	else
+		// 		return isDateRange.test(dateRange);
+		// });
 		// const business = await BusinessModel.findById(this._conditions._id).lean();
 		// if (business!.is24) {
 		// 	return !dateRange || dateRange.trim() === '';

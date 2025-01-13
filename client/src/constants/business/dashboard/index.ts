@@ -2,35 +2,35 @@ import type { BusinessDashboardTab } from '@/types/models/business';
 
 export const tabs: BusinessDashboardTab[] = [
 	{ 
-		name: 'Home',
+		name: 'home',
 		icon: 'LayoutDashboard'
 	},
 	{
-		name: 'Business',
+		name: 'business',
 		icon: 'ChefHat'
 	},
 	{
-		name: 'Conversations',
+		name: 'conversations',
 		icon: 'MessageCircle',
 	},
 	{
-		name: 'Orders',
+		name: 'orders',
 		icon: 'ShoppingCart'
 	},
 	{
-		name: 'Products',
+		name: 'products',
 		icon: 'Box'
 	},
 	{
-		name: 'Analytics',
+		name: 'analytics',
 		icon: 'ChartNoAxesCombined'
 	},
 	{
-		name: 'Reports',
+		name: 'reports',
 		icon: 'FileText'
 	},
 	{
-		name: 'Settings',
+		name: 'settings',
 		icon: 'Settings'
 	},
 ];

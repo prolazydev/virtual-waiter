@@ -1,0 +1,82 @@
+[
+	{
+		"name": "Appetizers",
+		"description": "Small dishes served before the main course to stimulate the appetite."
+	},
+	{
+		"name": "Entrees",
+		"description": "Main courses that form the central part of a meal."
+	},
+	{
+		"name": "Beverages",
+		"description": "Drinks including hot, cold, and alcoholic options."
+	},
+	{
+		"name": "Desserts",
+		"description": "Sweet dishes served at the end of a meal."
+	},
+	{
+		"name": "Salads",
+		"description": "Cold dishes made with vegetables, fruits, or grains, often served with dressing."
+	},
+	{
+		"name": "Soups",
+		"description": "Liquid-based dishes made with vegetables, meats, or seafood."
+	},
+	{
+		"name": "Breakfast Items",
+		"description": "Dishes typically served in the morning, such as eggs, pancakes, and toast."
+	},
+	{
+		"name": "Pasta",
+		"description": "Italian dishes made with noodles and various sauces or ingredients."
+	},
+	{
+		"name": "Pizza",
+		"description": "Baked flatbreads topped with cheese, sauce, and various toppings."
+	},
+	{
+		"name": "Grilled Items",
+		"description": "Food cooked on a grill, such as meats, seafood, or vegetables."
+	},
+	{
+		"name": "Vegan Options",
+		"description": "Plant-based dishes made without any animal products."
+	},
+	{
+		"name": "Gluten-Free Options",
+		"description": "Dishes made without gluten for those with dietary restrictions."
+	},
+	{
+		"name": "Seafood",
+		"description": "Dishes made with fish, shellfish, or other seafood."
+	},
+	{
+		"name": "Burgers",
+		"description": "Sandwiches with a patty and various toppings, often served with fries."
+	},
+	{
+		"name": "Sandwiches",
+		"description": "Dishes consisting of bread and various fillings, hot or cold."
+	},
+	{
+		"name": "Kids' Meals",
+		"description": "Smaller portioned dishes designed for children."
+	},
+	{
+		"name": "Snacks",
+		"description": "Quick, smaller food items meant to be eaten between meals."
+	},
+	{
+		"name": "Sides",
+		"description": "Accompaniments to the main dish, such as fries, rice, or vegetables."
+	},
+	{
+		"name": "Combo Meals",
+		"description": "Meal packages combining multiple items, such as a main dish, side, and drink."
+	},
+	{
+		"name": "Specials",
+		"description": "Limited-time or featured dishes unique to the restaurant."
+	}
+]

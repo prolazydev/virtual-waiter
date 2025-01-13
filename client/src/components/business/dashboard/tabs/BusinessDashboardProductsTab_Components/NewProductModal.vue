@@ -1,29 +1,32 @@
 <template>
 	<MyDialog _class="add-product-dialog p-7 overflow-hidden" title="Add a Product" size="xl">
-		<MyButton 
-			@click="toggleDialog('.add-product-dialog')"
-			style-type="full" 
-			color="inverted-primary"
-			size="sm"
-		>
-			Add a Product
-		</MyButton>
+		<template #default>
+			<MyButton 
+				@click="toggleDialog('.add-product-dialog')"
+				style-type="full" 
+				color="inverted-primary"
+				size="sm"
+				id="addProductButton"
+			>
+				Add a Product
+			</MyButton>
+		</template>
 
 		<template #body>
-			<div class="w-full mx-auto py-5 flex flex-col gap-3 justify-between">
+			<div class="w-full mx-auto py-5 flex flex-col gap-3">
 				<!-- TODO: Make an input search to filter out the businesses on the selection box (client side) -->
 				<div class="w-fit relative z-10">
-					<button type="button" class="dropdown-btn" aria-haspopup="menu">
+					<button type="button" class="dropdown-btn" autofocus="false" aria-haspopup="menu">
 						Selected Business 
 						<span class="w-32 px-1 text-start border border-black overflow-hidden">
-							{{ selectedCreateProductBusiness.length > 0  ? selectedCreateProductBusiness : 'Not Selected' }}
+							{{ selectedCreateProductBusiness.length > 0  ? businesses.find(b => b.username === selectedCreateProductBusiness)?.displayName : 'Not Selected' }}
 						</span>
 					</button>
 					<!-- TODO: Make an input search to filter out the businesses on the selection box (client side) -->
 					<ul class="dropdown-content p-2 right-0 top-0">
 						<li 
 							v-for="(item) in businesses" :key="item.username"
-							@click="selectedCreateProductBusiness = item.username"
+							@click="selectBusiness(item.username)"
 							:class="{ 'font-semibold': selectedCreateProductBusiness === item.username }"
 						>
 							{{ item.displayName }}
@@ -32,88 +35,126 @@
 				</div>
 				<!-- TODO: inputs here: name, price, description, tags,  -->
 				<div 
-					:class="{ 'opacity-75 cursor-not-allowed': !selectedCreateProductBusiness }"
-					class="w-1/2 flex flex-col gap-3"
+					:class="{ 'opacity-75': !selectedCreateProductBusiness }"
+					class="w-full h-full flex gap-7"
 				>
-					<div class="w-1/2 flex flex-col">
-						<label for="product-name">Product Name</label>
-						<input 
-							v-model="productData.name"
-							id="product-name" 
-							type="text" 
-							placeholder="Product Name"
-							class="form-input w-fit"
-							:disabled="!selectedCreateProductBusiness"
-						/>
-					</div>
-					<div class="w-1/2 flex flex-col">
-						<label for="product-price">Product Price</label>
-						<input 
-							id="product-price" 
-							type="number" 
-							placeholder="Product Price"
-							class="form-input w-fit"
-							:disabled="!selectedCreateProductBusiness"
-						/>
-					</div>
+					<div class="w-full flex flex-col gap-3">
+						<div class="w-w flex flex-col">
+							<label for="product-name">Name</label>
+							<input 
+								v-model="productData.name"
+								id="product-name" 
+								type="text" 
+								placeholder="Name"
+								class="form-input "
+								:disabled="!selectedCreateProductBusiness"
+							/>
+						</div>
+						<div class="w-full flex flex-col">
+							<label for="product-price">Price</label>
+							<input 
+								id="product-price" 
+								type="number" 
+								placeholder="Price"
+								class="form-input "
+								:disabled="!selectedCreateProductBusiness"
+							/>
+						</div>
+						<div class="w-full flex flex-col">
+							<label for="product-description">Description</label>
+							<textarea 
+								id="product-description" 
+								placeholder="Description"
+								class="form-input overflow-y-scroll"
+								:disabled="!selectedCreateProductBusiness"
+								rows="5"
+							></textarea>
+						</div>
 
-					<MyDialog 
-						:_class="`product-media-dialog p-7 gap-10 dialog-body-full`" 
-						:title="`Setup Media`" 
-						size="lg"
-						class="min-w-52"
-					>
-						<label for="productMediaDialog">Media</label>
-						<MyButton 
-							@click="toggleDialog('.product-media-dialog')" 
-							style-type="full" 
-							:disabled="!selectedCreateProductBusiness"
-							id="productMediaDialog" 
-							type="button"
+						<DebounceSearch
+							v-model="productData.categoryId"
+							:debounce-delay="500"
+							@debounce-fn="debounceCategorySearch"
+							input-type="text"
+							id="productCategoryList"
+							label="Category"
+							placeholder="Beverages, Food, etc."
+							input-class="form-input w-64"
 						>
-							Setup Media
-						</MyButton>
-						
-						<template #body>
-							<div class="w-full mt-5 flex flex-col gap-5 overflow-hidden">
-								<template v-if="mediaData.length > 0">
-									<label for="MediaSetup">
-										<img 
-											:src="parseBase64Image(mediaData)" 
-											alt="field.label"
-											class="max-w-[35rem] mx-auto shadow-black scale-[.975] transition-all duration-300 hover:shadow-lg hover:scale-[.990] active:scale-[.975]"
-										/>
+							<template #bottom>
+								<ul :class="{ 'show-search-results': true }" 
+									class="search-result" 
+								>
+									<li v-for="item in searchResults" :key="item._id">
+										<button 
+											@click="productData.categoryId = item._id"
+											class="capitalize text-start"
+											type="button" 
+										> 
+											{{ item.name }}
+										</button>
+									</li>
+								</ul>
+							</template>
+						</DebounceSearch>
+					</div>
+
+					<div class="w-full">
+						<MyDialog _class="setup-product-media-dialog p-5" size="lg">
+							<label for="setupProductMedia">Media</label>
+							<MyButton 
+								@click="toggleDialog(`.setup-product-media-dialog`)" 
+								style-type="hollow"
+								id="productMedia" 
+								class="form-button-1" 
+								type="button"
+								:disabled="!selectedCreateProductBusiness"
+							>
+								Setup Media
+							</MyButton>
+
+							<template #body>
+								<div class="w-full h-[38rem] overflow-hidden">
+									<template v-if="mediaData.length > 0">
+										<label class="product-image-label" for="productImage">
+											<img 
+												:src="parseBase64Image(mediaData)" 
+												alt="field.label"
+												class="max-w-[38rem] m-auto shadow-black scale-[.975] transition-all"
+											/>
+										</label>
+									</template>
+
+									<label v-else class="w-full h-full flex my-hover-dark-shadow overflow-hidden" for="productImage">
+										<LucideIcon name="ImagePlus" size="64" class="m-auto stroke-2 " />
 									</label>
-								</template>
-								
-								<label v-else class="w-full h-full flex my-hover-dark-shadow overflow-hidden" for="MediaSetup">
-									<LucideIcon name="ImagePlus" size="64" class="m-auto stroke-2 " />
-								</label>
 
-								<input 
-									@change="(e) => handleFileUpload(e)"
-									id="MediaSetup"
-									type="file" 
-									accept="image/*"
-									class="hidden" 
-								/>
+									<input 
+										@change="(e) => handleFileUpload(e)"
+										id="productImage"
+										type="file" 
+										accept="image/*"
+										class="hidden" 
+									/>
+								</div>
+							</template>
 
-								<div class="w-full h-[1px] mb-3 bg-black"></div>
-							</div>
-						</template>
+							<template #footer>
+								<div class="w-full flex justify-end gap-5">
+									<MyButton>Save</MyButton>
+									<MyButton @click="toggleDialog(`.setup-product-media-dialog`)" style-type="hollow">
+										Cancel
+									</MyButton>
+								</div>
+							</template>
+						</MyDialog>
+					</div>
 
-						<template #footer>
-							<!-- TODO: Save selection -->
-							<div class="w-full flex justify-end gap-5">
-								<MyButton @click="closeDialog('.product-media-dialog')" style-type="full" type="button">
-									Save
-								</MyButton>
-								<MyButton @click="closeDialog('.product-media-dialog')" style-type="hollow" type="button">
-									Cancel
-								</MyButton>
-							</div>
-						</template>
-					</MyDialog>
+					<!-- <div class="w-1 h-full bg-black"></div>
+
+					<div class="w-full flex justify-center items-center">
+						
+					</div> -->
 				</div>
 			</div>
 		</template>
@@ -143,10 +184,11 @@ import type { LoadingState } from '@/types';
 import type { Business } from '@/types/models/business';
 import type { ProductForm } from '@/types/models/product';
 
-defineProps<{
+const props = defineProps<{
 	businesses: Business[];
 }>();
 
+const loader = useLoader();
 const { toggleDialog, isDialogClosed } = myDialog();
 
 const selectedCreateProductBusiness = ref('');
@@ -157,10 +199,15 @@ const productData = ref<ProductForm>({
 	price: 0,
 	businessId: '',
 	image: '',
+	categoryId: '',
 });
 const mediaData = ref('');
 
 const loadingState = ref<LoadingState>('idle');
+
+const isProductCategorySelectedDebounce = ref(false);
+
+const searchResults = ref<{ _id:string, name:string, description:string }[]>([]);
 
 const editFormState = computed(() => 
     (state: LoadingState | 'edit' | 'preview') => {
@@ -191,6 +238,40 @@ const handleAddProduct = () => {
 	}
 };
 
+// TODO: Implement this
+const debounceCategorySearch = async (searchQuery: string) => {
+	if (isProductCategorySelectedDebounce.value) {
+		isProductCategorySelectedDebounce.value = false;
+		return;
+	}
+	try {
+		const { addProduct } = productsService();
+		// product_category
+		loader.startLoader();
+		
+		const { response, data } = await addProduct(productData.value);
+
+		console.log(data.value);
+
+		if (!response.value?.ok) {
+			throw new Error('Failed to fetch location data');
+		}
+		// searchResults.value = await res.json();
+		// console.log(searchResults.value);
+	} catch (error) {
+		console.error('Location search failed:', error);
+	} finally {
+		// loader.finishLoader();
+	}
+}
+
+const selectBusiness = async (businessId: string) => {
+	selectedCreateProductBusiness.value = businessId;
+	productData.value.businessId = businessId;
+
+	await debounceCategorySearch('');
+}
+
 const closeDialog = (dialogElement: string) => {
 	if (isDialogClosed(dialogElement)) return;
 	toggleDialog(dialogElement);
@@ -215,6 +296,12 @@ const parseBase64Image = (e: string) => {
     return e.startsWith('data') ? e : `data:image/png;base64,${e}`;
 }
 </script>
+
+<style>
+.add-product-dialog .dialog-body {
+	@apply h-full
+}
+</style>
 
 <style scoped>
 
@@ -250,4 +337,55 @@ const parseBase64Image = (e: string) => {
             hover:border-b-rose-600 
     ;
 }
+
+.product-image-label {
+	@apply w-full h-full flex overflow-hidden cursor-pointer
+}
+
+.product-image-label:hover > img {
+	@apply duration-300 shadow-lg scale-[.990] 
+} 
+
+.product-image-label:active > img {
+	@apply shadow-none scale-[.975]
+}
+
+/* DEBOUNCE */
+.debounce-search-input ul {
+	@apply 	h-fit p-2 flex flex-wrap gap-2 border-2 border-[#1b1b1b] bg-transparent transition-[border]
+			focus:outline-none focus:border-b-rose-600 
+	;
+}
+
+.search-result {
+	@apply	max-h-64 flex flex-col flex-nowrap gap-0 bg-white shadow-lg absolute transition-all duration-300
+            top-[calc(100%-3rem)] -left-[0.15rem] opacity-0 pointer-events-none 
+            overflow-hidden overflow-y-scroll z-[500]
+	;
+}
+
+.debounce-search-input .search-result {
+	@apply 	p-2 cursor-pointer border-b-2  
+			hover:border-b-rose-700
+			transition-all duration-300
+	;
+}
+
+.search-result li {
+	@apply 	p-2 cursor-pointer border-b-2  
+			hover:border-b-rose-700
+			transition-all duration-300
+	;
+}
+
+.show-search-results {
+	@apply  opacity-100 pointer-events-auto top-[calc(100%+0.75rem)]
+	; 
+}
+
+.debounce-search-input > input:focus + .show-business-categories-input {
+    @apply  opacity-100 pointer-events-auto top-[calc(100%+0.75rem)] 
+	;
+}
+
 </style>

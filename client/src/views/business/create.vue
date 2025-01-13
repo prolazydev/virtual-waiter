@@ -7,8 +7,8 @@
             </div>
 
 			<div class="relative flex flex-col gap-2">
-                <label for="businessName">Business Name</label>
-                <input v-model="createBusinessFormData.name" type="text" id="businessName" placeholder="My Virtual Business" required />
+                <label for="businessDisplayName">Business Display Name</label>
+                <input v-model="createBusinessFormData.displayName" type="text" id="businessDisplayName" placeholder="My Virtual Business" required />
             </div>
 			<div class="relative flex flex-col gap-2">
 				<div class="flex gap-1 items-center">
@@ -258,6 +258,7 @@ watch(() => useUserEmail.value, (newValue: boolean) => newValue
 );
 
 const handleBusinessCreation = async () => {
+		loader.startLoader();
 	try {
 		const { response, data, error } = await myFetch<{ id: string; }>('/business', createBusinessFormData.value, { method: 'POST' });
 
@@ -275,6 +276,8 @@ const handleBusinessCreation = async () => {
 		}
 	} catch (error) {
 		console.log(error);
+	} finally {
+		loader.finishLoader();
 	}
 };
 

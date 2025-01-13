@@ -34,8 +34,8 @@
 </template>
 
 <script lang="ts" setup>
+import { sizes } from '@/constants/componentDefaults';
 import type { StyleValue } from 'vue';
-import { sizes } from '@/components/ui/Dialog/utils';
 
 const { toggleDialog } = myDialog();
 

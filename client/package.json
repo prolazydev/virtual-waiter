@@ -16,9 +16,11 @@
 	"dependencies": {
 		"@glidejs/glide": "^3.7.1",
 		"@popperjs/core": "^2.11.8",
+		"@vueuse/components": "^12.4.0",
 		"@vueuse/core": "^12.3.0",
 		"chart.js": "^4.4.7",
 		"lucide-vue-next": "^0.469.0",
+		"mavon-editor": "^3.0.1",
 		"number-flip-ts": "^2.2.10",
 		"pinia": "^2.3.0",
 		"pinia-plugin-persistedstate": "^4.2.0",

@@ -56,8 +56,15 @@ export default {
 					'transitionProperty': 'all',
 					'transition-timing-function': 'cubic-bezier(0.4, 0, 0.2, 1)',
 					'transition-duration': '150ms',
-					...hover_dark_shadow,
-					...hover_scale,
+					'&:hover': {
+						'filter':
+							'drop-shadow(0 1px 1px hsl(0deg 0% 0% / 0.075)) drop-shadow(0 4px 4px hsla(0, 0%, 0%, 0.075)) drop-shadow(0 8px 8px hsla(0, 0%, 0%, 0.075)) drop-shadow(0 16px 16px hsl(0deg 0% 0% / 0.075)) drop-shadow(0 2px 2px hsl(0deg 0% 0% / 0.075))',
+						'scale': '1.05',
+					},
+					'&:active': {
+						'filter': 'drop-shadow(0 0 #0000)',
+						'scale': '0.95',
+					},
 				},
 				'.my-dark-shadow': {
 					...hover_dark_shadow,

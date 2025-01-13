@@ -34,6 +34,6 @@ declare module 'vue-router/auto-routes' {
     'business-dashboard-settings': RouteRecordInfo<'business-dashboard-settings', '/business/settings/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/error/bad-request': RouteRecordInfo<'/error/bad-request', '/error/bad-request', Record<never, never>, Record<never, never>>,
     '/search': RouteRecordInfo<'/search', '/search', Record<never, never>, Record<never, never>>,
-    '/user/[username]': RouteRecordInfo<'/user/[username]', '/user/:username', { username: ParamValue<true> }, { username: ParamValue<false> }>,
+    'user-profile': RouteRecordInfo<'user-profile', '/user/:username', { username: ParamValue<true> }, { username: ParamValue<false> }>,
   }
 }

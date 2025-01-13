@@ -1,13 +1,13 @@
-import mongoose, { InferSchemaType } from 'mongoose';
+import mongoose, { InferSchemaType, Schema } from 'mongoose';
 
 const productSchema = new mongoose.Schema({
 	userId: { 
-		type: mongoose.Schema.Types.ObjectId, 
+		type: Schema.Types.ObjectId, 
 		ref: 'users',
 		required: true, 
 	},
 	businessId: {
-		type: mongoose.Schema.Types.ObjectId,
+		type: Schema.Types.ObjectId,
 		ref: 'businesses',
 		required: true,
 	},
@@ -19,6 +19,7 @@ const productSchema = new mongoose.Schema({
 		type: String,
 		trim: true,
 	},
+	category: { type: Schema.Types.ObjectId, ref: "Product_Category" }, // Reference to ProductCategory
 	price: Number,
 	image: {
 		type: [ Buffer ],

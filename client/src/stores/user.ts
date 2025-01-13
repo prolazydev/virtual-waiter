@@ -9,8 +9,8 @@ const emptyUser: LoggedInUser = {
 	isAuth: false,
 	isBusinessOwner: false,
 	avatar: '',
-    lastBusinessDashboardTab: 'Home',
-    lastBusinessSettingsTab: 'General',
+    lastBusinessDashboardTab: 'home',
+    lastBusinessSettingsTab: 'general',
 	isAuthLoading: false,
 }
 
@@ -27,8 +27,8 @@ defineStore('user', () => {
         // user.value.avatar = newUser.avatar;
 
 		user.value.isAuth = true;
-        user.value.lastBusinessDashboardTab = 'Home';
-        user.value.lastBusinessSettingsTab = 'General';
+        user.value.lastBusinessDashboardTab = 'home';
+        user.value.lastBusinessSettingsTab = 'general';
 		user.value.isAuthLoading = false;
 	}
 

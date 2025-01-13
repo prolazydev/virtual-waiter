@@ -3,6 +3,7 @@
 		<label v-if="label" :for="id">{{ label }}</label>
 		<input 
 			v-model="model"
+			@focus="$emit('focus', 'focus')"
 			:class="inputClass"
 			:id="id"
 			:placeholder="placeholder"
@@ -42,6 +43,7 @@ const model = defineModel()
 const emit = defineEmits<{
 	(e: 'update:modelValue', value: string): void
 	(e: 'debounceFn', value: string): Function
+	(e: 'focus', value: string): void
 }>();
 
 watchDebounced(() => model.value, (val) => {

@@ -7,7 +7,10 @@
 					<h2 class="text-2xl font-semibold">Products</h2>
 					<div class="relative">
 						<button type="button" class="dropdown-btn" aria-haspopup="menu">
-							Selected Business <span class="w-32 px-1 text-start border border-black overflow-hidden">{{ selectedBusiness }}</span>
+							Selected Business 
+							<span class="w-32 px-1 text-start border border-black overflow-hidden">
+								{{ selectedBusiness === 'All' ? selectedBusiness : businesses.find(b => b.username === selectedBusiness)?.displayName }}
+							</span>
 						</button>
 						<!-- TODO: Make an input search to filter out the businesses on the selection box (client side) -->
 						<ul class="dropdown-content p-2 right-0 top-0">
@@ -82,7 +85,7 @@
 import type { Business } from '@/types/models/business';
 
 const businesses = ref<Business[]>([]);
-const selectedBusiness = ref('All');
+const selectedBusiness = ref<string>('All');
 
 const productQuery = ref('');
 const listOrGridView = ref(true);

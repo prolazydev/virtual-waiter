@@ -50,7 +50,8 @@
 					<LucideIcon class="absolute" name="ChefHat" :size="32" :stroke-width="2"  />
 				</button>
 
-				<p class="text-center">Already a member? 
+				<p class="text-end">
+					Already a member? 
 					<router-link to="/auth/login" class="underline underline-offset-2 decoration-dotted hover:underline-offset-4 transition-all">
 						Login here!
 					</router-link>

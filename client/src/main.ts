@@ -6,6 +6,7 @@ import piniaPluginPersistedState from 'pinia-plugin-persistedstate'
 
 import App from './App.vue'
 import router from './router'
+
 import { setupCalendar } from 'v-calendar';
 
 const app = createApp(App)

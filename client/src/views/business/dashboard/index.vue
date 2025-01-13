@@ -3,7 +3,7 @@
 		<div class="flex gap-10 w-full">
 			<div class="main-dashboard">
 				<div class="sidenav-main">
-					<Breadcrumb :node="dashboardNode" />
+					<Breadcrumb :node="dashboardNode" class="breadcrumb-main" />
 					<div class="sidenav">
 						<div class="flex flex-col gap-3">
 							<h1 class="text-2xl font-semibold">Dashboard</h1>
@@ -12,8 +12,8 @@
 
 						<div class="flex flex-col gap-3">
 							<button 
-								v-for="(item, index) in tabs" 
-								:key="index" @click="tab = item.name" 
+								v-for="(item, index) in tabs" :key="index" 
+								@click="tab = item.name" 
 								:class="{ 'active-tab': tab === item.name }"
 								class="dashboard-link" 
 							>
@@ -66,9 +66,12 @@ definePage({
 });
 
 const { user, setTab } = useUserStore();
+const { addQueryParam } = useWebUtils();
 const loader = useLoader();
 
-const tab = ref<BusinessDashboardTabTitles>(user.lastBusinessDashboardTab ?? 'Home');
+const tab = ref<BusinessDashboardTabTitles>(initTab());
+addQueryParam('t', tab.value);
+
 const dashboardNode = ref<BreadcrumbNode>({ 
 	title: 'Dashboard', 
 	link: 'business-dashboard', 
@@ -78,24 +81,28 @@ const dashboardNode = ref<BreadcrumbNode>({
 watch(tab, (newTab) => {
 	setTab('lastBusinessDashboardTab', newTab);
 
-	dashboardNode.value.title = 'Dashboard';
-	dashboardNode.value.link = 'business-dashboard';
-	dashboardNode.value.node = { title: newTab };
+	dashboardNode.value = {
+		title: 'Dashboard',
+		link: 'business-dashboard',
+		node: { title: newTab },
+	}
+
+	addQueryParam('t', newTab);
 })
 
 const componentTab = computed(() => {
 	try {
 		loader.startLoader();
-		switch (tab.value) {
-			case 'Home':
+		switch (tab.value.toLowerCase()) {
+			case 'home':
 				return defineAsyncComponent(() => import('@/components/business/dashboard/tabs/BusinessDashboardHomeTab.vue'));
-			case 'Business':
+			case 'business':
 				return defineAsyncComponent(() => import('@/components/business/dashboard/tabs/BusinessDashboardBusinessTab.vue'));
 			// case 'Conversations':
 			// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardConversations.vue'));
 			// case 'Orders':
 			// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardOrders.vue'));
-			case 'Products':
+			case 'products':
 				return defineAsyncComponent(() => import('@/components/business/dashboard/tabs/BusinessDashboardProductsTab.vue'));
 			// case 'Reports':
 			// 	return defineAsyncComponent(() => import('@/components/business/dashboard/BusinessDashboardReports.vue'));
@@ -110,10 +117,25 @@ const componentTab = computed(() => {
 		loader.finishLoader();
     }
 });
+
+function initTab() {
+	const router = useRouter();
+	// get t param if exists
+	const tabParam = router.currentRoute.value.query.t as BusinessDashboardTabTitles;
+	if (tabParam) {
+		return tabParam;
+	} else {
+		return user.lastBusinessDashboardTab ?? 'home';
+	}
+}
 </script>
 
 <style scoped>
 /* TODO: Make a reusable css component since it's used 2 times exactly on business dashboard and settings */
+.breadcrumb-main *>::first-letter {
+	@apply capitalize
+}
+
 .dashboard {
 	@apply py-5 flex flex-col gap-20
 }
@@ -134,7 +156,7 @@ const componentTab = computed(() => {
 }
 
 .dashboard-link {
-	@apply 	flex gap-1 items-center text-[#1b1b1b] 
+	@apply 	flex gap-1 items-center text-[#1b1b1b] capitalize
 			text-xl cursor-pointer
 			hover:text-[#303030] transition-colors
 }

@@ -41,7 +41,7 @@
 					</li>
 				</template>
 				<template v-else-if="!isAuth()" key="guest">
-						<li><router-link @mouseover="doTest" class="nav-link" to="/auth/register">Sign up</router-link></li>
+						<li><router-link class="nav-link" to="/auth/register">Sign up</router-link></li>
 						<li><router-link class="nav-link" to="/auth/login">Login</router-link></li>
 				</template>
 				<template v-else key="loggedIn">
@@ -77,7 +77,7 @@
 									/>
 								</button>
 								<ul class="dropdown-content px-2 py-3 right-0">
-									<li><router-link :to="{ name: '/user/[username]', params: { username: user.username ?? '' } }">Profile</router-link></li>
+									<li><router-link :to="{ name: 'user-profile', params: { username: user.username ?? '' } }">Profile</router-link></li>
 									<li><button @click="handleLogout">Logout</button></li>
 								</ul>
 							</div>
@@ -95,11 +95,13 @@
 import type { IconKeys } from '@/types';
 import useRoutePreload from '@/composables/useRoutePreload';
 
-const { user } = storeToRefs(useUserStore());
+const router = useRouter();
 
 const { isAuth, logout } = useAuth();
+const { preloadRoute } = useRoutePreload();
 
-const router = useRouter();
+
+const { user } = storeToRefs(useUserStore());
 
 const showNotificationsMenu = ref(false);
 
@@ -128,13 +130,6 @@ const searchType = computed<IconKeys>(() => {
     return 'Zap';
 });
 
-const { preloadRoute } = useRoutePreload();
-
-const doTest = (e: Event) => {
-    console.log(e);
-    debugger;
-    preloadRoute('/auth/register', router)
-}
 
 // Preload a route by its path
 // const preloadRoute = (path: RouteLocationRaw): void => {

@@ -134,11 +134,11 @@
                                                         <img 
                                                             :src="parseBase64Image(businessFormFields[field.prop as BusinessFormFieldKeys].value as string)" 
                                                             :alt="field.label"
-                                                            class="hover:shadow-lg shadow-black hover:scale-[.990] scale-[.975] active:scale-[.975] transition-all duration-300"
+                                                            class="hover:shadow-lg active:drop-shadow-none shadow-black hover:scale-[.990] scale-[.975] active:scale-[.975] transition-all duration-300"
                                                         />
                                                     </label>
                                                 </template>
-                                                
+                                                <!-- hover:drop-shadow-md hover:scale-110 active:scale-95 active:drop-shadow-none -->
                                                 <label v-else class="w-full h-full flex my-hover-dark-shadow overflow-hidden" :for="`${field.id}Setup`">
                                                     <LucideIcon name="ImagePlus" size="64" class="m-auto stroke-2 " />
                                                 </label>

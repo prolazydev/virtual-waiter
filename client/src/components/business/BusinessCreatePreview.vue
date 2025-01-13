@@ -28,7 +28,7 @@
 			<div class="flex justify-between gap-20 text-sm">
 				<div class="w-full flex flex-col gap-5">
 					<div class="h-fit w-full flex flex-col gap-2">
-						<h1 class="h-7 font-bold text-xl">{{ name }}</h1>
+						<h1 class="h-7 font-bold text-xl">{{ displayName }}</h1>
 						<Review class="text-gray-200 fill-gray-200" :stars="5" :reviews="10" :sizes="18" />
 
 						<span class="px-24 py-2 w-fit bg-gray-200"></span>
@@ -165,7 +165,7 @@ import type { CreateBusinessModel } from '@/types/models/business';
 
 withDefaults(defineProps<CreateBusinessModel>(), {
 	userId: '123',
-	name: 'My Business',
+	displayName: 'My Business',
 	email: 'test@mybusiness.com',
 	userEmail: 'test@myUserEmail.com',
 	phone: '',

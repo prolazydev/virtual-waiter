@@ -11,7 +11,10 @@ import { logger } from '../src/services/logger.service';
 import { SeedingStatus } from '../src/db/models/SeedStatus';
 import { BusinessCategory, BusinessCategoryModel } from '../src/db/models/BusinessCategory';
 
+// DATA IMPORTS
 import { categories as RestaurantCategoriesData } from './DummyData/BusinessCategoriesData.json';
+import productCategories from './DummyData/ProductCategoriesData.json';
+import { ProductCategoryModel } from '@/db/models/ProductCateogry';
 
 type RestaurantCategory = typeof RestaurantCategoriesData[0] & { 
 	userId: mongoose.Schema.Types.ObjectId;
@@ -27,7 +30,9 @@ export async function seed() {
 	try {
 		await seedAdmin();
 		await seedUser();
-		await seedRestaurantCategories();
+
+		await seedBusinessCategories();
+		await seedProductCategories();
 		
 	} catch (err) {
 		console.log('Seeding Error: ', err);
@@ -74,7 +79,7 @@ async function seedUser() {
 		const password = faker.internet.password();
 
 		const user: User = {
-			username: faker.internet.username({ firstName: firstName, lastName: lastName }),
+			username: faker.internet.userName({ firstName: firstName, lastName: lastName }),
 			email: faker.internet.email({ firstName }),
 			auth:  {
 				salt,
@@ -95,7 +100,7 @@ async function seedUser() {
 	await completeSeed('users');
 }
 
-async function seedRestaurantCategories() {
+async function seedBusinessCategories() {
 	const seededStatus = await SeedingStatus.exists({ seedFor: 'business_categories' });
 	if ( seededStatus ) 
 		return console.log('Seed for "business_categories" exists!');
@@ -124,6 +129,16 @@ async function seedRestaurantCategories() {
 			await completeSeed('business_categories');
 		});
 	});
+}
+
+async function seedProductCategories() {
+	const seededStatus = await SeedingStatus.findOne({ seedFor: 'product_categories' }).select('status').lean();
+	if ( seededStatus != null && seededStatus.status === 'completed') 
+		return console.log('Seed for "product_categories" exists!');
+
+	console.log('Inserting product categories...');
+	await ProductCategoryModel.create(productCategories);
+	await completeSeed('product_categories');
 }
 
 // PRIVATE

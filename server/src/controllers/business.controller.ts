@@ -15,8 +15,15 @@ import { createBusiness, findAllBusinesses, findBusinessById, findBusinessesByUs
 // #region POST
 export const registerBusinessRequest = requestHandler<Business>(async (req, res) => {
 	const business = req.body;
+
+	console.log('business', business);
+	
 	if (!business)
 		return respond(res, StatusCodes.BAD_REQUEST, Message.InvalidInput);
+	if (!business.username) {
+		// Generate username from display name or generate random username
+		business.username = business.displayName.toLowerCase().replace(/ /g, '');
+	}
 
 	// business.username = 'contosso2';
 
@@ -24,7 +31,6 @@ export const registerBusinessRequest = requestHandler<Business>(async (req, res)
 
 	respond(res, StatusCodes.CREATED, Message.SuccessCreate, { id: newBusiness._id });
 });
-
 export const getBusinessConfirmationCode = requestHandler(async (req, res) => {
 	const id = req.params.id;
 	if ( !id )

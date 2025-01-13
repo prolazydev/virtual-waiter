@@ -236,5 +236,14 @@ const businessSchema = new Schema<IBusiness>({
 	},
 }, { timestamps: true, versionKey: false });
 
+businessSchema.pre('save', async function (next) {
+	// const business = this as IBusiness;
+	// if (business.categories.length) {
+	// 	const validCategories = (await BusinessCategoryModel.exists({ name: { $in: business.categories } })) ? true : false;
+	// 	if (!validCategories) throw new Error('Category does not exist!');
+	// }
+	next();
+});
+
 export type Business = InferSchemaType<typeof businessSchema>;
 export const BusinessModel = model('Businesses', businessSchema);

@@ -19,6 +19,7 @@ export default defineConfig({
 	plugins: [
 		VueRouter({
 			routesFolder: 'src/views',
+			logs: true,
 		}),
 		vue(),
         vueDevTools(),

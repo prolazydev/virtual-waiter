@@ -1,7 +1,9 @@
-export const defaultFormData = (id: string, email?: string) => {
+import type { CreateBusinessModel } from '@/types/models/business';
+
+export const defaultFormData = (id: string, email?: string): CreateBusinessModel => {
 	return {
 		userId: id,
-		name: '',
+		displayName: '',
 		email: '',
 		userEmail: email ?? '',
 		phone: '',
