@@ -39,7 +39,7 @@
 					class="w-full h-full flex gap-7"
 				>
 					<div class="w-full flex flex-col gap-3">
-						<div class="w-w flex flex-col">
+						<div class="w-full flex flex-col gap-2">
 							<label for="product-name">Name</label>
 							<input 
 								v-model="productData.name"
@@ -50,7 +50,7 @@
 								:disabled="!selectedCreateProductBusiness"
 							/>
 						</div>
-						<div class="w-full flex flex-col">
+						<div class="w-full flex flex-col gap-2">
 							<label for="product-price">Price</label>
 							<input 
 								id="product-price" 
@@ -72,31 +72,72 @@
 						</div>
 
 						<DebounceSearch
-							v-model="productData.categoryId"
+							v-model="productData.categoryDisplayName"
 							:debounce-delay="500"
 							@debounce-fn="debounceCategorySearch"
 							input-type="text"
 							id="productCategoryList"
 							label="Category"
 							placeholder="Beverages, Food, etc."
-							input-class="form-input w-64"
+							input-class="form-input product-category-input"
 						>
 							<template #bottom>
-								<ul :class="{ 'show-search-results': true }" 
+								<ul 
+									:class="{ 'show-search-results': searchResults && searchResults.length > 0 }"
 									class="search-result" 
 								>
 									<li v-for="item in searchResults" :key="item._id">
 										<button 
-											@click="productData.categoryId = item._id"
-											class="capitalize text-start"
+											@click="selectProductCategory(item._id, item.name)"
+											class=" text-start"
 											type="button" 
+											:title="`${item.name} - ${item.description}`"
 										> 
-											{{ item.name }}
+											<div class="flex flex-col">
+												<span>{{ item.name }}</span>
+												<div class="text-sm text-gray-500">{{ item.description }}</div>
+											</div>
 										</button>
 									</li>
 								</ul>
 							</template>
 						</DebounceSearch>
+
+						
+						<div class="flex flex-col gap-2 relative">
+							<!-- productDietaryInformation -->
+							<label for="productDietaryInformation">Dietary Information</label>
+							<ul class="relative">
+								<li class="flex gap-2 items-center" v-for="(item) in selectedProductDietaryOptions" :key="item">
+									<span>{{ item }}</span>
+									<LucideIcon @click="selectedProductDietaryOptions.pop()" name="X" :size="14" />
+								</li>
+								<li class="w-fit flex items-center ">
+									<!-- <input :disabled="selectedProductDietaryOptions.length < 3 ? false : true" @input="autosizeWidth" @keydown.backspace="handlePop" v-model="categoryInput" id="businessCategories" :placeholder="selectedProductDietaryOptions.length < 3 ? 'Business Categories' : 'Please remove a category to add a new one'" autocomplete="off" /> -->
+
+									<ul :class="{ 'show-business-categories-input': productDietaryResult.length > 0 }" class="business-categories-result">
+										<li 
+											v-for="(item, index) in productDietaryResult" :key="index" 
+											@click="" 
+											class="flex gap-1"
+										>
+											<p 
+												v-if="item.parentCategories[0]" 
+												class="capitalize"
+											>
+												{{ item.parentCategories[0] }} - 
+											</p> 
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<input 
+								class="form-input"
+								id="productDietaryInformation"
+								placeholder="test"
+								autocomplete="off"
+							/>
+						</div>
 					</div>
 
 					<div class="w-full">
@@ -180,6 +221,7 @@
 </template>
 
 <script lang="ts" setup>
+import productCategoryService from '@/services/CRUD/productCategory.service';
 import type { LoadingState } from '@/types';
 import type { Business } from '@/types/models/business';
 import type { ProductForm } from '@/types/models/product';
@@ -200,14 +242,17 @@ const productData = ref<ProductForm>({
 	businessId: '',
 	image: '',
 	categoryId: '',
+	categoryDisplayName: '',
 });
 const mediaData = ref('');
 
+const isProductCategorySelectedDebounce = ref(false);
+const searchResults = ref<{ _id:string, name:string, description:string }[]>([]);
+
+const selectedProductDietaryOptions = ref<string[]>([]);
+const productDietaryResult = ref<{ name: string, parentCategories: string[] }[]>([]);
 const loadingState = ref<LoadingState>('idle');
 
-const isProductCategorySelectedDebounce = ref(false);
-
-const searchResults = ref<{ _id:string, name:string, description:string }[]>([]);
 
 const editFormState = computed(() => 
     (state: LoadingState | 'edit' | 'preview') => {
@@ -245,17 +290,18 @@ const debounceCategorySearch = async (searchQuery: string) => {
 		return;
 	}
 	try {
-		const { addProduct } = productsService();
-		// product_category
-		loader.startLoader();
+
+		// const { addProduct } = productsService();
+		// // product_category
+		// loader.startLoader();
 		
-		const { response, data } = await addProduct(productData.value);
+		// const { response, data } = await addProduct(productData.value);
 
-		console.log(data.value);
+		// console.log(data.value);
 
-		if (!response.value?.ok) {
-			throw new Error('Failed to fetch location data');
-		}
+		// if (!response.value?.ok) {
+		// 	throw new Error('Failed to fetch location data');
+		// }
 		// searchResults.value = await res.json();
 		// console.log(searchResults.value);
 	} catch (error) {
@@ -269,8 +315,36 @@ const selectBusiness = async (businessId: string) => {
 	selectedCreateProductBusiness.value = businessId;
 	productData.value.businessId = businessId;
 
-	await debounceCategorySearch('');
+	try {
+		loader.startLoader();
+		const { getAllProductCategories } = productCategoryService();
+		const { response, data } = await getAllProductCategories();
+
+		console.log(data.value);
+		if (response.value?.ok) {
+			searchResults.value = data.value!;
+		}
+
+	} catch (error) {
+		console.error('Failed to fetch product categories:', error);	
+	} finally {
+		loader.finishLoader();
+	}
+
+	// await debounceCategorySearch('');
 }
+
+const selectProductCategory = async (categoryId: string, categoryDisplayName: string) => {
+	productData.value.categoryId = categoryId;
+	productData.value.categoryDisplayName = categoryDisplayName;
+	isProductCategorySelectedDebounce.value = true;
+	
+}
+
+// const handlePop = () => {
+// 	if (categoryInput.value.length === 0 && selectedBusinessCategories.value.length > 0)
+// 		selectedBusinessCategories.value.pop();
+// };
 
 const closeDialog = (dialogElement: string) => {
 	if (isDialogClosed(dialogElement)) return;
@@ -292,9 +366,35 @@ const handleFileUpload = (e: Event) => {
     }
 }
 
+const autosizeWidth = async (e: Event | HTMLTextAreaElement) => {
+	if (e instanceof Event) {
+		const length = (e.target as HTMLInputElement).value.length;
+
+		(e.target as HTMLInputElement).style.width = `${Math.max(20, length + 3)}ch`;
+
+	} else
+		e.style.width = Math.max(20, e.value.length + 3) + 'ch';
+
+	// await debounceSearchCategories('');
+};
+
 const parseBase64Image = (e: string) => {
     return e.startsWith('data') ? e : `data:image/png;base64,${e}`;
 }
+
+// const formatText = (name: string) => {
+// 	const index = name.toLowerCase().indexOf(categoryInput.value.toLowerCase());
+
+// 	if (index !== -1) {
+// 		const before = name.substring(0, index);
+// 		const match = name.substring(index, index + categoryInput.value.length);
+// 		const after = name.substring(index + categoryInput.value.length);
+// 		return `${before}<span style="font-weight: bold;">${match}</span>${after}`;
+// 	}
+
+// 	// If the query is not found, return the original name
+// 	return name;
+// };
 </script>
 
 <style>
@@ -352,15 +452,15 @@ const parseBase64Image = (e: string) => {
 
 /* DEBOUNCE */
 .debounce-search-input ul {
-	@apply 	h-fit p-2 flex flex-wrap gap-2 border-2 border-[#1b1b1b] bg-transparent transition-[border]
+	@apply 	h-fit p-2 flex gap-2 border-2 border-[#1b1b1b] transition-[border]
 			focus:outline-none focus:border-b-rose-600 
 	;
 }
 
 .search-result {
-	@apply	max-h-64 flex flex-col flex-nowrap gap-0 bg-white shadow-lg absolute transition-all duration-300
-            top-[calc(100%-3rem)] -left-[0.15rem] opacity-0 pointer-events-none 
-            overflow-hidden overflow-y-scroll z-[500]
+	@apply	max-h-64 w-full flex flex-col flex-nowrap bg-white shadow-lg absolute transition-all duration-300
+            top-[calc(100%-3rem)] opacity-0 pointer-events-none 
+            overflow-x-hidden overflow-y-scroll z-[500]
 	;
 }
 
@@ -378,13 +478,17 @@ const parseBase64Image = (e: string) => {
 	;
 }
 
-.show-search-results {
-	@apply  opacity-100 pointer-events-auto top-[calc(100%+0.75rem)]
-	; 
-}
-
 .debounce-search-input > input:focus + .show-business-categories-input {
     @apply  opacity-100 pointer-events-auto top-[calc(100%+0.75rem)] 
+	;
+}
+
+.product-category-input {
+	@apply w-full
+}
+
+.product-category-input:focus + .show-search-results, .search-result:hover {
+	@apply  opacity-100 pointer-events-auto top-[calc(100%+0.75rem)] 
 	;
 }
 

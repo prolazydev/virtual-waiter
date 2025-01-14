@@ -35,6 +35,7 @@ export const registerProductCategory = requestHandler<ProductCategory>(async (re
 export const getAllProductCategories = requestHandler(async (req, res) => {
     try {
         const productCategories = await findAllProductCategories();
+		console.log(productCategories);
         respond(res, StatusCodes.OK, Message.SuccessRead, productCategories);
     } catch (error) {
         handleError(res, error);

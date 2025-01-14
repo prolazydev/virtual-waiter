@@ -8,7 +8,7 @@ export default () => {
         await myFetch<ProductCategory>(`product_category/name/${name}`);
 
     const getAllProductCategories = async (fields: string[] = []) => 
-        await myFetch<ProductCategory[]>(`product_category${setupFields(fields)}`);
+        await myFetch<ProductCategory[]>(`product_category`);
 
     const updateProductCategory = async (id: string, category: Partial<ProductCategory>) => 
         await myFetch<ProductCategory>(

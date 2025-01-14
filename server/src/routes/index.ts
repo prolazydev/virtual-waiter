@@ -7,6 +7,7 @@ import userRouter from './user.router';
 import businessRouter from './business.router';
 import businessCategoryRouter from './businessCategory.router';
 import productRouter from './products.router';
+import productCategoryRouter from './productCategory.router';
 
 /**
  * Registers all the routes and middlewares for the respective routes
@@ -20,6 +21,7 @@ export default (router: express.Router): express.Router => {
 	businessCategoryRouter(router, [ isAuthenticated, isAdmin ]);
 
 	productRouter(router, [ isAuthenticated ]);
+	productCategoryRouter(router, [ isAuthenticated ]);
 
 	return router;
 };
