@@ -1,12 +1,13 @@
+import { ONLINE_MODE } from '@/utils/constants';
 import { createClient, RedisClientType, SetOptions } from 'redis';
 
-console.log('online mode:', process.env.ONLINE_MODE)
+console.log('online mode:', ONLINE_MODE)
 
 let retries = 1;
 const maxRetries = 1000;
 let redisClient: RedisClientType;
 
-if (process.env.ONLINE_MODE === 'on') {
+if (ONLINE_MODE === 'on') {
 	console.log('Using online Redis Client');
 	redisClient = createClient({
 		username: 'default',

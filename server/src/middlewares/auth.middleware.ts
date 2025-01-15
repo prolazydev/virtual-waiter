@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { NextFunction, Response, type CookieOptions } from 'express';
 
-import { ACCESS_TOKEN_DURATION } from '@/utils/constants';
+import { ACCESS_TOKEN_DURATION, ONLINE_MODE } from '@/utils/constants';
 import { findUserByEmail } from '@/services/CRUD/user.service';
 import { UserResult, MyRequest } from '@/types';
 import { Message } from '@/utils/common/ServerResponseMessages';
@@ -57,8 +57,10 @@ export const isAuthenticated = requestHandler(async (req, res, next) => {
 				maxAge: refreshToken!.rememberMe ? 30 * 24 * 1 * 60 * 60 * 1000 : 5 * 60 * 1000, // 30d or 5m,
 				httpOnly: true,
 				secure: true, 
+				domain: ONLINE_MODE === 'on' ? 'app.github.dev' : 'localhost',
+				path: '/',              // Ensures the cookie is sent for all paths
+				sameSite: 'none',       // Allows the cookie to be sent in cross-origin requests
 				// secure: NODE_ENV === 'production', // leave to false in development
-				sameSite: 'none',
 				signed: true,
 			};
 			res.cookie('accessToken', newAccessToken, cookieOptions);

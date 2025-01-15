@@ -18,4 +18,5 @@ export type ProductForm = {
 	image: string;
 	categoryId: string;
 	categoryDisplayName: string;
+    dietaryInformation: string[];
 }

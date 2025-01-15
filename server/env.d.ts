@@ -35,6 +35,7 @@ declare global {
 
 			// Online Only settings
 			ONLINE_MODE: string,
+			NGROK_TOKEN: string,
 		}
 	}
 }

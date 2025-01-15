@@ -2,14 +2,14 @@ import crypto from 'crypto';
 import { CookieOptions, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import { LoginRequest, RegisterRequest, UpdatePasswordRequest, UserResult, type LoginWithUsernameRequest } from '@/types';
+import { LoginRequest, MyRequest, RegisterRequest, UpdatePasswordRequest, UserResult, type LoginWithUsernameRequest } from '@/types';
 
 import { requestHandler } from '@/utils/common/asyncErrorHandler';
 import { Message } from '@/utils/common/ServerResponseMessages';
 import { randomSalt, passwordMatch, signToken } from '@/utils/crypto';
 import { sendEmail } from '@/utils/email';
 import { respond } from '@/utils/common/http';
-import { REFRESH_TOKEN_DURATION, ACCESS_TOKEN_DURATION, REDIS_REFRESH_TOKEN_EXPIRY_TIME, ACCESS_TOKEN_DURATION_EXTENDED, REFRESH_TOKEN_DURATION_EXTENDED, NODE_ENV, REDIS_REFRESH_TOKEN_EXPIRY_TIME_EXTENDED, SECRET } from '@/utils/constants';
+import { REFRESH_TOKEN_DURATION, ACCESS_TOKEN_DURATION, REDIS_REFRESH_TOKEN_EXPIRY_TIME, ACCESS_TOKEN_DURATION_EXTENDED, REFRESH_TOKEN_DURATION_EXTENDED, NODE_ENV, REDIS_REFRESH_TOKEN_EXPIRY_TIME_EXTENDED, SECRET, ONLINE_MODE } from '@/utils/constants';
 
 import { createConfirmAccountToken, createResetPasswordToken, createUser, findUserByCustomQuery, findUserByEmail, findUserById, userExists } from '@/services/CRUD/user.service';
 import { rDel, rExists, rSet } from '@/services/redis.service';
@@ -107,7 +107,7 @@ export const loginWithEmail = requestHandler<LoginRequest>(async (req, res) => {
 		roles: user.auth!.roles,
 	};
 
-	const accessToken = await _tokenLoginUser(res, userObj, rememberMe);
+	const accessToken = await _tokenLoginUser(req, res, userObj, rememberMe);
 	if ( !accessToken )
 		return respond(res, StatusCodes.INTERNAL_SERVER_ERROR, Message.JWTError);
 
@@ -136,7 +136,7 @@ export const loginWithUsername = requestHandler<LoginWithUsernameRequest>(async 
 			roles: user.auth!.roles,
 		};
 
-		const accessToken = await _tokenLoginUser(res, userObj, rememberMe);
+		const accessToken = await _tokenLoginUser(req, res, userObj, rememberMe);
 		if ( !accessToken )
 			return respond(res, StatusCodes.INTERNAL_SERVER_ERROR, Message.JWTError);
 
@@ -309,7 +309,7 @@ export const resetPassword = requestHandler(async (req, res) => {
 		username: user.username,
 		roles: user.auth!.roles,
 	};
-	const accessToken = await _tokenLoginUser(res, userObj);
+	const accessToken = await _tokenLoginUser(req, res, userObj);
 	if ( !accessToken )
 		return respond(res, StatusCodes.UNAUTHORIZED, Message.JWTTokenError);
 
@@ -378,7 +378,7 @@ export const verifyAccount = requestHandler(async (req, res) => {
 /**
  * Sets the users credentials in cookies and redis
  */
-async function _tokenLoginUser(res: Response, userObj: UserResult, rememberMe: boolean = false) {
+async function _tokenLoginUser(req: Request | MyRequest, res: Response, userObj: UserResult, rememberMe: boolean = false) {
 	const accessToken = signToken(userObj, { expiresIn: rememberMe ? ACCESS_TOKEN_DURATION_EXTENDED : ACCESS_TOKEN_DURATION, algorithm: 'RS256' });
 	
 	userObj.rememberMe = rememberMe;
@@ -400,13 +400,20 @@ async function _tokenLoginUser(res: Response, userObj: UserResult, rememberMe: b
 		return respond(res, StatusCodes.INTERNAL_SERVER_ERROR, Message.DatabaseError);
 	}
 
+	console.log('ONLINE_MODE: ', ONLINE_MODE);
+	console.log('req.headers.origin: ', req.headers.origin);
+	console.log('formatted: ', req.headers.origin.split('://')[1]);
+	// ee6a-20-61-126-209.ngrok-free.app
+	// https://stunning-palm-tree-xpj9j4jwg662vw7q-5173.app.github.dev/
 	const cookieOptions: CookieOptions = {
 		// maxAge: 10000, // 10s, for testing
 		maxAge: rememberMe ? 30 * 24 * 1 * 60 * 60 * 1000 : 5 * 60 * 1000, // 30d or 5m,
 		httpOnly: true,
 		secure: true, 
+		// domain: ONLINE_MODE === 'on' ? req.headers.origin.split('://')[1] : 'localhost',
+		path: '/',              // Ensures the cookie is sent for all paths
+		sameSite: 'none',       // Allows the cookie to be sent in cross-origin requests
 		// secure: NODE_ENV === 'production', // leave to false in development
-		sameSite: 'none',
 		signed: true,
 	};
 	if (NODE_ENV === 'production') cookieOptions.secure = true;

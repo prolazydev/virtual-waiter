@@ -132,7 +132,7 @@ defineProps<{
 	--shadow-color: hsla(0, 0%, 0%, 0.075);
 }
 
-.business-categories-input {
+.product-dietary-information-input {
 	@apply max-w-60 
 }
 
@@ -156,14 +156,14 @@ defineProps<{
 	width: 100% !important;
 }
 
-.business-categories-input .business-categories-result {
+.business-categories-input .product-dietary-information-result {
 	@apply	max-h-64 flex flex-col flex-nowrap gap-0 shadow-lg z-10
 			transition-all duration-300
 			opacity-0 pointer-events-none 
 			absolute top-[calc(100%-3rem)] -left-[0.15rem] bg-white overflow-hidden overflow-y-scroll
 }
 
-.business-categories-input .show-business-categories-input {
+.business-categories-input .show-product-dietary-information-input {
 	@apply 	hover:top-[calc(100%+0.75rem)] hover:opacity-100 hover:pointer-events-auto
 	;
 }

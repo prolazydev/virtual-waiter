@@ -981,7 +981,7 @@ const handleEdit = async (dialogElement: string, prop: BusinessFormFieldKeys | B
    ;
 } */
 
-.business-categories-input svg {
+.product-dietary-information-input svg {
 	@apply  cursor-pointer stroke-2 text-gray-600 hover:text-black
 	;
 }
@@ -998,14 +998,14 @@ const handleEdit = async (dialogElement: string, prop: BusinessFormFieldKeys | B
 	width: 100% !important;
 }
 
-.business-categories-input .business-categories-result {
+.business-categories-input .product-dietary-information-result {
 	@apply	max-h-64 flex flex-col flex-nowrap gap-0 bg-white shadow-lg absolute transition-all duration-300
             top-[calc(100%-3rem)] -left-[0.15rem] opacity-0 pointer-events-none 
             overflow-hidden overflow-y-scroll z-[500]
 	;
 }
 
-.business-categories-input > input:focus + .show-business-categories-input {
+.business-categories-input > input:focus + .show-product-dietary-information-input {
     @apply  opacity-100 pointer-events-auto top-[calc(100%+0.75rem)] 
 	;
 }

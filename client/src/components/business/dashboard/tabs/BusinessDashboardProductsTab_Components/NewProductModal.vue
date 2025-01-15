@@ -104,19 +104,24 @@
 						</DebounceSearch>
 
 						
-						<div class="flex flex-col gap-2 relative">
+						<div class="product-dietary-information-input relative flex flex-col gap-2">
 							<!-- productDietaryInformation -->
 							<label for="productDietaryInformation">Dietary Information</label>
 							<ul class="relative">
-								<li class="flex gap-2 items-center" v-for="(item) in selectedProductDietaryOptions" :key="item">
-									<span>{{ item }}</span>
+								<li class="flex gap-2 items-center" v-for="(item) in selectedProductDietaryOptions" :key="item.value">
+									<span>{{ item.label	 }}</span>
 									<LucideIcon @click="selectedProductDietaryOptions.pop()" name="X" :size="14" />
 								</li>
 								<li class="w-fit flex items-center ">
-									<!-- <input :disabled="selectedProductDietaryOptions.length < 3 ? false : true" @input="autosizeWidth" @keydown.backspace="handlePop" v-model="categoryInput" id="businessCategories" :placeholder="selectedProductDietaryOptions.length < 3 ? 'Business Categories' : 'Please remove a category to add a new one'" autocomplete="off" /> -->
+									<input :disabled="selectedProductDietaryOptions.length < 3 ? false : true" @input="autosizeWidth" @keydown.backspace="handlePop()" v-model="productData.dietaryInformation" id="businessCategories" :placeholder="selectedProductDietaryOptions.length < 3 ? 'Business Categories' : 'Please remove a category to add a new one'" autocomplete="off" />
 
-									<ul :class="{ 'show-business-categories-input': productDietaryResult.length > 0 }" class="business-categories-result">
-										<li 
+									<ul :class="{ 'show-product-dietary-information-input': productDietaryResult.length > 0 }" class="product-dietary-information-result">
+										<ul :class="{ 'show-business-categories-input': productDietaryResult.length > 0 }" class="business-categories-result">
+											<li v-for="(item, index) in productDietaryResult" :key="index" @click="addDietaryInformation(item.value)" class="flex gap-1">
+												<p class="capitalize">{{ item.value }} - </p> <span v-html="formatText(item.label)"></span>
+											</li>
+										</ul>
+										<!-- <li 
 											v-for="(item, index) in productDietaryResult" :key="index" 
 											@click="" 
 											class="flex gap-1"
@@ -127,7 +132,7 @@
 											>
 												{{ item.parentCategories[0] }} - 
 											</p> 
-										</li>
+										</li> -->
 									</ul>
 								</li>
 							</ul>
@@ -221,6 +226,7 @@
 </template>
 
 <script lang="ts" setup>
+import { productDietaryInformation } from '@/constants/business/dashboard/product';
 import productCategoryService from '@/services/CRUD/productCategory.service';
 import type { LoadingState } from '@/types';
 import type { Business } from '@/types/models/business';
@@ -243,14 +249,15 @@ const productData = ref<ProductForm>({
 	image: '',
 	categoryId: '',
 	categoryDisplayName: '',
+	dietaryInformation: [],
 });
 const mediaData = ref('');
 
 const isProductCategorySelectedDebounce = ref(false);
 const searchResults = ref<{ _id:string, name:string, description:string }[]>([]);
 
-const selectedProductDietaryOptions = ref<string[]>([]);
-const productDietaryResult = ref<{ name: string, parentCategories: string[] }[]>([]);
+const selectedProductDietaryOptions = ref<typeof productDietaryInformation>([]);
+const productDietaryResult = ref(productDietaryInformation);
 const loadingState = ref<LoadingState>('idle');
 
 
@@ -311,6 +318,13 @@ const debounceCategorySearch = async (searchQuery: string) => {
 	}
 }
 
+const addDietaryInformation = (name: string) => {
+	if (selectedProductDietaryOptions.value.length < 3) {
+		selectedProductDietaryOptions.value.push({ value: name, label: name });
+		productData.value.dietaryInformation.push(name);
+	}
+}
+
 const selectBusiness = async (businessId: string) => {
 	selectedCreateProductBusiness.value = businessId;
 	productData.value.businessId = businessId;
@@ -341,60 +355,77 @@ const selectProductCategory = async (categoryId: string, categoryDisplayName: st
 	
 }
 
-// const handlePop = () => {
-// 	if (categoryInput.value.length === 0 && selectedBusinessCategories.value.length > 0)
-// 		selectedBusinessCategories.value.pop();
-// };
+const handlePop = (popFor: 'dietaryInformation' = 'dietaryInformation') => {
+	if (popFor === 'dietaryInformation') {
+		selectedProductDietaryOptions.value.pop();
+	} 
+	// if (categoryInput.value.length === 0 && selectedBusinessCategories.value.length > 0)
+	// 	selectedBusinessCategories.value.pop();
+};
 
-const closeDialog = (dialogElement: string) => {
-	if (isDialogClosed(dialogElement)) return;
-	toggleDialog(dialogElement);
-}
+const formatText = (name: string) => {
+	const dietaryInfo = productData.value.dietaryInformation.join(' ').toLowerCase();
+	const index = name.toLowerCase().indexOf(dietaryInfo);
 
-const handleFileUpload = (e: Event) => {
-    const target = e.target as HTMLInputElement;
-    const file = target.files?.[0];
-    
-    if (file) {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
+	if (index !== -1) {
+		const before = name.substring(0, index);
+		const match = name.substring(index, index + dietaryInfo.length);
+		const after = name.substring(index + dietaryInfo.length);
+		return `${before}<span style="font-weight: bold;">${match}</span>${after}`;
+	}
 
-        reader.onload = () => {
-            mediaData.value = reader.result as string;
-            // mediaData.state = 'preview';
-        }
-    }
-}
+	// If the query is not found, return the original name
+	return name;
+};
 
 const autosizeWidth = async (e: Event | HTMLTextAreaElement) => {
 	if (e instanceof Event) {
 		const length = (e.target as HTMLInputElement).value.length;
-
+		
 		(e.target as HTMLInputElement).style.width = `${Math.max(20, length + 3)}ch`;
-
+		
 	} else
-		e.style.width = Math.max(20, e.value.length + 3) + 'ch';
-
+	e.style.width = Math.max(20, e.value.length + 3) + 'ch';
+	
 	// await debounceSearchCategories('');
 };
 
+const handleFileUpload = (e: Event) => {
+	const target = e.target as HTMLInputElement;
+	const file = target.files?.[0];
+	
+	if (file) {
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+		
+		reader.onload = () => {
+			mediaData.value = reader.result as string;
+			// mediaData.state = 'preview';
+		}
+	}
+}
+
 const parseBase64Image = (e: string) => {
-    return e.startsWith('data') ? e : `data:image/png;base64,${e}`;
+	return e.startsWith('data') ? e : `data:image/png;base64,${e}`;
 }
 
 // const formatText = (name: string) => {
-// 	const index = name.toLowerCase().indexOf(categoryInput.value.toLowerCase());
-
-// 	if (index !== -1) {
-// 		const before = name.substring(0, index);
-// 		const match = name.substring(index, index + categoryInput.value.length);
-// 		const after = name.substring(index + categoryInput.value.length);
-// 		return `${before}<span style="font-weight: bold;">${match}</span>${after}`;
-// 	}
-
-// 	// If the query is not found, return the original name
-// 	return name;
-// };
+	// 	const index = name.toLowerCase().indexOf(categoryInput.value.toLowerCase());
+	
+	// 	if (index !== -1) {
+		// 		const before = name.substring(0, index);
+		// 		const match = name.substring(index, index + categoryInput.value.length);
+		// 		const after = name.substring(index + categoryInput.value.length);
+		// 		return `${before}<span style="font-weight: bold;">${match}</span>${after}`;
+		// 	}
+		
+		// 	// If the query is not found, return the original name
+		// 	return name;
+		// };
+const closeDialog = (dialogElement: string) => {
+	if (isDialogClosed(dialogElement)) return;
+	toggleDialog(dialogElement);
+}
 </script>
 
 <style>
@@ -478,7 +509,7 @@ const parseBase64Image = (e: string) => {
 	;
 }
 
-.debounce-search-input > input:focus + .show-business-categories-input {
+.debounce-search-input > input:focus + .show-product-dietary-information-input {
     @apply  opacity-100 pointer-events-auto top-[calc(100%+0.75rem)] 
 	;
 }
@@ -490,6 +521,50 @@ const parseBase64Image = (e: string) => {
 .product-category-input:focus + .show-search-results, .search-result:hover {
 	@apply  opacity-100 pointer-events-auto top-[calc(100%+0.75rem)] 
 	;
+}
+
+.product-dietary-information-input {
+	@apply max-w-64 
+}
+
+.product-dietary-information-input svg {
+	@apply cursor-pointer stroke-2 text-gray-600 hover:text-black
+}
+
+.product-dietary-information-input ul {
+	@apply 	w-64 h-fit p-2 flex flex-wrap gap-2 border-2 border-[#1b1b1b] transition-[border]
+			focus:outline-none focus:border-b-rose-600 
+	;
+}
+
+.product-dietary-information-input ul li input, .product-dietary-information-input ul li textarea {
+	@apply w-[10ch] p-0 border-none resize-none overflow-hidden
+	;
+}
+
+#businessCategories {
+	@apply disabled:bg-transparent;
+	width: 100% !important;
+}
+
+.product-dietary-information-input .product-dietary-information-result {
+	@apply	max-h-64 flex flex-col flex-nowrap gap-0 shadow-lg
+			transition-all duration-300
+			opacity-0 pointer-events-none 
+			absolute top-[calc(100%-3rem)] -left-[0.15rem] bg-white overflow-hidden overflow-y-scroll z-[500]
+}
+
+.product-dietary-information-input .show-product-dietary-information-input {
+	@apply 	hover:top-[calc(100%+0.75rem)] hover:opacity-100 hover:pointer-events-auto
+	;
+}
+
+.product-dietary-information-input ul li input:focus + .show-product-dietary-information-input {
+	@apply 
+	top-[calc(100%+0.75rem)] opacity-100 pointer-events-auto
+}
+.product-dietary-information-input ul li input:disabled + .show-product-dietary-information-input {
+	@apply top-[calc(100%-3rem)] opacity-0 pointer-events-none 
 }
 
 </style>
