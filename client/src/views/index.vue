@@ -16,7 +16,7 @@
                         </div>
                     </li>
                     <li class="home-slide relative w-screen">
-                        <img class="object-cover w-screen slide-height object-[0px_-350px]"
+                        <img class="object-cover w-screen slide-height"
                             src="@/assets/general/pasta_sm.jpg" alt="spaghetti" />
                         <div class="absolute-center slide-2">
                             <div class="flex gap-2 items-baseline">
@@ -30,7 +30,7 @@
                         </div>
                     </li>
                     <li class="home-slide relative w-screen">
-                        <img class="object-cover w-screen slide-height object-[0px_-50px]"
+                        <img class="object-cover w-screen slide-height"
                             src="@/assets/general/beef_sm.jpg" alt="spaghetti" />
                         <div class="absolute-center slide-3">
                             <h1>Looking to show off your cuisine?</h1>

@@ -49,9 +49,12 @@ defineSlots<{
     footer: void;
 }>();
 
-const emit = defineEmits<{
-    toggleDialog: [];
-}>();
+// const emit = defineEmits<{
+//     toggleDialog: [];
+// 	toggleShow: Function;
+// 	toggleHide: null;
+// }>();
+const emit = defineEmits([ 'toggleDialog', 'toggleShow', 'toggleClose' ]);
 
 const props = withDefaults(defineProps<{
 	toggleClass?: string;
@@ -78,7 +81,10 @@ const handleToggleDialog = () => {
         ? `.${props._class.split(' ')[0]}` 
         : props.toggleClass,
         () => emit('toggleDialog'),
-        () => emit('toggleDialog')
+        () => {
+			emit('toggleDialog');
+			emit('toggleClose')
+		}
     )
 }
 

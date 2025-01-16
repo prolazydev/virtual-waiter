@@ -1,5 +1,10 @@
 <template>
-	<MyDialog _class="add-product-dialog p-7 overflow-hidden" title="Add a Product" size="xl">
+	<MyDialog 
+		@toggle-close="selectedCreateProductBusiness = ''"
+		_class="add-product-dialog p-7 overflow-hidden" 
+		title="Add a Product" 
+		size="xl"
+	>
 		<template #default>
 			<MyButton 
 				@click="toggleDialog('.add-product-dialog')"
@@ -80,6 +85,7 @@
 							label="Category"
 							placeholder="Beverages, Food, etc."
 							input-class="form-input product-category-input"
+							:disabled="!selectedCreateProductBusiness"
 						>
 							<template #bottom>
 								<ul 
@@ -113,9 +119,22 @@
 									<LucideIcon @click="selectedProductDietaryOptions.pop()" name="X" :size="14" />
 								</li>
 								<li class="w-fit flex items-center ">
-									<input :disabled="selectedProductDietaryOptions.length < 3 ? false : true" @input="autosizeWidth" @keydown.backspace="handlePop()" v-model="productData.dietaryInformation" id="businessCategories" :placeholder="selectedProductDietaryOptions.length < 3 ? 'Business Categories' : 'Please remove a category to add a new one'" autocomplete="off" />
+									<input 
+										:disabled="(selectedProductDietaryOptions.length < 3 && selectedCreateProductBusiness) ? false : true" 
+										@input="autosizeWidth" 
+										@keydown.backspace="handlePop()" 
+										v-model="productData.dietaryInformation" 
+										id="businessCategories" 
+										:placeholder="selectedProductDietaryOptions.length < 3 ? 'Business Categories' : 'Please remove a category to add a new one'" 
+										autocomplete="off" 
+									/>
 
-									<ul :class="{ 'show-product-dietary-information-input': productDietaryResult.length > 0 }" class="product-dietary-information-result">
+									<ul 
+										:class="{ 
+											'show-product-dietary-information-input': productDietaryResult.length > 0,
+											'bg-gray-200 cursor-not-allowed': !selectedCreateProductBusiness }" 
+										class="product-dietary-information-result"
+									>
 										<ul :class="{ 'show-business-categories-input': productDietaryResult.length > 0 }" class="business-categories-result">
 											<li v-for="(item, index) in productDietaryResult" :key="index" @click="addDietaryInformation(item.value)" class="flex gap-1">
 												<p class="capitalize">{{ item.value }} - </p> <span v-html="formatText(item.label)"></span>
