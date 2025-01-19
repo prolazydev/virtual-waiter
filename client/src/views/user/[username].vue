@@ -9,7 +9,7 @@
 <script lang="ts" setup>
 import { needAuthGuard } from '@/utils/guards/auth';
 
-// import { definePage } from 'unplugin-vue-router/runtime';
+import { definePage } from 'unplugin-vue-router/runtime';
 
 definePage({
 	meta: {

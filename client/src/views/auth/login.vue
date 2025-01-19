@@ -137,17 +137,23 @@ const handleLogin = async () => {
                 const redirect = (route.query.redirect ?? '/') as keyof RouteNamedMap;
 				await router.push(redirect);
 			}, 650);
-        } else {
-            requestStatus.value = 'Error';
-            setTimeout(() => requestStatus.value = 'Idle', 1250)
-            console.log(statusCode.value, error.value);
-        }
+        } else 
+			handleAuthError(statusCode.value ?? 500, error.value);
     } catch (error) {
-        console.log(error);
+		handleAuthError(500, error);
     } finally {
 		user.value.isAuthLoading = false;
 	}
 }
+// newFunction(statusCode, error);
+const handleAuthError = (statusCode: number, error: any) => {
+	console.log(error);
+	useTost('Error logging in!');
+	requestStatus.value = 'Error';
+	setTimeout(() => requestStatus.value = 'Idle', 1250)
+	console.log(statusCode, error);
+}
+
 </script>
 
 <style scoped>
