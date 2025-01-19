@@ -113,54 +113,51 @@
 						<div class="product-dietary-information-input relative flex flex-col gap-2">
 							<!-- productDietaryInformation -->
 							<label for="productDietaryInformation">Dietary Information</label>
-							<ul class="relative">
+							<ul 
+								:class="{ 'disabled-input': selectedProductDietaryOptions.length >= 3 || !selectedCreateProductBusiness }"
+								class="relative disabled:bg-black">
 								<li class="flex gap-2 items-center" v-for="(item) in selectedProductDietaryOptions" :key="item.value">
 									<span>{{ item.label	 }}</span>
 									<LucideIcon @click="selectedProductDietaryOptions.pop()" name="X" :size="14" />
 								</li>
+								<!-- TODO: keep list open when selecting multiple options, and use same generic classes for each input -->
 								<li class="w-fit flex items-center ">
 									<input 
-										:disabled="(selectedProductDietaryOptions.length < 3 && selectedCreateProductBusiness) ? false : true" 
+										v-model="dietaryInformationQuery"
 										@input="autosizeWidth" 
 										@keydown.backspace="handlePop()" 
-										v-model="productData.dietaryInformation" 
-										id="businessCategories" 
+										:disabled="(selectedProductDietaryOptions.length < 3 && selectedCreateProductBusiness) ? false : true" 
 										:placeholder="selectedProductDietaryOptions.length < 3 ? 'Business Categories' : 'Please remove a category to add a new one'" 
+										id="businessCategories" 
+										class="product-category-input"
 										autocomplete="off" 
 									/>
 
 									<ul 
 										:class="{ 
+											'show-search-results': productDietaryResult.length > 0,
+											'bg-gray-200 cursor-not-allowed': !selectedCreateProductBusiness }" 
+										class="product-dietary-information-result search-result"
+									>
+										<!-- TODO: filter out based on dietaryInformationQuery -->
+										<li v-for="(item, index) in productDietaryResult" :key="index" @click="addDietaryInformation(item.value)" class="flex gap-1">
+											<p class="capitalize">{{ item.value }} - </p> <span v-html="formatText(item.label)"></span>
+										</li>
+									</ul>
+									<!-- <ul 
+										:class="{ 
 											'show-product-dietary-information-input': productDietaryResult.length > 0,
 											'bg-gray-200 cursor-not-allowed': !selectedCreateProductBusiness }" 
 										class="product-dietary-information-result"
 									>
-										<ul :class="{ 'show-business-categories-input': productDietaryResult.length > 0 }" class="business-categories-result">
+										<ul :class="{ 'show-business-categories-input': productDietaryResult.length > 0 }" >
 											<li v-for="(item, index) in productDietaryResult" :key="index" @click="addDietaryInformation(item.value)" class="flex gap-1">
 												<p class="capitalize">{{ item.value }} - </p> <span v-html="formatText(item.label)"></span>
 											</li>
 										</ul>
-										<!-- <li 
-											v-for="(item, index) in productDietaryResult" :key="index" 
-											@click="" 
-											class="flex gap-1"
-										>
-											<p 
-												v-if="item.parentCategories[0]" 
-												class="capitalize"
-											>
-												{{ item.parentCategories[0] }} - 
-											</p> 
-										</li> -->
-									</ul>
+									</ul> -->
 								</li>
 							</ul>
-							<input 
-								class="form-input"
-								id="productDietaryInformation"
-								placeholder="test"
-								autocomplete="off"
-							/>
 						</div>
 					</div>
 
@@ -272,13 +269,14 @@ const productData = ref<ProductForm>({
 });
 const mediaData = ref('');
 
+const dietaryInformationQuery = ref('');
+
 const isProductCategorySelectedDebounce = ref(false);
 const searchResults = ref<{ _id:string, name:string, description:string }[]>([]);
 
 const selectedProductDietaryOptions = ref<typeof productDietaryInformation>([]);
 const productDietaryResult = ref(productDietaryInformation);
 const loadingState = ref<LoadingState>('idle');
-
 
 const editFormState = computed(() => 
     (state: LoadingState | 'edit' | 'preview') => {
@@ -383,7 +381,7 @@ const handlePop = (popFor: 'dietaryInformation' = 'dietaryInformation') => {
 };
 
 const formatText = (name: string) => {
-	const dietaryInfo = productData.value.dietaryInformation.join(' ').toLowerCase();
+	const dietaryInfo = dietaryInformationQuery.value.toLowerCase();
 	const index = name.toLowerCase().indexOf(dietaryInfo);
 
 	if (index !== -1) {
@@ -428,19 +426,6 @@ const parseBase64Image = (e: string) => {
 	return e.startsWith('data') ? e : `data:image/png;base64,${e}`;
 }
 
-// const formatText = (name: string) => {
-	// 	const index = name.toLowerCase().indexOf(categoryInput.value.toLowerCase());
-	
-	// 	if (index !== -1) {
-		// 		const before = name.substring(0, index);
-		// 		const match = name.substring(index, index + categoryInput.value.length);
-		// 		const after = name.substring(index + categoryInput.value.length);
-		// 		return `${before}<span style="font-weight: bold;">${match}</span>${after}`;
-		// 	}
-		
-		// 	// If the query is not found, return the original name
-		// 	return name;
-		// };
 const closeDialog = (dialogElement: string) => {
 	if (isDialogClosed(dialogElement)) return;
 	toggleDialog(dialogElement);
@@ -504,7 +489,12 @@ const closeDialog = (dialogElement: string) => {
 .debounce-search-input ul {
 	@apply 	h-fit p-2 flex gap-2 border-2 border-[#1b1b1b] transition-[border]
 			focus:outline-none focus:border-b-rose-600 
+			
 	;
+}
+
+.debounce-search-input ul:disabled {
+	@apply bg-black
 }
 
 .search-result {
@@ -584,6 +574,10 @@ const closeDialog = (dialogElement: string) => {
 }
 .product-dietary-information-input ul li input:disabled + .show-product-dietary-information-input {
 	@apply top-[calc(100%-3rem)] opacity-0 pointer-events-none 
+}
+
+.disabled-input, .disabled-input li, .disabled-input li input {
+	@apply bg-gray-200 cursor-not-allowed
 }
 
 </style>
