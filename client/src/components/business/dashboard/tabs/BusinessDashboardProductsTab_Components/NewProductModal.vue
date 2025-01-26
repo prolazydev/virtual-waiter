@@ -18,7 +18,7 @@
 		</template>
 
 		<template #body>
-			<div class="w-full mx-auto py-5 flex flex-col gap-3">
+			<div class="w-full mx-auto py-5 flex flex-col gap-3 overflow-y-scroll">
 				<!-- TODO: Make an input search to filter out the businesses on the selection box (client side) -->
 				<div class="w-fit relative z-10">
 					<button type="button" class="dropdown-btn" autofocus="false" aria-haspopup="menu">
@@ -110,57 +110,120 @@
 						</DebounceSearch>
 
 						
+						<!-- Product Dietary Information -->
 						<div class="product-dietary-information-input relative flex flex-col gap-2">
-							<!-- productDietaryInformation -->
 							<label for="productDietaryInformation">Dietary Information</label>
 							<ul 
+								class="relative"
 								:class="{ 'disabled-input': selectedProductDietaryOptions.length >= 3 || !selectedCreateProductBusiness }"
-								class="relative disabled:bg-black">
-								<li class="flex gap-2 items-center" v-for="(item) in selectedProductDietaryOptions" :key="item.value">
-									<span>{{ item.label	 }}</span>
-									<LucideIcon @click="selectedProductDietaryOptions.pop()" name="X" :size="14" />
-								</li>
-								<!-- TODO: keep list open when selecting multiple options, and use same generic classes for each input -->
+							>
+								<div 
+									v-if="selectedProductDietaryOptions.length > 0"
+									class="w-full flex flex-wrap gap-2"
+								>
+									<li 
+										v-for="(item, index) in selectedProductDietaryOptions" :key="item.value"
+										class="flex gap-2 items-center" 
+									>
+										<span>{{ item.label }}</span>
+										<LucideIcon 
+											@click="selectedProductDietaryOptions.splice(index, 1)" 
+											name="X" 
+											:size="14" 
+										/>
+									</li>
+								</div>
 								<li class="w-fit flex items-center ">
 									<input 
-										v-model="dietaryInformationQuery"
+										v-model="productDietaryQuery" 
 										@input="autosizeWidth" 
 										@keydown.backspace="handlePop()" 
-										:disabled="(selectedProductDietaryOptions.length < 3 && selectedCreateProductBusiness) ? false : true" 
+										:disabled="!selectedCreateProductBusiness || selectedProductDietaryOptions.length >= 3" 
 										:placeholder="selectedProductDietaryOptions.length < 3 ? 'Business Categories' : 'Please remove a category to add a new one'" 
 										id="businessCategories" 
-										class="product-category-input"
 										autocomplete="off" 
 									/>
 
 									<ul 
-										:class="{ 
-											'show-search-results': productDietaryResult.length > 0,
-											'bg-gray-200 cursor-not-allowed': !selectedCreateProductBusiness }" 
+										:class="{ 'show-product-dietary-information-input': productDietaryResult.length > 0,
+											'bg-gray-200 cursor-not-allowed': !selectedCreateProductBusiness 
+										}" 
 										class="product-dietary-information-result search-result"
 									>
-										<!-- TODO: filter out based on dietaryInformationQuery -->
-										<li v-for="(item, index) in productDietaryResult" :key="index" @click="addDietaryInformation(item.value)" class="flex gap-1">
-											<p class="capitalize">{{ item.value }} - </p> <span v-html="formatText(item.label)"></span>
+										<li 
+											v-for="(item, index) in productDietaryResult" :key="index"  
+											@click="addDietaryInformation(item.value)" 
+											class="flex gap-1"
+										>
+											<p class="capitalize">{{ item.label }}</p>
 										</li>
 									</ul>
-									<!-- <ul 
-										:class="{ 
-											'show-product-dietary-information-input': productDietaryResult.length > 0,
-											'bg-gray-200 cursor-not-allowed': !selectedCreateProductBusiness }" 
-										class="product-dietary-information-result"
-									>
-										<ul :class="{ 'show-business-categories-input': productDietaryResult.length > 0 }" >
-											<li v-for="(item, index) in productDietaryResult" :key="index" @click="addDietaryInformation(item.value)" class="flex gap-1">
-												<p class="capitalize">{{ item.value }} - </p> <span v-html="formatText(item.label)"></span>
-											</li>
-										</ul>
-									</ul> -->
 								</li>
 							</ul>
 						</div>
-					</div>
 
+						<!-- Preparation Time -->
+						<div class="w-full flex flex-col gap-2">
+							<label for="product-preparation-time">Preparation Time</label>
+							<input 
+								v-model="preparationTime"
+								:disabled="!selectedCreateProductBusiness"
+								id="product-preparation-time" 
+								type="number" 
+								placeholder="Preparation Time"
+								class="form-input "
+							/>
+						</div>
+
+						<!-- Availability (Day/Time selector to specify when the product is available (e.g., breakfast, lunch, dinner).) -->
+						<div class="w-full flex flex-col gap-2">
+							<label for="product-availability">Availability</label>
+							<select 
+								id="product-availability" 
+								class="form-input"
+								:disabled="!selectedCreateProductBusiness"
+							>
+								<option value="breakfast">Breakfast</option>
+								<option value="lunch">Lunch</option>
+								<option value="dinner">Dinner</option>
+								<option value="all-day">All Day</option>
+							</select>
+						</div>
+
+						<!-- Ingredients (Multi-line text box or dynamic list input to specify the main ingredients.) -->
+
+						<!-- Spiciness Level (Dropdown or slider (e.g., Mild, Medium, Spicy).) -->
+						<div class="w-full flex flex-col gap-2">
+							<label for="product-spiciness">Spiciness Level</label>
+							<select 
+								id="product-spiciness" 
+								class="form-input"
+								:disabled="!selectedCreateProductBusiness"
+							>
+								<option value="none">Not Spicy</option>
+								<option value="mild">Mild</option>
+								<option value="medium">Medium</option>
+								<option value="spicy">Spicy</option>
+								<option value="very-spicy">Very Spicy</option>
+							</select>
+						</div>
+
+						<!-- Allergen Information (Checkboxes or multiselect for allergens (e.g., Dairy, Nuts, Seafood)) -->
+
+						<!-- Takeout Packaging (Radio buttons or checkboxes for packaging options (e.g., Eco-Friendly, Standard, Premium)) -->
+
+						<!-- Product Tags (Tag-based input for custom tags (e.g., Signature Dish, Seasonal Special).) -->
+
+						<!-- Price Variations (	For different portion sizes or add-ons:
+													Small/Medium/Large
+													With or without specific add-ons (e.g., cheese, extra sauce).) -->
+						
+						<!-- Calories or Nutritional Information (Optional field to display calories or other nutritional details.) -->
+
+						<!-- Stock Availability (Numeric input to set the available stock for limited-time items.) -->
+
+						<!-- Combo or Add-On Options (Multiselect or checkboxes for adding this product to a combo meal or selecting compatible add-ons.) -->
+					</div>
 					<div class="w-full">
 						<MyDialog _class="setup-product-media-dialog p-5" size="lg">
 							<label for="setupProductMedia">Media</label>
@@ -211,12 +274,6 @@
 							</template>
 						</MyDialog>
 					</div>
-
-					<!-- <div class="w-1 h-full bg-black"></div>
-
-					<div class="w-full flex justify-center items-center">
-						
-					</div> -->
 				</div>
 			</div>
 		</template>
@@ -248,7 +305,7 @@ import type { LoadingState } from '@/types';
 import type { Business } from '@/types/models/business';
 import type { ProductForm } from '@/types/models/product';
 
-const props = defineProps<{
+defineProps<{
 	businesses: Business[];
 }>();
 
@@ -274,8 +331,12 @@ const dietaryInformationQuery = ref('');
 const isProductCategorySelectedDebounce = ref(false);
 const searchResults = ref<{ _id:string, name:string, description:string }[]>([]);
 
-const selectedProductDietaryOptions = ref<typeof productDietaryInformation>([]);
+const productDietaryQuery = ref('');
 const productDietaryResult = ref(productDietaryInformation);
+const selectedProductDietaryOptions = ref<typeof productDietaryInformation>([]);
+
+const preparationTime = ref<null | number>();
+
 const loadingState = ref<LoadingState>('idle');
 
 const editFormState = computed(() => 
@@ -434,6 +495,9 @@ const closeDialog = (dialogElement: string) => {
 
 <style>
 .add-product-dialog .dialog-body {
+	@apply h-full overflow-y-auto
+}
+.add-product-dialog .dialog-body {
 	@apply h-full
 }
 </style>
@@ -533,7 +597,7 @@ const closeDialog = (dialogElement: string) => {
 }
 
 .product-dietary-information-input {
-	@apply max-w-64 
+	@apply w-full
 }
 
 .product-dietary-information-input svg {
@@ -541,7 +605,7 @@ const closeDialog = (dialogElement: string) => {
 }
 
 .product-dietary-information-input ul {
-	@apply 	w-64 h-fit p-2 flex flex-wrap gap-2 border-2 border-[#1b1b1b] transition-[border]
+	@apply 	w-full h-fit p-2 flex flex-wrap gap-2 border-2 border-[#1b1b1b] transition-[border]
 			focus:outline-none focus:border-b-rose-600 
 	;
 }

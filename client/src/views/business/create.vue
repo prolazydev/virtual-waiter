@@ -72,7 +72,15 @@
 						<LucideIcon @click="selectedBusinessCategories.pop()" name="X" :size="14" />
 					</li>
 					<li class="w-fit flex items-center ">
-						<input :disabled="selectedBusinessCategories.length < 3 ? false : true" @input="autosizeWidth" @keydown.backspace="handlePop" v-model="categoryInput" id="businessCategories" :placeholder="selectedBusinessCategories.length < 3 ? 'Business Categories' : 'Please remove a category to add a new one'" autocomplete="off" />
+						<input 
+							v-model="categoryInput" 
+							@input="autosizeWidth" 
+							@keydown.backspace="handlePop" 
+							:disabled="selectedBusinessCategories.length < 3 ? false : true" 
+							:placeholder="selectedBusinessCategories.length < 3 ? 'Business Categories' : 'Please remove a category to add a new one'" 
+							id="businessCategories" 
+							autocomplete="off" 
+						/>
 
 						<ul :class="{ 'show-business-categories-input': categoriesResult.length > 0 }" class="business-categories-result">
 							<li v-for="(item, index) in categoriesResult" :key="index" @click="addCategory(item.name)" class="flex gap-1">
