@@ -430,7 +430,7 @@ const toggleIndeterminateState = (isIndeterminate: string, checked: boolean | un
 	@apply  w-64 p-2 border-2 border-[#1b1b1b] transition-[border]
 			focus:outline-none focus:border-b-rose-600 
 
-			read-only:bg-gray-200 read-only:cursor-not-allowed
+			read-only:cursor-not-allowed
 			focus:read-only:border-b-[#1b1b1b]
     ;
 }

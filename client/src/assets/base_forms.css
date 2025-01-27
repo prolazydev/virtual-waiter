@@ -63,9 +63,6 @@
 			read-only:cursor-not-allowed 
 } */
 
-.input-group svg:has(+ input:read-only) {
-	@apply stroke-gray-700
-}
 
 .input-group svg {
 	@apply 	z-10

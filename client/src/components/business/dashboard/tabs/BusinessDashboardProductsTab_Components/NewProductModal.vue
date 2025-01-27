@@ -644,4 +644,8 @@ const closeDialog = (dialogElement: string) => {
 	@apply bg-gray-200 cursor-not-allowed
 }
 
+#product-availability, #product-spiciness{
+	@apply bg-transparent disabled:bg-gray-200
+}
+
 </style>
