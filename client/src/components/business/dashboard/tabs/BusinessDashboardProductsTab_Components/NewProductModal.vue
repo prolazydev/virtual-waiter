@@ -55,6 +55,7 @@
 								:disabled="!selectedCreateProductBusiness"
 							/>
 						</div>
+						<!-- TOOD: Price, needs to be adjusted to optional multiple pricing points for product size ex: xs, s, m, l, xl... -->
 						<div class="w-full flex flex-col gap-2">
 							<label for="product-price">Price</label>
 							<input 
