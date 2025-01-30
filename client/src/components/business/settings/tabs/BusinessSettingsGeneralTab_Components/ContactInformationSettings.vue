@@ -6,7 +6,7 @@
                     <div class="flex flex-col text-start">
                         <h3>Contact Information</h3>
                         <!-- TODO: Maybe add a loading string indicator  -->
-                        <p class="">{{ businessEdit.email }}, {{ businessEdit.userEmail }}, {{ businessEdit.phone }}</p>
+                        <p class="text-gray-600 text-sm">{{ businessEdit.email }}, {{ businessEdit.userEmail }}, {{ businessEdit.phone }}</p>
                     </div>
                     <LucideIcon name="PencilLine" :stroke-width="2" />
                 </div>

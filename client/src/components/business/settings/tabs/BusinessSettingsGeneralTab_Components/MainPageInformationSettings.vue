@@ -4,7 +4,7 @@
             <div @click="customToggleDialog" class="px-2 flex justify-between items-center cursor-pointer">
                 <div class="flex flex-col text-start">
                     <h3>General Business Page</h3>
-                    <p>Access your Page's information</p>
+                    <p class="text-gray-600 text-sm">Access your Page's information</p>
                 </div>
                 <LucideIcon name="PencilLine" :stroke-width="2" />
             </div>
