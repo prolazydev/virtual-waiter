@@ -10,7 +10,7 @@ export const color_theme_green: StyleValue = {
 // #endregion
 
 export const read_only: StyleValue = {
-	"backgroundColor": "transparent",
+	"backgroundColor": "#e5e7eb",
 	"color": "#374151",
 	'cursor': 'not-allowed',
 	"&:focus": {

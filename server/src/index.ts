@@ -1,5 +1,3 @@
-import { $ } from "bun";
-
 import ngrok from 'ngrok'
 
 import { seed } from '@/../seed';
@@ -32,42 +30,8 @@ await initSocketIO(server);
 
 async function startNgrok() {
     try {
-        const test = await $`ngrok http --url=free-anemone-vocal.ngrok-free.app 3000`;
-
-        
-
-        // TODO: List endpoints
-        // Pass the authtoken programmatically if needed
-        // await ngrok.authtoken(NGROK_TOKEN);
-
-        // TODO: check if a connection already exists
-        // const existingUrl = ngrok.getUrl();
-        // const test = ngrok.getApi();
-        // if (existingUrl) {
-        //     console.log('Ngrok is already running at: ' + existingUrl);
-        //     return;
-        // }
-
-        // Start Ngrok on port 3000
-        // const url = await ngrok.connect(3000);
-        // const url = await ngrok.connect({
-        //     proto: 'http', // http|tcp|tls, defaults to http
-        //     addr: 3000, // port or network address, defaults to 80
-        //     // basic_auth: 'user:pwd', // http basic authentication for tunnel
-        //     subdomain: 'free-anemone-vocal.ngrok-free.app', // reserved tunnel name https://alex.ngrok.io
-            
-            
-        //     authtoken: NGROK_TOKEN, // your authtoken from ngrok.com
-        //     // region: 'eu', // one of ngrok regions (us, eu, au, ap, sa, jp, in), defaults to us
-        //     // configPath: '~/git/project/ngrok.yml', // custom path for ngrok config file
-        //     // binPath: path => path.replace('app.asar', 'app.asar.unpacked'), // custom binary path, eg for prod in electron
-        //     onStatusChange: status => {}, // 'closed' - connection is lost, 'connected' - reconnected
-        //     onLogEvent: data => {
-        //         console.log('Ngrok log event: ', data);
-        //     }, // returns stdout messages from ngrok process
-        // });
-        
-        console.log('Ngrok URL: ' + url);
+        await ngrok.authtoken(NGROK_TOKEN);
+        const url = await ngrok.connect(3000);
 
         await setNgrokUrlInEnv(url);
         console.log('Updated .env.online file with Ngrok URL');
