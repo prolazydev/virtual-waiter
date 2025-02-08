@@ -117,8 +117,8 @@
 						<div class="product-dietary-information-input relative flex flex-col gap-2">
 							<label for="productDietaryInformation">Dietary Information</label>
 							<ul 
-								class="relative"
 								:class="{ 'disabled-input': selectedProductDietaryOptions.length >= 3 || !selectedCreateProductBusiness }"
+								class="relative"
 							>
 								<div 
 									v-if="selectedProductDietaryOptions.length > 0"
@@ -143,13 +143,13 @@
 										@keydown.backspace="handlePop()" 
 										:disabled="!selectedCreateProductBusiness || selectedProductDietaryOptions.length >= 3" 
 										:placeholder="selectedProductDietaryOptions.length < 3 ? 'Vegan, Nut-Free...' : 'Please remove a category to add a new one'" 
-										id="businessCategories" 
+										id="productDietaryInformation" 
 										autocomplete="off" 
 									/>
 
 									<ul 
-										:class="{ 'show-product-dietary-information-input': productDietaryResult.length > 0,
-											'bg-gray-200 cursor-not-allowed': !selectedCreateProductBusiness 
+										:class="{ 	'show-product-dietary-information-input': productDietaryResult.length > 0,
+													'bg-gray-200 cursor-not-allowed': !selectedCreateProductBusiness 
 										}" 
 										class="product-dietary-information-result search-result"
 									>
@@ -180,11 +180,12 @@
 
 						<!-- Availability (Day/Time selector to specify when the product is available (e.g., breakfast, lunch, dinner).) -->
 						<div class="debounce-search-input">
-							<label for="product-availability">Availability</label>
+							<label for="productAvailability">Availability</label>
 							<input 
 								v-model="productData.availibility"
 								class="form-input form-dropdown-input"
 								placeholder="Breakfast, Lunch, Dinner, All Day"
+								id="productAvailability"
 								:disabled="!selectedCreateProductBusiness"
 							>
 							<ul
@@ -232,6 +233,58 @@
 						</div>
 
 						<!-- Allergen Information (Checkboxes or multiselect for allergens (e.g., Dairy, Nuts, Seafood)) -->
+						<div class="product-dietary-information-input relative flex flex-col gap-2">
+							<label for="productAllergenInformation">Allergen Information</label>
+							<ul
+								:class="{ 'disabled-input': selectedAllergenOptions.length >= 3 || !selectedCreateProductBusiness }"
+								class="relative"
+							>
+								<div
+									v-if="selectedAllergenOptions.length > 0"
+									class="w-full flex flex-wrap gap-2"
+								>
+									<li 
+										v-for="(item, index) in selectedAllergenOptions" :key="item"
+										class="flex gap-2 items-center" 
+									>
+										<span>{{ item }}</span>
+										<LucideIcon 
+											@click="selectedAllergenOptions.splice(index, 1)" 
+											name="X" 
+											:size="14" 
+										/>
+									</li>
+								</div>
+								<li class="w-full flex items-center ">
+										<!-- @input="autosizeWidth"  -->
+									<input 
+										v-model="productDietaryQuery" 
+										@keydown.backspace="handlePop()" 
+										:disabled="!selectedCreateProductBusiness || selectedAllergenOptions.length >= 3" 
+										:placeholder="selectedAllergenOptions.length < 3 ? 'Dairy, Nuts...' : 'Please remove a category to add a new one'"
+										class="w-full"
+										id="productAllergenInformation"
+										autocomplete="off"
+									/>
+									
+									<ul 
+										:class="{ 'show-product-dietary-information-input': productDietaryResult.length > 0,
+											'bg-gray-200 cursor-not-allowed': !selectedCreateProductBusiness 
+										}" 
+										class="product-dietary-information-result search-result"
+								
+									>
+										<li 
+											v-for="(item) in productAllergens" :key="item"  
+											@click="addAllergenInformation(item)" 
+											class="flex gap-1"
+										>
+											<p class="capitalize">{{ item }}</p>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
 
 						<!-- Takeout Packaging (Radio buttons or checkboxes for packaging options (e.g., Eco-Friendly, Standard, Premium)) -->
 
@@ -247,6 +300,7 @@
 
 						<!-- Combo or Add-On Options (Multiselect or checkboxes for adding this product to a combo meal or selecting compatible add-ons.) -->
 					</div>
+
 					<div class="w-full">
 						<MyDialog _class="setup-product-media-dialog p-5" size="lg">
 							<label for="setupProductMedia">Media</label>
@@ -324,7 +378,7 @@
 </template>
 
 <script lang="ts" setup>
-import { productDietaryInformation } from '@/constants/business/dashboard/product';
+import { productDietaryInformation, productAllergens } from '@/constants/business/dashboard/product';
 import productCategoryService from '@/services/CRUD/productCategory.service';
 import type { LoadingState } from '@/types';
 import type { Business } from '@/types/models/business';
@@ -350,6 +404,7 @@ const productData = ref<ProductForm>({
 	dietaryInformation: [],
 	availibility: '',
 	availibilityDisplayName: '',
+	allergens: [],
 });
 const mediaData = ref('');
 
@@ -363,6 +418,8 @@ const productDietaryResult = ref(productDietaryInformation);
 const selectedProductDietaryOptions = ref<typeof productDietaryInformation>([]);
 
 const preparationTime = ref<null | number>();
+
+const selectedAllergenOptions = ref<string[]>([]);
 
 const loadingState = ref<LoadingState>('idle');
 
@@ -430,6 +487,13 @@ const addDietaryInformation = (name: string) => {
 	}
 }
 
+const addAllergenInformation = (name: string) => {
+	if (selectedAllergenOptions.value.length < 3) {
+		selectedAllergenOptions.value.push(name);
+		productData.value.allergens.push(name);
+	}
+}
+
 const selectBusiness = async (businessId: string) => {
 	selectedCreateProductBusiness.value = businessId;
 	productData.value.businessId = businessId;
@@ -457,7 +521,6 @@ const selectProductCategory = async (categoryId: string, categoryDisplayName: st
 	productData.value.categoryId = categoryId;
 	productData.value.categoryDisplayName = categoryDisplayName;
 	isProductCategorySelectedDebounce.value = true;
-	
 }
 
 const setProductAvailability = (availability: string) => 

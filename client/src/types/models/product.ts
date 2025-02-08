@@ -21,4 +21,5 @@ export type ProductForm = {
     dietaryInformation: string[];
 	availibility: string;
     availibilityDisplayName: string;
+	allergens: string[];
 }
