@@ -46,3 +46,5 @@ client/bun.lockb
 client/vite.config.ts.timestamp-*.mjs
 server/bun.lockb
 client/.env.online
+client/auto-imports.d.ts
+client/components.d.ts
