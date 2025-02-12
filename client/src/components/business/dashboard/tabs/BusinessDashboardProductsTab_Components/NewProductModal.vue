@@ -51,17 +51,18 @@
 								id="product-name" 
 								type="text" 
 								placeholder="Name"
-								class="form-input "
+								class="form-input"
 								:disabled="!selectedCreateProductBusiness"
 							/>
 						</div>
+						<!-- TOOD: Price, needs to be adjusted to optional multiple pricing points for product size ex: xs, s, m, l, xl... -->
 						<div class="w-full flex flex-col gap-2">
 							<label for="product-price">Price</label>
 							<input 
 								id="product-price" 
 								type="number" 
-								placeholder="Price"
-								class="form-input "
+								placeholder="69 dolla"
+								class="form-input"
 								:disabled="!selectedCreateProductBusiness"
 							/>
 						</div>
@@ -69,8 +70,8 @@
 							<label for="product-description">Description</label>
 							<textarea 
 								id="product-description" 
-								placeholder="Description"
 								class="form-input overflow-y-scroll"
+								placeholder="Something cool about your product"
 								:disabled="!selectedCreateProductBusiness"
 								rows="5"
 							></textarea>
@@ -84,7 +85,7 @@
 							id="productCategoryList"
 							label="Category"
 							placeholder="Beverages, Food, etc."
-							input-class="form-input product-category-input"
+							input-class="form-input form-dropdown-input"
 							:disabled="!selectedCreateProductBusiness"
 						>
 							<template #bottom>
@@ -92,10 +93,12 @@
 									:class="{ 'show-search-results': searchResults && searchResults.length > 0 }"
 									class="search-result" 
 								>
-									<li v-for="item in searchResults" :key="item._id">
+									<li 
+										v-for="item in searchResults" :key="item._id"
+										@click="selectProductCategory(item._id, item.name)"
+									>
 										<button 
-											@click="selectProductCategory(item._id, item.name)"
-											class=" text-start"
+											class="text-start"
 											type="button" 
 											:title="`${item.name} - ${item.description}`"
 										> 
@@ -139,7 +142,7 @@
 										@input="autosizeWidth" 
 										@keydown.backspace="handlePop()" 
 										:disabled="!selectedCreateProductBusiness || selectedProductDietaryOptions.length >= 3" 
-										:placeholder="selectedProductDietaryOptions.length < 3 ? 'Business Categories' : 'Please remove a category to add a new one'" 
+										:placeholder="selectedProductDietaryOptions.length < 3 ? 'Vegan, Nut-Free...' : 'Please remove a category to add a new one'" 
 										id="businessCategories" 
 										autocomplete="off" 
 									/>
@@ -170,24 +173,44 @@
 								:disabled="!selectedCreateProductBusiness"
 								id="product-preparation-time" 
 								type="number" 
-								placeholder="Preparation Time"
+								placeholder="Preparation Time (in minutes)"
 								class="form-input "
 							/>
 						</div>
 
 						<!-- Availability (Day/Time selector to specify when the product is available (e.g., breakfast, lunch, dinner).) -->
-						<div class="w-full flex flex-col gap-2">
+						<div class="debounce-search-input">
 							<label for="product-availability">Availability</label>
-							<select 
-								id="product-availability" 
-								class="form-input"
+							<input 
+								v-model="productData.availibility"
+								class="form-input form-dropdown-input"
+								placeholder="Breakfast, Lunch, Dinner, All Day"
 								:disabled="!selectedCreateProductBusiness"
 							>
-								<option value="breakfast">Breakfast</option>
-								<option value="lunch">Lunch</option>
-								<option value="dinner">Dinner</option>
-								<option value="all-day">All Day</option>
-							</select>
+							<ul
+								class="search-result show-search-results" 
+							>
+								<li @click="setProductAvailability('breakfast')">
+									<button type="button">
+										Breakfast
+									</button>
+								</li>
+								<li @click="setProductAvailability('lunch')">
+									<button type="button">
+										Lunch
+									</button>
+								</li>
+								<li @click="setProductAvailability('dinner')">
+									<button type="button">
+										Dinner
+									</button>
+								</li>
+								<li @click="setProductAvailability('all-day')">
+									<button type="button">
+										All Day
+									</button>
+								</li>
+							</ul>
 						</div>
 
 						<!-- Ingredients (Multi-line text box or dynamic list input to specify the main ingredients.) -->
@@ -266,9 +289,11 @@
 
 							<template #footer>
 								<div class="w-full flex justify-end gap-5">
-									<MyButton>Save</MyButton>
 									<MyButton @click="toggleDialog(`.setup-product-media-dialog`)" style-type="hollow">
 										Cancel
+									</MyButton>
+									<MyButton>
+										Save
 									</MyButton>
 								</div>
 							</template>
@@ -323,6 +348,8 @@ const productData = ref<ProductForm>({
 	categoryId: '',
 	categoryDisplayName: '',
 	dietaryInformation: [],
+	availibility: '',
+	availibilityDisplayName: '',
 });
 const mediaData = ref('');
 
@@ -433,6 +460,9 @@ const selectProductCategory = async (categoryId: string, categoryDisplayName: st
 	
 }
 
+const setProductAvailability = (availability: string) => 
+	productData.value.availibilityDisplayName = availability;
+
 const handlePop = (popFor: 'dietaryInformation' = 'dietaryInformation') => {
 	if (popFor === 'dietaryInformation') {
 		selectedProductDietaryOptions.value.pop();
@@ -503,7 +533,6 @@ const closeDialog = (dialogElement: string) => {
 </style>
 
 <style scoped>
-
 .dropdown-btn, .dropdown-btn-user {
     @apply flex gap-1 items-center cursor-pointer
     ;
@@ -587,11 +616,11 @@ const closeDialog = (dialogElement: string) => {
 	;
 }
 
-.product-category-input {
-	@apply w-full
+.form-dropdown-input {
+	@apply 	w-full
 }
 
-.product-category-input:focus + .show-search-results, .search-result:hover {
+.form-dropdown-input:focus + .show-search-results, .search-result:hover {
 	@apply  opacity-100 pointer-events-auto top-[calc(100%+0.75rem)] 
 	;
 }
@@ -616,7 +645,6 @@ const closeDialog = (dialogElement: string) => {
 }
 
 #businessCategories {
-	@apply disabled:bg-transparent;
 	width: 100% !important;
 }
 
@@ -644,7 +672,7 @@ const closeDialog = (dialogElement: string) => {
 	@apply bg-gray-200 cursor-not-allowed
 }
 
-#product-availability, #product-spiciness{
+#product-availability, #product-spiciness {
 	@apply bg-transparent disabled:bg-gray-200
 }
 

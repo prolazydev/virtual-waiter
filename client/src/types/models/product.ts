@@ -19,4 +19,6 @@ export type ProductForm = {
 	categoryId: string;
 	categoryDisplayName: string;
     dietaryInformation: string[];
+	availibility: string;
+    availibilityDisplayName: string;
 }
