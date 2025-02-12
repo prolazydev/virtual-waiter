@@ -21,10 +21,27 @@ export default () => {
 		if (interval) 
 			clearInterval(interval);
 		
-		interval = setInterval(() => {
-			progress += 10;
-			progressBar.style.width = `${progress}%`;
-		}, 500);
+		const tick = () => {
+            let increment: number;
+
+            if (progress < 30) {
+                increment = Math.random() * 8 + 3.5; // Faster at start (5-15)
+            } else if (progress < 70) {
+                increment = Math.random() * 6 + 1.5; // Medium speed (2-8)
+            } else {
+                increment = Math.random() * 2 + 0.5; // Slower near end (0.5-2.5)
+            }
+
+            progress = Math.min(90, progress + increment);
+            progressBar.style.width = `${progress}%`;
+
+            if (progress < 90) {
+                const nextTick = Math.random() * 400 + 100; // Random interval between 100-500ms
+                interval = setTimeout(tick, nextTick);
+            }
+        };
+
+        tick();
 	};
 
 	const clearProgress = () => clearInterval(interval!);
@@ -46,7 +63,6 @@ export default () => {
                 // progress = 0;
                 progressBar.style.width = `0%`;
             }, 150);
-
         }, 500);
 	};
 

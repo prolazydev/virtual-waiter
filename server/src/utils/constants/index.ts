@@ -4,6 +4,7 @@
 export const 
 	ONLINE_MODE = process.env.ONLINE_MODE || 'off',
 	NGROK_TOKEN = process.env.NGROK_TOKEN || '',
+	NGROK_API_KEY = process.env.NGROK_API_KEY || '',
 	NODE_ENV = process.env.NODE_ENV || 'development',
 	PORT = parseInt(process.env.PORT!) || 3000,
 	MONGODB_CONNECTION_URI = process.env.MONGODB_CONNECTION_STRING || 'mongodb://127.0.0.1:27017/virtual-waiter',
