@@ -41,9 +41,9 @@
 				<!-- TODO: inputs here: name, price, description, tags,  -->
 				<div 
 					:class="{ 'opacity-75': !selectedCreateProductBusiness }"
-					class="w-full h-full flex gap-7"
+					class="w-full h-fit flex gap-7"
 				>
-					<div class="w-full flex flex-col gap-3">
+					<div class="w-full h-fit flex flex-col gap-3">
 						<div class="w-full flex flex-col gap-2">
 							<label for="product-name">Name</label>
 							<input 
@@ -55,7 +55,7 @@
 								:disabled="!selectedCreateProductBusiness"
 							/>
 						</div>
-						<!-- TOOD: Price, needs to be adjusted to optional multiple pricing points for product size ex: xs, s, m, l, xl... -->
+						<!-- TODO: Price, needs to be adjusted to optional multiple pricing points for product size ex: xs, s, m, l, xl... -->
 						<div class="w-full flex flex-col gap-2">
 							<label for="product-price">Price</label>
 							<input 
@@ -111,7 +111,6 @@
 								</ul>
 							</template>
 						</DebounceSearch>
-
 						
 						<!-- Product Dietary Information -->
 						<div class="product-dietary-information-input relative flex flex-col gap-2">
@@ -136,10 +135,9 @@
 										/>
 									</li>
 								</div>
-								<li class="w-fit flex items-center ">
+								<li class="w-full flex items-center">
 									<input 
 										v-model="productDietaryQuery" 
-										@input="autosizeWidth" 
 										@keydown.backspace="handlePop()" 
 										:disabled="!selectedCreateProductBusiness || selectedProductDietaryOptions.length >= 3" 
 										:placeholder="selectedProductDietaryOptions.length < 3 ? 'Vegan, Nut-Free...' : 'Please remove a category to add a new one'" 
@@ -307,7 +305,7 @@
 							<MyButton 
 								@click="toggleDialog(`.setup-product-media-dialog`)" 
 								style-type="hollow"
-								id="productMedia" 
+								id="setupProductMedia" 
 								class="form-button-1" 
 								type="button"
 								:disabled="!selectedCreateProductBusiness"
@@ -689,11 +687,11 @@ const closeDialog = (dialogElement: string) => {
 }
 
 .product-dietary-information-input {
-	@apply w-full
+	@apply 	w-full
 }
 
 .product-dietary-information-input svg {
-	@apply cursor-pointer stroke-2 text-gray-600 hover:text-black
+	@apply 	cursor-pointer stroke-2 text-gray-600 hover:text-black
 }
 
 .product-dietary-information-input ul {
@@ -703,8 +701,14 @@ const closeDialog = (dialogElement: string) => {
 }
 
 .product-dietary-information-input ul li input, .product-dietary-information-input ul li textarea {
-	@apply w-[10ch] p-0 border-none resize-none overflow-hidden
+	@apply 	w-full p-0 border-none resize-none overflow-hidden
+			outline-none focus:outline-none
 	;
+}
+
+.product-dietary-information-input:has(input:focus) > ul,
+.product-dietary-information-input:hover > ul {
+  	@apply border-b-rose-600
 }
 
 #businessCategories {
@@ -724,19 +728,18 @@ const closeDialog = (dialogElement: string) => {
 }
 
 .product-dietary-information-input ul li input:focus + .show-product-dietary-information-input {
-	@apply 
-	top-[calc(100%+0.75rem)] opacity-100 pointer-events-auto
+	@apply 	top-[calc(100%+0.75rem)] opacity-100 pointer-events-auto
 }
 .product-dietary-information-input ul li input:disabled + .show-product-dietary-information-input {
-	@apply top-[calc(100%-3rem)] opacity-0 pointer-events-none 
+	@apply 	top-[calc(100%-3rem)] opacity-0 pointer-events-none 
 }
 
 .disabled-input, .disabled-input li, .disabled-input li input {
-	@apply bg-gray-200 cursor-not-allowed
+	@apply 	bg-gray-200 cursor-not-allowed
 }
 
 #product-availability, #product-spiciness {
-	@apply bg-transparent disabled:bg-gray-200
+	@apply 	bg-transparent disabled:bg-gray-200
 }
 
 </style>

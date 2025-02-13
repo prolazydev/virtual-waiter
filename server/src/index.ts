@@ -7,9 +7,18 @@ import { createApp, initServer, initRouting } from '@/utils/server';
 import { initMiddlewares } from '@/middlewares';
 import { initSocketIO } from '@/sockets';
 import { initRedis } from '@/services/redis.service';
-import { startNgrok } from '@/utils/server/ngrok';
+// import { startNgrok } from '@/utils/server/ngrok';
 
 const app = createApp();
+
+console.log('online mode:', ONLINE_MODE)
+// Check for online switching
+if (ONLINE_MODE === 'on') {
+	// @ts-expect-error test
+	const { startNgrok } = import('@/utils/server/ngrok');
+	await startNgrok();
+}
+
 
 await initDb();
 await initRedis();
@@ -22,8 +31,3 @@ await seed();
 const server = initServer();
 
 await initSocketIO(server);
-
-// Check for online switching
-if (ONLINE_MODE === 'on') {
-    await startNgrok();
-}

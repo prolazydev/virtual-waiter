@@ -1,7 +1,6 @@
 import { ONLINE_MODE } from '@/utils/constants';
 import { createClient, RedisClientType, SetOptions } from 'redis';
 
-console.log('online mode:', ONLINE_MODE)
 
 let retries = 1;
 const maxRetries = 1000;

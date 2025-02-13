@@ -27,8 +27,9 @@ const _myFetch = createFetch({
 				// TODO: Handle error
 				console.error(`Unauthorized Response: ${error.response.status}`);
                 
-				if ( useAuth().isAuth() )
-					useUserStore().logoutUser();
+				useUserStore().logoutUser();
+				// TODO: Redirect to login page
+				
 			}
 			else 
 				console.error('Fetch Error:', error);
