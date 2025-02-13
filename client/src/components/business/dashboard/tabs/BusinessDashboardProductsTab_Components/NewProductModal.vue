@@ -300,7 +300,7 @@
 					</div>
 
 					<div class="w-full">
-						<MyDialog _class="setup-product-media-dialog p-5" size="lg">
+						<MyDialog class="gap-2" _class="setup-product-media-dialog p-5" size="lg">
 							<label for="setupProductMedia">Media</label>
 							<MyButton 
 								@click="toggleDialog(`.setup-product-media-dialog`)" 
