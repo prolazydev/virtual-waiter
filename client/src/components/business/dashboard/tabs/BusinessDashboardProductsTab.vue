@@ -3,33 +3,7 @@
 		<!-- TODO: Implement the products (needs to be able to switch between a list and a grid, all virtual) -->
 		<div class="products-main">
 			<div class="flex flex-col gap-2">
-				<div class="flex justify-between items-baseline">
-					<h2 class="text-2xl font-semibold">Products</h2>
-					<div class="relative">
-						<button type="button" class="dropdown-btn" aria-haspopup="menu">
-							Selected Business 
-							<span class="w-32 px-1 text-start border border-black overflow-hidden">
-								{{ selectedBusiness === 'All' ? selectedBusiness : businesses.find(b => b.username === selectedBusiness)?.displayName }}
-							</span>
-						</button>
-						<!-- TODO: Make an input search to filter out the businesses on the selection box (client side) -->
-						<ul class="dropdown-content p-2 right-0 top-0">
-							<li
-								@click="selectedBusiness = 'All'"
-								:class="{ 'font-semibold': selectedBusiness === 'All' }"
-							>
-								All
-							</li>
-							<li 
-								v-for="(item) in businesses" :key="item.username"
-								@click="selectedBusiness = item.username"
-								:class="{ 'font-semibold': selectedBusiness === item.username }"
-							>
-								{{ item.displayName }}
-							</li>
-						</ul>
-					</div>
-				</div>
+				<h2 class="text-2xl font-semibold">Products</h2>
 
 				<div class="product-section justify-between items-center">
 					<!-- TODO: Craete a reusable input component, with props: style-typec size (for size of input), color -->

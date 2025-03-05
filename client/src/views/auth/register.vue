@@ -258,7 +258,7 @@ const signUp = async () => {
 
 #submitButton {
     @apply  border-4 border-[#1b1b1b] bg-[#1b1b1b] text-white uppercase tracking-widest font-semibold relative overflow-hidden
-            transition-all duration-500
+            transition-all
             focus:outline-none
             focus-visible:border-b-rose-600
             active:border-b-white focus:duration-300

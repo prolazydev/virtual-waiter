@@ -10,9 +10,10 @@
         </ul>
         <form @submit.prevent="handleSearch" class="absolute-center flex items-center border-2 border-[#1b1b1b]">
             <div class="relative pl-2 pr-[0.625rem]">
-                <button type="button" class="dropdown-btn " aria-haspopup="menu">
+                <button type="button" class="dropdown-btn" aria-haspopup="menu">
                     <LucideIcon id="searchTypeIcon" class="flex margin-auto stroke-[#1b1b1b]" :name="searchType" :size="24" :strokeWidth=2 />
-                    <span class="arrow"></span>
+                    <LucideIcon class="arrow fill-current stroke-[#1b1b1b] rotate-90 transition-all duration-300" name="Play" :size="12" :strokeWidth=2 />
+                    <!-- <span class="arrow"></span> -->
                 </button>
                 <ul class="dropdown-content p-2 left-[-2px]">
                     <li @click.prevent="searchProps.searchType = 'general'"><p>General</p></li>
@@ -275,7 +276,7 @@ async function handleLogout() {
     @apply border-black visible opacity-100;
 } 
 .dropdown-btn:focus > .arrow {
-	@apply rotate-180 
+	@apply rotate-[270deg] 
 	;
     /* transform: rotate(180deg); */
 }
@@ -283,15 +284,11 @@ async function handleLogout() {
     @apply opacity-100 pointer-events-auto;
 }
 
-.arrow {
+/* .arrow {
 	@apply 	border-[5px] border-solid border-x-transparent border-t-black border-b-transparent 
 			origin-center transition-transform duration-300
 	;
-    /* border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 6px solid #000;
-    transition: transform ease-in-out 0.3s; */
-}
+} */
 
 .dropdown-content {
     @apply  flex flex-col gap-1 w-fit text-start border-2 border-[#1b1b1b] bg-white opacity-0 transition-all 

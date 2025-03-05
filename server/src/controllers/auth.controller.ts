@@ -66,7 +66,7 @@ export const register = requestHandler<RegisterRequest>(async (req, res) => {
 
 	// SEND EMAIL
 	// const confirmURL = `${req.protocol}://${req.get('host')}/api/confirm_account/${confirmAccountToken}`;
-	const confirmURL = `http://localhost:5173/confirm_account/${confirmAccountToken}`;
+	const confirmURL = `http://localhost:5173/confirm-account/${confirmAccountToken}`;
 	const message = `Welcome to the platform! Please confirm your account by clicking on the link: ${confirmURL}.\n\nThis confirmation link will be valid for only 1 day!\nIf you didn't create an account, please ignore this email!`;
 	console.log(message);
 	try {

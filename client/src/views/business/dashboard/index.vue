@@ -27,12 +27,37 @@
 					</div>
 				</div>
 			</div>
-            <!-- NOTE:  Needed out-in for the component to properly render because of the 
-                        potential race conditions on the component rendering trying to render 
-                        without the transition finishing 
-            -->
-			<!-- <Transition mode="in-out"> -->
-				<Suspense :timeout="0">
+			<div class="w-full flex flex-col gap-3">
+				<div v-if="isLoading">
+					loading...
+				</div>
+				<div v-else>
+					<div class="w-fit pt-4 relative">
+						<button type="button" class="dropdown-btn w-32 border-b-2 border-[#1b1b1b] font-semibold" id="selectedBusinessDropdownBtn" aria-haspopup="menu">
+							{{ businessStore.selectedBusiness === 'All' ? businessStore.selectedBusiness : businesses.find(b => b.username === businessStore.selectedBusiness)?.displayName }}
+							<LucideIcon name="Play" class="fill-current stroke-[#1b1b1b] rotate-90 transition-all duration-300" size="12"/>
+						</button>
+						<ul class="dropdown-content top-1 p-2 z-10">
+							<li
+								@click="businessStore.selectedBusiness = 'All'"
+								:class="{ 'font-semibold': businessStore.selectedBusiness === 'All' }"
+							>
+								All
+							</li>
+							<li 
+								v-for="(item) in businesses" :key="item.username"
+								@click="businessStore.selectedBusiness = item.username"
+								:class="{ 'font-semibold': businessStore.selectedBusiness === item.username }"
+							>
+								{{ item.displayName }}
+							</li>
+						</ul>
+					</div>
+				</div>
+				<Suspense 
+					:timeout="5000" 
+					:key="`suspense-${tab}`"
+				>
 					<template #default>
 						<component 
 							:is="componentTab" 
@@ -41,21 +66,22 @@
 						/>
 					</template>
 					<template #fallback>
-						<Loading :style="defaultLoadingStyle" />
+						<Loading :style="{
+							'height': 'calc(100vh - 317px)',
+						}" />
 					</template>
 				</Suspense>
-			<!-- </Transition> -->
+			</div>
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { definePage } from 'unplugin-vue-router/runtime';
+import type { Business, BusinessDashboardTabTitles } from '@/types/models/business';
 
-import type { BusinessDashboardTabTitles } from '@/types/models/business';
 import { tabs } from '@/constants/business/dashboard';
 import type { BreadcrumbNode } from '@/types/common';
-import { defaultLoadingStyle } from '@/constants/common/style';
 
 definePage({
     meta: {
@@ -66,9 +92,13 @@ definePage({
 });
 
 const { user, setTab } = useUserStore();
+const businessStore = useBusinessStore();
 const { addQueryParam } = useWebUtils();
 const loader = useLoader();
 
+const isLoading = ref(false);;
+
+const businesses = ref<Business[]>([]);
 const tab = ref<BusinessDashboardTabTitles>(initTab());
 addQueryParam('t', tab.value);
 
@@ -114,8 +144,9 @@ const componentTab = computed(() => {
         
 	} catch (error) {
         console.error(error);
+    } finally {
 		loader.finishLoader();
-    }
+	}
 });
 
 function initTab() {
@@ -128,6 +159,26 @@ function initTab() {
 		return user.lastBusinessDashboardTab ?? 'home';
 	}
 }
+
+const getAllBusinessesByOwner = async () => {
+	isLoading.value = true;
+	try {
+		const { getAllOwnedBusinesses } = businessService();
+		const { response, data } = await getAllOwnedBusinesses(['_id', 'displayName', 'username', ]);
+
+		if (response.value?.ok && data.value) {
+			businesses.value = data.value;
+		} else {
+			useTost('Error! Failed to get businesses');
+		}
+	} catch (error) {
+		console.error(error);
+	} finally {
+		isLoading.value = false;
+	}
+}
+
+getAllBusinessesByOwner();
 </script>
 
 <style scoped>
@@ -163,5 +214,38 @@ function initTab() {
 
 .router-link-exact-activ, .active-tab, .active-tab > svg { 
 	@apply font-semibold stroke-2
+}
+
+.dropdown-content {
+    @apply  w-full mt-0 flex flex-col gap-1 text-start border-2 border-[#1b1b1b] bg-white opacity-0 transition-all 
+            absolute top-12 shadow-lg
+            pointer-events-none hover:pointer-events-auto hover:opacity-100  
+}
+.dropdown-content:hover > li {
+    @apply opacity-100 pointer-events-auto;
+}
+
+.dropdown-content li {
+    @apply  px-1 py-1 relative bg-white cursor-pointer opacity-0 transition-all z-10
+            border-b-4 border-b-transparent 
+            pointer-events-none
+            hover:border-b-rose-600 
+    ;
+}
+
+.dropdown-btn, .dropdown-btn-user {
+    @apply px-1 flex gap-1 justify-between items-center cursor-pointer
+    ;
+}
+.dropdown-btn:focus + .dropdown-content, .dropdown-btn-user:focus + .dropdown-content {
+    @apply mt-2 border-black visible opacity-100;
+} 
+.dropdown-btn:focus > svg {
+	@apply rotate-[270deg] 
+	;
+    /* transform: rotate(180deg); */
+}
+.dropdown-btn:focus + .dropdown-content li, .dropdown-btn-user:focus + .dropdown-content li {
+    @apply opacity-100 pointer-events-auto;
 }
 </style>
