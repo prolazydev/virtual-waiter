@@ -176,14 +176,15 @@ async function handleLogout() {
 
 <style scoped>
 .header-main {
-    @apply  w-full mb-[87px] px-32 py-[1rem] flex text-2xl border-b border-b-[#1b1b1b] bg-[#f8f8f8]/75
-            fixed z-[9999]
+    @apply  w-full px-32 py-[1rem] flex text-2xl border-b border-b-[#1b1b1b] bg-[#f8f8f8]/75
+            fixed z-[9999] backdrop-blur-[12px] backdrop-brightness-[2.5] backdrop-grayscale-[0.33]
+			font-sans
     ;
 
-	margin-bottom: var(--header-height);
+	/* margin-bottom: var(--header-height); */
 	
-	backdrop-filter: blur(12px) brightness(2.5) grayscale(0.33);
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+	/* backdrop-filter: blur(12px) brightness(2.5) grayscale(0.33); */
+    /* font-family: 'Avenir', Helvetica, Arial, sans-serif; */
 }
 
 .main-logo, .main-logo-responsive {

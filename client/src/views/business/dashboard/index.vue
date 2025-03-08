@@ -66,8 +66,9 @@
 						/>
 					</template>
 					<template #fallback>
+						<!-- NOTE: Height of all heights, margins and paddings for header, footer and body -->
 						<Loading :style="{
-							'height': 'calc(100vh - 317px)',
+							'height': 'calc(100vh - 264px - 57px - 69px - 35px)',
 						}" />
 					</template>
 				</Suspense>
@@ -188,7 +189,7 @@ getAllBusinessesByOwner();
 }
 
 .dashboard {
-	@apply py-5 flex flex-col gap-20
+	@apply pt-1 pb-6 flex flex-col gap-20
 }
 
 .main-dashboard {
@@ -197,8 +198,8 @@ getAllBusinessesByOwner();
 
 .sidenav-main {
 	@apply 	w-64 min-w-64 flex flex-col gap-1
-			sticky top-[5.75rem] self-start
-		;
+			sticky top-20 self-start
+	;
 }
 
 .sidenav {
@@ -243,7 +244,6 @@ getAllBusinessesByOwner();
 .dropdown-btn:focus > svg {
 	@apply rotate-[270deg] 
 	;
-    /* transform: rotate(180deg); */
 }
 .dropdown-btn:focus + .dropdown-content li, .dropdown-btn-user:focus + .dropdown-content li {
     @apply opacity-100 pointer-events-auto;
