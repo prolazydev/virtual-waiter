@@ -77,6 +77,7 @@ export default defineConfig({
 	],
 	css: {
 		postcss: {
+			// @ts-expect-error
 			plugins: [tailwind(), autoprefixer()],
 		},
 		preprocessorOptions: {

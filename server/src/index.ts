@@ -7,9 +7,6 @@ import { createApp, initServer, initRouting } from '@/utils/server';
 import { initMiddlewares } from '@/middlewares';
 import { initSocketIO } from '@/sockets';
 import { initRedis } from '@/services/redis.service';
-// import { startNgrok } from '@/utils/server/ngrok';
-
-const app = createApp();
 
 console.log('online mode:', ONLINE_MODE)
 // Check for online switching
@@ -19,6 +16,7 @@ if (ONLINE_MODE === 'on') {
 	await startNgrok();
 }
 
+const app = createApp();
 
 await initDb();
 await initRedis();
