@@ -285,7 +285,7 @@
                                     <div class="flex justify-between">
                                         <MyDialog :_class="`${nestedField.id}-dialog w-[28rem] p-7 gap-10 overflow-visible`" :title="`Setup ${nestedField.label}`" :size="nestedField.size ?? 'custom'">
                                             <div class="form-part flex flex-col gap-1">
-                                                <label :for="nestedField.id">{{ `Setup ${nestedField.label}` }}</label>
+                                                <label :for="nestedField.id">{{ `${nestedField.label}` }}</label>
                                                 <button @click="toggleDialog(`.${nestedField.id}-dialog`)" class="form-button-1 min-w-52" :id="nestedField.id" type="button">
                                                     Setup {{ nestedField.label }}
                                                 </button>
@@ -370,7 +370,7 @@
                                 <template v-else-if="nestedField.fieldType === 'nested' && nestedField.prop === 'hours'">
                                     <MyDialog :_class="`${nestedField.id}-dialog w-[32rem] p-7`" :title="`Setup ${nestedField.label}`" :size="nestedField.size ?? 'custom'">
                                         <div class="form-part flex flex-col gap-1">
-                                            <label :for="nestedField.id">{{ `Setup ${nestedField.label}` }}</label>
+                                            <label :for="nestedField.id">{{ `${nestedField.label}` }}</label>
                                             <button @click="toggleDialog(`.${nestedField.id}-dialog`)" class="form-button-1 min-w-52" :id="nestedField.id" type="button">
                                                 Setup {{ nestedField.label }}
                                             </button>
