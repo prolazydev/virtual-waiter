@@ -37,7 +37,7 @@
 							{{ businessStore.selectedBusiness === 'All' ? businessStore.selectedBusiness : businesses.find(b => b.username === businessStore.selectedBusiness)?.displayName }}
 							<LucideIcon name="Play" class="fill-current stroke-[#1b1b1b] rotate-90 transition-all duration-300" size="12"/>
 						</button>
-						<ul class="dropdown-content top-1 p-2 z-10">
+						<ul class="dropdown-content top-1 p-2 z-20">
 							<li
 								@click="businessStore.selectedBusiness = 'All'"
 								:class="{ 'font-semibold': businessStore.selectedBusiness === 'All' }"

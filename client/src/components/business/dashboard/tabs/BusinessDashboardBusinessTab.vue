@@ -40,7 +40,7 @@
 				>
 					<router-link 
 						:to="{ name: 'business-dashboard-settings', params: { id: business._id } }" 
-						class="absolute top-0 left-0 m-2 z-50 transition-all" 
+						class="absolute top-0 left-0 m-2 z-10 transition-all" 
 						type="button"
 					>
 						<LucideIcon 
@@ -52,7 +52,7 @@
                  
 					<button 
 						@click="() => console.log('blewh')" 
-						class="absolute top-0 right-0 m-2 z-50 transition-all" 
+						class="absolute top-0 right-0 m-2 z-10 transition-all" 
 						type="button"
 					>
                         <LucideIcon 

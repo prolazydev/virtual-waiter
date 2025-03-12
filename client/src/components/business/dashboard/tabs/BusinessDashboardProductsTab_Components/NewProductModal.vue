@@ -21,7 +21,7 @@
 			<div class="w-full mx-auto py-5 flex flex-col gap-3 overflow-y-scroll">
 				<!-- TODO: Make an input search to filter out the businesses on the selection box (client side) -->
 				<div class="w-fit relative z-10">
-					<button type="button" class="dropdown-btn" autofocus="false" aria-haspopup="menu">
+					<button type="button" class="dropdown-btn" id="selectBusinessForNewProductBtn" aria-haspopup="menu">
 						Selected Business 
 						<span class="w-32 px-1 text-start border border-black overflow-hidden">
 							{{ selectedCreateProductBusiness.length > 0  ? businesses.find(b => b.username === selectedCreateProductBusiness)?.displayName : 'Not Selected' }}
@@ -389,7 +389,14 @@ defineProps<{
 const loader = useLoader();
 const { toggleDialog, isDialogClosed } = myDialog();
 
-const selectedCreateProductBusiness = ref('');
+const selectedCreateProductBusiness = ref(initBusiness());
+function initBusiness() {
+	const businessStore = useBusinessStore();
+	if (businessStore.selectedBusiness !== 'All') 
+		return businessStore.selectedBusiness;
+
+	return '';
+}
 
 const productData = ref<ProductForm>({
 	name: '',
@@ -629,8 +636,14 @@ const closeDialog = (dialogElement: string) => {
 
 .product-image-label {
 	@apply w-full h-full flex overflow-hidden cursor-pointer
+	;
 }
 
+.product-image-label > img {
+	@apply w-auto h-auto max-h-[100%] object-contain
+	;
+
+}
 .product-image-label:hover > img {
 	@apply duration-300 shadow-lg scale-[.990] 
 } 
